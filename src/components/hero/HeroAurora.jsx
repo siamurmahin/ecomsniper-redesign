@@ -38,7 +38,7 @@ export default function HeroAurora() {
       aria-hidden="true"
       /* Weighted to the panel side, not centred: keeps the field off the
          copy column and puts the light where the window is. */
-      className="pointer-events-none absolute inset-x-0 top-0 -z-20 h-[42rem] opacity-[0.75] [mask-image:radial-gradient(85%_70%_at_82%_2%,black_8%,transparent_68%)]"
+      className="pointer-events-none absolute inset-x-0 top-0 -z-20 h-[42rem] opacity-[0.42] [mask-image:radial-gradient(85%_70%_at_82%_2%,black_8%,transparent_68%)]"
     >
       {isRunning && (
         <Suspense fallback={null}>
