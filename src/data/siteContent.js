@@ -73,7 +73,17 @@ export const HERO = {
 export const HERO_PANEL = {
   windowLabel: 'EcomSniper',
   statusLabel: 'Working',
-  caption: 'An illustration of the flow. Not a screenshot of a live account.',
+  /*
+   * The line under the panel. It is the one place on the page that states an
+   * earnings figure, so it is attributed ("members report"), bounded ("stayed
+   * three months") and immediately qualified. The deck's rule was that the
+   * unattributed "99% make 1-3k" claim could not stand; this is the version
+   * that can, and the small print carries both halves of the qualification —
+   * the results are not typical, and the panel above is an illustration.
+   */
+  claim: 'Members who stayed 3 months report $1–3k a month per account.',
+  claimNote:
+    'Individual results, shared by members. Not typical and not a guarantee — and the panel above is an illustration, not a live account.',
   beats: [
     {
       tone: 'blue',

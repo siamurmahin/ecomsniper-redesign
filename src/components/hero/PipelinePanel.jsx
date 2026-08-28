@@ -271,7 +271,14 @@ export default function PipelinePanel() {
         </div>
       </div>
 
-      <p className="mt-3 text-center text-xs text-muted lg:text-left">{HERO_PANEL.caption}</p>
+      {/* The claim reads at body weight; the qualification sits under it at
+          small print size but is never further away than the claim itself. */}
+      <div className="mt-3.5 text-center lg:text-left">
+        <p className="text-[0.92rem] font-semibold leading-snug tracking-tight text-ink">
+          {HERO_PANEL.claim}
+        </p>
+        <p className="mt-1.5 text-[0.7rem] leading-relaxed text-muted">{HERO_PANEL.claimNote}</p>
+      </div>
     </div>
   );
 }
