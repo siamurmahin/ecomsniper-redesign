@@ -7,7 +7,7 @@ import { toneOf } from '../../lib/signalTones';
 
 /** How long one step holds, swap included. Long enough that the two numbers
     in a step can be read before the next one arrives. */
-const BEAT_MS = 2900;
+const BEAT_MS = 3800;
 
 /**
  * The hero's right-hand side: one product through the software — found,
@@ -40,20 +40,16 @@ export default function PipelinePanel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  // Direction of travel, so a step always leaves the way the strip is moving.
-  const [direction, setDirection] = useState(1);
   // Read on the first render: a flag set later would arrive after the entrance
   // timeline has already resolved its targets.
   const [isStatic] = useState(() => prefersReducedMotion());
 
   const goTo = (index) => {
-    setDirection(index >= activeIndex ? 1 : -1);
     setActiveIndex(index);
     setIsAutoPlaying(false);
   };
 
   const replay = () => {
-    setDirection(1);
     setActiveIndex(0);
     setIsAutoPlaying(true);
   };
@@ -183,8 +179,7 @@ export default function PipelinePanel() {
                           key={isActive ? `run-${activeIndex}` : `state-${index}`}
                           onAnimationEnd={() => {
                             if (isActive && isAutoPlaying) {
-                              setDirection(1);
-                              setActiveIndex(index + 1);
+                                                        setActiveIndex(index + 1);
                             }
                           }}
                           style={isActive ? { animationDuration: `${BEAT_MS}ms` } : undefined}
@@ -219,26 +214,24 @@ export default function PipelinePanel() {
             <div className="relative h-[16.5rem] px-5 sm:h-[14rem]">
               {steps.map((step, index) => {
                 const isActive = index === activeIndex;
-                // Leaving steps exit the way the strip is travelling, and
-                // arriving ones come from the opposite edge, so the panel reads
-                // as one strip being pulled past a window.
-                const leaveClass = direction > 0 ? '-translate-x-6' : 'translate-x-6';
-                const enterClass = direction > 0 ? 'translate-x-6' : '-translate-x-6';
 
                 return (
                   <div
                     key={step.chip}
                     aria-hidden={!isActive}
-                    // Incoming takes 620ms on an expo curve; outgoing leaves
-                    // in 340ms on an ease-in, accelerating away rather than
-                    // snapping off. It stays the shorter of the two so the
-                    // middle of the swap never holds two legible cards.
-                    className={`absolute inset-x-5 top-0 ease-[var(--ease-out-expo)] ${
+                    /*
+                     * A crossfade, staggered rather than simultaneous: the old
+                     * step fades out over 500ms, and the new one waits 420ms
+                     * before taking 900ms to arrive. The two overlap for about
+                     * 80ms, which is short enough that no one reads both, and
+                     * the gap in between is what makes it a fade rather than a
+                     * swap. Opacity only — the slide it replaces was the thing
+                     * making a 2.9s step feel hurried.
+                     */
+                    className={`absolute inset-x-5 top-0 ${
                       isActive
-                        ? 'translate-x-0 opacity-100 transition-[opacity,transform] duration-[620ms]'
-                        : `pointer-events-none opacity-0 transition-[opacity,transform] duration-[340ms] ease-[cubic-bezier(0.4,0,1,1)] ${
-                            index < activeIndex ? leaveClass : enterClass
-                          }`
+                        ? 'opacity-100 transition-opacity duration-[900ms] delay-[420ms] ease-[var(--ease-out-expo)]'
+                        : 'pointer-events-none opacity-0 transition-opacity duration-[500ms] ease-linear'
                     }`}
                   >
                     {step.isFinale ? (
@@ -304,7 +297,7 @@ function Beat({ beat, isActive = true }) {
         {beat.rows.map((row, index) => (
           <div
             key={row.label}
-            style={isActive ? { animationDelay: `${260 + index * 130}ms` } : undefined}
+            style={isActive ? { animationDelay: `${620 + index * 150}ms` } : undefined}
             className={`flex items-baseline justify-between gap-4 px-3.5 py-2.5 ${
               isActive ? 'motion-safe:animate-row-in' : ''
             }`}
