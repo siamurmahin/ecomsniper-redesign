@@ -411,12 +411,13 @@
     animation: row-in 520ms var(--ease-out-expo) both;
   }
 
-  /* A drawn arrow leaning toward what it points at, then easing back. A quint
-     ease parked it at both ends and read as static; this curve keeps it moving
-     through the middle of the travel. */
+  /* The drawn arrow travelling toward what it points at — right to left and
+     rising, along the line the arrow itself is drawn on — then easing back. A
+     quint ease parked it at both ends and read as static; this curve keeps it
+     moving through the middle of the travel. */
   @keyframes nudge-x {
-    0%, 100% { transform: translateX(0); }
-    50%      { transform: translateX(-14px); }
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(-14px, -12px); }
   }
   .motion-safe\:animate-nudge-x {
     animation: nudge-x 1.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;

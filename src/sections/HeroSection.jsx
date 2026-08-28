@@ -219,8 +219,10 @@ export default function HeroSection() {
                   >
                     {/* Mirrored inside the SVG rather than with a scale class:
                         the nudge animation owns `transform` on this element and
-                        would overwrite a Tailwind scale outright. */}
-                    <g transform="translate(0,28) scale(1,-1)">
+                        would overwrite one outright. The -38deg tilt lifts the
+                        head so it meets the button rather than running level
+                        into its side. */}
+                    <g transform="rotate(-38 24 14) translate(0,28) scale(1,-1)">
                       {/* One stroke, tail to head, so it reads as a pen mark
                           rather than a UI glyph. */}
                       <path
@@ -240,7 +242,7 @@ export default function HeroSection() {
                   </svg>
 
                   <span className="font-serif text-[0.95rem] italic leading-tight text-signal-blue-deep">
-                    Grab it, free
+                    Grab it for free
                   </span>
 
                 </span>
