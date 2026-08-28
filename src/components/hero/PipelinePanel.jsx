@@ -271,13 +271,17 @@ export default function PipelinePanel() {
         </div>
       </div>
 
-      {/* The claim reads at body weight; the qualification sits under it at
-          small print size but is never further away than the claim itself. */}
-      <div className="mt-3.5 text-center lg:text-left">
-        <p className="text-[0.92rem] font-semibold leading-snug tracking-tight text-ink">
+      {/* The claim reads at body weight and the qualification sits directly
+          under it, never further away than the claim itself.
+
+          On its own paper plate because the dot field runs behind this corner
+          of the hero, and small type over texture is the one place the two
+          layers actually fight. */}
+      <div className="mt-3.5 rounded-2xl bg-paper/80 px-4 py-3 text-center backdrop-blur-sm lg:text-left">
+        <p className="text-[1rem] font-semibold leading-snug tracking-tight text-ink">
           {HERO_PANEL.claim}
         </p>
-        <p className="mt-1.5 text-[0.7rem] leading-relaxed text-muted">{HERO_PANEL.claimNote}</p>
+        <p className="mt-1.5 text-[0.78rem] leading-relaxed text-ink/70">{HERO_PANEL.claimNote}</p>
       </div>
     </div>
   );

@@ -82,8 +82,7 @@ export const HERO_PANEL = {
    * the results are not typical, and the panel above is an illustration.
    */
   claim: 'Members who stayed 3 months report $1–3k a month per account.',
-  claimNote:
-    'Individual results, shared by members. Not typical and not a guarantee — and the panel above is an illustration, not a live account.',
+  claimNote: 'Individual results, not typical. The panel above is an illustration.',
   beats: [
     {
       tone: 'blue',
