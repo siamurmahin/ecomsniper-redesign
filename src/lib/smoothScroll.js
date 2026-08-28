@@ -1,11 +1,8 @@
 /**
- * Shared handle on the page's Lenis instance.
- *
- * Anything that wants to move the page must go through here. Mixing native
- * smooth scrolling with Lenis makes the two ease toward different targets on
- * every frame, and the page visibly drifts on its own — so every programmatic
- * scroll is routed to Lenis when it exists, and falls back to an instant jump
- * when it does not (touch, reduced motion, no JS-driven scrolling).
+ * Shared handle on the page's Lenis instance. Everything that moves the page
+ * goes through here: native smooth scrolling and Lenis ease toward different
+ * targets every frame and the page visibly drifts. Falls back to an instant
+ * jump when Lenis is absent (touch, reduced motion, no JS).
  */
 
 let lenisInstance = null;

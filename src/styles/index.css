@@ -2,8 +2,6 @@
 
 /* ==========================================================================
    EcomSniper design system
-   Tokens are derived from the live brand: paper ground, ink type, blue accent,
-   marketplace colours (eBay / Amazon) used only as small signal accents.
    ========================================================================== */
 
 @theme {
@@ -17,103 +15,63 @@
   --color-muted-dark: #9a9ca3; /* secondary type on ink */
   --color-hairline: #e4e4e1; /* hairline on paper */
 
-  /*
-   * --- Brand accent -----------------------------------------------------
-   * Blue, taken from the ring in the reticle. It replaced a gold accent that
-   * had spread across buttons, badges, prices and body copy until it read as
-   * a primary brand colour, which it is not.
-   *
-   * Four values because one blue cannot serve both grounds: `accent` is dark
-   * enough to carry white button text (5.6:1), `accent-soft` light enough to
-   * be read as text on the ink bands (5.9:1). Using either on the wrong
-   * ground drops below AA.
-   */
-  --color-accent: #0064d2; /* fills; white text on it passes AA */
+  /* --- Brand accent ------------------------------------------------------
+     One blue cannot serve both grounds: `accent` is dark enough for white
+     button text, `accent-soft` light enough to read on the ink bands. */
+  --color-accent: #0064d2; /* fills; white on it 5.6:1 */
   --color-accent-deep: #0052ab; /* hover / pressed */
-  --color-accent-soft: #5b9df0; /* accent text + icons on ink */
+  --color-accent-soft: #5b9df0; /* text + icons on ink, 5.9:1 */
   --color-accent-wash: #eaf2fd; /* background tint on paper */
 
-  /* --- Signal colours (marketplaces + status) --------------------------- */
+  /* --- Marketplace colours ---------------------------------------------- */
   --color-ebay-blue: #0064d2;
   --color-ebay-red: #e53238;
   --color-ebay-yellow: #f5af02;
   --color-ebay-green: #86b817;
   --color-amazon: #ff9900;
 
-  /*
-   * --- The signal set ---------------------------------------------------
-   * The live site does not run on one accent. It uses eBay's four colours as
-   * a *set*, one per enumerated thing: pillar 01 blue, 02 gold, 03 green; the
-   * four software steps blue, red, green, gold. Colour there is identity, not
-   * decoration — an item keeps its colour across icon tile, number chip, rule
-   * and wash, so the eye can follow one thread down the page.
-   *
-   * Three values per hue, for the reason the accent needs four: the brand
-   * value is a fill, not a text colour.
-   *
-   *   plain   fills, icon tiles, rules, dots — the brand value itself
-   *   deep    the same hue as text on paper   (all ≥ 5.2:1)
-   *   soft    the same hue as text on the ink bands (all ≥ 5.9:1)
-   *
-   * Gold returns here after being pulled as the site accent. That removal was
-   * right — as a primary it had spread across buttons, prices and body copy.
-   * As one of four signals carrying a single pillar, it is what the live
-   * brand actually does.
-   */
-  --color-signal-blue: #0064d2; /* = accent; first colour of the set */
-  --color-signal-blue-deep: #0052ab; /* 6.4:1 on paper */
-  --color-signal-blue-soft: #5b9df0; /* 5.9:1 on ink */
+  /* --- The signal set ----------------------------------------------------
+     eBay's four colours used as a set, one per enumerated item, carried
+     across its tile, chip, rule and wash. Three values per hue because the
+     brand value is a fill, not a text colour: `plain` fills, `deep` is text
+     on paper (≥5.2:1), `soft` is text on ink (≥5.9:1). */
+  --color-signal-blue: #0064d2;
+  --color-signal-blue-deep: #0052ab;
+  --color-signal-blue-soft: #5b9df0;
 
   --color-signal-red: #e53238;
-  --color-signal-red-deep: #c1272d; /* 5.6:1 on paper */
-  --color-signal-red-soft: #ef7a76; /* 6.1:1 on ink */
+  --color-signal-red-deep: #c1272d;
+  --color-signal-red-soft: #ef7a76;
 
   --color-signal-green: #86b817;
-  --color-signal-green-deep: #547310; /* 5.3:1 on paper */
-  --color-signal-green-soft: #9ed420; /* 9.3:1 on ink */
+  --color-signal-green-deep: #547310;
+  --color-signal-green-soft: #9ed420;
 
   --color-signal-gold: #dca54c;
-  --color-signal-gold-deep: #8a6318; /* 5.2:1 on paper */
-  --color-signal-gold-soft: #e8b866; /* 9.0:1 on ink */
+  --color-signal-gold-deep: #8a6318;
+  --color-signal-gold-soft: #e8b866;
 
-  /*
-   * --- The brand gradient -----------------------------------------------
-   * Red to blue, the two loudest colours in the set, as the site's one
-   * gradient. It carries the primary button, the hero badge and the hero
-   * mark — the three things a visitor should see first — and nothing else.
-   * A gradient used more widely than that stops signalling anything.
-   *
-   * Three stops, not two: a straight red→blue ramp passes through a dead
-   * grey-violet at the midpoint. A magenta stop at 48% keeps the middle
-   * saturated and makes the sweep read as deliberate.
-   *
-   * The red end is #d0212a, not the signal red #e53238. White on the brand
-   * red is 5.3:1; on the signal red it is 4.3:1, which fails AA for button
-   * text. Every point along this ramp clears 5.3:1 against white.
-   */
-  --color-brand-red: #d0212a; /* gradient start; 5.3:1 with white */
-  --color-brand-violet: #8e2a86; /* midpoint; 6.9:1 with white */
+  /* --- The brand gradient ------------------------------------------------
+     Red to blue, on the primary button and the hero mark only. The magenta
+     midpoint keeps a straight ramp out of the dead grey-violet it would
+     otherwise pass through. Red is #d0212a, not the signal red: white on
+     that is 4.3:1 and fails AA for button text; every point here clears
+     5.3:1. */
+  --color-brand-red: #d0212a;
+  --color-brand-violet: #8e2a86;
 
   /* --- Type ------------------------------------------------------------- */
   --font-display: 'Bricolage Grotesque', 'Montserrat', system-ui, sans-serif;
   --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
-  /*
-   * Eyebrows, labels and small caps. Bricolage Grotesque rather than a
-   * monospace: the mono read as technical and dated next to the display type,
-   * and reusing the display family keeps the page to two voices instead of
-   * three. Numbers get `tabular-nums` where they need to align.
-   */
+  /* Eyebrows and small caps. Reuses the display family so the page keeps two
+     voices rather than three. */
   --font-label: 'Bricolage Grotesque', 'Montserrat', system-ui, sans-serif;
 
-  /* Fluid display scale — clamps keep headlines readable from 360px to 1920px */
+  /* Fluid display scale — readable from 360px to 1920px */
   --text-hero: clamp(2.35rem, 5vw, 4.6rem);
-  /*
-   * The hero headline shares its column with the pipeline panel, so it gets
-   * its own ceiling: at the full 4.6rem the first line breaks mid-phrase
-   * ("ESCAPE THE / 9 TO 5") on a laptop, which splits the one joke the
-   * headline is making. The full-width page heroes keep --text-hero.
-   */
+  /* The hero headline shares its column with the panel, so it gets a lower
+     ceiling; at --text-hero it breaks as "ESCAPE THE / 9 TO 5". */
   --text-hero-split: clamp(2.3rem, 3.7vw, 3.55rem);
   --text-display: clamp(1.85rem, 3.6vw, 3.15rem);
   --text-section: clamp(1.6rem, 2.8vw, 2.55rem);
@@ -138,8 +96,7 @@
     --sticky-cta-height: 4.25rem;
     color-scheme: light;
 
-    /* The one gradient. Kept as a variable so the ramp is defined once and
-       every surface that carries it stays in step. */
+    /* Defined once so every surface carrying the ramp stays in step. */
     --gradient-brand: linear-gradient(
       135deg,
       var(--color-brand-red) 0%,
@@ -156,11 +113,8 @@
     /* Lenis drives smooth scroll; native smooth would fight it. */
     scroll-behavior: auto;
     -webkit-text-size-adjust: 100%;
-    /*
-     * `clip`, not `hidden`: overflow-x: hidden turns the element into a scroll
-     * container, which breaks position: sticky inside it and desynchronises
-     * Lenis from window.scrollY. `clip` trims the overflow without that.
-     */
+    /* `clip`, not `hidden`: hidden makes this a scroll container, which breaks
+       sticky inside it and desyncs Lenis from window.scrollY. */
     overflow-x: clip;
   }
 
@@ -190,10 +144,7 @@
     text-wrap: pretty;
   }
 
-  /*
-   * Focus ring uses the brand blue from the logo's reticle: it is a real brand
-   * colour, and it stays legible on both the paper and the ink bands.
-   */
+  /* Brand blue: legible on both the paper and the ink bands. */
   :focus-visible {
     outline: 2px solid var(--color-ebay-blue);
     outline-offset: 3px;
@@ -216,11 +167,8 @@
    Named for what they are, never for where they sit.
    ========================================================================== */
 
-/*
- * Declared with @utility rather than inside @layer components: Tailwind v4 only
- * lets @apply reference real utilities, and the .btn-* variants below build on
- * this shared base.
- */
+/* @utility, not @layer components: Tailwind v4 only lets @apply reference real
+   utilities, and the .btn-* variants below build on this. */
 @utility btn {
   @apply relative inline-flex items-center justify-center gap-2 rounded-full
          px-7 py-3.5 text-sm font-semibold tracking-tight
@@ -234,23 +182,14 @@
     @apply mx-auto w-full max-w-[82rem] px-5 sm:px-7 lg:px-10;
   }
 
-  /*
-   * Every band pads both edges, so the space a visitor actually sees between
-   * two sections is twice this value. At py-32 that was a 256px void at all
-   * fourteen seams — a third of a laptop viewport, identical every time, so
-   * the page read as evenly spaced rather than paced. Symmetric padding has
-   * to stay: the coloured bands (ink, paper-sunk) would sit off-centre in
-   * their own block without it.
-   */
+  /* Both edges pad, so the gap a visitor sees between two bands is twice this.
+     Symmetric padding has to stay or the coloured bands sit off-centre. */
   .section-band {
     @apply relative py-16 sm:py-20 lg:py-24;
   }
 
-  /*
-   * Small uppercase label above every section headline.
-   * Neutral by default: a short rule carries the eye, not a colour. The accent
-   * is tertiary here and reads as noise when it appears on all 15 sections.
-   */
+  /* Neutral by default: a rule carries the eye. An accent on all 15 sections
+     reads as noise. */
   .section-eyebrow {
     @apply inline-flex items-center gap-2.5 font-label text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-muted;
   }
@@ -259,7 +198,6 @@
     @apply h-px w-6 shrink-0 bg-ink/25;
   }
 
-  /* Same label on the dark bands, where the paper-side values invert. */
   .section-eyebrow-on-ink {
     @apply text-muted-dark;
   }
@@ -267,33 +205,20 @@
     @apply bg-paper/30;
   }
 
-  /* Uppercase micro-label used inside cards and captions. */
   .micro-label {
     @apply font-label text-[0.65rem] font-semibold uppercase tracking-[0.14em];
   }
 
-  /* --- Buttons ---------------------------------------------------------- */
-  /* `.btn` is declared as a @utility above so these variants can @apply it. */
-
-  /*
-   * Every variant answers a hover with a background change, not only with lift
-   * and shadow — on a trackpad the 2px rise is easy to miss, and the filled
-   * buttons had no colour response at all. The accent carries the response in
-   * each case, so the whole set reads as one control.
-   */
-  /*
-   * The primary action carries a gradient rather than a flat fill, so the one
-   * button that matters most on each screen is the one thing on the page with
-   * depth in it. The pair runs light-to-deep at 135deg; on hover it deepens
-   * and the sheen below sweeps across.
-   */
+  /* --- Buttons ----------------------------------------------------------
+     Every variant answers hover with a background change, not only lift and
+     shadow: on a trackpad a 2px rise is easy to miss. */
   .btn-primary {
     @apply btn relative overflow-hidden text-paper shadow-lift hover:-translate-y-0.5 hover:shadow-float;
     background-image: var(--gradient-brand);
   }
 
-  /* Hover slides the ramp along rather than changing its colours: the button
-     stays the same object, lit differently. */
+  /* Hover slides the ramp along rather than changing its colours: same object,
+     lit differently. */
   .btn-primary:hover {
     background-image: linear-gradient(
       135deg,
@@ -303,7 +228,7 @@
     );
   }
 
-  /* Sheen: a soft highlight that crosses the button on hover. */
+  /* Sheen that crosses the button on hover. */
   .btn-primary::after {
     content: '';
     @apply pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-12;
@@ -325,7 +250,7 @@
     @apply btn border border-hairline bg-paper text-ink hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent-wash;
   }
 
-  /* Used inside dark bands where the ink button would disappear. */
+  /* For dark bands, where the ink button would disappear. */
   .btn-on-ink {
     @apply btn bg-accent text-paper hover:-translate-y-0.5 hover:bg-accent-deep hover:text-paper;
   }
@@ -343,24 +268,13 @@
     @apply rounded-2xl border border-ink-line bg-ink-soft p-6;
   }
 
-  /* Any surface that should carry the site's one gradient. */
   .brand-fill {
     background-image: var(--gradient-brand);
   }
 
-  /*
-   * The hero's marked phrase. Same block as `.headline-mark`, filled with the
-   * brand ramp instead of flat ink — used once, on the last line of the hero
-   * headline, so the gradient lands on the words the page is selling.
-   */
-  /*
-   * On a phone the marked phrase is the widest line on the page — at full
-   * headline size "WHILE YOU COMMUTE" measures 338px inside 335px of column,
-   * and the `nowrap` that keeps it on one line turns that into clipped text
-   * rather than a second line. The block, not the whole headline, takes the
-   * reduction: shrinking the h1 for every phone to fit one word of one line
-   * would cost the other three lines their weight.
-   */
+  /* The hero's marked phrase. Smaller below `sm`: at full size "WHILE YOU
+     COMMUTE" is 338px inside 335px of column, and the nowrap that holds it on
+     one line would clip it. The block takes the cut, not the whole h1. */
   .headline-mark-brand {
     @apply inline-block px-2 pb-1 text-[0.78em] text-paper sm:px-2.5 sm:text-[1em];
     background-image: var(--gradient-brand);
@@ -370,20 +284,10 @@
     -webkit-box-decoration-break: clone;
   }
 
-  /*
-   * The typed word inside the hero's marked block, and its caret.
-   *
-   * `TextType`'s own cursor is switched off and drawn here instead. Its cursor
-   * is a real glyph in a real span: at headline weight a '▌' is about half an
-   * em wide, so it added ~28px of block between the last letter and the full
-   * stop — visible as a gap in the middle of a sentence — and that width was
-   * also enough to push the longest phrase past the column and onto a second
-   * line.
-   *
-   * This caret is 0.07em of painted box, so the block ends where the word
-   * ends. `steps(1)` because a caret snaps between states; a fade would make
-   * it a glow.
-   */
+  /* Caret for the typed word. Replaces TextType's own cursor, which is a real
+     glyph ~0.5em wide — enough to read as a gap before the full stop and to
+     push the longest phrase onto a second line. `steps(1)` because a caret
+     snaps rather than fades. */
   .headline-type::after {
     content: '';
     display: inline-block;
@@ -407,14 +311,13 @@
     }
   }
 
-  /* Highlighted phrase inside a headline: black block, paper text. */
+  /* Highlighted phrase: black block, paper text. */
   .headline-mark {
     @apply inline-block bg-ink px-2.5 pb-1 text-paper;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
 
-  /* The strike used on "9 TO 5" in the hero. */
   .headline-strike {
     @apply relative text-muted;
   }
@@ -429,7 +332,6 @@
     @apply h-px w-full border-0 bg-hairline;
   }
 
-  /* Fades a horizontally-scrolling strip out at both edges. */
   .edge-fade-x {
     -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
@@ -448,7 +350,6 @@
     will-change: transform, opacity;
   }
 
-  /* Continuous marquee used by the proof bar. */
   @keyframes marquee-drift {
     from { transform: translate3d(0, 0, 0); }
     to { transform: translate3d(-50%, 0, 0); }
@@ -466,11 +367,9 @@
     animation: pulse-ring 2.6s var(--ease-out-expo) infinite;
   }
 
-  /*
-   * The hero panel's clock. Linear on purpose: an eased progress bar lies
-   * about how much time is left. Its `animationend` is what advances the
-   * beat, so the duration is set inline from one constant in the component.
-   */
+  /* The hero panel's clock; its `animationend` advances the beat, so the
+     duration is set inline. Linear because an eased bar lies about the time
+     left. */
   @keyframes beat-fill {
     from { transform: scaleX(0); }
     to   { transform: scaleX(1); }
@@ -479,7 +378,6 @@
     animation: beat-fill linear forwards;
   }
 
-  /* A value arriving a moment after the card it sits in. */
   @keyframes row-in {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -488,11 +386,8 @@
     animation: row-in 420ms var(--ease-out-expo) both;
   }
 
-  /*
-   * The gradient inside the hero's marked phrase drifts across it. 9s and a
-   * 220% background: slow enough that it is never caught moving, which is the
-   * point — it should read as light on a surface, not as an animation.
-   */
+  /* Slow enough that it is never caught moving: light on a surface, not an
+     animation. */
   @keyframes brand-drift {
     0%   { background-position: 0% 50%; }
     50%  { background-position: 100% 50%; }

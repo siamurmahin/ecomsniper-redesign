@@ -4,14 +4,10 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../../lib/motion';
 import { registerLenis, unregisterLenis, scrollToTarget } from '../../lib/smoothScroll';
 
 /**
- * Drives page scrolling through Lenis and keeps GSAP's ScrollTrigger in sync.
- *
- * Lenis is skipped entirely for reduced-motion visitors and on coarse pointers,
- * where native momentum scrolling already feels better than any JS easing.
- *
- * In-page anchor clicks are intercepted here so they are handled by Lenis too:
- * left to the browser, a native smooth scroll would run alongside Lenis and the
- * two would fight for the scroll position.
+ * Drives page scrolling through Lenis and keeps ScrollTrigger in sync. Skipped
+ * for reduced motion and coarse pointers, where native momentum already feels
+ * better. Anchor clicks are intercepted so a native smooth scroll cannot run
+ * alongside Lenis and fight it for the position.
  */
 export default function SmoothScrollProvider({ children }) {
   useEffect(() => {

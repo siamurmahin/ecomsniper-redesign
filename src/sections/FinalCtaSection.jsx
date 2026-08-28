@@ -60,9 +60,7 @@ export default function FinalCtaSection() {
           <p className="mt-4 text-xs text-muted-dark">{FINAL_CTA.reassurance}</p>
         </div>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* The second door                                                     */}
-        {/* ------------------------------------------------------------------ */}
+        {/* The second door */}
         <div
           data-reveal
           data-reveal-group="final-second-door"

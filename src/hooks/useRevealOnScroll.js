@@ -2,11 +2,9 @@ import { useLayoutEffect, useRef } from 'react';
 import { gsap, ScrollTrigger, prefersReducedMotion, MOTION } from '../lib/motion';
 
 /**
- * Reveals every `[data-reveal]` descendant of the returned ref as it scrolls in.
- *
- * Elements are hidden by CSS (`.js-motion [data-reveal]`) only while JS is
- * running, so a no-JS or reduced-motion visitor never loses content. Items
- * sharing a `data-reveal-group` value animate together as a stagger.
+ * Reveals every `[data-reveal]` descendant of the returned ref as it scrolls
+ * in. The hiding CSS only applies while JS runs, so no-JS and reduced-motion
+ * visitors never lose content. A shared `data-reveal-group` staggers together.
  *
  * @param {object} [options]
  * @param {string} [options.start] ScrollTrigger start position.

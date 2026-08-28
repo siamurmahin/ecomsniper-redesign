@@ -1,8 +1,6 @@
 /**
- * The shared headline block used at the top of every section.
- *
- * Keeping eyebrow + headline + lead in one component is what makes the page
- * feel like one document rather than fifteen stitched-together designs.
+ * The headline block at the top of every section. One component for eyebrow,
+ * headline and lead is what makes the page read as one document.
  *
  * @param {object} props
  * @param {string} props.eyebrow Small mono label above the headline.

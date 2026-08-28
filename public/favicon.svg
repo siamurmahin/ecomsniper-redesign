@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-  <rect width="40" height="40" rx="9" fill="#1e1f23"/>
-  <circle cx="20" cy="20" r="13" fill="none" stroke="#fbfbfa" stroke-opacity=".35" stroke-width="1.5"/>
-  <path d="M20 4v6M20 30v6M4 20h6M30 20h6" stroke="#fbfbfa" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="20" cy="20" r="4" fill="#5b9df0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="EcomSniper">
+  <!-- The brand reticle, rebuilt from the logo artwork. Rings are heavier and
+       the spikes shorter than the original: at 16px the true proportions
+       close up into a dot. -->
+  <g fill="none" stroke-linecap="round">
+    <circle cx="32" cy="32" r="24" stroke="#86b817" stroke-width="4"/>
+    <circle cx="32" cy="32" r="16.5" stroke="#0064d2" stroke-width="6"/>
+    <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" stroke-width="6"/>
+  </g>
+  <circle cx="32" cy="32" r="9.5" fill="#e53238"/>
+  <circle cx="32" cy="32" r="3.6" fill="#fbfbfa"/>
 </svg>

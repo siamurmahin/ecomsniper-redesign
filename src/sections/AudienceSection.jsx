@@ -38,9 +38,7 @@ export default function AudienceSection() {
         />
 
         <div className="mt-14 grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:items-start lg:gap-12">
-          {/* ---------------------------------------------------------------- */}
-          {/* Person selector                                                   */}
-          {/* ---------------------------------------------------------------- */}
+          {/* Person selector */}
           <ul
             className="grid grid-cols-2 gap-2.5 sm:grid-cols-2"
             aria-label="Members using EcomSniper"
@@ -84,9 +82,7 @@ export default function AudienceSection() {
             })}
           </ul>
 
-          {/* ---------------------------------------------------------------- */}
-          {/* Quote panel — swaps with the selection                            */}
-          {/* ---------------------------------------------------------------- */}
+          {/* Quote panel — swaps with the selection */}
           <figure
             data-reveal
             data-reveal-group="audience-panel"

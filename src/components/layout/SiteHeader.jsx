@@ -5,12 +5,9 @@ import CtaButton from '../ui/CtaButton';
 import { NAV_LINKS, SITE } from '../../data/siteContent';
 
 /**
- * Fixed site header.
- *
- * Two states: transparent over the hero, then a condensed frosted bar once the
- * visitor has scrolled past it. The nav is a real <nav> with a labelled
- * landmark, and the mobile panel traps nothing — it closes on route change and
- * on Escape, which is what people expect from a marketing menu.
+ * Fixed header in two states: transparent over the hero, condensed and frosted
+ * once past it. The mobile panel traps nothing and closes on route change and
+ * Escape, which is what people expect from a marketing menu.
  */
 export default function SiteHeader() {
   const [isCondensed, setIsCondensed] = useState(false);
@@ -52,12 +49,8 @@ export default function SiteHeader() {
               : 'border-transparent bg-transparent'
           }`}
         >
-          {/*
-            The signal set, in order, as a hairline under the bar — the same
-            device the live header uses. It appears only once the bar has a
-            surface to sit on; over the bare hero it would be a stripe floating
-            in space.
-          */}
+          {/* The signal set as a hairline under the bar, as on the live
+              header. Only once the bar has a surface to sit on. */}
           <span
             aria-hidden="true"
             className={`pointer-events-none absolute inset-x-6 -bottom-px h-px bg-[linear-gradient(90deg,var(--color-signal-blue)_0%,var(--color-signal-red)_34%,var(--color-signal-gold)_67%,var(--color-signal-green)_100%)] transition-opacity duration-500 sm:inset-x-8 ${

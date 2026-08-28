@@ -15,11 +15,8 @@ function upsertTag(tagName, keyAttr, keyValue, valueAttr, value) {
 }
 
 /**
- * Per-route document metadata.
- *
- * The site is a SPA, so index.html carries the default tags for crawlers that
- * do not execute JS, and this component overrides them per route for the ones
- * that do (and for link-preview scrapers that render).
+ * Per-route document metadata. index.html carries the defaults for crawlers
+ * that do not execute JS; this overrides them per route for the ones that do.
  *
  * @param {object} props
  * @param {string} props.title Full <title> for the route.

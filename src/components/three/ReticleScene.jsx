@@ -17,11 +17,8 @@ const BRAND = {
   amazon: '#ff9900',
 };
 
-/**
- * The reticle: three concentric rings at different tilts, slowly counter-
- * rotating. This is the brand mark rendered in space rather than a generic
- * spinning blob, so the 3D actually says something about the product.
- */
+/** The brand mark in space rather than a generic spinning blob: three rings
+    at different tilts, slowly counter-rotating. */
 function ReticleRings({ pointer }) {
   const groupRef = useRef();
 
@@ -138,11 +135,8 @@ function PointerTracker({ pointer }) {
 }
 
 /**
- * The hero's 3D layer.
- *
- * Rendered behind the headline as decoration, so it is aria-hidden and never
- * carries information that is not also in the copy. Mounted lazily by the hero
- * and skipped entirely for reduced-motion visitors.
+ * Decoration, so it is aria-hidden and carries nothing the copy does not.
+ * Mounted lazily and skipped entirely under reduced motion.
  */
 export default function ReticleScene() {
   const pointer = useRef({ x: 0, y: 0 });

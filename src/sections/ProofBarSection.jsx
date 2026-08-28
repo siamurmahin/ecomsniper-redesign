@@ -5,29 +5,20 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { prefersReducedMotion } from '../lib/motion';
 
 /**
- * 02 — Proof bar.
+ * 02 — Proof bar. Its whole value is that every number is checkable: the score
+ * links to the live profile and the member count matches the rest of the site.
+ * Inconsistent numbers read as advertising; consistent ones read as evidence.
  *
- * Its whole value is that every number here is checkable: the Trustpilot score
- * links to the live profile, and the member count is the same figure used
- * everywhere else on the site. Invented or inconsistent numbers read as
- * advertising; consistent ones read as evidence.
- *
- * The two real quantities count up on first view (React Bits `CountUp`). The
- * figure they land on is the one in the copy deck, and it is what renders with
- * no JS or under reduced motion — the animation draws the eye to the number,
- * it never invents one.
+ * The two real quantities count up on first view. They land on the copy deck's
+ * figure, which is also what renders with no JS.
  */
 /**
  * A figure that counts up and then states the exact number.
  *
- * `CountUp` drives the value with a spring, and a spring approaches its target
- * asymptotically — it was still reading "4.5" and "392+" a full second after
- * the animation was supposed to have finished. On a bar whose entire claim is
- * that these numbers are checkable, landing near the number is landing wrong.
- *
- * So the animation runs, and the moment it reports it is done the component is
- * swapped for the literal string from the copy deck. That also unmounts the
- * spring, so nothing can write over the settled figure afterwards.
+ * `CountUp` uses a spring, and a spring approaches its target asymptotically —
+ * it settled on "4.5" and "392+". On a bar claiming these numbers are
+ * checkable, landing near the number is landing wrong. So the moment it reports
+ * done it is swapped for the copy deck's string, which also unmounts the spring.
  */
 function ProofFigure({ item }) {
   const [settled, setSettled] = useState(false);

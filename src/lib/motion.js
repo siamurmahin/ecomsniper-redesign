@@ -1,21 +1,13 @@
 /**
- * Central GSAP configuration.
- *
- * Every component imports gsap and ScrollTrigger from here rather than from
- * the package directly, so plugins are registered exactly once and the
- * reduced-motion decision is made in a single place.
+ * Central GSAP configuration. Everything imports from here rather than the
+ * package, so plugins register once and reduced motion is decided in one place.
  */
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
-/*
- * SplitText is bundled with GSAP itself from 3.13 — the whole plugin set is
- * free now, so this is a registration, not a dependency. It is registered
- * here rather than at the call site so a second component using it cannot
- * register it twice.
- */
+// SplitText ships with GSAP from 3.13 — a registration, not a dependency.
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 // Fewer, cheaper ScrollTrigger recalculations on mobile address-bar resize.
@@ -28,10 +20,7 @@ export const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/**
- * Shared easing + distance values so every section animates with one voice.
- * Distances are deliberately small — premium reads as restrained, not bouncy.
- */
+/** Shared easing and distances so every section animates with one voice. */
 export const MOTION = {
   ease: 'expo.out',
   easeSoft: 'power3.out',

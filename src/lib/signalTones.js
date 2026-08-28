@@ -1,40 +1,25 @@
 /**
- * The signal set, as class strings.
+ * The signal set as class strings — one colour per enumerated item, carried
+ * across its tile, chip, rule and wash. Values live in `styles/index.css`.
  *
- * The four eBay colours are used the way the live site uses them: one per
- * enumerated item, carried across every part of that item — icon tile, number
- * chip, rule, wash — so colour reads as identity rather than as decoration.
- * The values themselves live in `styles/index.css` under `--color-signal-*`.
+ * A lookup table rather than `bg-signal-${tone}` because Tailwind only
+ * compiles classes it can see: a template literal would silently produce no
+ * stylesheet output at all.
  *
- * Why a lookup table rather than `bg-signal-${tone}`: Tailwind compiles the
- * classes it can see in the source. A template literal produces nothing at
- * build time, and every one of these utilities would be missing from the
- * stylesheet with no error to show for it.
- *
- * On the icon glyph inside a filled tile. Blue and red are dark enough to
- * carry a paper glyph (5.6:1 and 4.3:1); green and gold are not (2.4:1, 2.2:1)
- * and take an ink glyph instead (7.0:1, 7.5:1). Icons are non-text content, so
- * the bar is 3:1 — but the two light fills miss even that with white on them,
- * which is why the glyph colour is part of the tone and not a constant.
+ * The glyph colour is part of the tone, not a constant: blue and red carry a
+ * paper glyph (5.6:1, 4.3:1), green and gold are too light and take ink
+ * (7.0:1, 7.5:1) — white on them misses even the 3:1 non-text bar.
  */
 export const SIGNAL_TONES = {
   blue: {
-    // Filled tile: the brand value, with the glyph colour that survives on it.
-    tile: 'bg-signal-blue text-paper',
-    // The hue as text on paper, and the dashed number chip that goes with it.
-    text: 'text-signal-blue-deep',
-    // Solid fill of the readable variant: for small indicators on paper,
-    // where the plain brand value is too light to signal state (3:1).
-    dot: 'bg-signal-blue-deep',
+    tile: 'bg-signal-blue text-paper', // filled tile + a glyph colour that survives on it
+    text: 'text-signal-blue-deep', // the hue as text on paper
+    dot: 'bg-signal-blue-deep', // small indicators, where the brand value misses 3:1
     ring: 'border-signal-blue/40',
-    // Edge rule along the bottom of a card.
-    rule: 'bg-signal-blue',
-    // Corner wash. Kept faint: it tints the card, it does not colour it.
-    wash: 'from-signal-blue/10',
-    // SpotlightCard takes a colour value, not a class.
-    spotlight: 'rgb(0 100 210 / 0.16)',
-    // On the ink bands the plain value is too dark to read as text.
-    onInk: 'text-signal-blue-soft',
+    rule: 'bg-signal-blue', // edge rules
+    wash: 'from-signal-blue/10', // corner tint, not a fill
+    spotlight: 'rgb(0 100 210 / 0.16)', // SpotlightCard takes a value, not a class
+    onInk: 'text-signal-blue-soft', // the plain value is too dark to read on ink
     onInkDot: 'bg-signal-blue-soft',
   },
   red: {

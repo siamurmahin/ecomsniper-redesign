@@ -8,19 +8,13 @@ import { toneOf } from '../lib/signalTones';
 
 const STEP_INTERVAL = 4600;
 
-/**
- * How far back each card sits behind the one in front of it. The stack is the
- * point of this layout, so the offsets are large enough to read as depth from
- * across the room rather than as a rendering artefact.
- */
+/** How far back each card sits behind the one in front. Large enough to
+    read as depth rather than as a rendering artefact. */
 const OFFSET = { x: 38, y: -30, z: -90, skew: 5 };
 
 /**
- * One step, placed by how far it is behind the front of the stack.
- *
- * `rank` is 0 for the card in front and counts upward going back, so the
- * transform is a straight multiple of it and the stack stays evenly spaced
- * whatever the step count becomes.
+ * One step, placed by how far it sits behind the front. `rank` is 0 at the
+ * front and counts back, so the stack stays evenly spaced at any step count.
  */
 function StepCard({ item, rank, total, isActive }) {
   const tone = toneOf(item.tone);
@@ -62,40 +56,25 @@ function StepCard({ item, rank, total, isActive }) {
 }
 
 /**
- * 07 — What the software does.
+ * 07 — What the software does. Four steps on a stack of cards; it advances on
+ * its own so a passive scroller sees all four, and any deliberate interaction
+ * ends the autoplay for good.
  *
- * The four steps ride a stack of cards: the front one is the step being read,
- * the rest sit behind it at a skew so the section shows its own depth. It
- * advances on its own so a passive scroller sees all four, and any explicit
- * interaction stops the autoplay for good — an auto-rotating panel that fights
- * the visitor is worse than no motion at all.
+ * The three things a decorative carousel usually costs are kept: the controls
+ * are real buttons, only the front card is exposed to screen readers (with a
+ * live region announcing each), and reduced motion renders all four as a plain
+ * list — which is also the no-JS rendering.
  *
- * Three things the stack must not cost, since a decorative carousel usually
- * costs all three:
- *
- * - **Keyboard.** Previous / next and the step dots are real buttons in the
- *   tab order, so the whole section works without a pointer.
- * - **Screen readers.** Only the front card is exposed; the ones behind it are
- *   skewed and overlapped, so their text is decoration. A live region
- *   announces each step as it comes forward.
- * - **Reduced motion.** No stack, no autoplay, no transforms — all four steps
- *   render as a plain list, which is also what a visitor sees if the JS never
- *   runs.
- *
- * The cards are where the dashboard screenshots go when they arrive: same
- * geometry, image above the copy.
+ * The cards are where the dashboard screenshots go: same geometry, image above
+ * the copy.
  */
 export default function FeatureTourSection() {
   const sectionRef = useRevealOnScroll();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  /*
-   * Read during the first render, not in an effect. `useRevealOnScroll`
-   * collects its `[data-reveal]` targets once on mount; anything this flag
-   * adds afterwards is never collected, so it keeps the stylesheet's hidden
-   * state forever and the whole stack renders invisible. The app is
-   * client-rendered, so there is no hydration pass to disagree with.
-   */
+  // Read on the first render: `useRevealOnScroll` collects its targets once
+  // on mount, so anything added later keeps the stylesheet's hidden state and
+  // never appears.
   const [isStatic] = useState(() => prefersReducedMotion());
   const isPausedRef = useRef(false);
 
@@ -119,12 +98,8 @@ export default function FeatureTourSection() {
     setIsAutoPlaying(false);
   };
 
-  /*
-   * Stepping has to read the *current* index, not the one captured when this
-   * render ran. Two clicks land in the same batch, so computing from the
-   * closed-over `activeIndex` makes both resolve to the same step and the
-   * second click does nothing.
-   */
+  // Reads the current index, not the one this render closed over: two clicks
+  // in one batch would otherwise resolve to the same step.
   const step = (delta) => {
     setActiveIndex((current) => (current + delta + total) % total);
     setIsAutoPlaying(false);
@@ -139,9 +114,7 @@ export default function FeatureTourSection() {
     >
       <div className="site-shell">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-16">
-          {/* -------------------------------------------------------------- */}
-          {/* Framing copy                                                    */}
-          {/* -------------------------------------------------------------- */}
+          {/* Framing copy */}
           <div>
             <SectionHeading
               eyebrow={FEATURES.eyebrow}
@@ -198,9 +171,7 @@ export default function FeatureTourSection() {
             )}
           </div>
 
-          {/* -------------------------------------------------------------- */}
-          {/* The stack                                                       */}
-          {/* -------------------------------------------------------------- */}
+          {/* The stack */}
           {isStatic ? (
             // No motion: every step, plainly, in order.
             <ul className="flex flex-col gap-4">

@@ -9,13 +9,9 @@ const FLAGS = import.meta.glob('../assets/flags/*.png', { eager: true, import: '
 const flagUrl = (code) => FLAGS[`../assets/flags/flag-${code.toLowerCase()}.png`];
 
 /**
- * 14 — Countries and guarantee, merged.
- *
- * These were two separate full-height sections. The review's note was that
- * neither earns a screen alone, and that the unqualified "no refunds, final
- * sale" line elsewhere contradicted the guarantee. Both now sit side by side,
- * and the guarantee names the plan it covers — the same wording used in the
- * pricing cards and the FAQ.
+ * 14 — Countries and guarantee, merged: neither earned a full screen alone.
+ * The guarantee names the plan it covers, in the same wording as the pricing
+ * cards and the FAQ, because an unqualified version contradicted them.
  */
 export default function AssuranceSection() {
   const sectionRef = useRevealOnScroll();
@@ -30,9 +26,7 @@ export default function AssuranceSection() {
     >
       <div className="site-shell">
         <div className="grid gap-4 lg:grid-cols-2">
-          {/* -------------------------------------------------------------- */}
-          {/* Countries                                                       */}
-          {/* -------------------------------------------------------------- */}
+          {/* Countries */}
           <div
             data-reveal
             data-reveal-group="assurance"
@@ -56,26 +50,17 @@ export default function AssuranceSection() {
               {countries.body}
             </p>
 
-            {/*
-              The eight countries ride a marquee (React Bits' LogoLoop) rather
-              than sitting in a static wrap. Eight pills in two ragged rows read
-              as a leftover list; moving, they read as reach. The pill markup is
-              unchanged — LogoLoop only takes over the scrolling, and it pauses
-              when a visitor points at it so a name can still be read.
-
-              `fadeOutColor` has to be the card's own surface, not the page's:
-              the mask is a solid-to-transparent gradient painted over the ends.
-            */}
+            {/* A marquee, not a static wrap: eight pills in two ragged rows
+                read as a leftover list, moving they read as reach. It pauses on
+                hover so a name can still be read. `fadeOutColor` must be the
+                card's own surface — the mask is painted over the ends. */}
             <div className="relative mt-8">
               <LogoLoop
                 logos={countries.list.map((country) => ({
                   node: (
                     <span className="inline-flex items-center gap-2 rounded-full border border-hairline bg-paper py-1.5 pl-1.5 pr-3.5 text-[0.82rem] font-medium">
-                      {/*
-                        Real flag artwork rather than a flag emoji: regional
-                        indicator pairs do not render on Windows, where they
-                        show as two bare letters and read as a bug.
-                      */}
+                      {/* Real artwork, not flag emoji: regional indicator
+                          pairs render as two bare letters on Windows. */}
                       <img
                         src={flagUrl(country.code)}
                         alt=""
@@ -107,9 +92,7 @@ export default function AssuranceSection() {
             </ul>
           </div>
 
-          {/* -------------------------------------------------------------- */}
-          {/* Guarantee                                                       */}
-          {/* -------------------------------------------------------------- */}
+          {/* Guarantee */}
           <div
             data-reveal
             data-reveal-group="assurance"

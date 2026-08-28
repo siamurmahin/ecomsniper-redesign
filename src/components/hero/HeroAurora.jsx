@@ -4,26 +4,15 @@ import { prefersReducedMotion } from '../../lib/motion';
 const SoftAurora = lazy(() => import('../reactbits/SoftAurora'));
 
 /**
- * The hero's looping background.
+ * The hero's looping background: a shader aurora in the two ends of the brand
+ * ramp, on its own clock. Three constraints, all about the field it replaces:
+ * it does not follow the pointer (that one moved under the headline while the
+ * headline was being read), it is masked off the copy column so no type is
+ * read against moving colour, and an `IntersectionObserver` unmounts it once
+ * the hero scrolls past — WebGL holds a rAF loop for as long as it is mounted.
  *
- * A shader aurora in the two ends of the brand ramp, drifting on its own
- * clock. Three deliberate constraints, all of them about the last background
- * this hero had:
- *
- * - **It does not follow the pointer.** `enableMouseInteraction` is off. The
- *   dot field this replaces reacted to the cursor, which meant it moved under
- *   the headline exactly while the headline was being read.
- * - **It is masked away from the type.** The mask holds the field to the top
- *   and outer edges, so the copy column sits on plain paper and nothing is
- *   ever read against moving colour.
- * - **It only runs while it is on screen.** WebGL keeps a `requestAnimationFrame`
- *   loop alive as long as it is mounted, so an `IntersectionObserver` unmounts
- *   the canvas once the hero is scrolled past. A background nobody is looking
- *   at should not be costing a frame budget.
- *
- * Under reduced motion, or before the browser is idle, nothing mounts at all —
- * the static wash underneath is the whole background, and the hero looks
- * finished without it.
+ * Under reduced motion nothing mounts, and the static wash underneath is the
+ * whole background.
  */
 export default function HeroAurora() {
   const hostRef = useRef(null);
@@ -47,11 +36,8 @@ export default function HeroAurora() {
     <div
       ref={hostRef}
       aria-hidden="true"
-      /*
-        The mask is weighted to the panel side rather than centred: it keeps
-        the field off the copy column entirely, so no line of type is ever read
-        against drifting colour, and it puts the light where the window is.
-      */
+      /* Weighted to the panel side, not centred: keeps the field off the
+         copy column and puts the light where the window is. */
       className="pointer-events-none absolute inset-x-0 top-0 -z-20 h-[42rem] opacity-[0.75] [mask-image:radial-gradient(85%_70%_at_82%_2%,black_8%,transparent_68%)]"
     >
       {isRunning && (

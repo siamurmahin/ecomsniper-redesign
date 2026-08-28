@@ -2,11 +2,9 @@ import { useLayoutEffect, useRef } from 'react';
 import { gsap, prefersReducedMotion } from '../lib/motion';
 
 /**
- * Scroll-linked parallax for a single element.
- *
- * `speed` is the fraction of the scrolled distance the element travels against
- * the page: 0.2 drifts gently behind the content, -0.15 drifts ahead of it.
- * Values above ~0.35 start to read as broken rather than deep.
+ * Scroll-linked parallax for a single element. `speed` is the fraction of the
+ * scrolled distance travelled against the page; past ~0.35 it reads as broken
+ * rather than deep.
  *
  * @param {number} [speed] Parallax factor, roughly -0.4 … 0.4.
  * @param {object} [options]

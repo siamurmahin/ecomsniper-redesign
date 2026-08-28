@@ -4,15 +4,11 @@ import { EXIT_INTENT } from '../../data/siteContent';
 import { getLenis } from '../../lib/smoothScroll';
 
 /**
- * Exit-intent capture for the visitors who will not buy today.
+ * Exit-intent capture for the visitors who will not buy today — the page
+ * otherwise had one exit, pay now, and 95% of traffic left with no way back.
  *
- * The funnel review's core finding was that the page had exactly one exit —
- * pay now — so 95% of traffic left with no way back. This offers the free
- * playbook instead of the sale.
- *
- * Deliberately restrained: desktop pointer-leave only (never on touch, where
- * there is no such gesture), once per visitor via localStorage, and dismissible
- * with Escape or a click outside.
+ * Restrained on purpose: desktop pointer-leave only, once per visitor via
+ * localStorage, dismissible with Escape or a click outside.
  */
 export default function ExitIntentOffer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,10 +36,8 @@ export default function ExitIntentOffer() {
       armed = true;
     }, 12000);
 
-    // A scroll moves content out from under a stationary pointer, and the
-    // browser reports that as the pointer leaving what it was over. Treating
-    // it as an exit fires the dialog at someone who is still reading, so
-    // anything within a moment of a scroll is not an exit.
+    // A scroll moves content out from under a still pointer and the browser
+    // reports that as a leave, so anything just after a scroll is not an exit.
     let lastScrollAt = 0;
     const onScroll = () => {
       lastScrollAt = performance.now();
@@ -63,10 +57,8 @@ export default function ExitIntentOffer() {
       document.documentElement.removeEventListener('mouseleave', onPointerLeave);
     };
 
-    // `mouseleave` on the root element, not `mouseout` on the document:
-    // `mouseout` bubbles from every element the pointer crosses and reports a
-    // null `relatedTarget` whenever the next element is not resolved yet, so it
-    // reads as an exit dozens of times mid-page.
+    // `mouseleave` on the root, not `mouseout` on the document: mouseout
+    // bubbles from every element crossed and reads as an exit mid-page.
     document.documentElement.addEventListener('mouseleave', onPointerLeave);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
@@ -85,15 +77,11 @@ export default function ExitIntentOffer() {
     return () => window.removeEventListener('keydown', onKey);
   }, [isOpen, close]);
 
-  // Hold the page still behind the dialog, which otherwise scrolls away under
-  // a wheel gesture while the dialog sits fixed on top of it.
-  //
-  // Stopping Lenis is not enough on its own: it only ends Lenis' own easing
-  // and hands the gesture back to the browser, which then scrolls natively.
-  // The events have to be refused as well. `overflow: hidden` would be the
-  // shorter way and is the one to avoid here — it turns the element into a
-  // scroll container, which is what the stylesheet's `overflow-x: clip` on
-  // `html`/`body` exists to prevent.
+  // Hold the page still behind the dialog. Stopping Lenis is not enough — it
+  // only ends its own easing and hands the gesture back to the browser — so
+  // the events are refused too. `overflow: hidden` is avoided deliberately: it
+  // would make the element a scroll container, which the stylesheet's
+  // `overflow-x: clip` exists to prevent.
   useEffect(() => {
     if (!isOpen) return undefined;
 
@@ -105,9 +93,8 @@ export default function ExitIntentOffer() {
     const scrollKeys = new Set([' ', 'PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown']);
     const onKeyDown = (event) => {
       if (!scrollKeys.has(event.key)) return;
-      // Focus sits on the dialog itself, which does not scroll — so exempting
-      // the dialog would just hand these keys to the page behind it. Only a
-      // field the visitor is typing into gets to keep them.
+      // Focus sits on the dialog, which does not scroll, so exempting it
+      // would hand these keys to the page behind. Only real fields keep them.
       const el = event.target;
       if (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName)) return;
       event.preventDefault();

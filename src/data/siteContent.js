@@ -1,16 +1,11 @@
 /**
- * Single source of truth for every word on the marketing site.
- *
- * Copy is lifted from the approved EcomSniper copy deck (27 Aug 2026) so that
- * wording changes never require touching a component. Two deck rules are
- * enforced here rather than in the UI, because they are legal/claim issues:
- *   1. The "99% make 1-3k" income claim is replaced by verifiable proof.
- *   2. The guarantee is stated with the SAME qualification everywhere.
+ * Single source of truth for every word on the site, from the approved copy
+ * deck (27 Aug 2026). Two rules are enforced here rather than in the UI
+ * because they are claim issues: no "99% make 1-3k", and the guarantee always
+ * carries the same qualification.
  */
 
-/* -------------------------------------------------------------------------- */
-/* Global                                                                      */
-/* -------------------------------------------------------------------------- */
+/* Global */
 
 export const SITE = {
   name: 'EcomSniper',
@@ -30,11 +25,7 @@ export const NAV_LINKS = [
   { label: 'FAQ', href: '/#faq' },
 ];
 
-/* -------------------------------------------------------------------------- */
-/* 01 — Hero                                                                   */
-/* Deck: keep the strike-through, replace the 99% claim with a price signal,    */
-/* add a second, free door for the 95% who are not ready to pay today.          */
-/* -------------------------------------------------------------------------- */
+/* 01 — Hero Deck: keep the strike-through, replace the 99% claim with a price signal, add a second, free door for the 95% who are not ready to pay today. */
 
 export const HERO = {
   eyebrow: '400+ members · 8 countries · 24/7 support',
@@ -47,66 +38,37 @@ export const HERO = {
     { text: '.', tone: 'plain' },
   ],
   blessing: { arabic: 'In shaa Allah', translation: 'IF GOD WILLS' },
-  /*
-   * The marked phrase at the end of the headline. The prefix is fixed and only
-   * the last word is typed.
-   *
-   * Splitting it that way is not a detail: a typewriter that deletes the whole
-   * phrase leaves the gradient block empty twice a cycle, which reads as the
-   * headline breaking. With "WHILE YOU" held, the block never collapses and
-   * the animation lands on the only word that changes.
-   *
-   * All three verbs are one word, so the block breathes by about the same
-   * amount each time instead of lurching. "While you sleep" is the site's
-   * existing promise; the other two say the same thing about the other twenty
-   * hours of the day, which is the part a visitor with a full-time job needs
-   * to hear. No new claim — listing and monitoring run unattended either way.
-   */
+  /* Only the last word is typed: deleting the whole phrase would empty the
+     gradient block twice a cycle. Single words so it breathes evenly. */
   markPrefix: 'WHILE YOU',
   markWords: ['SLEEP', 'WORK', 'COMMUTE'],
   subhead:
     'Software that lists for you. Training that starts from zero. And people who answer at 2 in the morning.',
   primaryCta: { label: 'Start your eBay business', href: SITE.signupUrl },
   secondaryCta: { label: 'Get the free playbook', href: '/free-playbook' },
-  /*
-   * Deck: price + risk reversal must appear under the hero buttons, not 900px
-   * down.
-   *
-   * Split into a lead and a qualifier so the hero can set them at two weights:
-   * as three equal-weight sentences they read as small print, which is the one
-   * thing the price and the guarantee must not do. The qualifier is not
-   * decoration — "on the monthly plan" is the sentence that keeps the
-   * guarantee claim honest, and it stays attached to it everywhere.
-   */
+  /* Deck: price and risk reversal go under the hero buttons, not 900px down.
+     Lead and detail are separate so the hero can set them at two weights —
+     three equal-weight sentences read as small print. "On the monthly plan"
+     keeps the guarantee honest and stays attached to it. */
   assurances: [
     { lead: 'From $97', detail: 'for your first month', tone: 'blue', icon: 'salesGrowth' },
     { lead: '30 day', detail: 'money back on the monthly plan', tone: 'green', icon: 'shield' },
     { lead: 'No inventory', detail: 'and no website to build', tone: 'gold', icon: 'seedling' },
   ],
-  /*
-   * The two objections a cold beginner brings to this page: "I would not know
-   * how" and "I would be on my own". They are answered in full by the training
-   * and community sections further down; these are the one-line versions, said
-   * in the hero so nobody leaves before reaching them.
-   */
+  /* The two objections a beginner arrives with, answered in one line each so
+     nobody leaves before the sections that answer them properly. */
   support: [
     { title: 'No experience needed', body: 'Guided step by step' },
     { title: 'An active community', body: 'You are not walking alone' },
   ],
 };
 
-/* -------------------------------------------------------------------------- */
-/* 01b — The hero panel                                                        */
-/* -------------------------------------------------------------------------- */
+/* 01b — The hero panel */
 
 /**
- * What the software actually does to one product, in four beats, shown beside
- * the headline instead of described under it.
- *
- * The numbers are an illustration and are labelled as one in the panel. They
- * are deliberately ordinary — a $38.90 order at $13.20 profit — because the
- * page's argument is that this is repeatable, not that it is spectacular.
- * Nothing here is presented as a screenshot of a live account.
+ * What the software does to one product, in four beats. The numbers are an
+ * illustration, labelled as one in the panel, and deliberately ordinary — the
+ * argument is that it repeats, not that it is spectacular.
  */
 export const HERO_PANEL = {
   windowLabel: 'EcomSniper',
@@ -154,19 +116,10 @@ export const HERO_PANEL = {
       status: 'Paid',
     },
   ],
-  /*
-   * The fifth node, and the reason the sequence does not simply loop.
-   *
-   * Beats one to four are a demonstration. A demonstration that restarts
-   * itself throws away the moment it just earned: the visitor who watched a
-   * product go from found to paid is at the point of highest intent on the
-   * page, and the panel's answer was to quietly go back to step 1. So the run
-   * ends here instead, autoplay stops, and the ask sits where the interest
-   * is. Replay is offered, not forced.
-   *
-   * The claim is the one number the plan already guarantees — 3,000 listings a
-   * month — not a promise about earnings.
-   */
+  /* The fifth step, and why the sequence does not loop: a demonstration that
+     restarts itself spends the highest-intent moment on a repeat. The run ends
+     here, autoplay stops, and the ask sits where the interest is. The claim is
+     a plan limit, not a promise about earnings. */
   finale: {
     chip: 'And again',
     title: 'That was one product. The software does not stop at one.',
@@ -176,20 +129,13 @@ export const HERO_PANEL = {
   },
 };
 
-/* -------------------------------------------------------------------------- */
-/* 02 — Proof bar (NEW per deck)                                               */
-/* One static strip, directly under the hero. Every number is checkable.       */
-/* -------------------------------------------------------------------------- */
+/* 02 — Proof bar (NEW per deck) One static strip, directly under the hero. Every number is checkable. */
 
 export const PROOF_BAR = {
   intro: 'Trusted by sellers in the US, UK, Canada, Australia, Germany, France, Spain and Italy',
-  /*
-   * `countTo` opts a figure into the count-up animation; `value` is what it
-   * reads when it settles, and what shows without JS or under reduced motion.
-   * Only the two real quantities count. "24/7" is a schedule and the
-   * marketplace names are not numbers, so animating them would be decoration
-   * pretending to be data.
-   */
+  /* `countTo` opts a figure into the count-up; `value` is what it settles on,
+     and what shows without JS. Only real quantities count — animating "24/7"
+     would be decoration pretending to be data. */
   items: [
     {
       value: '4.6',
@@ -204,10 +150,7 @@ export const PROOF_BAR = {
   ],
 };
 
-/* -------------------------------------------------------------------------- */
-/* 03 — Who this is for                                                        */
-/* Deck: collapse three near-empty viewports into one screen.                  */
-/* -------------------------------------------------------------------------- */
+/* 03 — Who this is for Deck: collapse three near-empty viewports into one screen. */
 
 export const AUDIENCE = {
   eyebrow: 'First things first',
@@ -228,11 +171,7 @@ export const AUDIENCE = {
   closer: 'Different lives. Same system. Could you be next?',
 };
 
-/* -------------------------------------------------------------------------- */
-/* 04 — Proof: video, reviews, receipts                                        */
-/* Deck: strongest section, keep the structure. Three fixes applied:           */
-/* live Trustpilot link, no truncated reviews, disclaimer under the receipts.  */
-/* -------------------------------------------------------------------------- */
+/* 04 — Proof: video, reviews, receipts Deck: strongest section, keep the structure. Three fixes applied: live Trustpilot link, no truncated reviews, disclaimer under the receipts. */
 
 export const PROOF = {
   eyebrow: "Let's see",
@@ -241,12 +180,8 @@ export const PROOF = {
   headlineTail: 'work?',
   lead: 'Real members answer that question. Watch them, read them, or look at the receipts.',
 
-  /*
-   * Member interviews from the EcomSniper channel. Thumbnails are stored
-   * locally and named after the video so a poster can never end up on the wrong
-   * clip; `id` is the only thing the embed needs. Nothing loads from YouTube
-   * until a visitor actually presses play.
-   */
+  /* Thumbnails are local and named after the video, so a poster can never end
+     up on the wrong clip. Nothing loads from YouTube until play is pressed. */
   videos: [
     {
       id: 'SosyiNFvbVc',
@@ -348,10 +283,7 @@ export const PROOF = {
     'Results shown are from individual members and are not typical. Your results depend on the time you put in, your market, and factors outside anyone’s control. See our results disclaimer.',
 };
 
-/* -------------------------------------------------------------------------- */
-/* 05 — How it works (MOVED UP per deck)                                       */
-/* A cold visitor needs the mechanism before the feature tour.                 */
-/* -------------------------------------------------------------------------- */
+/* 05 — How it works (MOVED UP per deck) A cold visitor needs the mechanism before the feature tour. */
 
 export const MODEL = {
   eyebrow: 'The model, in plain English',
@@ -365,20 +297,14 @@ export const MODEL = {
   closer: 'No warehouse. No website. No money tied up in stock you might not sell.',
 };
 
-/* -------------------------------------------------------------------------- */
-/* 06 — Three things, one system                                               */
-/* -------------------------------------------------------------------------- */
+/* 06 — Three things, one system */
 
 export const PILLARS = {
   eyebrow: 'The system',
   headline: 'Three things. One system.',
   lead: 'Everything you need to build your eBay business.',
-  /*
-   * `tone` is the pillar's colour from the signal set, and it is the same
-   * mapping the live site uses: software blue, community gold, training
-   * green. It travels with the item so the section that expands a pillar can
-   * pick up the same colour later without re-deciding it.
-   */
+  /* `tone` follows the live site: software blue, community gold, training
+     green. It travels with the item so sections downstream inherit it. */
   items: [
     {
       n: '01',
@@ -407,9 +333,7 @@ export const PILLARS = {
   ],
 };
 
-/* -------------------------------------------------------------------------- */
-/* 07 — What the software does                                                 */
-/* -------------------------------------------------------------------------- */
+/* 07 — What the software does */
 
 export const FEATURES = {
   eyebrow: "Let's start with the software",
@@ -450,10 +374,7 @@ export const FEATURES = {
   closer: 'More time building. Less time clicking.',
 };
 
-/* -------------------------------------------------------------------------- */
-/* 08 — Support and community                                                  */
-/* Deck: this is the real differentiator against cheaper tools.                */
-/* -------------------------------------------------------------------------- */
+/* 08 — Support and community Deck: this is the real differentiator against cheaper tools. */
 
 export const COMMUNITY = {
   eyebrow: 'Support and community',
@@ -474,10 +395,7 @@ export const COMMUNITY = {
   },
 };
 
-/* -------------------------------------------------------------------------- */
-/* 09 — The course                                                             */
-/* Deck: rename the middle plan so it stops colliding with the course name.    */
-/* -------------------------------------------------------------------------- */
+/* 09 — The course Deck: rename the middle plan so it stops colliding with the course name. */
 
 export const TRAINING = {
   eyebrow: 'Starting from zero',
@@ -492,10 +410,7 @@ export const TRAINING = {
   cta: { label: 'See what the training covers', href: '/pricing' },
 };
 
-/* -------------------------------------------------------------------------- */
-/* 10 — Founders (NEW per deck)                                                */
-/* Trust in this category rests on the operator, not the software.             */
-/* -------------------------------------------------------------------------- */
+/* 10 — Founders (NEW per deck) Trust in this category rests on the operator, not the software. */
 
 export const FOUNDERS = {
   eyebrow: 'Who is behind this',
@@ -511,10 +426,7 @@ export const FOUNDERS = {
   ],
 };
 
-/* -------------------------------------------------------------------------- */
-/* 11 — Comparison (NEW per deck)                                              */
-/* Honest: we lose rows on purpose, which is what makes the wins believable.   */
-/* -------------------------------------------------------------------------- */
+/* 11 — Comparison (NEW per deck) Honest: we lose rows on purpose, which is what makes the wins believable. */
 
 export const COMPARISON = {
   eyebrow: 'Honest comparison',
@@ -538,10 +450,7 @@ export const COMPARISON = {
     'If price per month is the only thing that matters to you, a bare listing tool will be cheaper. If you want the business taught and the people around it, that is what we built.',
 };
 
-/* -------------------------------------------------------------------------- */
-/* 12 — Pricing preview (NEW per deck)                                         */
-/* Deck: "$" must appear on the homepage. Most visitors never reach /pricing.  */
-/* -------------------------------------------------------------------------- */
+/* 12 — Pricing preview (NEW per deck) Deck: "$" must appear on the homepage. Most visitors never reach /pricing. */
 
 export const PRICING = {
   eyebrow: 'Plans',
@@ -598,10 +507,7 @@ export const PRICING = {
     'Budget beyond the subscription: an eBay store subscription and, in the US, an Amazon Prime membership. See the FAQ for typical monthly costs.',
 };
 
-/* -------------------------------------------------------------------------- */
-/* 13 — FAQ (NEW on the homepage, marked up as FAQPage)                        */
-/* Ten questions drawn from the ones support already answers.                  */
-/* -------------------------------------------------------------------------- */
+/* 13 — FAQ (NEW on the homepage, marked up as FAQPage) Ten questions drawn from the ones support already answers. */
 
 export const FAQ = {
   eyebrow: 'Before you ask',
@@ -651,11 +557,7 @@ export const FAQ = {
   ],
 };
 
-/* -------------------------------------------------------------------------- */
-/* 14 — Countries and guarantee (MERGED per deck)                              */
-/* Deck: the unqualified "no refunds, final sale" line contradicted this.      */
-/* Fixed by naming exactly which plans the guarantee covers.                   */
-/* -------------------------------------------------------------------------- */
+/* 14 — Countries and guarantee (MERGED per deck) Deck: the unqualified "no refunds, final sale" line contradicted this. Fixed by naming exactly which plans the guarantee covers. */
 
 export const ASSURANCE = {
   countries: {
@@ -681,11 +583,7 @@ export const ASSURANCE = {
   },
 };
 
-/* -------------------------------------------------------------------------- */
-/* 15 — Final CTA + the second door                                            */
-/* Deck: the single most important change on the page. Give the 95% who are    */
-/* not ready to pay a way to stay in touch.                                    */
-/* -------------------------------------------------------------------------- */
+/* 15 — Final CTA + the second door Deck: the single most important change on the page. Give the 95% who are not ready to pay a way to stay in touch. */
 
 export const FINAL_CTA = {
   headlineParts: ['ESCAPE THE 9 TO 5.', 'BUILD SOMETHING OF YOUR OWN.'],
@@ -702,9 +600,7 @@ export const FINAL_CTA = {
   },
 };
 
-/* -------------------------------------------------------------------------- */
-/* Conversion furniture                                                        */
-/* -------------------------------------------------------------------------- */
+/* Conversion furniture */
 
 export const STICKY_CTA = {
   // Deck: appears after 25% scroll.
@@ -737,12 +633,9 @@ export const PLAYBOOK = {
   smallprint: 'No countdown timers, no fake scarcity. Unsubscribe at the bottom of any email.',
 };
 
-/*
- * NOTE: this rebuild ships /, /pricing and /free-playbook. The remaining
- * footer paths (/about, /blog, /contact, /help and the legal pages) exist on
- * the current production site; keep them pointing there, or add the routes,
- * before this replaces it — otherwise they land on the 404 page.
- */
+/* This rebuild ships /, /pricing and /free-playbook. The other footer paths
+   exist on the current production site — point them there or add the routes
+   before this replaces it, or they land on the 404 page. */
 export const FOOTER = {
   tagline: 'Software, training and community for eBay sellers.',
   columns: [

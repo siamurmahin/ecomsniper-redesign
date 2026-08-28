@@ -3,11 +3,9 @@ import logoPaper from '../../assets/brand/logo-wordmark-paper.png';
 import logoReticle from '../../assets/brand/logo-reticle.png';
 
 /**
- * The official EcomSniper wordmark.
- *
- * Two artworks rather than one recoloured file: the wordmark's "Sniper" is
- * black on light backgrounds and white on dark, while the reticle and the
- * "eCom" letters keep their brand colours in both. `tone` picks the file.
+ * The official wordmark. Two artworks rather than one recoloured file:
+ * "Sniper" flips black to white by background, while the reticle and "eCom"
+ * keep their brand colours in both.
  *
  * @param {object} props
  * @param {'ink'|'paper'} [props.tone] Which background the mark sits on.

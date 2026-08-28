@@ -2,12 +2,9 @@ import { useState } from 'react';
 import Icon from './Icon';
 
 /**
- * A YouTube player that costs nothing until it is wanted.
- *
- * Until the visitor presses play this is a local poster image and a button —
- * no YouTube script, no iframe, no third-party cookies. On click it swaps in a
- * `youtube-nocookie` iframe with `autoplay=1`, so the click that revealed the
- * player is also the click that starts it.
+ * A YouTube player that costs nothing until it is wanted: a local poster and a
+ * button until play is pressed — no script, no iframe, no third-party cookies.
+ * The click that reveals the player also starts it (`autoplay=1`).
  *
  * @param {object} props
  * @param {string} props.videoId YouTube video id.

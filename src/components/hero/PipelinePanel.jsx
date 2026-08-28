@@ -5,57 +5,30 @@ import { HERO_PANEL } from '../../data/siteContent';
 import { prefersReducedMotion } from '../../lib/motion';
 import { toneOf } from '../../lib/signalTones';
 
-/**
- * How long one beat holds. Short: this is a loop a visitor watches out of the
- * corner of their eye while reading the headline, not a slideshow they are
- * waiting on. The four beats run in under nine seconds.
- */
+/** How long one step holds. Short — this is watched out of the corner of an
+    eye while the headline is read, not waited on. */
 const BEAT_MS = 2100;
 
 /**
- * The hero's right-hand side: one product moving through the software, and
- * then the ask.
+ * The hero's right-hand side: one product through the software — found,
+ * listed, watched, paid — then the ask.
  *
- * Four beats — found, listed, watched, paid — on one product, in the order
- * they happen, followed by a fifth node that **ends the run instead of looping
- * it**. That last node is the whole reason this component is shaped the way it
- * is: a visitor who has just watched a product go from found to paid is at the
- * highest-intent moment the page will get, and the old behaviour was to
- * silently restart at step 1 and spend that moment on a repeat. The run now
- * finishes, autoplay stops, and the offer is sitting there. Replay is offered,
- * never forced.
+ * The fifth step ends the run rather than looping it. A demonstration that
+ * restarts itself spends the highest-intent moment on a repeat, so autoplay
+ * stops there and the offer sits waiting. Replay is offered, not forced.
  *
- * **The rail is a stepper, and the connectors are the clock.**
+ * The connectors are the clock: the one out of the active step animates for
+ * `BEAT_MS` and its `animationend` advances the step, so the bar cannot drift
+ * from the content and pausing it pauses the sequence. Completed connectors
+ * stay filled — an earlier rail refilled from zero each beat, which read as
+ * progress going backwards.
  *
- * React Bits' `Stepper` was tried here first and is the wrong shape for this
- * job: it owns its own step state with no controlled prop, ships a
- * Back/Continue footer meant for a form, hardcodes a purple accent, and
- * spring-animates its height on every change. Driving it from an autoplay
- * clock would mean synthesising clicks on its internal buttons. What it gets
- * right is the *pattern* — numbered nodes, connectors that fill as you
- * advance, a check once a step is behind you — so that is what is rebuilt
- * here, in brand colour, driven by our own clock.
+ * React Bits' `Stepper` was tried first and is the wrong shape (uncontrolled
+ * state, a Back/Continue footer for forms, a hardcoded accent), so only its
+ * pattern is reused.
  *
- * The connector out of the active step animates for exactly `BEAT_MS`, and its
- * `animationend` advances the step. Two things follow from that:
- *
- * - **Progress accumulates instead of resetting.** An earlier rail refilled a
- *   fresh segment from zero every beat, so a step change read as progress
- *   going backwards. Completed connectors stay filled — the line grows across
- *   the panel once, beat one to the offer.
- * - **The bar cannot drift from the content.** No `setInterval` racing a
- *   separate CSS animation; one clock, and pausing it pauses the sequence.
- *
- * Other rules it keeps:
- *
- * - **It is labelled as an illustration.** No fabricated dashboard, no numbers
- *   presented as a live account. The caption says so in words.
- * - **The nodes are controls.** Real buttons; clicking one stops the autoplay,
- *   because a panel that keeps moving after a deliberate choice is fighting
- *   the visitor.
- * - **Reduced motion gets every step at once**, as a plain list with the offer
- *   at the end — which is also what renders if the JS never runs.
- * - **The step is announced** through a polite live region.
+ * Nodes are real buttons and a click ends autoplay. Reduced motion renders
+ * every step at once as a plain list, which is also the no-JS rendering.
  */
 export default function PipelinePanel() {
   const { beats, finale } = HERO_PANEL;
@@ -90,11 +63,8 @@ export default function PipelinePanel() {
 
   return (
     <div className="relative">
-      {/*
-        Colour cast behind the window, in the active step's colour — and the
-        brand wash on the offer, which is the one step that is not a stage of
-        the process.
-      */}
+      {/* Colour cast in the active step's colour; the brand ramp on the
+          offer, the one step that is not a stage of the process. */}
       <div
         aria-hidden="true"
         className={`pointer-events-none absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br to-transparent opacity-60 blur-3xl transition-colors duration-[1200ms] ${
@@ -118,9 +88,7 @@ export default function PipelinePanel() {
           }`}
         />
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Title bar                                                         */}
-        {/* ---------------------------------------------------------------- */}
+        {/* Title bar */}
         <div className="flex items-center gap-3 border-b border-ink-line px-5 py-3.5">
           <span aria-hidden="true" className="flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-signal-red/70" />
@@ -164,9 +132,7 @@ export default function PipelinePanel() {
           </>
         ) : (
           <>
-            {/* -------------------------------------------------------------- */}
-            {/* Stepper rail                                                    */}
-            {/* -------------------------------------------------------------- */}
+            {/* Stepper rail */}
             <div className="flex items-center px-5 py-5">
               {steps.map((step, index) => {
                 const tone = step.isFinale ? null : toneOf(step.tone);
@@ -183,12 +149,8 @@ export default function PipelinePanel() {
                       aria-current={isActive}
                       className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
                     >
-                      {/*
-                        The offer node wears the brand ramp rather than a
-                        signal colour: the four beats are stages of a process,
-                        this one is the thing being sold, and the ramp is
-                        already the site's mark for that.
-                      */}
+                      {/* Brand ramp on the offer node: the beats are stages,
+                          this one is the thing being sold. */}
                       <span
                         className={`grid size-8 place-items-center rounded-full border font-label text-xs font-bold transition-[background-color,border-color,color,transform] duration-500 ease-[var(--ease-out-expo)] ${
                           isActive
@@ -210,11 +172,8 @@ export default function PipelinePanel() {
                       </span>
                     </button>
 
-                    {/*
-                      The connector out of this node. Filled for good once the
-                      step is behind us; the active one is the clock. The last
-                      node has nothing after it — that is what ends the run.
-                    */}
+                    {/* Filled for good once passed; the active one is the
+                        clock. The last node has none, which ends the run. */}
                     {!isLast && (
                       <span
                         aria-hidden="true"
@@ -248,25 +207,15 @@ export default function PipelinePanel() {
               })}
             </div>
 
-            {/* -------------------------------------------------------------- */}
-            {/* Steps                                                           */}
-            {/* -------------------------------------------------------------- */}
+            {/* Steps */}
             <p aria-live="polite" className="sr-only">
               {`Step ${activeIndex + 1} of ${total}: ${activeStep.title}`}
             </p>
 
-            {/*
-              Fixed height, so the panel does not resize as steps of different
-              lengths come forward — a hero that changes height while it is
-              being read pushes everything under it around.
-
-              The steps are absolutely positioned, so `pb-*` on this box
-              reserves nothing: the height itself has to carry the gap. It is
-              set from the tallest step — the offer, at 199px on a desktop
-              width — plus room to breathe under its button, and the wider base
-              value covers the extra lines that copy takes when the panel is
-              the width of a phone.
-            */}
+            {/* Fixed height so the panel does not resize as steps come
+                forward. The steps are absolutely positioned, so padding here
+                reserves nothing — the height carries the gap, set from the
+                tallest step (the offer, 199px) plus room under its button. */}
             <div className="relative h-[16.5rem] px-5 sm:h-[14rem]">
               {steps.map((step, index) => {
                 const isActive = index === activeIndex;
@@ -280,13 +229,9 @@ export default function PipelinePanel() {
                   <div
                     key={step.chip}
                     aria-hidden={!isActive}
-                    /*
-                     * The outgoing step clears in 180ms while the incoming one
-                     * takes 420ms. Equal durations leave both cards legible at
-                     * once through the middle of the swap, and two sets of
-                     * words on top of each other is the part that reads as
-                     * broken rather than as motion.
-                     */
+                    // Outgoing clears in 180ms, incoming takes 420ms: at
+                    // equal durations both cards are legible mid-swap, and two
+                    // sets of words at once is what reads as broken.
                     className={`absolute inset-x-5 top-0 ease-[var(--ease-out-expo)] ${
                       isActive
                         ? 'translate-x-0 opacity-100 transition-[opacity,transform] duration-[420ms]'
@@ -307,11 +252,8 @@ export default function PipelinePanel() {
           </>
         )}
 
-        {/*
-          Where the loop actually runs. Two marketplaces, stated plainly — the
-          one fact in the panel that is not an illustration, and the answer to
-          the question the headline raises: sell where, exactly?
-        */}
+        {/* The one fact in the panel that is not an illustration, and the
+            answer to the question the headline raises: sell where? */}
         <div className="flex items-center justify-between gap-4 border-t border-ink-line bg-ink-soft/60 px-5 py-3.5">
           <p className="micro-label text-muted-dark">Runs on</p>
 
@@ -335,11 +277,8 @@ export default function PipelinePanel() {
 }
 
 /**
- * One beat: whose job it is, what it did, and the two numbers behind it.
- *
- * The rows animate in after the card, a beat apart, so a value lands *as* the
- * eye reaches it. Without that the whole card arrives at once and the numbers
- * — the part worth reading — get no moment of their own.
+ * One beat: whose job it is, what it did, and the two numbers behind it. Rows
+ * arrive after the card so each value lands as the eye reaches it.
  */
 function Beat({ beat, isActive = true }) {
   const tone = toneOf(beat.tone);
@@ -380,10 +319,8 @@ function Beat({ beat, isActive = true }) {
 }
 
 /**
- * The last step: what the four beats add up to, and the ask.
- *
- * `onReplay` is null in the reduced-motion rendering, where every step is
- * already on screen and there is nothing to replay.
+ * The last step: what the four beats add up to, and the ask. `onReplay` is
+ * null under reduced motion, where every step is already on screen.
  */
 function Finale({ finale, onReplay }) {
   return (

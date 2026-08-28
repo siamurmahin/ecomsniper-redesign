@@ -5,11 +5,8 @@ import { PROOF, SITE } from '../data/siteContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { useParallax } from '../hooks/useParallax';
 
-/*
- * Eager glob of the local media this section renders. Vite resolves each to a
- * hashed URL at build time, so the JSX can look them up by the plain key stored
- * in siteContent rather than importing 8 files by hand.
- */
+// Eager glob so the JSX can look media up by the plain key in siteContent
+// instead of importing eight files by hand.
 const VIDEO_THUMBS = import.meta.glob('../assets/video/*.jpg', { eager: true, import: 'default' });
 const RECEIPTS = import.meta.glob('../assets/proof/*.png', { eager: true, import: 'default' });
 
@@ -17,16 +14,12 @@ const thumbUrl = (key) => VIDEO_THUMBS[`../assets/video/${key}.jpg`];
 const receiptUrl = (key) => RECEIPTS[`../assets/proof/${key}.png`];
 
 /**
- * 04 — Proof: video, reviews, receipts.
+ * 04 — Proof: video, reviews, receipts. Structure kept from the original, with
+ * the review fixes applied: a live Trustpilot link, reviews in full rather than
+ * cut mid-sentence, and the disclaimer under the proof instead of in a footnote.
  *
- * The strongest section on the original site, so the structure is kept. Fixes
- * from the review are applied: the review column links to the live Trustpilot
- * profile, reviews run in full rather than cut mid-sentence, and the results
- * disclaimer sits directly under the proof instead of in a footnote.
- *
- * All three kinds of evidence are here on purpose — a face, a written review
- * and a dashboard screenshot answer the same objection for three different
- * kinds of sceptic.
+ * Three kinds of evidence on purpose — a face, a written review and a
+ * dashboard answer the same objection for three kinds of sceptic.
  */
 export default function ProofSection() {
   const sectionRef = useRevealOnScroll();
@@ -61,9 +54,7 @@ export default function ProofSection() {
           lead={PROOF.lead}
         />
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Member interviews                                                   */}
-        {/* ------------------------------------------------------------------ */}
+        {/* Member interviews */}
         <div className="mt-14 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
           <div data-reveal data-reveal-group="proof-video-lead">
             <YouTubeFacade
@@ -99,9 +90,7 @@ export default function ProofSection() {
           Full interviews on the EcomSniper channel. Nothing loads from YouTube until you press play.
         </p>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Receipts                                                            */}
-        {/* ------------------------------------------------------------------ */}
+        {/* Receipts */}
         <div className="mt-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h3 className="micro-label text-muted">The receipts</h3>
@@ -139,9 +128,7 @@ export default function ProofSection() {
           </ul>
         </div>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Written reviews                                                     */}
-        {/* ------------------------------------------------------------------ */}
+        {/* Written reviews */}
         <div className="mt-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h3 className="micro-label text-muted">Read them</h3>

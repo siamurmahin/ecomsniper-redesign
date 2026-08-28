@@ -99,9 +99,7 @@ export default function PlaybookPage() {
               </ul>
             </div>
 
-            {/* ---------------------------------------------------------------- */}
-            {/* Capture form                                                      */}
-            {/* ---------------------------------------------------------------- */}
+            {/* Capture form */}
             <div
               data-reveal
               data-reveal-group="playbook-form"

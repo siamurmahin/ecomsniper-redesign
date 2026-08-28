@@ -34,14 +34,9 @@ import MailIcon from '../../assets/icons/mail.svg?react';
 import MapPinIcon from '../../assets/icons/map-pin.svg?react';
 
 /**
- * The site's icon set, from the brand's own SVGs.
- *
- * Every source file is authored with `fill="currentColor"`, so icons inherit
- * the text colour of whatever they sit in — which is what lets the same file
- * work on the paper bands and the ink bands without a second copy.
- *
- * Inlined as components rather than <img> for exactly that reason, and because
- * 34 separate icon requests would cost more than the bytes they save.
+ * The site's icon set, from the brand's own SVGs. Each is authored with
+ * `fill="currentColor"` and inlined rather than served as <img>, so one file
+ * works on both the paper and the ink bands and there are no 34 extra requests.
  */
 const ICONS = {
   globe: GlobeIcon,
