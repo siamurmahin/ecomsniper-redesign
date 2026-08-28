@@ -48,10 +48,11 @@ export default function HeroDots() {
             dotSpacing={22}
             cursorRadius={200}
             bulgeStrength={26}
-            glowRadius={150}
+            /* No cursor halo: the blue bloom under the pointer read as a
+               highlight the page had not earned. */
+            glowRadius={0}
             gradientFrom="rgba(30, 31, 35, 0.55)"
             gradientTo="rgba(30, 31, 35, 0.22)"
-            glowColor="#0064d2"
           />
         </Suspense>
       )}
