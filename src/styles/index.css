@@ -172,7 +172,8 @@
 @utility btn {
   @apply relative inline-flex items-center justify-center gap-2 rounded-full
          px-7 py-3.5 text-sm font-semibold tracking-tight
-         transition-[transform,box-shadow,background-color,color] duration-300 ease-out
+         transition-[transform,box-shadow,background-color,border-color,color,filter]
+         duration-[400ms] ease-[var(--ease-out-expo)]
          will-change-transform select-none;
 }
 
@@ -217,15 +218,13 @@
     background-image: var(--gradient-brand);
   }
 
-  /* Hover slides the ramp along rather than changing its colours: same object,
-     lit differently. */
+  /* Hover deepens the ramp rather than swapping it for another one.
+     `background-image` is not an animatable property — the old version changed
+     gradients on a single frame however long the transition was — while
+     `filter` interpolates, so the same "lit differently" idea now actually
+     eases. */
   .btn-primary:hover {
-    background-image: linear-gradient(
-      135deg,
-      var(--color-brand-violet) 0%,
-      var(--color-accent) 55%,
-      var(--color-accent-deep) 100%
-    );
+    filter: saturate(1.12) brightness(0.93);
   }
 
   /* Sheen that crosses the button on hover. */
@@ -269,9 +268,11 @@
     animation: brand-drift 6s ease-in-out infinite;
   }
 
+  /* The fill is a background-image layer here too, so hover moves what can be
+     interpolated: the ramp saturates, the label takes the accent. */
   .btn-brand-outline:hover {
-    background-image: linear-gradient(var(--color-accent-wash), var(--color-accent-wash)),
-      var(--gradient-brand);
+    filter: saturate(1.15);
+    color: var(--color-accent-deep);
   }
 
   /* For dark bands, where the ink button would disappear. */
@@ -410,15 +411,15 @@
     animation: row-in 520ms var(--ease-out-expo) both;
   }
 
-  /* A drawn arrow leaning toward what it points at, then easing back. Short
-     travel: past a few pixels it stops being a nudge and starts being a
-     bounce. */
+  /* A drawn arrow leaning toward what it points at, then easing back. A quint
+     ease parked it at both ends and read as static; this curve keeps it moving
+     through the middle of the travel. */
   @keyframes nudge-x {
     0%, 100% { transform: translateX(0); }
-    50%      { transform: translateX(-9px); }
+    50%      { transform: translateX(-14px); }
   }
-  .motion-safe:animate-nudge-x {
-    animation: nudge-x 1.6s var(--ease-in-out-quint) infinite;
+  .motion-safe\:animate-nudge-x {
+    animation: nudge-x 1.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   /* Slow enough that it is never caught moving: light on a surface, not an
