@@ -5,9 +5,9 @@ import { HERO_PANEL } from '../../data/siteContent';
 import { prefersReducedMotion } from '../../lib/motion';
 import { toneOf } from '../../lib/signalTones';
 
-/** How long one step holds. Short — this is watched out of the corner of an
-    eye while the headline is read, not waited on. */
-const BEAT_MS = 2100;
+/** How long one step holds, swap included. Long enough that the two numbers
+    in a step can be read before the next one arrives. */
+const BEAT_MS = 2900;
 
 /**
  * The hero's right-hand side: one product through the software — found,
@@ -83,7 +83,7 @@ export default function PipelinePanel() {
             the step and the eye does not have to hunt for what changed. */}
         <div
           aria-hidden="true"
-          className={`h-1 w-full transition-colors duration-500 ${
+          className={`h-1 w-full transition-colors duration-700 ${
             activeTone ? activeTone.rule : 'brand-fill'
           }`}
         />
@@ -152,7 +152,7 @@ export default function PipelinePanel() {
                       {/* Brand ramp on the offer node: the beats are stages,
                           this one is the thing being sold. */}
                       <span
-                        className={`grid size-8 place-items-center rounded-full border font-label text-xs font-bold transition-[background-color,border-color,color,transform] duration-500 ease-[var(--ease-out-expo)] ${
+                        className={`grid size-8 place-items-center rounded-full border font-label text-xs font-bold transition-[background-color,border-color,color,transform] duration-700 ease-[var(--ease-out-expo)] ${
                           isActive
                             ? `${step.isFinale ? 'brand-fill text-paper' : tone.tile} scale-110 border-transparent`
                             : isDone
@@ -188,7 +188,7 @@ export default function PipelinePanel() {
                             }
                           }}
                           style={isActive ? { animationDuration: `${BEAT_MS}ms` } : undefined}
-                          className={`absolute inset-y-0 left-0 w-full origin-left rounded-full transition-transform duration-500 ${
+                          className={`absolute inset-y-0 left-0 w-full origin-left rounded-full transition-transform duration-700 ${
                             step.isFinale ? 'brand-fill' : tone.rule
                           } ${
                             isDone
@@ -229,13 +229,14 @@ export default function PipelinePanel() {
                   <div
                     key={step.chip}
                     aria-hidden={!isActive}
-                    // Outgoing clears in 180ms, incoming takes 420ms: at
-                    // equal durations both cards are legible mid-swap, and two
-                    // sets of words at once is what reads as broken.
+                    // Incoming takes 620ms on an expo curve; outgoing leaves
+                    // in 340ms on an ease-in, accelerating away rather than
+                    // snapping off. It stays the shorter of the two so the
+                    // middle of the swap never holds two legible cards.
                     className={`absolute inset-x-5 top-0 ease-[var(--ease-out-expo)] ${
                       isActive
-                        ? 'translate-x-0 opacity-100 transition-[opacity,transform] duration-[420ms]'
-                        : `pointer-events-none opacity-0 transition-[opacity,transform] duration-[180ms] ${
+                        ? 'translate-x-0 opacity-100 transition-[opacity,transform] duration-[620ms]'
+                        : `pointer-events-none opacity-0 transition-[opacity,transform] duration-[340ms] ease-[cubic-bezier(0.4,0,1,1)] ${
                             index < activeIndex ? leaveClass : enterClass
                           }`
                     }`}
@@ -303,7 +304,7 @@ function Beat({ beat, isActive = true }) {
         {beat.rows.map((row, index) => (
           <div
             key={row.label}
-            style={isActive ? { animationDelay: `${140 + index * 110}ms` } : undefined}
+            style={isActive ? { animationDelay: `${260 + index * 130}ms` } : undefined}
             className={`flex items-baseline justify-between gap-4 px-3.5 py-2.5 ${
               isActive ? 'motion-safe:animate-row-in' : ''
             }`}

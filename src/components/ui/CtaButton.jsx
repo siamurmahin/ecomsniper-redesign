@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 const VARIANT_CLASS = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
+  brandOutline: 'btn-brand-outline',
   onInk: 'btn-on-ink',
   ghost: 'btn-ghost-on-ink',
 };

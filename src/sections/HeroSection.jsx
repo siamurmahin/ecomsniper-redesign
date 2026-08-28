@@ -197,7 +197,7 @@ export default function HeroSection() {
               </span>
               <span data-hero-cta>
                 {/* The second door: for the majority who will not buy today. */}
-                <CtaButton href={HERO.secondaryCta.href} variant="secondary" intent="hero-playbook">
+                <CtaButton href={HERO.secondaryCta.href} variant="brandOutline" intent="hero-playbook">
                   {HERO.secondaryCta.label}
                 </CtaButton>
               </span>

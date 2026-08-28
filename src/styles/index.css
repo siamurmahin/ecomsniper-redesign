@@ -250,6 +250,30 @@
     @apply btn border border-hairline bg-paper text-ink hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent-wash;
   }
 
+  /* Paper fill, brand ramp in the border, drifting on the same loop as the
+     hero mark. Two background layers do the work: a solid paper fill clipped
+     to the padding box, over the ramp clipped to the border box — the only way
+     to paint a gradient into a border without wrapping the button in a second
+     element. `background-size` on the ramp is what gives the drift somewhere
+     to travel. Used on the hero's second door only; the other secondary
+     buttons stay quiet. */
+  .btn-brand-outline {
+    @apply btn text-ink shadow-lift hover:-translate-y-0.5 hover:shadow-float;
+    border: 2px solid transparent;
+    background-image: linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size:
+      100% 100%,
+      220% 100%;
+    animation: brand-drift 6s ease-in-out infinite;
+  }
+
+  .btn-brand-outline:hover {
+    background-image: linear-gradient(var(--color-accent-wash), var(--color-accent-wash)),
+      var(--gradient-brand);
+  }
+
   /* For dark bands, where the ink button would disappear. */
   .btn-on-ink {
     @apply btn bg-accent text-paper hover:-translate-y-0.5 hover:bg-accent-deep hover:text-paper;
@@ -383,7 +407,7 @@
     to   { opacity: 1; transform: translateY(0); }
   }
   .motion-safe\:animate-row-in {
-    animation: row-in 420ms var(--ease-out-expo) both;
+    animation: row-in 520ms var(--ease-out-expo) both;
   }
 
   /* Slow enough that it is never caught moving: light on a surface, not an
