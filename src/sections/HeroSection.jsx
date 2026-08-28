@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import HeroAurora from '../components/hero/HeroAurora';
+import HeroDots from '../components/hero/HeroDots';
 import PipelinePanel from '../components/hero/PipelinePanel';
 import TextType from '../components/reactbits/TextType';
 import { HERO } from '../data/siteContent';
@@ -88,6 +89,9 @@ export default function HeroSection() {
     >
       {/* Looping shader field, masked away from the copy column. */}
       <HeroAurora />
+
+      {/* Dot texture under it, cut out of the copy column. */}
+      <HeroDots />
 
       {/* Static floor under the aurora — red behind the copy, blue behind
           the panel. Carries the hero alone when the canvas never mounts. */}
