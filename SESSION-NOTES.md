@@ -720,3 +720,172 @@ than a wrap. So the block takes the reduction on its own — `text-[0.78em]`
 below `sm`, back to `1em` above it, plus `px-2` instead of `px-2.5` — which
 brings it to ~304px inside 335px. Shrinking the whole `h1` instead would have
 cost the other three lines their weight to fit one word of one line.
+
+---
+
+# Session notes — 29 Aug 2026, later
+
+## 21. Favicon rebuilt from the brand mark
+
+`public/favicon.svg` was a generic ink tile with a blue dot, unrelated to
+anything. Redrawn as the actual reticle in the four brand colours: green outer
+ring, blue inner ring, red centre with a paper dot, gold crosshair spikes.
+
+Rings are heavier and spikes shorter than the source artwork — at 16px the true
+proportions close into a smudge. `apple-touch-icon.png` was already the real
+mark and is untouched.
+
+## 22. Comment pass over the whole tree
+
+Every rationale block cut to one or two sentences, three-line divider banners
+collapsed to a single label, and comments that restated the code deleted.
+
+```
+1,193 comment lines  →  746        19% of the codebase  →  13%
+27 files, +337 / −835
+```
+
+What stayed is the non-obvious why: the contrast ratio behind each token, why
+SplitText and a React component cannot share an element, why the panel's
+progress bar is the clock, why `overflow-x: clip` rather than `hidden`, why
+`mouseleave` on the root rather than `mouseout`.
+
+**Verified mechanically.** A throwaway script stripped all comments from each
+changed file and diffed the result against its committed version; all 26 source
+files came back identical, so no code moved. The script is not in the repo.
+
+## 23. On GitHub, and Netlify-ready
+
+**https://github.com/siamurmahin/ecomsniper-redesign** — private, `main`.
+
+`git push` authenticates through Git Credential Manager, which opens a browser
+window against the logged-in GitHub session. No token is stored in the project.
+
+`netlify.toml` pins Node 22 (Netlify's own default drifts between deploys),
+restates the SPA fallback that `public/_redirects` also carries, and sets cache
+headers: immutable for the content-hashed assets, `must-revalidate` for
+`index.html` so a cached document can never point at assets from a previous
+deploy.
+
+**Not yet connected.** Connecting is a browser-side authorisation on the GitHub
+account: app.netlify.com → Add new project → Import from GitHub → grant access
+to this repo only → deploy. Settings auto-fill from `netlify.toml`.
+
+## 24. Hero background — dot field under the aurora
+
+`components/hero/HeroDots.jsx` wraps React Bits' `DotField`.
+
+Two rounds of tuning, both worth remembering:
+
+- **First attempt was invisible.** Ink at 0.28 alpha on 26px spacing, under an
+  aurora running at 0.75 opacity — what showed was the aurora, which reads as a
+  plain gradient wash. Dots are now 0.55/0.22 alpha, 22px spacing, 1.9px
+  radius, and the aurora is down to 0.42.
+- **The cursor glow had to go.** `glowRadius` painted a blue bloom that tracked
+  the pointer and read as a highlight the page had not earned. Zero now. Dots
+  still displace slightly under the cursor.
+
+Masked out of the copy column and hidden below `lg`, where the layout stacks
+and the copy spans full width. Unmounted by an `IntersectionObserver` once the
+hero scrolls past — the canvas holds a rAF loop for as long as it is mounted.
+
+**`ShapeGrid` was tried alongside it** behind a temporary `?bg=squares` switch.
+It draws a full ruled floor across the hero — visible lines behind the headline
+and through the panel, fighting the panel's own borders. Rejected; the switch
+and the wrapper are gone.
+
+## 25. The line under the panel: added, then removed
+
+The illustration caption was replaced with an earnings claim, in the only form
+that could stand behind it — attributed ("members report"), bounded ("who
+stayed 3 months"), stated as a report rather than a rate, and qualified
+directly underneath rather than in a footnote.
+
+Then removed entirely at your call, caption included.
+
+**Live consequence, worth knowing:** the panel's figures — $11.40 margin, 142
+sold, $38.90 order, $13.20 profit — are invented for the demonstration, and
+nothing on the page says so any more. The footer disclaimer covers results in
+general but not the panel. Cheapest fix if it ever matters: a "Sample data"
+chip in the panel's title bar next to WORKING, which costs no vertical space.
+
+## 26. Panel timing — three passes to a fade
+
+| | v1 | v2 | now |
+|---|---|---|---|
+| Hold per step | 2100ms | 2900ms | **3800ms** |
+| Step in | 420ms slide | 620ms slide | **900ms fade, 420ms delay** |
+| Step out | 180ms | 340ms | **500ms fade** |
+| Value rows | +140/250ms | +260/390ms | **+620/770ms** |
+
+**The slide was the problem, not the numbers.** Horizontal movement reads as
+speed however generous the timing is. It is opacity only now, and the fades are
+staggered rather than simultaneous — old one out over 500ms, new one waits
+420ms then takes 900ms, so they overlap for about 80ms. A true simultaneous
+crossfade leaves two legible cards stacked for half a second, which is what
+reads as broken. The gap between them is what makes it a fade rather than a
+swap.
+
+`direction` state went with the slide; nothing reads it now.
+
+## 27. Buttons: hover was never animating
+
+Both gradient variants changed `background-image` on hover, and **that property
+is not animatable** — the change lands on one frame no matter what the
+transition says. No duration would ever have fixed it.
+
+They change `filter` instead, which interpolates: the primary saturates and
+darkens (`saturate(1.12) brightness(0.93)`), the outline saturates and takes
+the accent on its label. The base `.btn` transition is 400ms on expo and now
+covers `transform, box-shadow, background-color, border-color, color, filter`.
+
+**`.btn-brand-outline`** — the hero's second CTA. Paper fill, brand ramp as the
+border, drifting on the hero mark's loop. Two background layers: a solid fill
+clipped to the padding box over the ramp clipped to the border box, which is
+how a gradient gets into a border without a wrapper element. A separate variant
+rather than a change to `btn-secondary`, because the pricing and 404 pages use
+that one and should stay quiet.
+
+## 28. The arrow beside the playbook button
+
+A drawn arrow with the note *Grab it for free* in serif italic, blue, pointing
+back at the second CTA — the door most visitors should take, which nothing else
+in the hero said.
+
+Three faults on the way, all silent:
+
+1. **It never animated.** The hand-written rule read
+   `.motion-safe:animate-nudge-x` — an unescaped colon, so it parsed as a
+   pseudo-class on `.motion-safe` and matched nothing. Caught with
+   `getAnimations()` on the element, not by looking at it.
+2. **Running, it still read as static.** `ease-in-out-quint` parks the travel
+   at both ends. It is 14px left and 12px up on a gentler curve over 1.2s now.
+3. **Rotation fought the mirror.** Replacing the mirror with a rotate sent the
+   head one way and the tail the other. Both compose inside the SVG:
+   `rotate(-38 24 14) translate(0,28) scale(1,-1)`. It has to be inside the
+   SVG — the nudge animation owns `transform` on that element and would
+   overwrite a Tailwind rotate class outright.
+
+The note is lifted 12px, because the tilt puts the arrow's tail above the
+vertical centre it was aligned to.
+
+## Where this stands
+
+The hero is finished unless you want more: typed rotating headline, dot field
+under a shader aurora, five-step panel that ends on the offer, three assurance
+facts, two objection cards, and a gradient-bordered second CTA with the arrow.
+
+**Next section by the funnel order: 02 proof bar, then 03 who this is for.**
+
+Still outstanding, unchanged:
+
+1. **Dashboard screenshots** — `FeatureTourSection` still uses `AppFrame`, and
+   the hero panel is the other slot they would fit.
+2. `VITE_PLAYBOOK_ENDPOINT` unset — the playbook form delivers nothing. Set it
+   in Netlify's environment variables once the ESP endpoint exists.
+3. Confirm the live Trustpilot score still matches the stated 4.6 from 90+.
+4. No routes for `/about`, `/blog`, `/contact`, `/help` or the legal pages —
+   the footer links point at nothing. `/terms` and `/privacy` are parked
+   awaiting real text; the other six can be written from `siteContent.js`.
+5. `/design-lab` is still mounted and reachable by URL on any deploy.
+6. The panel's illustrative figures are no longer labelled — see §25.
