@@ -241,7 +241,7 @@ export default function HeroSection() {
                     </g>
                   </svg>
 
-                  <span className="font-serif text-[0.95rem] italic leading-tight text-signal-blue-deep">
+                  <span className="-translate-y-3 font-serif text-[0.95rem] italic leading-tight text-signal-blue-deep">
                     Grab it for free
                   </span>
 
