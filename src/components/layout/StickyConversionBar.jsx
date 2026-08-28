@@ -1,0 +1,68 @@
+import { useEffect, useState } from 'react';
+import CtaButton from '../ui/CtaButton';
+import { STICKY_CTA } from '../../data/siteContent';
+
+/**
+ * Persistent conversion bar.
+ *
+ * Per the funnel review, the offer has to stay reachable once a visitor is
+ * deep in the page: it appears after 25% scroll and hides again over the final
+ * CTA, where a second copy of the same button would only compete with itself.
+ */
+export default function StickyConversionBar() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const finalCta = document.getElementById('final-cta');
+
+    const onScroll = () => {
+      const scrolled = window.scrollY;
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = scrollable > 0 ? scrolled / scrollable : 0;
+
+      // Hide once the real CTA block enters the viewport.
+      const finalCtaVisible = finalCta
+        ? finalCta.getBoundingClientRect().top < window.innerHeight * 0.9
+        : false;
+
+      setIsVisible(ratio > STICKY_CTA.showAfterScrollRatio && !finalCtaVisible);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`fixed inset-x-0 bottom-0 z-40 transition-[transform,opacity] duration-500 ease-[var(--ease-out-expo)] ${
+        isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-full opacity-0'
+      }`}
+      // Announced only when it actually appears, never as a page-load surprise.
+      aria-hidden={!isVisible}
+    >
+      <div className="site-shell pb-3">
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-ink-line bg-ink/95 px-4 py-3 text-paper shadow-float backdrop-blur-xl sm:px-5">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold">{STICKY_CTA.price}</p>
+            <p className="hidden truncate text-xs text-muted-dark sm:block">{STICKY_CTA.message}</p>
+          </div>
+
+          <CtaButton
+            href={STICKY_CTA.cta.href}
+            variant="onInk"
+            intent="sticky-bar"
+            className="shrink-0 !px-6 !py-2.5 text-[0.82rem]"
+            tabIndex={isVisible ? 0 : -1}
+          >
+            {STICKY_CTA.cta.label}
+          </CtaButton>
+        </div>
+      </div>
+    </div>
+  );
+}

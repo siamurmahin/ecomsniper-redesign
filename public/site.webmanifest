@@ -1,0 +1,10 @@
+{
+  "name": "EcomSniper",
+  "short_name": "EcomSniper",
+  "description": "eBay dropshipping software, training and community.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfbfa",
+  "theme_color": "#1e1f23",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

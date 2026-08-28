@@ -1,0 +1,49 @@
+/*
+ * React Bits — SpotlightCard (MIT + Commons Clause), adapted.
+ *
+ * The upstream file also paints the card: a dark #111 surface, a #222 border,
+ * fixed padding and radius. That is stripped here, because the pillar cards
+ * already have a surface from the design system and a second one would fight
+ * it. What is kept is the mechanism — the pointer position written to two
+ * custom properties, and the radial highlight that reads them.
+ */
+.card-spotlight {
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgb(0 100 210 / 0.14);
+}
+
+.card-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    22rem circle at var(--mouse-x) var(--mouse-y),
+    var(--spotlight-color),
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card-spotlight:hover::before,
+.card-spotlight:focus-within::before {
+  opacity: 1;
+}
+
+/* The highlight is decoration; the card's own content sits above it. */
+.card-spotlight > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* A highlight that tracks the pointer is motion. Honour the setting. */
+@media (prefers-reduced-motion: reduce) {
+  .card-spotlight::before {
+    display: none;
+  }
+}

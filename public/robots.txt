@@ -1,0 +1,8 @@
+# EcomSniper — allow everything except app/auth surfaces.
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /account
+
+Sitemap: https://ecomsniper.io/sitemap.xml
