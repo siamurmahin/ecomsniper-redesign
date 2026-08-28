@@ -195,11 +195,46 @@ export default function HeroSection() {
                   {HERO.primaryCta.label}
                 </CtaButton>
               </span>
-              <span data-hero-cta>
+              <span data-hero-cta className="relative">
                 {/* The second door: for the majority who will not buy today. */}
                 <CtaButton href={HERO.secondaryCta.href} variant="brandOutline" intent="hero-playbook">
                   {HERO.secondaryCta.label}
                 </CtaButton>
+
+                {/*
+                  A drawn arrow pointing back at the button — the second door
+                  is the one most visitors should take, and nothing else in the
+                  hero says so. Decoration, so it is hidden from assistive tech
+                  and from the layout below lg, where the CTAs stack full width
+                  and there is no margin for it.
+                */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-full top-1/2 hidden -translate-y-1/2 items-center pl-2 lg:flex"
+                >
+                  <svg
+                    viewBox="0 0 48 28"
+                    fill="none"
+                    className="h-11 w-[4.5rem] shrink-0 text-signal-blue motion-safe:animate-nudge-x"
+                  >
+                    {/* Drawn in one stroke, tail to head, so it reads as a
+                        pen mark rather than a UI glyph. */}
+                    <path
+                      d="M45 6c-9.5-2.6-19.4-1.2-27.4 3.4C13.4 11.9 9.6 15.4 7 19.6"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M5.6 21.8l1.1-7.4M5.6 21.8l7.3 1.5"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+
+                </span>
               </span>
             </div>
 

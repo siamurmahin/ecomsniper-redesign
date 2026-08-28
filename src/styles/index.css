@@ -410,6 +410,17 @@
     animation: row-in 520ms var(--ease-out-expo) both;
   }
 
+  /* A drawn arrow leaning toward what it points at, then easing back. Short
+     travel: past a few pixels it stops being a nudge and starts being a
+     bounce. */
+  @keyframes nudge-x {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-9px); }
+  }
+  .motion-safe:animate-nudge-x {
+    animation: nudge-x 1.6s var(--ease-in-out-quint) infinite;
+  }
+
   /* Slow enough that it is never caught moving: light on a surface, not an
      animation. */
   @keyframes brand-drift {
