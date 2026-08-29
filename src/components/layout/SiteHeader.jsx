@@ -43,7 +43,10 @@ export default function SiteHeader() {
         <div
           // py-2 rather than py-2.5: the wordmark is now the tallest thing in
           // the pill, so the smaller inset keeps the bar the height it was.
-          className={`relative flex items-center justify-between gap-4 rounded-full border px-4 py-2 transition-[background-color,border-color,box-shadow,padding] duration-500 ease-[var(--ease-out-expo)] sm:px-5 ${
+          // The tighter gap and inset below sm are what pay for the wordmark:
+          // every pixel not spent on padding here is one the logo can keep, and
+          // keeping the name legible on a phone is worth more than the inset.
+          className={`relative flex items-center justify-between gap-2 rounded-full border px-3 py-2 transition-[background-color,border-color,box-shadow,padding] duration-500 ease-[var(--ease-out-expo)] sm:gap-4 sm:px-5 ${
             isCondensed
               ? 'border-hairline bg-paper/85 shadow-lift backdrop-blur-xl'
               : 'border-transparent bg-transparent'
@@ -57,7 +60,7 @@ export default function SiteHeader() {
               isCondensed ? 'opacity-70' : 'opacity-0'
             }`}
           />
-          <Link to="/" aria-label="EcomSniper home" className="shrink-0">
+          <Link to="/" aria-label="EcomSniper home" className="min-w-0 shrink">
             <BrandLogo />
           </Link>
 
@@ -84,7 +87,10 @@ export default function SiteHeader() {
             <CtaButton
               href={SITE.signupUrl}
               intent="header-signup"
-              className="!px-5 !py-2.5 text-[0.82rem]"
+              // whitespace-nowrap: the label is two words and a price, and by
+              // ~500px the pill ran out of room and broke it onto a second
+              // line, which doubled the height of the whole header.
+              className="whitespace-nowrap !px-3 !py-2.5 text-[0.82rem] sm:!px-5"
             >
               Start for $97
             </CtaButton>
@@ -96,7 +102,7 @@ export default function SiteHeader() {
               aria-expanded={isMenuOpen}
               aria-controls="mobile-nav-panel"
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              className="grid size-10 place-items-center rounded-full border border-hairline bg-paper/60 lg:hidden"
+              className="grid size-9 shrink-0 place-items-center rounded-full border border-hairline bg-paper/60 sm:size-10 lg:hidden"
             >
               <span className="relative block h-3 w-4">
                 <span

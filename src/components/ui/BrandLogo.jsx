@@ -34,9 +34,21 @@ export default function BrandLogo({ tone = 'ink', reticleOnly = false, className
       height={336}
       // The reticle is the full height of the artwork and the lettering only
       // 46% of it, so the box has to be taller than a text logo would be for
-      // the same reading size. Below 44px the cart that forms the "e" loses
-      // its handle and the wordmark starts reading as "7eComSniper".
-      className={`h-11 w-auto ${className}`.trim()}
+      // the same reading size — 44px is where the cart that forms the "e"
+      // still keeps its handle.
+      //
+      // The mark is 4.5:1, so height is really a width decision: at 44px it is
+      // 197px, which is most of a phone's header once the sign-up button and
+      // the menu toggle have taken their share. Rather than step it down at a
+      // breakpoint and drop the name entirely on the narrowest phones, it
+      // tracks the viewport and stops at both ends — never above the 44px it
+      // is drawn for, never below the 24px where the lettering stops being
+      // readable at all.
+      // max-w-full with object-contain is the last resort under the clamp: on a
+      // 320px phone the row is still a few pixels over, and a logo that gives
+      // them up is better than a sign-up button clipped by the pill edge. The
+      // aspect holds either way, so this only ever reads as slightly smaller.
+      className={`h-[clamp(1.5rem,7.5vw,2.75rem)] w-auto max-w-full object-contain object-left ${className}`.trim()}
     />
   );
 }

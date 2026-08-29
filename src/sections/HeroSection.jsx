@@ -34,6 +34,42 @@ export default function HeroSection() {
   // them.
   const [isStatic] = useState(() => prefersReducedMotion());
 
+  // The eyebrow scrolls its copy instead of wrapping, but only on the widths
+  // where the line genuinely does not fit: a marquee that runs when there is
+  // nothing to reveal is just motion for its own sake. Measuring beats a
+  // breakpoint here because the copy is content and can change length.
+  const eyebrowTrackRef = useRef(null);
+  const eyebrowTextRef = useRef(null);
+  const [isEyebrowOverflowing, setIsEyebrowOverflowing] = useState(false);
+
+  useLayoutEffect(() => {
+    const track = eyebrowTrackRef.current;
+    const text = eyebrowTextRef.current;
+    // Reduced motion keeps the wrapping version, which costs a second line but
+    // never moves and never hides a word behind a clip.
+    if (!track || !text || isStatic) return undefined;
+
+    // Compare against the text's own natural width, not the rendered one:
+    // once the marquee is on, the rendered row holds two copies and would
+    // always read as overflowing, so the state could never switch back off.
+    const measure = () => {
+      const available = track.clientWidth;
+      // Discount the seam gap the copy only carries while scrolling, or the
+      // measurement would answer a different question in each state and the
+      // marquee could latch on at the threshold.
+      const padEnd = parseFloat(getComputedStyle(text).paddingInlineEnd) || 0;
+      const natural = text.getBoundingClientRect().width - padEnd;
+      // A sub-pixel rounding difference is not an overflow worth animating.
+      setIsEyebrowOverflowing(available > 0 && natural - available > 1);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    observer.observe(text);
+    return () => observer.disconnect();
+  }, [isStatic]);
+
   useLayoutEffect(() => {
     const scope = heroRef.current;
     if (!scope || isStatic) return undefined;
@@ -105,18 +141,67 @@ export default function HeroSection() {
             and centring the panel against it left a hole above the window. */}
         <div className="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
           {/* Copy */}
-          <div className="text-center lg:text-left">
+          {/* min-w-0: a grid item's automatic minimum is its content, so the
+              eyebrow's now-unbreakable line would widen this column past the
+              viewport instead of being clipped and scrolled. */}
+          <div className="min-w-0 text-center lg:text-left">
             {/* Ink, not the ramp: the first checkable proof on the page
                 has to read as a fact, not as a second button. */}
             <p
               data-hero-eyebrow
-              className="inline-flex flex-wrap items-center justify-center gap-x-2.5 rounded-full bg-ink px-4 py-2 font-label text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-paper shadow-lift"
+              className="inline-flex max-w-full items-center gap-x-2.5 rounded-full bg-ink px-4 py-2 font-label text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-paper shadow-lift"
             >
-              <span aria-hidden="true" className="relative grid size-2 place-items-center">
+              {/* shrink-0 and no flex-wrap on the row: the copy used to be a
+                  bare text node, so on a phone it became its own flex line and
+                  pushed the live dot up onto a line of its own. The dot is a
+                  fixed item on the left now and never moves. */}
+              <span
+                aria-hidden="true"
+                className="relative grid size-2 shrink-0 place-items-center"
+              >
                 <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
                 <span className="size-2 rounded-full bg-signal-green-soft" />
               </span>
-              {HERO.eyebrow}
+
+              {/* One line, always. Where the copy fits it simply sits centred;
+                  where it does not, it scrolls past rather than wrapping and
+                  making the pill twice as tall. min-w-0 lets this shrink below
+                  the text's own width, which is what makes the clip possible. */}
+              <span ref={eyebrowTrackRef} className="min-w-0 flex-1 overflow-hidden">
+                <span
+                  // animate-marquee-drift is hand-written CSS rather than a
+                  // generated utility, so a `motion-safe:` prefix on it would
+                  // never compile — the reduced-motion case is handled by
+                  // isStatic gating the measurement instead.
+                  className={`flex ${
+                    isEyebrowOverflowing
+                      ? 'w-max animate-marquee-drift'
+                      : 'justify-center'
+                  }`}
+                  style={isEyebrowOverflowing ? { '--marquee-duration': '14s' } : undefined}
+                >
+                  {/* While scrolling, the trailing space is padding that
+                      travels with the copy, so the seam between the two passes
+                      reads as a gap rather than as one run-on sentence. Both
+                      copies carry it, which is what keeps the -50% loop point
+                      landing exactly one copy along. Standing still there is
+                      nothing to separate, so the pill stays as tight as it
+                      was before any of this. */}
+                  <span
+                    ref={eyebrowTextRef}
+                    className={`${isStatic ? '' : 'whitespace-nowrap'} ${
+                      isEyebrowOverflowing ? 'pe-6' : ''
+                    }`}
+                  >
+                    {HERO.eyebrow}
+                  </span>
+                  {isEyebrowOverflowing ? (
+                    <span aria-hidden="true" className="whitespace-nowrap pe-6">
+                      {HERO.eyebrow}
+                    </span>
+                  ) : null}
+                </span>
+              </span>
             </p>
 
             <h1
