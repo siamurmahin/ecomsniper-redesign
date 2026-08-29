@@ -137,10 +137,14 @@ export const PROOF_BAR = {
      would be decoration pretending to be data. */
   items: [
     {
-      value: '4.6',
-      countTo: 4.6,
+      value: '4.7',
+      countTo: 4.7,
       label: 'Trustpilot score',
-      detail: 'from 90+ reviews',
+      /* Both figures are what the linked profile showed on 29 Aug 2026. The
+         card links straight to it, so anything that does not match is checked
+         and found wrong in one click — which costs more than the larger number
+         could ever be worth. */
+      detail: 'from 41 reviews',
       href: SITE.trustpilotUrl,
     },
     { value: '400+', countTo: 400, suffix: '+', label: 'Members', detail: 'building income on eBay' },

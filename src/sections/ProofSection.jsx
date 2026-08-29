@@ -169,7 +169,7 @@ export default function ProofSection() {
                   </span>
                 </div>
 
-                <p className="mt-4 flex gap-0.5 text-ebay-green" aria-label="Rated 5 out of 5">
+                <p className="mt-4 flex gap-0.5 text-signal-gold" aria-label="Rated 5 out of 5">
                   {Array.from({ length: 5 }, (_, index) => (
                     <Icon key={index} name="star" className="size-3.5" />
                   ))}
