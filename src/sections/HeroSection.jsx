@@ -121,7 +121,15 @@ export default function HeroSection() {
     <section
       ref={heroRef}
       aria-labelledby="hero-headline"
-      className="relative isolate overflow-hidden pb-16 pt-32 sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40"
+      // A full viewport, so nothing of the next section shows on load and the
+      // hero is the whole first impression. min-h rather than h: if the copy
+      // ever outgrows a short window the section stretches instead of hiding
+      // its own bottom. svh rather than vh because mobile browser chrome makes
+      // vh taller than what is actually on screen, which would push the CTAs
+      // under the fold on exactly the devices that can least afford it. The top
+      // padding stays — it is what keeps the headline clear of the fixed header
+      // — and justify-center balances the content in what is left.
+      className="relative isolate flex min-h-svh flex-col justify-center overflow-hidden pb-16 pt-32 sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40"
     >
       {/* Looping shader field, masked away from the copy column. */}
       <HeroAurora />
