@@ -555,18 +555,26 @@ export default function AudienceSection() {
           title. The deep step of the green, since #86b817 on this band is about
           2.4:1 and unreadable at this size.
         */}
-        {/* The question alone. "Different lives. Same system." summarised the
-            eight, and the eight are directly above saying it themselves — read
-            after them it was a caption on something already understood, and it
-            pushed the line long enough to read as a heading again. The sentence
-            is still in the deck under `closer.beats` if it is wanted back. */}
+        {/* Two weights, not one line. Setting the whole closer at a single size
+            was what made it read as another heading; the first sentence is the
+            setup and sits back, the question is the only part that asks for
+            anything and keeps the weight.
+
+            `join(' ')` rather than spacing the beats with margin: a gap made of
+            margin looks identical and reads as "Different lives.Same system."
+            to a screen reader, a copy and paste, or a search. */}
         <p
           data-reveal
           data-reveal-group="audience-closer"
-          className="mt-14 text-center font-display text-base font-bold sm:text-lg"
+          className="mt-14 text-center font-display"
         >
-          {AUDIENCE.closer.questionLead} {AUDIENCE.closer.questionMark}{' '}
-          {AUDIENCE.closer.questionTail}
+          <span className="block text-sm font-semibold text-muted sm:text-base">
+            {AUDIENCE.closer.beats.join(' ')}
+          </span>
+          <span className="mt-1.5 block text-base font-bold sm:text-lg">
+            {AUDIENCE.closer.questionLead} {AUDIENCE.closer.questionMark}{' '}
+            {AUDIENCE.closer.questionTail}
+          </span>
         </p>
 
         <div className="mt-4 flex justify-center">
