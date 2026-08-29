@@ -1,5 +1,6 @@
 import GlobeIcon from '../../assets/icons/globe.svg?react';
 import ChevronDownIcon from '../../assets/icons/chevron-down.svg?react';
+import MouseScrollIcon from '../../assets/icons/mouse-scroll.svg?react';
 import CloseIcon from '../../assets/icons/close.svg?react';
 import SalesGrowthIcon from '../../assets/icons/sales-growth.svg?react';
 import CheckCircleIcon from '../../assets/icons/check-circle.svg?react';
@@ -41,6 +42,7 @@ import MapPinIcon from '../../assets/icons/map-pin.svg?react';
 const ICONS = {
   globe: GlobeIcon,
   chevronDown: ChevronDownIcon,
+  mouseScroll: MouseScrollIcon,
   close: CloseIcon,
   salesGrowth: SalesGrowthIcon,
   checkCircle: CheckCircleIcon,
