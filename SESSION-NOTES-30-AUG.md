@@ -159,9 +159,13 @@ ones exist.
 
 `memberLabel` is `'Real EcomSniper member'`, stored once.
 
-`closer.beats` (`"Different lives. Same system."`) is **in the data but not
-rendered**. The client wanted the closer shorter; only the question survives.
-Restoring it is one line.
+The closer renders the full deck line — `"Different lives. Same system. Could
+you be next?"` — but at two weights. It was briefly cut back to the question
+alone because at one size the whole thing read as another section heading; the
+size was the problem, not the words. The first sentence sits back at caption
+weight, the question keeps the emphasis, and the mouse cue sits under it. The
+beats are joined with a real space, not spaced with margin, so the paragraph
+reads back identical to the deck.
 
 ### Responsive rules, all measured
 
@@ -276,8 +280,6 @@ at 1568px wide; JS reports CSS pixels. The ratio changes with window size.
 - **Commit §4.** It is done and passing, just pending review.
 - **Seven member titles are written by me** — replace with real ones if they
   exist.
-- **`closer.beats` is unrendered** — restore if the client wants that sentence
-  back.
 - **CTA jumps §03 → pricing**, skipping proof, model, features, community and
   training. A deliberate shortcut for someone already sold; `#proof` is a
   one-word change in `siteContent.js` if they change their mind.
