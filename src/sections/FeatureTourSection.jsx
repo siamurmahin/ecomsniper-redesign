@@ -57,14 +57,24 @@ function ToolPills({ links }) {
   );
 }
 
-/** The number, as a tone tile — the same glyph vocabulary as every other set. */
-function StepNumber({ item, size = 'md' }) {
+/**
+ * The number, as a tone tile — the same glyph vocabulary as every other set.
+ *
+ * NEVER TRANSLUCENT. The spine runs through the centre of these tiles, so a
+ * tile at reduced opacity lets the coloured line show straight through the
+ * number sitting on it. A step that is not current is drawn in a different,
+ * fully opaque style instead of a faded version of the same one.
+ */
+function StepNumber({ item, size = 'md', isActive = true }) {
   const tone = toneOf(item.tone);
   const box = size === 'lg' ? 'size-12 text-base' : 'size-10 text-sm';
+  const skin = isActive
+    ? tone.tile
+    : 'border border-hairline bg-paper-sunk text-muted';
 
   return (
     <span
-      className={`grid shrink-0 place-items-center rounded-xl font-display font-extrabold ${box} ${tone.tile}`}
+      className={`grid shrink-0 place-items-center rounded-xl font-display font-extrabold transition-colors duration-500 ${box} ${skin}`}
     >
       {item.n}
     </span>
@@ -141,14 +151,17 @@ export default function FeatureTourSection() {
                   ref={(node) => {
                     stepRefs.current[index] = node;
                   }}
-                  className="relative flex gap-6 pb-14 last:pb-0"
+                  /* The spacing IS the pacing. At the original `pb-14` the
+                     steps sat 234px apart in a 935px viewport, so a single
+                     screen of scrolling ran through almost all four and 1 → 2
+                     → 3 went past before any of them could be read. A step
+                     needs about half a screen to itself. */
+                  className="relative flex gap-6 pb-16 last:pb-0 lg:pb-64"
                 >
-                  <span
-                    className={`relative z-10 transition-opacity duration-500 ${
-                      isActive ? 'opacity-100' : 'opacity-45'
-                    }`}
-                  >
-                    <StepNumber item={item} />
+                  {/* No opacity on this wrapper: it would take the number tile
+                      with it and the spine would show through. */}
+                  <span className="relative z-10">
+                    <StepNumber item={item} isActive={isActive} />
                   </span>
 
                   <div
@@ -187,7 +200,7 @@ export default function FeatureTourSection() {
 
                 <div className="p-8">
                   <div className="flex items-center gap-4">
-                    <StepNumber item={active} size="lg" />
+                    <StepNumber item={active} size="lg" isActive />
                     <span className="micro-label text-muted">
                       Step {active.n} of {FEATURES.items.length}
                     </span>
