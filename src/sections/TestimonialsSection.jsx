@@ -202,7 +202,13 @@ export default function TestimonialsSection() {
         <SectionHeading
           eyebrow={testimonials.eyebrow}
           align="center"
-          headline={<span id="testimonials-headline">{testimonials.headline}</span>}
+          headline={
+            <span id="testimonials-headline">
+              {testimonials.headline}{' '}
+              <span className="headline-mark">{testimonials.headlineMark}</span>
+              {testimonials.headlineTail}
+            </span>
+          }
           lead={testimonials.lead}
         />
       </div>

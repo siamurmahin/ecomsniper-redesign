@@ -542,7 +542,13 @@ export const PROOF = {
 
   testimonials: {
     eyebrow: 'In writing',
-    headline: 'What members wrote on Trustpilot.',
+    /* Split for the ink mark, the same three-part shape as section 03's
+       "…work for [you]?" and the wall's "But does it [really] work?".
+       Trustpilot is the word carrying the claim here: these are not our
+       reviews, they are on someone else's public profile. */
+    headline: 'What members wrote on',
+    headlineMark: 'Trustpilot',
+    headlineTail: '.',
     /* Was "Unedited and in full". Dropped "unedited": the reviews carry tidied
        capitalisation and punctuation, so the claim was not exactly true. "In
        full" still is — none of them is clipped. */
