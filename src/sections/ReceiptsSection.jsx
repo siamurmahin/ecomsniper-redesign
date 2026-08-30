@@ -179,13 +179,6 @@ export default function ReceiptsSection() {
             <Icon name="shield" className="size-4 shrink-0 text-signal-green-deep" />
             {receiptsSection.closer.guarantee}
           </p>
-
-          {/* Hands over to what the money actually buys. A question rather
-              than a heading, because it is the reader's question at this
-              point and the sections after it are the answer. */}
-          <p className="mt-14 text-center text-[length:var(--text-section)] leading-[0.98]">
-            {receiptsSection.closer.question}
-          </p>
         </div>
       </div>
 

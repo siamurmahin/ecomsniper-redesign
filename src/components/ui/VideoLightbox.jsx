@@ -36,7 +36,7 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
 
   return (
     <div
-      className="fixed inset-0 z-[60] grid place-items-center bg-ink/80 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[60] grid place-items-center bg-ink/80 p-3 backdrop-blur-sm sm:p-8"
       onClick={(event) => event.target === event.currentTarget && close()}
     >
       <div
@@ -45,7 +45,11 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
         aria-modal="true"
         aria-labelledby="video-dialog-title"
         tabIndex={-1}
-        className="flex max-h-full w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-ink-line bg-ink text-paper shadow-float focus-visible:outline-none"
+        /* `overflow-y-auto` and not `hidden`: on a short viewport — a phone in
+           landscape especially — the player plus its details are taller than
+           the screen, and hiding the overflow would cut the close button off
+           with no way to reach it. */
+        className="flex max-h-full w-full max-w-4xl flex-col overflow-y-auto rounded-2xl border border-ink-line bg-ink text-paper shadow-float focus-visible:outline-none sm:rounded-3xl"
         style={{ animation: 'exit-intent-in 420ms var(--ease-out-expo) both' }}
       >
         {/* Player first: it is what the click asked for, and a header above it
@@ -61,8 +65,13 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
           />
         </div>
 
-        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4 p-5 sm:p-6">
-          <div className="min-w-0 flex-1">
+        {/* Stacked below `sm`, side by side above it. Wrapping alone was not
+            enough: `flex-1` with `min-w-0` lets the title shrink instead of
+            wrapping, so at 500px it was a 199px column of broken words beside
+            199px of buttons. Stacking gives the title the full width and puts
+            the controls under it. */}
+        <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start sm:justify-between sm:gap-x-6 sm:p-6">
+          <div className="min-w-0 sm:flex-1">
             <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
               {video.guest}
               {/* Only the videos whose figure was recorded show one. An
@@ -97,10 +106,13 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
             </a>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* `shrink-0` so the buttons keep their tap size when the title is
+              long; `justify-between` on mobile spreads the counter away from
+              the controls rather than crowding them into one corner. */}
+          <div className="flex shrink-0 items-center justify-between gap-2 sm:justify-end">
             {hasList && (
               <>
-                <span className="mr-1 text-xs tabular-nums text-muted-dark">
+                <span className="mr-auto text-xs tabular-nums text-muted-dark sm:mr-1">
                   {index + 1} / {total}
                 </span>
                 <button

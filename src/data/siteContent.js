@@ -537,7 +537,6 @@ export const PROOF = {
     closer: {
       cta: { label: 'Start your eBay business', href: SITE.signupUrl },
       guarantee: '30 day money back guarantee on the monthly plan',
-      question: 'So what do you get?',
     },
   },
 

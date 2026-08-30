@@ -1,10 +1,14 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import FigureRail from '../components/ui/FigureRail';
 import Icon from '../components/ui/Icon';
 import VideoLightbox from '../components/ui/VideoLightbox';
 import { PROOF } from '../data/siteContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+import { gsap, prefersReducedMotion } from '../lib/motion';
 import { thumbUrl } from '../lib/proofMedia';
+
+/** Seconds an interview holds the stage before the next one takes it. */
+const DWELL = 5;
 
 /**
  * 04b — Member interviews.
@@ -36,6 +40,65 @@ export default function InterviewsSection() {
      than to the top of the document. */
   const openerRef = useRef(null);
 
+  /* The stage cycles all twelve interviews rather than holding the first.
+     Same shape as the rotation in section 03: it parks off screen, holds
+     under the pointer, and never runs under reduced motion. */
+  const [leadIndex, setLeadIndex] = useState(0);
+  const [isHeld, setIsHeld] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const [isStatic] = useState(() => prefersReducedMotion());
+  const stageRef = useRef(null);
+  const listRef = useRef(null);
+  const rowRefs = useRef(new Map());
+
+  /* Follow the stage with the list. The highlighted row is useless if it has
+     scrolled out of the panel, and by the twelfth interview it has.
+
+     Only ever `scrollTop` on the list itself — `scrollIntoView` walks every
+     scrollable ancestor including the page, and the page belongs to Lenis.
+     This cannot fight a reader either: the turn only happens when the pointer
+     is nowhere near the section, because hovering either half holds it. */
+  useEffect(() => {
+    const list = listRef.current;
+    const row = rowRefs.current.get(PROOF.videos[leadIndex].id);
+    if (!list || !row) return;
+
+    const target = row.offsetTop - (list.clientHeight - row.offsetHeight) / 2;
+    list.scrollTo({
+      top: Math.max(0, target),
+      behavior: isStatic ? 'auto' : 'smooth',
+    });
+  }, [leadIndex, isStatic]);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return undefined;
+
+    // Nothing rotates where nobody is looking.
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.35 },
+    );
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  /* Paused while the lightbox is open — turning the stage under someone who
+     is watching would change what they come back to.
+
+     A bare timer: this drove a progress bar for a while, which is why section
+     03 runs its rotation off a tween. Without a bar to keep in step there is
+     nothing to synchronise, and a countdown the reader cannot see does not
+     need one. */
+  useEffect(() => {
+    if (isStatic || isHeld || !isInView || openIndex !== null) return undefined;
+
+    const turn = gsap.delayedCall(DWELL, () =>
+      setLeadIndex((index) => (index + 1) % PROOF.videos.length),
+    );
+    return () => turn.kill();
+  }, [leadIndex, isHeld, isInView, isStatic, openIndex]);
+
   const openAt = (index, event) => {
     openerRef.current = event.currentTarget;
     setOpenIndex(index);
@@ -55,7 +118,7 @@ export default function InterviewsSection() {
     });
   }, []);
 
-  const [lead, ...rest] = PROOF.videos;
+  const lead = PROOF.videos[leadIndex];
 
   return (
     <section
@@ -125,21 +188,35 @@ export default function InterviewsSection() {
         </div>
 
         <div className="mt-9 grid gap-5 lg:grid-cols-[1.65fr_1fr] lg:items-start">
-          {/* The lead interview. A poster and a play button — the player
-              itself only ever appears in the lightbox. */}
-          <div data-reveal data-reveal-group="interviews-stage">
+          {/* The stage. It cycles all twelve; the player itself only ever
+              appears in the lightbox. Holding the pointer anywhere over it
+              stops the turn, so a title can be read without it moving. */}
+          <div
+            ref={stageRef}
+            data-reveal
+            data-reveal-group="interviews-stage"
+            onPointerEnter={() => setIsHeld(true)}
+            onPointerLeave={() => setIsHeld(false)}
+            onFocusCapture={() => setIsHeld(true)}
+            onBlurCapture={() => setIsHeld(false)}
+          >
             <button
               type="button"
-              onClick={(event) => openAt(0, event)}
+              onClick={(event) => openAt(leadIndex, event)}
               aria-haspopup="dialog"
               className="group relative block aspect-video w-full overflow-hidden rounded-2xl border border-ink-line bg-ink text-left shadow-float"
             >
+              {/* `key` restarts the fade on every turn, so a change reads as
+                  a change rather than the poster swapping underneath. CSS,
+                  not a tween: it runs on the compositor and cannot stutter
+                  behind whatever else the page is doing. */}
               <img
+                key={lead.id}
                 src={thumbUrl(lead.thumb)}
                 alt=""
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
+                className="absolute inset-0 size-full animate-[panel-in_0.6s_var(--ease-out-expo)_both] object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
               />
               <span
                 aria-hidden="true"
@@ -153,7 +230,7 @@ export default function InterviewsSection() {
                 <Icon name="play" className="size-5 translate-x-0.5" />
               </span>
 
-              <span className="absolute inset-x-0 bottom-0 block p-5">
+              <span key={lead.id} className="absolute inset-x-0 bottom-0 block animate-[panel-in_0.6s_var(--ease-out-expo)_both] p-5">
                 <span className="block text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
                   {lead.guest}
                   {lead.views && (
@@ -175,12 +252,25 @@ export default function InterviewsSection() {
             </p>
           </div>
 
-          {/* The rest. `data-lenis-prevent` hands the wheel back to this panel;
-              without it Lenis scrolls the page while the pointer is over a
-              list that plainly scrolls itself. */}
+          {/* All twelve, including the one currently on stage — the stage
+              cycles through them now, so a list of "the others" would change
+              membership every five seconds and nothing would stay where the
+              reader last saw it.
+
+              Holding the pointer here stops the turn too: picking a row off a
+              list that is quietly rotating behind you is how you end up
+              opening the wrong interview.
+
+              `data-lenis-prevent` hands the wheel back to this panel; without
+              it Lenis scrolls the page while the pointer is over a list that
+              plainly scrolls itself. */}
           <div
             data-reveal
             data-reveal-group="interviews-list"
+            onPointerEnter={() => setIsHeld(true)}
+            onPointerLeave={() => setIsHeld(false)}
+            onFocusCapture={() => setIsHeld(true)}
+            onBlurCapture={() => setIsHeld(false)}
             className="rounded-2xl border border-ink-line bg-ink-soft/60 p-2"
           >
             <h3 className="micro-label px-3 pb-2 pt-2 text-muted-dark">
@@ -190,16 +280,27 @@ export default function InterviewsSection() {
               </span>
             </h3>
 
-            <ul data-lenis-prevent className="max-h-[22rem] overflow-y-auto lg:max-h-[26rem]">
-              {rest.map((video, restIndex) => (
-                <li key={video.id}>
+            <ul
+              ref={listRef}
+              data-lenis-prevent
+              className="max-h-[22rem] overflow-y-auto lg:max-h-[26rem]"
+            >
+              {PROOF.videos.map((video, index) => (
+                <li
+                  key={video.id}
+                  ref={(node) => {
+                    if (node) rowRefs.current.set(video.id, node);
+                    else rowRefs.current.delete(video.id);
+                  }}
+                >
                   <button
                     type="button"
-                    /* +1 because the lead was sliced off the front, and the
-                       lightbox steps through the full list. */
-                    onClick={(event) => openAt(restIndex + 1, event)}
+                    onClick={(event) => openAt(index, event)}
                     aria-haspopup="dialog"
-                    className="group flex w-full items-start gap-3 rounded-xl p-2 text-left transition-colors duration-300 hover:bg-paper/8"
+                    aria-current={index === leadIndex}
+                    className={`group flex w-full items-start gap-3 rounded-xl p-2 text-left transition-colors duration-300 ${
+                      index === leadIndex ? 'bg-paper/12' : 'hover:bg-paper/8'
+                    }`}
                   >
                     <span className="relative block w-24 shrink-0 overflow-hidden rounded-lg">
                       <img
@@ -220,7 +321,11 @@ export default function InterviewsSection() {
                     </span>
 
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[0.8rem] font-semibold leading-snug text-muted-dark transition-colors duration-300 group-hover:text-paper">
+                      <span
+                        className={`block text-[0.8rem] font-semibold leading-snug transition-colors duration-300 group-hover:text-paper ${
+                          index === leadIndex ? 'text-paper' : 'text-muted-dark'
+                        }`}
+                      >
                         {video.title}
                       </span>
                       <span className="mt-1 flex items-center gap-2 text-[0.68rem] text-muted-dark">
