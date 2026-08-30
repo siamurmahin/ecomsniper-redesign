@@ -416,6 +416,19 @@ export default function FeatureTourSection() {
                     </div>
 
                     <ToolPills links={item.links} />
+
+                    {/* Below lg the sticky panel is gone, and with it every
+                        visual on the section — the steps became four
+                        paragraphs. Each one carries its own here instead, so
+                        the phone gets the same four pictures the desktop
+                        does, just attached to the step rather than beside it.
+
+                        `lg:hidden` and not a second render: above lg this
+                        would be the same visual twice on screen at once, once
+                        here and once in the panel. */}
+                    <div className="mt-7 lg:hidden">
+                      <StepVisual item={item} index={index} />
+                    </div>
                   </div>
                 </li>
               );
