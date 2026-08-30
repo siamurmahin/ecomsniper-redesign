@@ -276,6 +276,33 @@ export default function AudienceSection() {
     return () => observer.disconnect();
   }, [applyLayout]);
 
+  /*
+   * Measure again once the webfont has swapped.
+   *
+   * Every story's height is measured in whatever font is rendering at the
+   * time, and the fallback's metrics are not the real ones. A swap is not a
+   * resize, so the observer above never hears it and the row keeps the height
+   * it was given for text that no longer exists.
+   *
+   * Measured, every panel came out 12px short — 309px of content in a 297px
+   * box, the same shortfall on all eight members, which is the signature of a
+   * uniform metrics change rather than anything to do with one story's
+   * wrapping. Those 12px came out of whichever edge the content was not
+   * anchored to, so the glyph or the name sat hard against it.
+   */
+  useEffect(() => {
+    if (!document.fonts) return undefined;
+
+    let cancelled = false;
+    document.fonts.ready.then(() => {
+      if (!cancelled) applyLayout(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [applyLayout]);
+
   // Nothing animates while the row is off screen. A rotation running down the
   // page is work nobody sees, and it would have moved on by the time a visitor
   // arrives.
