@@ -35,11 +35,22 @@ export default function HeroDots() {
     <div
       ref={hostRef}
       aria-hidden="true"
-      /* Transparent over the copy, solid towards the edges and the panel. Only
-         from lg up: below that the layout stacks and the copy spans the full
-         width, so there is nowhere the field can sit without being behind
-         text. */
-      className="pointer-events-none absolute inset-0 -z-[25] hidden lg:block [mask-image:radial-gradient(46%_46%_at_26%_40%,transparent_30%,black_82%)]"
+      /* Transparent over the copy, solid towards the edges and the panel.
+         Two masks, because the layout is two different shapes.
+
+         From lg the copy sits in a left column, so the hole is a radial one
+         punched over it. Below lg the layout stacks and the copy spans the
+         full width — there is no column to cut around, so the field is simply
+         held back a little at the top and full strength from a third down.
+
+         Softened, not cut. A first pass made the top 38% fully transparent to
+         keep dots off the headline, which meant the top of the hero — the part
+         everyone sees first — was flat. At 55% the texture is present behind
+         the headline without competing with it; the dots are 1.9px at 22px
+         spacing in ink at 0.22–0.55 alpha, so there is not much to compete
+         with in the first place. It used to be hidden outright below lg, which
+         left the hero flat on exactly the screens that see it most. */
+      className="pointer-events-none absolute inset-0 -z-[25] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.55),#000_32%)] lg:[mask-image:radial-gradient(46%_46%_at_26%_40%,transparent_30%,black_82%)]"
     >
       {isRunning && (
         <Suspense fallback={null}>

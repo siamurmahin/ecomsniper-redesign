@@ -175,7 +175,10 @@ export default function ReceiptsSection() {
 
           {/* "on the monthly plan" is not optional — see the note in
               `siteContent`. The bundle and Enterprise plans are final sale. */}
-          <p className="mt-4 inline-flex items-center gap-2 text-sm text-muted">
+          {/* `flex-wrap` and a centred `text-center`, not a plain inline row.
+              On a phone this line wraps, and without them the second line sat
+              left-aligned under the shield while the first stayed centred. */}
+          <p className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-muted">
             <Icon name="shield" className="size-4 shrink-0 text-signal-green-deep" />
             {receiptsSection.closer.guarantee}
           </p>

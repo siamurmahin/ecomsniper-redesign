@@ -4,6 +4,7 @@ import RatingStars from '../components/ui/RatingStars';
 import { PROOF, SITE } from '../data/siteContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { receiptUrl, thumbUrl } from '../lib/proofMedia';
+import { toneOf } from '../lib/signalTones';
 
 /**
  * 04 — Proof, variant C: a wall of evidence with the argument standing still
@@ -235,10 +236,22 @@ export default function ProofWallSection() {
 
         {/* The wall itself carries earnings screenshots, so the qualification
             has to sit in this section and not only under the readable copies
-            in 04b. Backed, because it is set over moving cards. */}
-        <p className="mx-auto max-w-3xl rounded-xl bg-paper/85 px-4 py-3 text-center text-xs leading-relaxed text-muted backdrop-blur-sm">
-          {PROOF.disclaimer}
-        </p>
+            in 04b.
+
+            Set as a solid card rather than a translucent wash. At 85% over
+            drifting evidence cards the type was competing with whatever
+            happened to be behind it, and a disclaimer that cannot be read
+            comfortably is not doing the job it is there for. Opaque paper, a
+            hairline, a lift and a tone rule down the leading edge — the same
+            parts every other surface on this page is built from, so it reads
+            as a deliberate note and not as a caption that lost its
+            background. */}
+        <div className="mx-auto flex max-w-3xl overflow-hidden rounded-xl border border-hairline bg-paper shadow-lift">
+          <span aria-hidden="true" className={`w-1 shrink-0 ${toneOf('gold').rule}`} />
+          <p className="px-5 py-4 text-center text-xs leading-relaxed text-muted">
+            {PROOF.disclaimer}
+          </p>
+        </div>
       </div>
     </section>
   );

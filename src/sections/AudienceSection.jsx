@@ -472,7 +472,16 @@ export default function AudienceSection() {
                   ref={(el) => (openRefs.current[index] = el)}
                   aria-hidden={!isOpen}
                   style={{ opacity: 0 }}
-                  className="absolute inset-y-0 left-0 flex w-full flex-col justify-end gap-5 p-6 md:w-[var(--panel-open-w)] lg:p-7"
+                  /* Anchored to the TOP below md, to the bottom above it.
+                     `justify-end` everywhere meant that when a story needed a
+                     few pixels more than the row was measured for, the excess
+                     came out of the TOP of the flex box and pushed the glyph
+                     tile hard against the panel's edge — no scrollbar, no
+                     overflow, nothing to notice. Stacked on a phone the
+                     stories are at their tallest and it showed on every
+                     member. Anchoring to the start there keeps the tile on its
+                     padding whatever the copy does. */
+                  className="absolute inset-y-0 left-0 flex w-full flex-col justify-start gap-5 p-6 md:justify-end md:w-[var(--panel-open-w)] lg:p-7"
                 >
                   <span
                     aria-hidden="true"
