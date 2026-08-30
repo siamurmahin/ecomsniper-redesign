@@ -10,7 +10,6 @@ import PricingPage from './pages/PricingPage';
 import PlaybookPage from './pages/PlaybookPage';
 import NotFoundPage from './pages/NotFoundPage';
 import DesignLabPage from './pages/DesignLabPage';
-import SoftwareLabPage from './pages/SoftwareLabPage';
 import { ScrollTrigger } from './lib/motion';
 import { dismissPreloader } from './lib/preloader';
 import { scrollToTarget } from './lib/smoothScroll';
@@ -93,7 +92,6 @@ export default function App() {
           <Route path="/free-playbook" element={<PlaybookPage />} />
           {/* Internal comparison route; remove with the page once a direction is picked. */}
           <Route path="/design-lab" element={<DesignLabPage />} />
-          <Route path="/software-lab" element={<SoftwareLabPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
