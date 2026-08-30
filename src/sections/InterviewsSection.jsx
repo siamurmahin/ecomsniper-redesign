@@ -135,7 +135,12 @@ export default function InterviewsSection() {
       />
 
       <div className="site-shell">
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
+        {/* Stacked below sm so the channel link sits under the heading rather
+            than beside it. Wrapping alone put it on its own line but still
+            hard against the left edge of a 500px column, reading as a stray
+            control; below the lead it reads as what follows the section's
+            own words. */}
+        <div className="flex flex-col items-start gap-y-6 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-x-8 sm:gap-y-5">
           <header className="max-w-2xl">
             <p
               className="section-eyebrow section-eyebrow-on-ink"

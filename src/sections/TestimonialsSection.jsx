@@ -1,8 +1,12 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import RatingStars from '../components/ui/RatingStars';
 import { PROOF, SITE } from '../data/siteContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+
+/** Below this the wall becomes a swipe rail. Matches Tailwind's `sm`. */
+const NARROW_QUERY = '(max-width: 639px)';
 
 /**
  * 04d — Written reviews, as a drifting wall.
@@ -73,9 +77,119 @@ function ReviewCard({ review }) {
   );
 }
 
+/**
+ * The mobile shape: one row you swipe, with arrows for anyone who would rather
+ * press something.
+ *
+ * A wall needs columns, and below `sm` there is only room for one — a single
+ * column of reviews drifting past is a much weaker thing than the wall it is
+ * standing in for. Across, the same eighteen read as a stack you move through.
+ *
+ * Native `overflow-x` with scroll snapping, so the swipe is the browser's own
+ * and costs nothing: momentum, rubber-banding and the scrollbar all come free.
+ * Lenis is not a concern here — it disables itself entirely on coarse
+ * pointers, and it only ever drives the vertical axis anyway, so there is
+ * deliberately no `data-lenis-prevent`: that would trap the page's own scroll
+ * under a thumb that is trying to leave the section.
+ */
+function ReviewRail() {
+  const railRef = useRef(null);
+  const [edges, setEdges] = useState({ start: true, end: false });
+
+  const syncEdges = useCallback(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    // 1px of slack: scrollLeft is fractional at some zoom levels and an exact
+    // comparison never becomes true.
+    setEdges({
+      start: rail.scrollLeft <= 1,
+      end: rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 1,
+    });
+  }, []);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return undefined;
+
+    syncEdges();
+    rail.addEventListener('scroll', syncEdges, { passive: true });
+    const observer = new ResizeObserver(syncEdges);
+    observer.observe(rail);
+
+    return () => {
+      rail.removeEventListener('scroll', syncEdges);
+      observer.disconnect();
+    };
+  }, [syncEdges]);
+
+  const step = useCallback((direction) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    // One card, not one screen: a card is the unit the snap points are on.
+    const card = rail.firstElementChild;
+    const distance = card ? card.getBoundingClientRect().width + 16 : rail.clientWidth;
+    rail.scrollBy({ left: direction * distance, behavior: 'smooth' });
+  }, []);
+
+  return (
+    <div className="sm:hidden">
+      <div
+        ref={railRef}
+        className="edge-fade-x flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {PROOF.reviews.map((review) => (
+          <div key={review.name + review.title} className="w-[82vw] max-w-sm shrink-0 snap-center">
+            <ReviewCard review={review} />
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => step(-1)}
+          disabled={edges.start}
+          aria-label="Previous review"
+          className="grid size-11 place-items-center rounded-full border border-hairline bg-white text-ink transition-colors duration-300 disabled:pointer-events-none disabled:opacity-35"
+        >
+          <Icon name="arrowRight" className="size-4 rotate-180" />
+        </button>
+        <button
+          type="button"
+          onClick={() => step(1)}
+          disabled={edges.end}
+          aria-label="Next review"
+          className="grid size-11 place-items-center rounded-full border border-hairline bg-white text-ink transition-colors duration-300 disabled:pointer-events-none disabled:opacity-35"
+        >
+          <Icon name="arrowRight" className="size-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function TestimonialsSection() {
   const sectionRef = useRevealOnScroll();
   const { testimonials } = PROOF;
+
+  /* Which shape to build, decided in JS rather than by hiding one with CSS.
+     Both are eighteen cards, and the wall duplicates its columns to close the
+     loop — rendering both would put fifty-four review cards in a document
+     already carrying about 4,500 nodes, for the sake of showing eighteen.
+
+     Read synchronously on the first render so a phone never paints the wall
+     and then swaps it out. */
+  const [isNarrow, setIsNarrow] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(NARROW_QUERY).matches,
+  );
+
+  useEffect(() => {
+    const query = window.matchMedia(NARROW_QUERY);
+    const sync = () => setIsNarrow(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
 
   return (
     <section
@@ -93,12 +207,22 @@ export default function TestimonialsSection() {
         />
       </div>
 
+      {/* Below sm the wall has room for exactly one column, which is not a
+          wall — it is a single list drifting past. Across is the better shape
+          at that width, and it is the one a thumb already knows. */}
+      {isNarrow && (
+        <div className="mt-12">
+          <ReviewRail />
+        </div>
+      )}
+
       {/* The wall. A fixed height with a mask top and bottom: the columns run
           past it in both directions, which is what makes it read as a wall
           rather than as three lists that happen to be sliding.
 
           `rail-hold` pauses rather than stops, so a column holds its place
           under the pointer instead of snapping back to the top. */}
+      {!isNarrow && (
       <div className="site-shell mt-12">
         {/* Height is what sets how many reviews are on screen at once, and at
             34rem the wall showed about two cards per column — enough to read
@@ -143,6 +267,7 @@ export default function TestimonialsSection() {
           </div>
         </div>
       </div>
+      )}
 
       <div className="site-shell mt-10 flex justify-center">
         <a
