@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import CtaButton from '../components/ui/CtaButton';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import { PILLARS } from '../data/siteContent';
@@ -217,21 +218,23 @@ export default function PillarsSection() {
             ))}
           </ul>
 
-          {/* The handover. Each card links into the section that expands it,
-              and this is what says so — without it the row is three cards that
-              happen to be clickable. Two weights: the claim, then what happens
-              next. */}
+          {/* The line still says the three are distinct; the button is the
+              door for anyone who does not need the other three sections to
+              prove it. The cards keep their own links for anyone who does. */}
           <div
             data-reveal
             data-reveal-group="pillars-closer"
-            className="mx-auto mt-14 max-w-2xl text-center"
+            className="mx-auto mt-14 flex max-w-2xl flex-col items-center text-center"
           >
             <p className="font-display text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
               {PILLARS.closer.lead}
             </p>
-            <p className="mt-2 text-[length:var(--text-lead)] leading-relaxed text-muted">
-              {PILLARS.closer.detail}
-            </p>
+
+            <div className="mt-7">
+              <CtaButton href={PILLARS.closer.cta.href} intent="pillars-primary">
+                {PILLARS.closer.cta.label}
+              </CtaButton>
+            </div>
           </div>
         </div>
       </div>
