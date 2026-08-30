@@ -65,22 +65,39 @@
       claiming to show progress.
     -->
     <style>
+      /* Every value here is literal. This renders before the bundle's
+         stylesheet exists, so there are no design tokens to reach for — these
+         are copied from `--color-paper`, `--color-ink`, `--color-brand-red`,
+         `--color-brand-violet` and `--color-accent`. If those change, change
+         these. */
       #preloader {
         position: fixed;
         inset: 0;
         z-index: 9999;
         display: grid;
         place-items: center;
-        background: #fbfbfa;
+        /* The hero's own floor: red behind the copy, blue behind the panel.
+           The preloader dissolves into the page it is covering rather than
+           cutting to it from a flat white card. */
+        background:
+          radial-gradient(48rem 36rem at 12% 14%, rgba(208, 33, 42, 0.06), transparent 68%),
+          radial-gradient(52rem 40rem at 88% 28%, rgba(0, 100, 210, 0.09), transparent 70%), #fbfbfa;
         transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       }
       #preloader.is-done {
         opacity: 0;
         pointer-events: none;
       }
+      #preloader .preloader-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        animation: preloader-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
       #preloader svg {
-        width: 68px;
-        height: 68px;
+        width: 62px;
+        height: 62px;
       }
       /* Only the rings and spikes turn. The centre dot is the thing being
          aimed with, so it holds still and the reticle rolls around it. */
@@ -88,14 +105,65 @@
         transform-origin: 32px 32px;
         animation: preloader-spin 1.15s linear infinite;
       }
+      /* Set rather than drawn: the wordmark artwork is a PNG, and inlining it
+         as a data URI to save a request would bloat the very document whose
+         parse speed this depends on. The stack falls back to the system UI
+         face, so it is legible from the first frame whether or not the
+         webfont has arrived. */
+      #preloader .preloader-word {
+        font-family: 'Bricolage Grotesque', 'Montserrat', system-ui, sans-serif;
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #1e1f23;
+        line-height: 1;
+      }
+      /* An indeterminate sweep, not a progress bar. Nothing here knows how far
+         through the load it is, and a bar that pretends to is lying. */
+      #preloader .preloader-track {
+        position: relative;
+        width: 132px;
+        height: 2px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(30, 31, 35, 0.08);
+      }
+      #preloader .preloader-track::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, #d0212a 0%, #8e2a86 48%, #0064d2 100%);
+        animation: preloader-sweep 1.15s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+      }
       @keyframes preloader-spin {
         to {
           transform: rotate(360deg);
         }
       }
+      @keyframes preloader-in {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 8px, 0);
+        }
+      }
+      @keyframes preloader-sweep {
+        0% {
+          transform: translate3d(-100%, 0, 0);
+        }
+        100% {
+          transform: translate3d(100%, 0, 0);
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
-        #preloader .reticle-spin {
+        #preloader .reticle-spin,
+        #preloader .preloader-stack,
+        #preloader .preloader-track::after {
           animation: none;
+        }
+        /* With no sweep the track would read as an empty slot, so fill it. */
+        #preloader .preloader-track::after {
+          transform: none;
         }
       }
     </style>
@@ -121,16 +189,23 @@
   </head>
 
   <body>
-    <div id="preloader" role="status" aria-label="Loading">
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <g class="reticle-spin" fill="none" stroke-linecap="round">
-          <circle cx="32" cy="32" r="24" stroke="#86b817" stroke-width="4" />
-          <circle cx="32" cy="32" r="16.5" stroke="#0064d2" stroke-width="6" />
-          <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" stroke-width="6" />
-        </g>
-        <circle cx="32" cy="32" r="9.5" fill="#e53238" />
-        <circle cx="32" cy="32" r="3.6" fill="#fbfbfa" />
-      </svg>
+    <div id="preloader" role="status" aria-label="Loading EcomSniper">
+      <div class="preloader-stack">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <g class="reticle-spin" fill="none" stroke-linecap="round">
+            <circle cx="32" cy="32" r="24" stroke="#86b817" stroke-width="4" />
+            <circle cx="32" cy="32" r="16.5" stroke="#0064d2" stroke-width="6" />
+            <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" stroke-width="6" />
+          </g>
+          <circle cx="32" cy="32" r="9.5" fill="#e53238" />
+          <circle cx="32" cy="32" r="3.6" fill="#fbfbfa" />
+        </svg>
+
+        <!-- aria-hidden: the wrapper's label already says this, and a screen
+             reader should not hear the name twice. -->
+        <span class="preloader-word" aria-hidden="true">EcomSniper</span>
+        <span class="preloader-track" aria-hidden="true"></span>
+      </div>
     </div>
 
     <script>
