@@ -620,8 +620,15 @@ export const FEATURES = {
   eyebrow: "Let's start with the software",
   headline: 'The software does the heavy lifting.',
   lead: 'It handles the repetitive work. You make the decisions.',
-  // One signal colour per step, in the live site's order: find, list, watch,
-  // fulfil → blue, red, green, gold.
+  /* One signal colour per step, in the live site's order: find, list, watch,
+     fulfil → blue, red, green, gold.
+
+     `links` are the named tools the live site puts inside each tile as dashed
+     pills. They point at its feature pages, which THIS SITE DOES NOT HAVE —
+     so they are absolute URLs to the live site for now. When those pages are
+     rebuilt here, repoint them; until then a relative path would be a 404 and
+     dropping them would lose the product names entirely, which are the most
+     concrete thing in the section. */
   items: [
     {
       n: '1',
@@ -629,6 +636,10 @@ export const FEATURES = {
       body: 'Product Hunter and Competitor Research surface items that are moving right now, so you are not guessing.',
       metric: 'Live sales data',
       tone: 'blue',
+      links: [
+        { label: 'Product Hunter', href: 'https://ecomsniper.io/productHunterV6' },
+        { label: 'Competitor Research', href: 'https://ecomsniper.io/competitorResearchV6' },
+      ],
     },
     {
       n: '2',
@@ -636,6 +647,7 @@ export const FEATURES = {
       body: 'AI writes the title, the description and the item specifics. Up to 3,000 listings a month on the monthly plan.',
       metric: 'Up to 3,000 listings / month',
       tone: 'red',
+      links: [{ label: 'AI Powered Lister', href: 'https://ecomsniper.io/aiListerV6' }],
     },
     {
       n: '3',
@@ -643,6 +655,7 @@ export const FEATURES = {
       body: 'Price or stock changes at the retailer, and your listing updates in the background.',
       metric: '24/7 price & stock monitoring',
       tone: 'green',
+      links: [{ label: 'Price Monitoring', href: 'https://ecomsniper.io/priceMonitorV6' }],
     },
     {
       n: '4',
@@ -650,6 +663,7 @@ export const FEATURES = {
       body: 'A sale comes in, you confirm once, and EcomSniper prepares the rest.',
       metric: 'One-click fulfilment',
       tone: 'gold',
+      links: [],
     },
   ],
   closer: 'More time building. Less time clicking.',
