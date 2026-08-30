@@ -129,40 +129,74 @@ function StepVisual({ item, index }) {
     );
   }
 
-  // 2 — the listing going live on eBay.
+  /* 2 — the listing handed from EcomSniper to eBay.
+     The live site draws this as its own mark pointing at eBay, and that is the
+     claim: you press once here and it appears there. */
   if (index === 1) {
     return (
-      <div className="step-visual rounded-2xl bg-ink/[0.035] p-4">
-        <div className="rounded-xl bg-white p-3 shadow-sm">
-          <span className={`block h-20 w-full rounded-lg ${tone.wash} bg-gradient-to-br to-transparent`} />
-          <span className="mt-3 block h-2 w-4/5 rounded-full bg-ink/15" />
-          <span className="mt-2 block h-2 w-3/5 rounded-full bg-ink/10" />
+      <div className="step-visual rounded-2xl bg-ink/[0.035] p-5">
+        <div className="flex items-center justify-between gap-3">
+          {/* The reticle, drawn rather than fetched — the favicon's own
+              artwork, so it cannot go out of step with the brand mark. */}
+          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-white shadow-sm">
+            <svg viewBox="0 0 64 64" className="size-7" aria-hidden="true">
+              <g fill="none" strokeLinecap="round">
+                <circle cx="32" cy="32" r="24" stroke="#86b817" strokeWidth="4" />
+                <circle cx="32" cy="32" r="16.5" stroke="#0064d2" strokeWidth="6" />
+                <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" strokeWidth="6" />
+              </g>
+              <circle cx="32" cy="32" r="9.5" fill="#e53238" />
+              <circle cx="32" cy="32" r="3.6" fill="#fbfbfa" />
+            </svg>
+          </span>
 
-          <div className="mt-3 flex items-center justify-between">
+          {/* The packet crossing. Three dots on one keyframe, offset by a
+              third each, so the run reads as continuous rather than as three
+              things blinking. */}
+          <span aria-hidden="true" className="relative h-2 flex-1">
+            <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 border-t border-dashed border-ink/15" />
+            {[0, 1, 2].map((dot) => (
+              <span
+                key={dot}
+                className="absolute left-0 top-1/2 size-2 -translate-y-1/2 rounded-full bg-accent"
+                style={{ animation: `step-travel 2.4s linear ${dot * 0.8}s infinite` }}
+              />
+            ))}
+          </span>
+
+          {/* eBay, in eBay's own colours — which are this site's four signal
+              tones, because the palette was taken from the logo. */}
+          <span className="shrink-0 font-display text-2xl font-extrabold lowercase tracking-tight">
+            <span style={{ color: '#e53238' }}>e</span>
+            <span style={{ color: '#0064d2' }}>b</span>
+            <span style={{ color: '#f5af02' }}>a</span>
+            <span style={{ color: '#86b817' }}>y</span>
+          </span>
+        </div>
+
+        {/* And what lands there. */}
+        <div className="mt-4 rounded-xl bg-white p-3 shadow-sm">
+          <div className="flex gap-3">
+            <span className={`grid size-14 shrink-0 place-items-center rounded-lg ${tone.tile}`}>
+              <Icon name="salesGrowth" className="size-6" />
+            </span>
+            <span className="flex-1 space-y-2 pt-1">
+              <span className="block h-2 w-full rounded-full bg-ink/15" />
+              <span className="block h-2 w-3/5 rounded-full bg-ink/10" />
+            </span>
+          </div>
+
+          <div className="mt-3 flex items-center justify-between border-t border-hairline pt-3">
             <span className="inline-flex items-center gap-1.5">
               <span
                 aria-hidden="true"
                 className="size-1.5 rounded-full bg-signal-green"
                 style={{ animation: 'step-live 1.6s ease-in-out infinite' }}
               />
-              <span className="micro-label text-signal-green-deep">Live</span>
+              <span className="micro-label text-signal-green-deep">Live on eBay</span>
             </span>
-            <span className="micro-label text-muted">eBay</span>
+            <span className="font-display text-sm font-extrabold tracking-tight">$38.90</span>
           </div>
-        </div>
-
-        {/* One click, rippling. */}
-        <div className="relative mt-4 grid place-items-center">
-          <span
-            aria-hidden="true"
-            className={`absolute size-12 rounded-full ${tone.rule}`}
-            style={{ animation: 'step-sonar 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite' }}
-          />
-          <span
-            className={`relative rounded-full px-4 py-2 font-label text-[0.62rem] font-bold uppercase tracking-[0.09em] ${tone.tile}`}
-          >
-            List it
-          </span>
         </div>
       </div>
     );

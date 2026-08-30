@@ -775,6 +775,23 @@
     }
   }
 
+  /* A packet crossing from EcomSniper to eBay: the listing being handed over.
+     Three dots on the same keyframe, offset, so the run reads as continuous. */
+  @keyframes step-travel {
+    0% {
+      transform: translate3d(0, 0, 0) scale(0.6);
+      opacity: 0;
+    }
+    18%,
+    72% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(58px, 0, 0) scale(0.6);
+      opacity: 0;
+    }
+  }
+
   /* The order confirmation drawing itself. */
   @keyframes step-draw {
     to {
