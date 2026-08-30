@@ -653,6 +653,67 @@
   /* Tab panels swap in place, so their entrance is an animation and not a
      ScrollTrigger: a panel that mounts hidden has no measurable position for a
      trigger to read, and would reveal at the wrong moment or not at all. */
+  /* Section 06's connector. The three pillars are wired together and a current
+     runs along the wire, because the headline claims they are one system and
+     three separate cards in a row say the opposite.
+
+     The pulse is a gradient segment translated across a clipped track, so the
+     only animated property is `transform` and it composites. `background-position`
+     would have repainted the strip every frame for the same picture. */
+  @keyframes system-current {
+    from {
+      transform: translate3d(-40%, 0, 0);
+    }
+    to {
+      transform: translate3d(240%, 0, 0);
+    }
+  }
+
+  .system-wire {
+    @apply pointer-events-none absolute overflow-hidden;
+  }
+  .system-wire::after {
+    content: '';
+    @apply absolute inset-y-0 w-2/5;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent) 35%,
+      var(--color-brand-violet) 65%,
+      transparent
+    );
+    animation: system-current 4.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  /* A node holds still while the current passes through it. */
+  @keyframes system-node {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.35);
+    }
+  }
+  .system-node-halo {
+    animation: system-node 4.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .system-wire::after,
+    .system-node-halo {
+      animation: none;
+    }
+    /* Without the travelling pulse the wire would read as an empty groove, so
+       it keeps a steady tint instead. */
+    .system-wire::after {
+      @apply w-full opacity-40;
+      transform: none;
+    }
+  }
+
   @keyframes panel-in {
     from { opacity: 0; transform: translate3d(0, 10px, 0); }
     to   { opacity: 1; transform: translate3d(0, 0, 0); }
