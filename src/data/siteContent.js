@@ -573,6 +573,15 @@ export const PILLARS = {
   headline: 'Three things.',
   headlineMark: 'One system',
   headlineTail: '.',
+  /* Closes the section on the live site and was missing here. It earns its
+     place: the three cards each link into the section that expands them, and
+     these two lines are what says so — without them the row is three cards
+     that happen to be clickable. Set at two weights, the claim then the
+     handover. */
+  closer: {
+    lead: 'Each one plays a different role.',
+    detail: 'Let us take them one at a time.',
+  },
   lead: 'Everything you need to build your eBay business.',
   /* `tone` follows the live site: software blue, community gold, training
      green. It travels with the item so sections downstream inherit it. */

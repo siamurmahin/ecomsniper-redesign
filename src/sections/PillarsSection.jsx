@@ -216,6 +216,23 @@ export default function PillarsSection() {
               <PillarCard key={item.n} item={item} index={index} />
             ))}
           </ul>
+
+          {/* The handover. Each card links into the section that expands it,
+              and this is what says so — without it the row is three cards that
+              happen to be clickable. Two weights: the claim, then what happens
+              next. */}
+          <div
+            data-reveal
+            data-reveal-group="pillars-closer"
+            className="mx-auto mt-14 max-w-2xl text-center"
+          >
+            <p className="font-display text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
+              {PILLARS.closer.lead}
+            </p>
+            <p className="mt-2 text-[length:var(--text-lead)] leading-relaxed text-muted">
+              {PILLARS.closer.detail}
+            </p>
+          </div>
         </div>
       </div>
     </section>
