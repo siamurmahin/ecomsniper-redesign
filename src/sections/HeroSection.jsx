@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import HeroAurora from '../components/hero/HeroAurora';
 import HeroDots from '../components/hero/HeroDots';
 import PipelinePanel from '../components/hero/PipelinePanel';
 import TextType from '../components/reactbits/TextType';
@@ -190,14 +189,14 @@ export default function HeroSection() {
       // — and justify-center balances the content in what is left.
       className="relative isolate flex min-h-svh flex-col justify-center overflow-hidden pb-16 pt-32 sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40"
     >
-      {/* Looping shader field, masked away from the copy column. */}
-      <HeroAurora />
-
-      {/* Dot texture under it, cut out of the copy column. */}
+      {/* Dot texture, cut out of the copy column. */}
       <HeroDots />
 
-      {/* Static floor under the aurora — red behind the copy, blue behind
-          the panel. Carries the hero alone when the canvas never mounts. */}
+      {/* The hero's background — red behind the copy, blue behind the panel.
+          This was the floor under a WebGL aurora that has been removed: the
+          shader compiled on the main thread during the hero's entrance, which
+          is the one moment on the page that cannot afford it. It was always
+          written to carry the hero on its own. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-30 bg-[radial-gradient(48rem_36rem_at_12%_14%,rgb(208_33_42/0.06),transparent_68%),radial-gradient(52rem_40rem_at_88%_28%,rgb(0_100_210/0.09),transparent_70%)]"
