@@ -491,8 +491,20 @@ export default function FeatureTourSection() {
             'never alone' looks like", so the bridge is that section's own
             headline asked as a question. */}
         <div className="mt-16 flex flex-col items-center text-center">
-          <p className="flex items-center gap-2 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
-            <Icon name="checkCircle" className="size-6 shrink-0 text-signal-green-deep" />
+          {/* The icon flows WITH the text rather than sitting beside it as a
+              flex sibling. As a sibling under `items-center` it centred
+              against the whole block, so the moment the line wrapped on a
+              phone the tick landed in the gap between the two lines.
+              `inline-block` + `align-middle` keeps it on the first line and
+              lets the sentence wrap around it.
+
+              Sized down a step on small screens: at `text-2xl` this broke
+              across three lines on a narrow phone. */}
+          <p className="mx-auto max-w-md font-display text-xl font-extrabold leading-snug tracking-tight sm:max-w-lg sm:text-2xl lg:text-3xl">
+            <Icon
+              name="checkCircle"
+              className="mr-2 inline-block size-6 -translate-y-0.5 align-middle text-signal-green-deep"
+            />
             {FEATURES.closer.lead}
           </p>
 
