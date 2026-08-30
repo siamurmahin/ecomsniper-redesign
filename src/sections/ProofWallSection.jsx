@@ -219,8 +219,13 @@ export default function ProofWallSection() {
               {PROOF.cta.label}
             </CtaButton>
 
+            {/* Left as a link, deliberately, unlike the matching one in 04d.
+                It sits directly under "See what it costs" — the page's own
+                CTA — and two buttons stacked would make the reader choose
+                between them. This one is the quiet second option. */}
             <a
               href={SITE.trustpilotUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-1.5 text-sm font-medium text-muted-dark transition-colors hover:text-paper"
             >

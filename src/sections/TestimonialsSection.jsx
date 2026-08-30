@@ -269,17 +269,34 @@ export default function TestimonialsSection() {
       </div>
       )}
 
-      <div className="site-shell mt-10 flex justify-center">
+      {/* A button, because this is the section's one real action: eighteen
+          reviews are a claim, and this is the reader checking it. As a line of
+          muted text under a wall of cards it read as a caption.
+
+          Bordered rather than filled. It leaves for somebody else's site, so
+          it must not carry more weight than "Start your eBay business" — the
+          same reasoning as the YouTube pill in 04b, and the two now match.
+
+          The star stays gold: every RatingStars on this page is gold, and
+          reaching for Trustpilot's own green here would put a fifth colour on
+          a page built from four signal tones. */}
+      <div className="site-shell mt-12 flex justify-center">
         <a
           href={SITE.trustpilotUrl}
+          target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
+          className="group inline-flex items-center gap-2.5 rounded-full border border-hairline bg-white py-3 pl-3 pr-5 text-sm font-semibold text-ink shadow-lift transition-[background-color,border-color,transform,box-shadow] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-float"
         >
-          <Icon name="star" className="size-4 shrink-0 text-signal-gold" />
+          <span
+            aria-hidden="true"
+            className="grid size-7 shrink-0 place-items-center rounded-full bg-signal-gold text-ink"
+          >
+            <Icon name="star" className="size-4" />
+          </span>
           {PROOF.verifyLabel}
           <Icon
             name="arrowRight"
-            className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
+            className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
           />
         </a>
       </div>
