@@ -723,6 +723,88 @@
     }
   }
 
+  /* --- Section 07's step visuals ---------------------------------------
+
+     Small mock interfaces, one per step, built from DOM and CSS exactly as
+     the live site builds its own — no Lottie, no canvas, no player. Read off
+     ecomsniper.io: its scan panel is 210x155, the beam a 35px gradient, and
+     the only real animations on the whole section are two rotations.
+
+     Everything here is `transform` and `opacity`, so it composites and keeps
+     time while the main thread is busy. */
+
+  /* The beam sweeping down the product list while it is "scanning". */
+  @keyframes step-scan {
+    0% {
+      transform: translate3d(0, -100%, 0);
+      opacity: 0;
+    }
+    12%,
+    76% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(0, 420%, 0);
+      opacity: 0;
+    }
+  }
+
+  /* A ring leaving a source: price monitoring listening, and the ripple under
+     the one-click button. */
+  @keyframes step-sonar {
+    0% {
+      transform: scale(0.35);
+      opacity: 0.55;
+    }
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+
+  /* The live dot on a listing. */
+  @keyframes step-live {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.82);
+    }
+  }
+
+  /* The order confirmation drawing itself. */
+  @keyframes step-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* A row landing in the results as the scan finds it. */
+  @keyframes step-row-in {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    40%,
+    70% {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step-visual [class*='animate-'],
+    .step-visual [style*='animation'] {
+      animation: none !important;
+    }
+    /* The check would otherwise sit permanently undrawn. */
+    .step-visual .step-check-path {
+      stroke-dashoffset: 0 !important;
+    }
+  }
+
   @keyframes panel-in {
     from { opacity: 0; transform: translate3d(0, 10px, 0); }
     to   { opacity: 1; transform: translate3d(0, 0, 0); }

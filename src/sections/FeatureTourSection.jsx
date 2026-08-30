@@ -81,6 +81,150 @@ function StepNumber({ item, size = 'md', isActive = true }) {
   );
 }
 
+/**
+ * A small mock interface per step, in that step's tone.
+ *
+ * Built from DOM and CSS, which is how the live site builds its own — there is
+ * no Lottie and no canvas anywhere on that section; the only animations on it
+ * are two rotations. A player plus a hosted JSON to draw four boxes and a line
+ * would be a dependency bought for nothing.
+ *
+ * Each one shows the step actually happening rather than illustrating it: the
+ * scan sweeps a list, the listing goes live, the monitor pings, the order
+ * confirms.
+ */
+function StepVisual({ item, index }) {
+  const tone = toneOf(item.tone);
+
+  // 1 — Product Hunter sweeping a list of candidates.
+  if (index === 0) {
+    return (
+      <div className="step-visual rounded-2xl bg-ink/[0.035] p-4">
+        <div className="relative overflow-hidden rounded-xl">
+          <ul className="space-y-2">
+            {[0, 1, 2, 3].map((row) => (
+              <li
+                key={row}
+                className="flex items-center gap-2.5 rounded-lg bg-white p-2 shadow-sm"
+                style={{ animation: `step-row-in 3.2s ease-in-out ${row * 0.18}s infinite` }}
+              >
+                <span className={`size-7 shrink-0 rounded-md ${tone.tile}`} />
+                <span className="flex-1 space-y-1.5">
+                  <span className="block h-1.5 w-3/4 rounded-full bg-ink/15" />
+                  <span className="block h-1.5 w-1/2 rounded-full bg-ink/10" />
+                </span>
+                <span className={`micro-label ${tone.text}`}>{[142, 96, 210, 63][row]}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* The beam. A gradient the height of one row, run down the panel. */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-transparent via-accent/25 to-transparent"
+            style={{ animation: 'step-scan 3.2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // 2 — the listing going live on eBay.
+  if (index === 1) {
+    return (
+      <div className="step-visual rounded-2xl bg-ink/[0.035] p-4">
+        <div className="rounded-xl bg-white p-3 shadow-sm">
+          <span className={`block h-20 w-full rounded-lg ${tone.wash} bg-gradient-to-br to-transparent`} />
+          <span className="mt-3 block h-2 w-4/5 rounded-full bg-ink/15" />
+          <span className="mt-2 block h-2 w-3/5 rounded-full bg-ink/10" />
+
+          <div className="mt-3 flex items-center justify-between">
+            <span className="inline-flex items-center gap-1.5">
+              <span
+                aria-hidden="true"
+                className="size-1.5 rounded-full bg-signal-green"
+                style={{ animation: 'step-live 1.6s ease-in-out infinite' }}
+              />
+              <span className="micro-label text-signal-green-deep">Live</span>
+            </span>
+            <span className="micro-label text-muted">eBay</span>
+          </div>
+        </div>
+
+        {/* One click, rippling. */}
+        <div className="relative mt-4 grid place-items-center">
+          <span
+            aria-hidden="true"
+            className={`absolute size-12 rounded-full ${tone.rule}`}
+            style={{ animation: 'step-sonar 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite' }}
+          />
+          <span
+            className={`relative rounded-full px-4 py-2 font-label text-[0.62rem] font-bold uppercase tracking-[0.09em] ${tone.tile}`}
+          >
+            List it
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // 3 — the monitor listening for a change at the retailer.
+  if (index === 2) {
+    return (
+      <div className="step-visual grid place-items-center rounded-2xl bg-ink/[0.035] p-8">
+        <div className="relative grid size-32 place-items-center">
+          {[0, 1, 2].map((ring) => (
+            <span
+              key={ring}
+              aria-hidden="true"
+              className={`absolute size-24 rounded-full border-2 ${tone.ring}`}
+              style={{ animation: `step-sonar 3s cubic-bezier(0.2, 0.6, 0.4, 1) ${ring * 1}s infinite` }}
+            />
+          ))}
+          <span className={`relative grid size-12 place-items-center rounded-2xl ${tone.tile}`}>
+            <Icon name="magnifier" className="size-5" />
+          </span>
+        </div>
+
+        <p className="mt-6 text-center">
+          <span className="micro-label text-muted">Retailer price</span>
+          <span className="mt-1 block font-display text-lg font-extrabold tracking-tight">
+            $24.99 <span className={tone.text}>→ $22.49</span>
+          </span>
+        </p>
+      </div>
+    );
+  }
+
+  // 4 — the order confirmed.
+  return (
+    <div className="step-visual grid place-items-center rounded-2xl bg-ink/[0.035] p-8">
+      <span className={`grid size-20 place-items-center rounded-full ${tone.tile}`}>
+        <svg viewBox="0 0 32 32" className="size-10" fill="none" aria-hidden="true">
+          <path
+            className="step-check-path"
+            d="M8 16.5l5.5 5.5L24 11"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="30"
+            strokeDashoffset="30"
+            style={{ animation: 'step-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards' }}
+          />
+        </svg>
+      </span>
+
+      <p className="mt-6 text-center">
+        <span className="micro-label text-muted">Order total</span>
+        <span className="mt-1 block font-display text-lg font-extrabold tracking-tight">
+          $38.90 <span className={tone.text}>· $13.20 profit</span>
+        </span>
+      </p>
+    </div>
+  );
+}
+
 export default function FeatureTourSection() {
   const sectionRef = useRevealOnScroll();
   const stepRefs = useRef([]);
@@ -151,12 +295,14 @@ export default function FeatureTourSection() {
                   ref={(node) => {
                     stepRefs.current[index] = node;
                   }}
-                  /* The spacing IS the pacing. At the original `pb-14` the
-                     steps sat 234px apart in a 935px viewport, so a single
-                     screen of scrolling ran through almost all four and 1 → 2
-                     → 3 went past before any of them could be read. A step
-                     needs about half a screen to itself. */
-                  className="relative flex gap-6 pb-16 last:pb-0 lg:pb-64"
+                  /* The spacing IS the pacing, and it has been wrong in both
+                     directions. At `pb-14` the steps were 234px apart in a
+                     935px viewport and a single screen ran through nearly all
+                     four; at `pb-64` they were 434px apart and the column was
+                     mostly empty between them. 36 lands at ~320px, about a
+                     third of a screen each — enough to read one before the
+                     next arrives, without a hole. */
+                  className="relative flex gap-6 pb-16 last:pb-0 lg:pb-36"
                 >
                   {/* No opacity on this wrapper: it would take the number tile
                       with it and the spine would show through. */}
@@ -164,15 +310,23 @@ export default function FeatureTourSection() {
                     <StepNumber item={item} isActive={isActive} />
                   </span>
 
+                  {/* 0.8, not 0.55. A step that is not current still has to be
+                      readable — the whole column is on screen at once, and a
+                      reader looks ahead and back. `text-muted` on
+                      `paper-sunk` at 55% was under the contrast floor. */}
                   <div
                     className={`min-w-0 flex-1 transition-opacity duration-500 ${
-                      isActive ? 'opacity-100' : 'opacity-55'
+                      isActive ? 'opacity-100' : 'opacity-80'
                     }`}
                   >
                     <h3 className="font-display text-xl font-extrabold leading-tight tracking-tight sm:text-2xl">
                       {item.title}
                     </h3>
-                    <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">{item.body}</p>
+                    {/* `ink/80` rather than `muted`: this is body copy people
+                        are meant to read, not a caption. */}
+                    <p className="mt-3 text-[0.95rem] font-medium leading-relaxed text-ink/80">
+                      {item.body}
+                    </p>
 
                     <div className="mt-5 inline-flex items-center gap-2">
                       <span
@@ -206,16 +360,19 @@ export default function FeatureTourSection() {
                     </span>
                   </div>
 
-                  {/* Keyed, so a swap reads as a change rather than as text
-                      quietly replacing itself under the reader. */}
+                  {/* The step happening, rather than the step described
+                      again. This panel used to repeat the title and body that
+                      are already six inches to its left — the reader had just
+                      read them, and the most prominent thing on screen was a
+                      duplicate.
+
+                      Keyed on the step, so the visual restarts its animation
+                      on every change and a swap reads as a change. */}
                   <div
                     key={active.n}
                     className="mt-6 animate-[panel-in_0.5s_var(--ease-out-expo)_both]"
                   >
-                    <h3 className="font-display text-2xl font-extrabold leading-tight tracking-tight">
-                      {active.title}
-                    </h3>
-                    <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">{active.body}</p>
+                    <StepVisual item={active} index={activeIndex} />
                   </div>
 
                   <div className="mt-8 flex items-center gap-2">
