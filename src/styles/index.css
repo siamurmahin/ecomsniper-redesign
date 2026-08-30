@@ -109,6 +109,28 @@
     border-color: var(--color-hairline);
   }
 
+  /* Anything that can be clicked says so.
+
+     Tailwind v4 dropped the preflight rule that used to put `cursor: pointer`
+     on buttons, and the browser default for `<button>` is `default` — so links
+     got the hand and buttons did not. Measured on the homepage, 70 of 125
+     clickable elements were showing an arrow: every audience panel, every
+     hero-panel beat, every video thumbnail, every receipt card, the menu
+     toggle. The one place it had been noticed got a local `cursor-pointer`
+     patch; this fixes the cause instead. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
+  }
+
+  /* A disabled control should read as unavailable, not as unclickable-looking
+     but otherwise normal. */
+  button:disabled,
+  [role='button'][aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
   html {
     /* Lenis drives smooth scroll; native smooth would fight it. */
     scroll-behavior: auto;
@@ -370,9 +392,21 @@
    ========================================================================== */
 
 @layer utilities {
+  /* Hidden until its reveal runs. The hiding only applies while JS is running,
+     so no-JS visitors never lose content.
+
+     `will-change` deliberately does NOT live here. It used to, and because
+     this rule is permanent it promoted every reveal target to its own
+     compositor layer for the whole life of the page — 97 of them on the
+     homepage, long after their one-shot entrance had finished. Chrome's
+     guidance is that `will-change` is a temporary hint; left on at that
+     volume the compositor starts squashing and re-rasterising layers while
+     scrolling, which reads as flicker.
+
+     `useRevealOnScroll` now applies it for the duration of the tween and
+     takes it off again. */
   .js-motion [data-reveal] {
     opacity: 0;
-    will-change: transform, opacity;
   }
 
   @keyframes marquee-drift {
@@ -460,5 +494,116 @@
   .js-motion [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Section 04 — the proof rails
+   The wall in 04a and the review rows in 04d are the same idea on two axes:
+   a track holding two identical copies of a list, walked by half its own
+   length so the seam never reaches the viewport.
+   ========================================================================== */
+
+@layer utilities {
+  /* Vertical evidence rail, used by the wall in 04a. Two identical stacks share one column and the
+     column is walked up by half its own height, so the seam between the first
+     copy and the second never reaches the viewport and the loop reads as
+     continuous. Up and down are separate keyframes rather than one with
+     `animation-direction: reverse`, which reverses the timing function too. */
+  @keyframes rail-drift-up {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(0, -50%, 0); }
+  }
+  @keyframes rail-drift-down {
+    from { transform: translate3d(0, -50%, 0); }
+    to   { transform: translate3d(0, 0, 0); }
+  }
+  .animate-rail-up {
+    animation: rail-drift-up var(--rail-duration, 52s) linear infinite;
+  }
+  .animate-rail-down {
+    animation: rail-drift-down var(--rail-duration, 52s) linear infinite;
+  }
+
+  /* Pause rather than stop: the rail holds its place under the pointer instead
+     of snapping back to the top when the pointer leaves. */
+  .rail-hold:hover .animate-rail-up,
+  .rail-hold:hover .animate-rail-down {
+    animation-play-state: paused;
+  }
+
+  .edge-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  /* Tab panels swap in place, so their entrance is an animation and not a
+     ScrollTrigger: a panel that mounts hidden has no measurable position for a
+     trigger to read, and would reveal at the wrong moment or not at all. */
+  @keyframes panel-in {
+    from { opacity: 0; transform: translate3d(0, 10px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  .animate-panel-in {
+    animation: panel-in 420ms var(--ease-out-expo) both;
+  }
+}
+
+/* The global reduced-motion rule collapses every animation to its end frame,
+   which would park a rail on its second copy with the first unreachable. Stop
+   the rail where it starts and give it a scrollbar instead. */
+@media (prefers-reduced-motion: reduce) {
+  .rail-viewport {
+    overflow-y: auto;
+  }
+  .animate-rail-up,
+  .animate-rail-down {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+@layer utilities {
+  /* Horizontal testimonial rows. `marquee-drift` above already walks a track
+     left; this is its mirror, so alternating rows can run against each other.
+     A separate keyframe rather than `animation-direction: reverse` because
+     that reverses the timing function as well as the path. */
+  @keyframes marquee-drift-back {
+    from { transform: translate3d(-50%, 0, 0); }
+    to   { transform: translate3d(0, 0, 0); }
+  }
+  .animate-marquee-back {
+    animation: marquee-drift-back var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .rail-hold:hover .animate-marquee-drift,
+  .rail-hold:hover .animate-marquee-back {
+    animation-play-state: paused;
+  }
+}
+
+/* Same trade as the vertical rails: with animation collapsed, a row would sit
+   on its second copy with the first unreachable. Stop it at the start and let
+   the reader push it by hand. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-viewport {
+    overflow-x: auto;
+  }
+  .animate-marquee-back {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+@layer utilities {
+  /* The interview rail is driven by its buttons, by drag and by touch. The
+     native scrollbar under it reads as a stray UI element on a marketing
+     page, and the arrows already say the rail moves. */
+  .rail-x {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .rail-x::-webkit-scrollbar {
+    display: none;
   }
 }

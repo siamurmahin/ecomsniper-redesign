@@ -2,6 +2,30 @@ import { useLayoutEffect, useRef } from 'react';
 import { gsap, ScrollTrigger, prefersReducedMotion, MOTION } from '../lib/motion';
 
 /**
+ * One `ScrollTrigger.refresh()` for the whole page, however many sections ask
+ * for it.
+ *
+ * `refresh()` is global: it re-measures every trigger on the document, not the
+ * caller's. Seventeen sections use this hook, so seventeen of them resolved
+ * `document.fonts.ready` in the same microtask and each re-measured the whole
+ * page — the same work, seventeen times, all before first paint. It showed up
+ * in a production trace as 555ms of forced reflow inside GSAP.
+ *
+ * Collapsing them on a frame keeps the behaviour (measurements still land
+ * after fonts settle) and does the work once. A late-mounting section still
+ * gets its own refresh, because the handle is cleared when the frame runs.
+ */
+let pendingRefresh = 0;
+
+const scheduleRefresh = () => {
+  cancelAnimationFrame(pendingRefresh);
+  pendingRefresh = requestAnimationFrame(() => {
+    pendingRefresh = 0;
+    ScrollTrigger.refresh();
+  });
+};
+
+/**
  * Reveals every `[data-reveal]` descendant of the returned ref as it scrolls
  * in. The hiding CSS only applies while JS runs, so no-JS and reduced-motion
  * visitors never lose content. A shared `data-reveal-group` staggers together.
@@ -46,6 +70,15 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
             duration: MOTION.duration,
             ease: MOTION.ease,
             stagger: MOTION.stagger,
+            /* Promote for the entrance and then hand the layer back. The
+               stylesheet used to carry `will-change` permanently, which left
+               ~97 compositor layers alive on the homepage long after every
+               entrance had finished — the compositor then squashes and
+               re-rasterises them during scroll, and it reads as flicker.
+               These reveals are `once: true`, so after this there is nothing
+               left to promote for. */
+            onStart: () => gsap.set(els, { willChange: 'transform, opacity' }),
+            onComplete: () => gsap.set(els, { willChange: 'auto' }),
             scrollTrigger: { trigger: els[0], start, once: true },
           },
         );
@@ -53,8 +86,8 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
     }, scope);
 
     // Layout settles after fonts load; refresh so triggers use final positions.
-    const refresh = () => ScrollTrigger.refresh();
-    document.fonts?.ready.then(refresh);
+    // Shared and frame-collapsed — see `scheduleRefresh` above.
+    document.fonts?.ready.then(scheduleRefresh);
 
     return () => ctx.revert();
   }, [start, y]);

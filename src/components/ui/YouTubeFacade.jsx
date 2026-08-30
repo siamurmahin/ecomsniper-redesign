@@ -31,7 +31,7 @@ export default function YouTubeFacade({ videoId, title, poster, guest, className
         <button
           type="button"
           onClick={() => setIsPlaying(true)}
-          className="absolute inset-0 size-full cursor-pointer text-left"
+          className="absolute inset-0 size-full text-left"
         >
           {/* The accessible name carries the real title, not "play". */}
           <span className="sr-only">Play video: {title}</span>

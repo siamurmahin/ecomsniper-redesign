@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import { EXIT_INTENT } from '../../data/siteContent';
-import { getLenis } from '../../lib/smoothScroll';
+import { useModalLayer } from '../../hooks/useModalLayer';
 
 /**
  * Exit-intent capture for the visitors who will not buy today — the page
@@ -68,49 +68,11 @@ export default function ExitIntentOffer() {
     };
   }, []);
 
-  // Escape to dismiss, and move focus into the dialog when it opens.
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    const onKey = (event) => event.key === 'Escape' && close();
-    window.addEventListener('keydown', onKey);
-    dialogRef.current?.focus();
-    return () => window.removeEventListener('keydown', onKey);
-  }, [isOpen, close]);
-
-  // Hold the page still behind the dialog. Stopping Lenis is not enough — it
-  // only ends its own easing and hands the gesture back to the browser — so
-  // the events are refused too. `overflow: hidden` is avoided deliberately: it
-  // would make the element a scroll container, which the stylesheet's
-  // `overflow-x: clip` exists to prevent.
-  useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const lenis = getLenis();
-    lenis?.stop();
-
-    const block = (event) => event.preventDefault();
-    // Keys that scroll: space, page up/down, home/end, arrows.
-    const scrollKeys = new Set([' ', 'PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown']);
-    const onKeyDown = (event) => {
-      if (!scrollKeys.has(event.key)) return;
-      // Focus sits on the dialog, which does not scroll, so exempting it
-      // would hand these keys to the page behind. Only real fields keep them.
-      const el = event.target;
-      if (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName)) return;
-      event.preventDefault();
-    };
-
-    window.addEventListener('wheel', block, { passive: false });
-    window.addEventListener('touchmove', block, { passive: false });
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => {
-      window.removeEventListener('wheel', block);
-      window.removeEventListener('touchmove', block);
-      window.removeEventListener('keydown', onKeyDown);
-      lenis?.start();
-    };
-  }, [isOpen]);
+  /* Escape, focus and the scroll lock behind the dialog. All of it moved to
+     `useModalLayer` when the receipts lightbox became a second dialog — the
+     scroll lock in particular is a pile of non-obvious decisions that should
+     not exist in two places. Behaviour here is unchanged. */
+  useModalLayer(isOpen, { onClose: close, dialogRef });
 
   if (!isOpen) return null;
 

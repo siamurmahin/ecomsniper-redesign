@@ -1,8 +1,12 @@
 import Seo from '../components/ui/Seo';
+import DeferUntilPainted from '../components/layout/DeferUntilPainted';
 import HeroSection from '../sections/HeroSection';
 import ProofBarSection from '../sections/ProofBarSection';
 import AudienceSection from '../sections/AudienceSection';
-import ProofSection from '../sections/ProofSection';
+import ProofWallSection from '../sections/ProofWallSection';
+import InterviewsSection from '../sections/InterviewsSection';
+import ReceiptsSection from '../sections/ReceiptsSection';
+import TestimonialsSection from '../sections/TestimonialsSection';
 import ModelSection from '../sections/ModelSection';
 import PillarsSection from '../sections/PillarsSection';
 import FeatureTourSection from '../sections/FeatureTourSection';
@@ -22,7 +26,10 @@ import { FAQ, PRICING } from '../data/siteContent';
  *  01 Hero .............. what this is, who for, what it costs
  *  02 Proof bar ......... checkable numbers, immediately
  *  03 Who it's for ...... self-identification
- *  04 Proof ............. video, reviews, receipts
+ *  04 Proof wall ........ the volume of it, and the door
+ *  04b Interviews ....... members, in their own words
+ *  04c Receipts ......... screenshots members posted
+ *  04d Testimonials ..... written reviews, two running rows
  *  05 The model ......... the mechanism, BEFORE the feature tour
  *  06 Three pillars ..... the page's table of contents
  *  07 Feature tour ...... what the software actually does
@@ -74,21 +81,35 @@ export default function HomePage() {
         schema={schema}
       />
 
+      {/* The first screen, mounted synchronously. The hero holds a full
+          viewport, so the proof bar is already below the fold — it is eager
+          anyway because it is small and it is the first thing a scroll
+          reaches. */}
       <HeroSection />
       <ProofBarSection />
-      <AudienceSection />
-      <ProofSection />
-      <ModelSection />
-      <PillarsSection />
-      <FeatureTourSection />
-      <CommunitySection />
-      <TrainingSection />
-      <FoundersSection />
-      <ComparisonSection />
-      <PricingPreviewSection />
-      <FaqSection />
-      <AssuranceSection />
-      <FinalCtaSection />
+
+      {/* Everything below, mounted one frame after the hero has painted.
+          Sixteen sections, ~4,000 nodes and sixteen GSAP setups used to run
+          before the first frame with the screen blank behind them. See
+          `DeferUntilPainted` — including why this is not viewport-based. */}
+      <DeferUntilPainted>
+        <AudienceSection />
+        <ProofWallSection />
+        <InterviewsSection />
+        <ReceiptsSection />
+        <TestimonialsSection />
+        <ModelSection />
+        <PillarsSection />
+        <FeatureTourSection />
+        <CommunitySection />
+        <TrainingSection />
+        <FoundersSection />
+        <ComparisonSection />
+        <PricingPreviewSection />
+        <FaqSection />
+        <AssuranceSection />
+        <FinalCtaSection />
+      </DeferUntilPainted>
     </>
   );
 }

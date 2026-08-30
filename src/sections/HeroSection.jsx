@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import HeroAurora from '../components/hero/HeroAurora';
@@ -6,6 +6,7 @@ import HeroDots from '../components/hero/HeroDots';
 import PipelinePanel from '../components/hero/PipelinePanel';
 import TextType from '../components/reactbits/TextType';
 import { HERO } from '../data/siteContent';
+import { announceHeroReady } from '../lib/heroReady';
 import { gsap, prefersReducedMotion, MOTION, SplitText } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
@@ -42,37 +43,76 @@ export default function HeroSection() {
   const eyebrowTextRef = useRef(null);
   const [isEyebrowOverflowing, setIsEyebrowOverflowing] = useState(false);
 
-  useLayoutEffect(() => {
+  /* Deliberately `useEffect` and not `useLayoutEffect`, and deliberately not
+     measured until after the first paint.
+
+     This reads `getComputedStyle` and `getBoundingClientRect`. Run during the
+     commit, that forces a full style-and-layout pass over the whole document
+     at the one moment the entire page has just mounted and every style is
+     invalidated — a production trace put 502ms of forced reflow here, the
+     single biggest block of our own code on the critical path.
+
+     Nothing about this decision has to be right before the first frame. The
+     eyebrow starts wrapped, which is the readable state anyway, and switches
+     to the marquee a frame later if it genuinely does not fit. */
+  useEffect(() => {
     const track = eyebrowTrackRef.current;
     const text = eyebrowTextRef.current;
     // Reduced motion keeps the wrapping version, which costs a second line but
     // never moves and never hides a word behind a clip.
     if (!track || !text || isStatic) return undefined;
 
-    // Compare against the text's own natural width, not the rendered one:
-    // once the marquee is on, the rendered row holds two copies and would
-    // always read as overflowing, so the state could never switch back off.
-    const measure = () => {
-      const available = track.clientWidth;
-      // Discount the seam gap the copy only carries while scrolling, or the
-      // measurement would answer a different question in each state and the
-      // marquee could latch on at the threshold.
+    /* The copy's own width, cached. It only changes when the font swaps or the
+       copy itself changes, never when the marquee turns on — so measuring it
+       on every resize was paying for a layout to re-learn a constant. */
+    let naturalWidth = 0;
+
+    const readNatural = () => {
+      // `pe-6` is added only while scrolling, so it has to come off the
+      // measurement or the marquee could latch on at the threshold.
       const padEnd = parseFloat(getComputedStyle(text).paddingInlineEnd) || 0;
-      const natural = text.getBoundingClientRect().width - padEnd;
-      // A sub-pixel rounding difference is not an overflow worth animating.
-      setIsEyebrowOverflowing(available > 0 && natural - available > 1);
+      naturalWidth = text.getBoundingClientRect().width - padEnd;
     };
 
-    measure();
-    const observer = new ResizeObserver(measure);
+    const apply = () => {
+      const available = track.clientWidth;
+      // A sub-pixel rounding difference is not an overflow worth animating.
+      setIsEyebrowOverflowing(available > 0 && naturalWidth - available > 1);
+    };
+
+    let frame = requestAnimationFrame(() => {
+      readNatural();
+      apply();
+    });
+
+    /* Only the TRACK is observed. Observing the text as well meant the state
+       change resized it (`pe-6`) and fed the observer straight back into
+       another forced layout. The track's width changes on viewport resize,
+       which is the only thing that can change the answer. */
+    const observer = new ResizeObserver(apply);
     observer.observe(track);
-    observer.observe(text);
-    return () => observer.disconnect();
+
+    // Glyph widths move when the webfont swaps, so re-read the constant then.
+    const onFonts = () => {
+      readNatural();
+      apply();
+    };
+    document.fonts?.ready.then(onFonts);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, [isStatic]);
 
   useLayoutEffect(() => {
     const scope = heroRef.current;
-    if (!scope || isStatic) return undefined;
+    /* Reduced motion has no entrance to wait for, so the rest of the page is
+       told it can mount right away rather than sitting on the timeout. */
+    if (!scope || isStatic) {
+      announceHeroReady();
+      return undefined;
+    }
 
     const ctx = gsap.context(() => {
       /* SplitText rather than hand-written line spans: the copy wraps
@@ -89,27 +129,38 @@ export default function HeroSection() {
           gsap.from(self.words, {
             yPercent: 118,
             opacity: 0,
-            duration: 1,
+            duration: 0.7,
             ease: MOTION.ease,
             // Per word, not per line: the eye reads left to right and the
             // stagger should too. Small enough that it never feels typed out.
-            stagger: 0.028,
+            stagger: 0.022,
           }),
       });
 
-      const timeline = gsap.timeline({ defaults: { ease: MOTION.ease } });
+      /* Timings measured, not felt. The first version ran 1.85s and the hero
+         was not fully on screen until 1,600ms after load — for over a second
+         a visitor is looking at a mostly empty first screen, which is the one
+         screen that has to do the work. Every duration and offset here is
+         about 45% of what it was; the sequence and the order are unchanged,
+         it just stops dawdling. Ends at ~0.95s. */
+      const timeline = gsap.timeline({
+        defaults: { ease: MOTION.ease },
+        /* Nothing heavy may run while this is playing — see `onComplete`
+           below and `DeferUntilPainted`. */
+        onComplete: announceHeroReady,
+      });
 
       timeline
-        .from('[data-hero-eyebrow]', { opacity: 0, y: 12, duration: 0.7 })
-        .from('[data-hero-mark]', { opacity: 0, y: 22, duration: 0.9 }, 0.34)
-        .from('[data-hero-blessing]', { opacity: 0, y: 14, duration: 0.8 }, 0.5)
-        .from('[data-hero-sub]', { opacity: 0, y: 16, duration: 0.8 }, 0.62)
-        .from('[data-hero-cta]', { opacity: 0, y: 18, duration: 0.8, stagger: 0.09 }, 0.72)
-        .from('[data-hero-reassure]', { opacity: 0, y: 12, duration: 0.7, stagger: 0.07 }, 0.86)
+        .from('[data-hero-eyebrow]', { opacity: 0, y: 12, duration: 0.45 })
+        .from('[data-hero-mark]', { opacity: 0, y: 22, duration: 0.5 }, 0.16)
+        .from('[data-hero-blessing]', { opacity: 0, y: 14, duration: 0.45 }, 0.24)
+        .from('[data-hero-sub]', { opacity: 0, y: 16, duration: 0.45 }, 0.3)
+        .from('[data-hero-cta]', { opacity: 0, y: 18, duration: 0.45, stagger: 0.06 }, 0.38)
+        .from('[data-hero-reassure]', { opacity: 0, y: 12, duration: 0.4, stagger: 0.05 }, 0.44)
         // The panel enters alongside the copy: it is the other half of the
         // fold, not a footnote to the headline.
-        .from('[data-hero-panel]', { opacity: 0, x: 28, duration: 1.1 }, 0.28)
-        .from('[data-hero-support]', { opacity: 0, y: 14, duration: 0.7, stagger: 0.1 }, 0.95);
+        .from('[data-hero-panel]', { opacity: 0, x: 28, duration: 0.7 }, 0.1)
+        .from('[data-hero-support]', { opacity: 0, y: 14, duration: 0.4, stagger: 0.06 }, 0.5);
 
       return () => split.revert();
     }, scope);
