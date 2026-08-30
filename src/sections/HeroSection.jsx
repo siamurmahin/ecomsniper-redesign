@@ -7,7 +7,9 @@ import PipelinePanel from '../components/hero/PipelinePanel';
 import TextType from '../components/reactbits/TextType';
 import { HERO } from '../data/siteContent';
 import { announceHeroReady } from '../lib/heroReady';
-import { gsap, prefersReducedMotion, MOTION, SplitText } from '../lib/motion';
+// No MOTION easing here any more: the hero's entrance is CSS, and its easing
+// comes from `--ease-out-expo` in the stylesheet.
+import { gsap, prefersReducedMotion, SplitText } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
 /** The two objections, and the colour each answer carries. */
@@ -26,6 +28,15 @@ const SUPPORT_META = [
  * The brand ramp appears twice here, on the marked phrase and the primary
  * button. It was on four things at once, which left it nothing to emphasise.
  */
+/* Mirrors of the hero entrance timings in `index.css`. Only used to work out
+   when the entrance is over, so the rest of the page knows it may mount.
+   If the stylesheet's numbers change, change these too. */
+const WORD_DELAY_MS = 60;
+const STAGGER_MS = 40;
+const WORD_DURATION_MS = 550;
+/** Support cards: 500ms base + two steps + 450ms. The other chains are shorter. */
+const SUPPORT_END_MS = 500 + 2 * STAGGER_MS + 450;
+
 export default function HeroSection() {
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
@@ -125,44 +136,41 @@ export default function HeroSection() {
         mask: 'lines',
         autoSplit: true,
         linesClass: 'overflow-hidden',
-        onSplit: (self) =>
-          gsap.from(self.words, {
-            yPercent: 118,
-            opacity: 0,
-            duration: 0.7,
-            ease: MOTION.ease,
-            // Per word, not per line: the eye reads left to right and the
-            // stagger should too. Small enough that it never feels typed out.
-            stagger: 0.022,
-          }),
+        /* The split is the only part that has to be JavaScript — the copy
+           wraps differently at every width, so the lines can only be found
+           from rendered text. The animation itself is handed to CSS: each
+           word is tagged and given its step, and the stylesheet runs it on
+           the compositor. See the hero entrance block in `index.css` for why
+           that matters more here than anywhere else on the page. */
+        onSplit: (self) => {
+          self.words.forEach((word, index) => {
+            word.setAttribute('data-hero-word', '');
+            word.style.setProperty('--hero-stagger', String(index));
+          });
+        },
       });
 
-      /* Timings measured, not felt. The first version ran 1.85s and the hero
-         was not fully on screen until 1,600ms after load — for over a second
-         a visitor is looking at a mostly empty first screen, which is the one
-         screen that has to do the work. Every duration and offset here is
-         about 45% of what it was; the sequence and the order are unchanged,
-         it just stops dawdling. Ends at ~0.95s. */
-      const timeline = gsap.timeline({
-        defaults: { ease: MOTION.ease },
-        /* Nothing heavy may run while this is playing — see `onComplete`
-           below and `DeferUntilPainted`. */
-        onComplete: announceHeroReady,
-      });
+      /* The entrance itself lives in the stylesheet now — every delay and
+         duration is there, keyed off the `data-hero-*` attributes. Nothing
+         about it runs on the main thread, which is the whole point.
 
-      timeline
-        .from('[data-hero-eyebrow]', { opacity: 0, y: 12, duration: 0.45 })
-        .from('[data-hero-mark]', { opacity: 0, y: 22, duration: 0.5 }, 0.16)
-        .from('[data-hero-blessing]', { opacity: 0, y: 14, duration: 0.45 }, 0.24)
-        .from('[data-hero-sub]', { opacity: 0, y: 16, duration: 0.45 }, 0.3)
-        .from('[data-hero-cta]', { opacity: 0, y: 18, duration: 0.45, stagger: 0.06 }, 0.38)
-        .from('[data-hero-reassure]', { opacity: 0, y: 12, duration: 0.4, stagger: 0.05 }, 0.44)
-        // The panel enters alongside the copy: it is the other half of the
-        // fold, not a footnote to the headline.
-        .from('[data-hero-panel]', { opacity: 0, x: 28, duration: 0.7 }, 0.1)
-        .from('[data-hero-support]', { opacity: 0, y: 14, duration: 0.4, stagger: 0.06 }, 0.5);
+         The rest of the page waits for this before mounting, so something has
+         to say when it is over. Derived from the split rather than written
+         down: the headline is the longest chain and its length depends on the
+         copy and on where it wraps, so a hard-coded number goes stale the
+         first time either changes. Kept in step with the stylesheet by the
+         constants below.
 
-      return () => split.revert();
+         A timer and not `animationend`, because which element finishes last
+         varies with the copy, and a missed event would strand sixteen
+         sections behind the fallback timeout. */
+      const wordsEndMs = WORD_DELAY_MS + (split.words.length - 1) * STAGGER_MS + WORD_DURATION_MS;
+      const doneIn = gsap.delayedCall(Math.max(wordsEndMs, SUPPORT_END_MS) / 1000, announceHeroReady);
+
+      return () => {
+        doneIn.kill();
+        split.revert();
+      };
     }, scope);
 
     return () => ctx.revert();
@@ -334,12 +342,12 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <span data-hero-cta>
+              <span data-hero-cta style={{ '--hero-stagger': 0 }}>
                 <CtaButton href={HERO.primaryCta.href} intent="hero-primary">
                   {HERO.primaryCta.label}
                 </CtaButton>
               </span>
-              <span data-hero-cta className="relative">
+              <span data-hero-cta style={{ '--hero-stagger': 1 }} className="relative">
                 {/* The second door: for the majority who will not buy today. */}
                 <CtaButton href={HERO.secondaryCta.href} variant="brandOutline" intent="hero-playbook">
                   {HERO.secondaryCta.label}
@@ -397,13 +405,14 @@ export default function HeroSection() {
                 three equal sentences: at one weight this is the shape of small
                 print, which is the wrong voice for a price and a guarantee. */}
             <ul className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-hairline bg-hairline sm:grid-cols-3">
-              {HERO.assurances.map((item) => {
+              {HERO.assurances.map((item, index) => {
                 const tone = toneOf(item.tone);
 
                 return (
                   <li
                     key={item.lead}
                     data-hero-reassure
+                    style={{ '--hero-stagger': index }}
                     className="group flex items-start gap-3 bg-white/75 px-4 py-3.5 text-left backdrop-blur-sm transition-colors duration-500 hover:bg-white"
                   >
                     <span
@@ -445,6 +454,7 @@ export default function HeroSection() {
                   <li
                     key={item.title}
                     data-hero-support
+                    style={{ '--hero-stagger': index }}
                     className="group relative overflow-hidden rounded-2xl border border-hairline bg-white/70 p-4 text-left backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-lift"
                   >
                     {/* The same corner wash the pillar cards use, so the hero

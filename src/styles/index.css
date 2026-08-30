@@ -409,6 +409,119 @@
     opacity: 0;
   }
 
+  /* --- The hero entrance ------------------------------------------------
+
+     CSS and not GSAP, and the reason is the moment it runs in.
+
+     A JS-driven tween writes opacity and transform on the main thread every
+     frame. The hero's entrance plays during the busiest moment the page ever
+     has: React mounting, SplitText splitting the headline, the webfont
+     swapping, the panel's images decoding and the WebGL aurora compiling its
+     shaders. Any one of those blocks a frame, and a main-thread animation
+     visibly stutters when it does.
+
+     Worse, `SmoothScrollProvider` sets `gsap.ticker.lagSmoothing(0)` because
+     Lenis needs it. With lag smoothing off, GSAP does not stretch a stall —
+     after a 200ms block it advances the timeline 200ms in a single step. So
+     every stall became a jump rather than a slow patch.
+
+     These animations run on the compositor. They keep their timing while the
+     main thread is completely blocked, which is exactly the property an
+     animation that plays during page load needs.
+
+     `both` fill mode holds the from-state before the delay elapses, so
+     nothing flashes at full opacity first. Everything is gated on
+     `.js-motion`, so with no JS the hero is simply visible. */
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes hero-slide-in {
+    from {
+      opacity: 0;
+      transform: translate3d(28px, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .js-motion [data-hero-eyebrow],
+  .js-motion [data-hero-mark],
+  .js-motion [data-hero-blessing],
+  .js-motion [data-hero-sub],
+  .js-motion [data-hero-cta],
+  .js-motion [data-hero-reassure],
+  .js-motion [data-hero-support],
+  .js-motion [data-hero-word] {
+    animation: hero-rise 450ms var(--ease-out-expo) both;
+    /* Base offset per element, plus a step for items rendered from a list. */
+    animation-delay: calc(var(--hero-delay, 0ms) + var(--hero-stagger, 0) * 40ms);
+  }
+
+  .js-motion [data-hero-eyebrow] {
+    --hero-delay: 0ms;
+  }
+  .js-motion [data-hero-mark] {
+    --hero-delay: 160ms;
+  }
+  .js-motion [data-hero-blessing] {
+    --hero-delay: 240ms;
+  }
+  .js-motion [data-hero-sub] {
+    --hero-delay: 300ms;
+  }
+  .js-motion [data-hero-cta] {
+    --hero-delay: 380ms;
+  }
+  .js-motion [data-hero-reassure] {
+    --hero-delay: 440ms;
+  }
+  .js-motion [data-hero-support] {
+    --hero-delay: 500ms;
+  }
+
+  /* Words carry their own step, set from the split. The eye reads left to
+     right and the stagger should too, without feeling typed out — with eleven
+     words the whole headline lands inside a second. */
+  .js-motion [data-hero-word] {
+    --hero-delay: 60ms;
+    animation-duration: 550ms;
+    animation-name: hero-rise;
+  }
+
+  /* The panel enters alongside the copy: it is the other half of the fold,
+     not a footnote to the headline. */
+  .js-motion [data-hero-panel] {
+    animation: hero-slide-in 700ms var(--ease-out-expo) both;
+    animation-delay: 100ms;
+  }
+
+  /* Nothing moves, and nothing is hidden waiting for a delay to elapse. */
+  @media (prefers-reduced-motion: reduce) {
+    .js-motion [data-hero-eyebrow],
+    .js-motion [data-hero-mark],
+    .js-motion [data-hero-blessing],
+    .js-motion [data-hero-sub],
+    .js-motion [data-hero-cta],
+    .js-motion [data-hero-reassure],
+    .js-motion [data-hero-support],
+    .js-motion [data-hero-word],
+    .js-motion [data-hero-panel] {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   @keyframes marquee-drift {
     from { transform: translate3d(0, 0, 0); }
     to { transform: translate3d(-50%, 0, 0); }
