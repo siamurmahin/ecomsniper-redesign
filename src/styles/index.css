@@ -365,6 +365,15 @@
     -webkit-box-decoration-break: clone;
   }
 
+  /* The same device inverted, for headlines on a dark band. The ink block
+     would be invisible there — a marked word that disappears is worse than no
+     mark, because the sentence has been split for it. */
+  .headline-mark-on-ink {
+    @apply inline-block bg-paper px-2.5 pb-1 text-ink;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
   .headline-strike {
     @apply relative text-muted;
   }

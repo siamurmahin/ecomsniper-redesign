@@ -172,7 +172,17 @@ export default function PillarsSection() {
       ref={sectionRef}
       id="the-system"
       aria-labelledby="pillars-headline"
-      className="section-band"
+      /* Standard band, less lead-in at the top. This follows the ink
+         testimonials band, and a hard colour edge already does the separating
+         that padding does between two sections of the same ground — 96px of
+         ink and then 132px of paper measured as 228px of nothing between the
+         Trustpilot button and this heading.
+
+         Safe to make asymmetric here specifically because this section paints
+         no background of its own. On a coloured band uneven padding would sit
+         the band visibly off-centre, which is why `section-band` is symmetric
+         in the first place. */
+      className="section-band pt-12 sm:pt-14 lg:pt-16"
     >
       <div className="site-shell">
         <SectionHeading

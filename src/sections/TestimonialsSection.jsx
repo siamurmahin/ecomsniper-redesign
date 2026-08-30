@@ -44,17 +44,18 @@ const COLUMNS = (() => {
 
 function ReviewCard({ review }) {
   return (
-    <article className="card-paper flex w-full flex-col">
+    <article className="card-ink flex w-full flex-col">
       <div className="flex items-center gap-3">
+        {/* Inverted with the band: paper disc, ink initial. */}
         <span
           aria-hidden="true"
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-sm font-bold text-paper"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-paper text-sm font-bold text-ink"
         >
           {review.name.charAt(0).toUpperCase()}
         </span>
         <span className="min-w-0">
-          <span className="block truncate text-sm font-semibold">{review.name}</span>
-          <span className="block text-xs text-muted">
+          <span className="block truncate text-sm font-semibold text-paper">{review.name}</span>
+          <span className="block text-xs text-muted-dark">
             {review.country} · {review.when}
           </span>
         </span>
@@ -68,11 +69,11 @@ function ReviewCard({ review }) {
         <span className="sr-only">Rated {review.rating ?? 5} out of 5</span>
       </p>
 
-      <h4 className="mt-2 text-sm font-semibold">{review.title}</h4>
+      <h4 className="mt-2 text-sm font-semibold text-paper">{review.title}</h4>
 
       {/* Full, never clipped. A review cut mid-sentence to fit a card is the
           one thing already rejected here. */}
-      <p className="mt-2 text-[0.85rem] leading-relaxed text-muted">{review.body}</p>
+      <p className="mt-2 text-[0.85rem] leading-relaxed text-muted-dark">{review.body}</p>
     </article>
   );
 }
@@ -150,7 +151,7 @@ function ReviewRail() {
           onClick={() => step(-1)}
           disabled={edges.start}
           aria-label="Previous review"
-          className="grid size-11 place-items-center rounded-full border border-hairline bg-white text-ink transition-colors duration-300 disabled:pointer-events-none disabled:opacity-35"
+          className="grid size-11 place-items-center rounded-full border border-ink-line bg-ink-soft text-paper transition-colors duration-300 hover:bg-paper/10 disabled:pointer-events-none disabled:opacity-35"
         >
           <Icon name="arrowRight" className="size-4 rotate-180" />
         </button>
@@ -159,7 +160,7 @@ function ReviewRail() {
           onClick={() => step(1)}
           disabled={edges.end}
           aria-label="Next review"
-          className="grid size-11 place-items-center rounded-full border border-hairline bg-white text-ink transition-colors duration-300 disabled:pointer-events-none disabled:opacity-35"
+          className="grid size-11 place-items-center rounded-full border border-ink-line bg-ink-soft text-paper transition-colors duration-300 hover:bg-paper/10 disabled:pointer-events-none disabled:opacity-35"
         >
           <Icon name="arrowRight" className="size-4" />
         </button>
@@ -196,16 +197,26 @@ export default function TestimonialsSection() {
       ref={sectionRef}
       id="testimonials"
       aria-labelledby="testimonials-headline"
-      className="section-band relative overflow-hidden"
+      /* Ink, for two reasons. The band before this is paper-sunk and the one
+         after is paper, so on paper it had no edges — the section-band padding
+         either side read as dead space rather than as separation, worst of all
+         against the pillars below. And written reviews are the quietest
+         evidence on the page; the lights down is what makes a wall of them
+         feel like something rather than a list.
+
+         Sequence is now sunk → ink → sunk → ink → paper across 04a to 06. */
+      className="section-band relative overflow-hidden bg-ink text-paper"
     >
       <div className="site-shell">
         <SectionHeading
+          tone="ink"
           eyebrow={testimonials.eyebrow}
           align="center"
           headline={
             <span id="testimonials-headline">
               {testimonials.headline}{' '}
-              <span className="headline-mark">{testimonials.headlineMark}</span>
+              {/* Inverted: the ink block would vanish on this band. */}
+              <span className="headline-mark-on-ink">{testimonials.headlineMark}</span>
               {testimonials.headlineTail}
             </span>
           }
@@ -291,7 +302,7 @@ export default function TestimonialsSection() {
           href={SITE.trustpilotUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex items-center gap-2.5 rounded-full border border-hairline bg-white py-3 pl-3 pr-5 text-sm font-semibold text-ink shadow-lift transition-[background-color,border-color,transform,box-shadow] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-float"
+          className="group inline-flex items-center gap-2.5 rounded-full border border-ink-line bg-ink-soft py-3 pl-3 pr-5 text-sm font-semibold text-paper transition-[background-color,border-color,transform] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-paper/30 hover:bg-paper/10"
         >
           <span
             aria-hidden="true"
