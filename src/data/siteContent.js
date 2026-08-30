@@ -550,19 +550,10 @@ export const PROOF = {
   },
 };
 
-/* 05 — How it works (MOVED UP per deck) A cold visitor needs the mechanism before the feature tour. */
-
-export const MODEL = {
-  eyebrow: 'The model, in plain English',
-  headline: 'You never buy stock. You never ship a box.',
-  steps: [
-    { n: '01', text: 'You find an item on a retailer’s site and list it on eBay for a higher price.' },
-    { n: '02', text: 'A customer buys it from your eBay store.' },
-    { n: '03', text: 'You order it from the retailer, shipped straight to your customer.' },
-    { n: '04', text: 'You keep the difference. That is your profit.' },
-  ],
-  closer: 'No warehouse. No website. No money tied up in stock you might not sell.',
-};
+/* 05 — REMOVED. "The model, in plain English" explained the four steps on its
+   own ink band, a third of the page above the course that teaches them. The
+   live site runs the two as one section and it is the better shape; the steps
+   and both closing lines now live in TRAINING below. */
 
 /* 06 — Three things, one system */
 
@@ -664,16 +655,48 @@ export const COMMUNITY = {
 
 /* 09 — The course Deck: rename the middle plan so it stops colliding with the course name. */
 
+/**
+ * 09 — Step by step. The model and the course, in one section.
+ *
+ * These were two: section 05 explained the four-step model on its own ink
+ * band, and this one sold the course. The live site (ecomsniper.io, read
+ * 31 Aug 2026) runs them as one — "Step by step / Starting from zero?", the
+ * four steps, then the course underneath — and it is the better shape: the
+ * steps ARE what the course teaches, so explaining them and then separately
+ * offering to teach them was saying the same thing twice, a third of the page
+ * apart.
+ *
+ * `steps` is section 05's, kept close to the live site's wording. `closer`
+ * keeps both of section 05's payoff lines, which the live site does not have —
+ * they answer the objection the steps raise, so they are not thrown away with
+ * the section they came from.
+ */
 export const TRAINING = {
-  eyebrow: 'Starting from zero',
-  headline: 'Dropship Mastery',
-  lead: 'The step by step eBay dropshipping training that takes a complete beginner through the whole process. Included with every plan.',
-  bullets: [
-    'No inventory, no website',
-    'Taught step by step',
-    'Updated as eBay and the market change',
-    'Taught by Marc Augustine and Sammy',
+  eyebrow: 'Step by step',
+  headline: 'Starting from zero?',
+  lead: 'Dropship Mastery teaches the entire process, step by step.',
+  steps: [
+    { n: '01', text: 'Find an item on a retailer’s site and list it on eBay for a higher price.' },
+    { n: '02', text: 'A customer buys the item from your eBay store.' },
+    { n: '03', text: 'You order it from the retailer, shipped straight to your customer.' },
+    { n: '04', text: 'You keep the difference in price. That is your profit.' },
   ],
+  closer: {
+    lead: 'You never buy stock. You never ship a box.',
+    detail: 'No warehouse. No website. No money tied up in stock you might not sell.',
+  },
+  course: {
+    eyebrow: 'The course',
+    name: 'Dropship Mastery',
+    body: 'The step by step eBay dropshipping training that takes a complete beginner through the whole process. Included with every plan.',
+    bullets: [
+      'No inventory, no website',
+      'Taught step by step',
+      'Updated as eBay and the market change',
+      'Taught by Marc Augustine and Sammy',
+    ],
+    modules: ['Account setup', 'Finding products', 'Your first listing', 'Scaling up'],
+  },
   cta: { label: 'See what the training covers', href: '/pricing' },
 };
 

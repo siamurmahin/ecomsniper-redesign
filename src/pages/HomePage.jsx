@@ -7,7 +7,6 @@ import ProofWallSection from '../sections/ProofWallSection';
 import InterviewsSection from '../sections/InterviewsSection';
 import ReceiptsSection from '../sections/ReceiptsSection';
 import TestimonialsSection from '../sections/TestimonialsSection';
-import ModelSection from '../sections/ModelSection';
 import PillarsSection from '../sections/PillarsSection';
 import FeatureTourSection from '../sections/FeatureTourSection';
 import CommunitySection from '../sections/CommunitySection';
@@ -30,11 +29,15 @@ import { FAQ, PRICING } from '../data/siteContent';
  *  04b Interviews ....... members, in their own words
  *  04c Receipts ......... screenshots members posted
  *  04d Testimonials ..... written reviews, two running rows
- *  05 The model ......... the mechanism, BEFORE the feature tour
  *  06 Three pillars ..... the page's table of contents
  *  07 Feature tour ...... what the software actually does
  *  08 Community ......... the real differentiator
- *  09 Training .......... what a beginner gets
+ *  09 Step by step ...... the four-step model, then the course that teaches it
+ *
+ *  05 is gone. It explained the same four steps on its own band a third of the
+ *  page above the course, so the page described the mechanism and then later
+ *  offered to teach the mechanism without either half mentioning the other.
+ *  Both now open 09, which is how the live site runs it.
  *  10 Founders .......... who is behind it
  *  11 Comparison ........ the decision they are already making elsewhere
  *  12 Pricing ........... the price, on the page most people actually see
@@ -98,7 +101,6 @@ export default function HomePage() {
         <InterviewsSection />
         <ReceiptsSection />
         <TestimonialsSection />
-        <ModelSection />
         <PillarsSection />
         <FeatureTourSection />
         <CommunitySection />
