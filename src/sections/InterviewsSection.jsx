@@ -163,17 +163,35 @@ export default function InterviewsSection() {
             </p>
           </header>
 
+          {/* A pill, and red, so it reads as "this leaves for YouTube" before
+              the label is read.
+
+              Outlined rather than filled. A solid red button here would carry
+              more weight than "Start your eBay business" further down the
+              page, and this is the secondary door — it sends people to
+              someone else's site. The glyph is the thing that is solid red;
+              the pill only fills on hover, when the intent is already there.
+
+              Red is `ebay-red`, the palette's red, not YouTube's #FF0000. The
+              icon already used it, the section is on an ink band, and one
+              foreign red in a page built on four signal tones would read as a
+              pasted-in widget. */}
           <a
             href={interviews.channelHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-muted-dark transition-colors hover:text-paper"
+            className="group inline-flex shrink-0 items-center gap-2.5 rounded-full border border-ebay-red/40 bg-ebay-red/10 py-2.5 pl-3 pr-4 text-sm font-semibold text-paper transition-[background-color,border-color,transform] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-ebay-red hover:bg-ebay-red"
           >
-            <Icon name="youtube" className="size-4 shrink-0 text-ebay-red" />
+            <span
+              aria-hidden="true"
+              className="grid size-7 shrink-0 place-items-center rounded-full bg-ebay-red text-paper transition-colors duration-300 group-hover:bg-paper group-hover:text-ebay-red"
+            >
+              <Icon name="youtube" className="size-4" />
+            </span>
             {interviews.channelLabel}
             <Icon
               name="arrowRight"
-              className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
+              className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
             />
           </a>
         </div>
