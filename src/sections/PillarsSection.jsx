@@ -39,7 +39,12 @@ export default function PillarsSection() {
         <SectionHeading
           eyebrow={PILLARS.eyebrow}
           align="center"
-          headline={<span id="pillars-headline">{PILLARS.headline}</span>}
+          headline={
+            <span id="pillars-headline">
+              {PILLARS.headline} <span className="headline-mark">{PILLARS.headlineMark}</span>
+              {PILLARS.headlineTail}
+            </span>
+          }
           lead={PILLARS.lead}
         />
 

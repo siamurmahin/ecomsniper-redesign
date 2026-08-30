@@ -565,7 +565,14 @@ export const PROOF = {
 
 export const PILLARS = {
   eyebrow: 'The system',
-  headline: 'Three things. One system.',
+  /* Marked like section 03's "you", the wall's "really" and 04d's
+     "Trustpilot". The mark is the second half of the sentence: three things
+     is the setup, one system is the claim — and the wire drawn through the
+     three cards below is the same claim made visually. The full stop sits
+     outside the block, as it does in the other three. */
+  headline: 'Three things.',
+  headlineMark: 'One system',
+  headlineTail: '.',
   lead: 'Everything you need to build your eBay business.',
   /* `tone` follows the live site: software blue, community gold, training
      green. It travels with the item so sections downstream inherit it. */
