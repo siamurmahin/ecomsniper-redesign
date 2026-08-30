@@ -44,7 +44,10 @@ function ToolPills({ links }) {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group/pill inline-flex items-center gap-1.5 rounded-full border border-dashed border-accent/60 px-3 py-1.5 font-label text-[0.62rem] font-semibold uppercase tracking-[0.09em] text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-paper"
+            /* Taller where it is a thumb doing the pressing: at `py-1.5`
+               these measured 29px, which is a small target for a finger.
+               They stay compact from `lg`, where a pointer is doing it. */
+            className="group/pill inline-flex items-center gap-1.5 rounded-full border border-dashed border-accent/60 px-3.5 py-2.5 font-label text-[0.62rem] font-semibold uppercase tracking-[0.09em] text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-paper lg:px-3 lg:py-1.5"
           >
             {link.label}
             <Icon
