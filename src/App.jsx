@@ -11,6 +11,7 @@ import PlaybookPage from './pages/PlaybookPage';
 import NotFoundPage from './pages/NotFoundPage';
 import DesignLabPage from './pages/DesignLabPage';
 import { ScrollTrigger } from './lib/motion';
+import { dismissPreloader } from './lib/preloader';
 import { scrollToTarget } from './lib/smoothScroll';
 
 /**
@@ -44,9 +45,34 @@ function RouteScrollManager() {
   return null;
 }
 
+/**
+ * Uncovers the page once the first route has actually painted.
+ *
+ * Two frames, not one: a `requestAnimationFrame` callback runs BEFORE the
+ * paint it was scheduled against, so dismissing there would pull the cover off
+ * a frame early and show the blank moment it exists to hide. The second frame
+ * runs after pixels are on screen.
+ */
+function PreloaderRelease() {
+  useEffect(() => {
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(dismissPreloader);
+    });
+
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, []);
+
+  return null;
+}
+
 export default function App() {
   return (
     <SmoothScrollProvider>
+      <PreloaderRelease />
       <RouteScrollManager />
 
       {/* Skip link: first thing in the tab order on every page. */}

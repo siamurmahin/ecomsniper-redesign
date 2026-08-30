@@ -49,6 +49,57 @@
       rel="stylesheet"
     />
 
+    <!--
+      Preloader, inlined on purpose.
+
+      The bundle has to download, parse and execute before React can render
+      anything, and the shell paints long before that — measured, the document
+      paints at ~116ms and the hero does not appear until ~1.3s. That gap was
+      a blank page. This fills it, and it can only do that if it costs no
+      request of its own: the mark is the favicon's own artwork pasted in, and
+      the styles are here rather than in the bundle they are covering for.
+
+      The spin is a CSS animation so it runs on the compositor. A spinner
+      driven by JavaScript would stall exactly when the main thread is busiest,
+      which is the entire time this is on screen — it would sit frozen while
+      claiming to show progress.
+    -->
+    <style>
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: #fbfbfa;
+        transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #preloader.is-done {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #preloader svg {
+        width: 68px;
+        height: 68px;
+      }
+      /* Only the rings and spikes turn. The centre dot is the thing being
+         aimed with, so it holds still and the reticle rolls around it. */
+      #preloader .reticle-spin {
+        transform-origin: 32px 32px;
+        animation: preloader-spin 1.15s linear infinite;
+      }
+      @keyframes preloader-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #preloader .reticle-spin {
+          animation: none;
+        }
+      }
+    </style>
+
     <!-- Organisation + product data for rich results. -->
     <script type="application/ld+json">
       {
@@ -70,6 +121,28 @@
   </head>
 
   <body>
+    <div id="preloader" role="status" aria-label="Loading">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <g class="reticle-spin" fill="none" stroke-linecap="round">
+          <circle cx="32" cy="32" r="24" stroke="#86b817" stroke-width="4" />
+          <circle cx="32" cy="32" r="16.5" stroke="#0064d2" stroke-width="6" />
+          <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" stroke-width="6" />
+        </g>
+        <circle cx="32" cy="32" r="9.5" fill="#e53238" />
+        <circle cx="32" cy="32" r="3.6" fill="#fbfbfa" />
+      </svg>
+    </div>
+
+    <script>
+      /* Backstop. The app removes this as soon as it has painted; this is
+         only here so a bundle that never executes cannot leave a visitor
+         staring at a spinner forever. */
+      setTimeout(function () {
+        var el = document.getElementById('preloader');
+        if (el) el.remove();
+      }, 6000);
+    </script>
+
     <div id="root"></div>
     <noscript>
       <div style="max-width: 42rem; margin: 4rem auto; padding: 0 1.25rem; font-family: system-ui, sans-serif">
