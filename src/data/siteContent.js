@@ -666,7 +666,29 @@ export const FEATURES = {
       links: [],
     },
   ],
-  closer: 'More time building. Less time clicking.',
+  /* How the live site closes this section too: the payoff line, a door, and a
+     question that hands over to the community section directly below — which
+     opens "Here's what 'never alone' looks like", so the bridge and the
+     section it introduces are the same sentence answered.
+
+     `guarantee` carries "on the monthly plan" and has to keep carrying it.
+     That qualification is one of the two claim rules this file exists to
+     enforce: the credits bundle and the Enterprise plan are final sale, so
+     the unqualified version is contradicted by the pricing page and the FAQ. */
+  closer: {
+    lead: 'More time building. Less time clicking.',
+    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+    guarantee: '30 day money back guarantee on the monthly plan',
+    /* Marked on exactly the two words the next section's headline puts in
+       quotes — "Here's what 'never alone' looks like." The bridge asks it and
+       the section below answers it in the same words, so the mark is the
+       hinge between them rather than emphasis for its own sake. */
+    bridge: {
+      lead: 'And if you ever get stuck? You are',
+      mark: 'never alone',
+      tail: '.',
+    },
+  },
 };
 
 /* 08 — Support and community Deck: this is the real differentiator against cheaper tools. */

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import SectionHeading from '../components/ui/SectionHeading';
 import { FEATURES } from '../data/siteContent';
@@ -265,30 +266,74 @@ export default function FeatureTourSection() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
+    const section = sectionRef.current;
     const nodes = stepRefs.current.filter(Boolean);
-    if (!nodes.length) return undefined;
+    if (!section || !nodes.length) return undefined;
 
-    /* A band across the middle of the screen: a step becomes current when it
-       reaches where a reader is actually looking, not when its top edge clips
-       the bottom of the viewport.
+    /*
+     * The current step is the LAST one whose top has crossed a line about
+     * halfway down the screen. Derived from where things are, not from events
+     * about them arriving.
+     *
+     * This replaced an IntersectionObserver that listened for steps entering a
+     * band, which was wrong in two ways going upwards. It only ever reacted to
+     * an ENTRY, so scrolling back from 4 to 3 — where 3 is already intersecting
+     * and nothing new enters — left the panel stale. And when several entries
+     * did arrive in one callback the loop set the index once per entry, so
+     * whichever happened to be last in the array won: scrolling from 3 to 1 the
+     * panel would land on 2. Entry order is not scroll order and never was.
+     *
+     * Reading four rects settles it in one pass, in either direction, with no
+     * dependence on ordering. It is throttled to a frame and only runs while
+     * the section is on screen, so the cost is four `getBoundingClientRect`
+     * calls per frame during the seconds this section is actually being
+     * scrolled through.
+     */
+    let frame = 0;
+    let live = false;
 
-       An observer rather than a scroll handler — the browser does this off the
-       main thread, and a handler recomputing four rects on every scroll event
-       is work this page has already been taught not to spend. */
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const index = nodes.indexOf(entry.target);
-          if (index >= 0) setActiveIndex(index);
-        });
+    const measure = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.45;
+
+      let next = 0;
+      nodes.forEach((node, index) => {
+        if (node.getBoundingClientRect().top <= line) next = index;
+      });
+
+      // Only re-render when the answer actually changes.
+      setActiveIndex((current) => (current === next ? current : next));
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(measure);
+    };
+
+    // Nothing is measured while the section is nowhere near the viewport.
+    const gate = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting === live) return;
+        live = entry.isIntersecting;
+
+        if (live) {
+          window.addEventListener('scroll', onScroll, { passive: true });
+          measure();
+        } else {
+          window.removeEventListener('scroll', onScroll);
+        }
       },
-      { rootMargin: '-40% 0px -45% 0px', threshold: 0 },
+      { rootMargin: '100px' },
     );
 
-    nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
-  }, []);
+    gate.observe(section);
+
+    return () => {
+      gate.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [sectionRef]);
 
   const active = FEATURES.items[activeIndex];
   const activeTone = toneOf(active.tone);
@@ -428,10 +473,37 @@ export default function FeatureTourSection() {
           </div>
         </div>
 
-        <p className="mt-16 flex items-center justify-center gap-2 text-center font-display text-xl font-extrabold tracking-tight">
-          <Icon name="checkCircle" className="size-5 shrink-0 text-signal-green-deep" />
-          {FEATURES.closer}
-        </p>
+        {/* The close: the payoff, a door, and the question that hands over to
+            the community section directly below — which opens "Here's what
+            'never alone' looks like", so the bridge is that section's own
+            headline asked as a question. */}
+        <div className="mt-16 flex flex-col items-center text-center">
+          <p className="flex items-center gap-2 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+            <Icon name="checkCircle" className="size-6 shrink-0 text-signal-green-deep" />
+            {FEATURES.closer.lead}
+          </p>
+
+          <div className="mt-8">
+            <CtaButton href={FEATURES.closer.cta.href} intent="software-primary">
+              {FEATURES.closer.cta.label}
+            </CtaButton>
+          </div>
+
+          {/* "on the monthly plan" is not optional — see the note in
+              `siteContent`. The bundle and Enterprise plans are final sale. */}
+          <p className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-muted">
+            <Icon name="shield" className="size-4 shrink-0 text-signal-green-deep" />
+            {FEATURES.closer.guarantee}
+          </p>
+
+          {/* Set as a statement, not a caption. It is the hinge into the next
+              section, and the marked words are that section's own headline. */}
+          <p className="mt-12 max-w-2xl border-t border-hairline pt-10 font-display text-xl font-extrabold leading-snug tracking-tight sm:text-2xl">
+            {FEATURES.closer.bridge.lead}{' '}
+            <span className="headline-mark">{FEATURES.closer.bridge.mark}</span>
+            {FEATURES.closer.bridge.tail}
+          </p>
+        </div>
       </div>
     </section>
   );
