@@ -28,9 +28,10 @@ from it and never hardcode copy. If you are changing text, change it there.
 Homepage order (`src/pages/HomePage.jsx`):
 
 ```
-Hero → ProofBar → Audience → Proof → Model → Pillars → FeatureTour →
-Community → Training → Founders → Comparison → PricingPreview → Faq →
-Assurance → FinalCta
+Hero → ProofBar → Audience →
+ProofWall → Interviews → Receipts → Testimonials →
+Model → Pillars → FeatureTour → Community → Training → Founders →
+Comparison → PricingPreview → Faq → Assurance → FinalCta
 ```
 
 Design system is in `src/styles/index.css`:
@@ -277,7 +278,7 @@ at 1568px wide; JS reports CSS pixels. The ratio changes with window size.
 
 ## 8. Open
 
-- **Commit §4.** It is done and passing, just pending review.
+- ~~Commit §4.~~ Done — `6a308ff`, `475ff9f`, `15df52f`, `303367e`.
 - **Seven member titles are written by me** — replace with real ones if they
   exist.
 - **CTA jumps §03 → pricing**, skipping proof, model, features, community and
@@ -289,3 +290,101 @@ at 1568px wide; JS reports CSS pixels. The ratio changes with window size.
   and consistent.
 - `youtube.txt` in the deleted folder held a video not used on the site:
   `-cDk4ztkWaw`. Recoverable via `git checkout a0c6425 -- "images from the home page"`.
+
+---
+
+## 9. 30 Aug (early hours) — section 04 rebuilt as four sections
+
+The old `ProofSection` is **deleted**. So is the audience-style comparison
+scaffolding used to choose its replacement. Nothing is committed yet.
+
+### What replaced it
+
+```
+04a  ProofWallSection    id="proof"         832px
+04b  InterviewsSection   id="interviews"    861px
+04c  ReceiptsSection     id="receipts"      951px
+04d  TestimonialsSection id="testimonials" 1145px
+```
+
+One 2,139px section became four. It is more page, not less — that was the
+client's call after seeing all of it, and the wall now carries the argument
+early so the length after it is opt-in.
+
+**`#proof` moved to the wall.** Both `NAV_LINKS` and the proof bar's "See the
+proof" link point at it, so the id had to follow, not the file name.
+
+- **04a Proof wall.** Three columns of real evidence drifting at different
+  speeds behind a small ink card holding the question and one CTA. The card is
+  deliberately small: it was tried holding the lead video and the receipts,
+  and a card big enough for them covers the wall it is meant to stand in front
+  of. The disclaimer is pinned to the section's bottom — centred with the card
+  it floated mid-wall with 186px of dead space under it and read as a sticker.
+- **04b Interviews.** Ink band, because video wants the lights down and it
+  separates 04b from the paper sections either side. Stage on the left, all
+  twelve interviews in a scrollable list on the right. Twelve in a grid is four
+  rows of large thumbnails. The list carries `data-lenis-prevent` — without it
+  Lenis scrolls the page while the pointer is over a list that plainly scrolls
+  itself. (Lenis 1.3.26; the attribute is supported.)
+- **04c Receipts.** Three screenshots, each with its figure on a plate that
+  overlaps the image, because the number is the claim and the screenshot is the
+  evidence for it. Middle card steps down at `lg` so three cards do not read as
+  a table. The disclaimer lives here now, with the figures it qualifies.
+- **04d Testimonials.** Two full-bleed rows, running right then left. It was
+  built with three; three put every one of the six names on screen **three
+  times**, which looked like padding. Two rows halve that and save ~370px.
+
+### Videos: 5 → 12
+
+Pulled from the channel's **Popular** tab (`@sammyecomsniper`), which needed the
+browser — the page is JS-rendered and WebFetch gets only the shell. Seven added,
+all member-success stories, with the view count each had recorded in
+`siteContent.js` so the next person to prune can see what was popular rather
+than guess. Thumbnails downloaded at maxres into `src/assets/video`, because
+posters are local here on purpose.
+
+**Deliberately excluded, and worth a decision.** The channel's three most-viewed
+videos are sniping guides, and further down sit "Multiple eBay Accounts with
+LLCs (Full Stealth Guide)", "MC011 Account Restriction Removal", "Avoid
+Suspensions" and one whose own title mentions "Fake INRs". They are popular and
+they are about evading eBay and Amazon enforcement. On the page selling the
+product they read as an admission. The reasoning is in `siteContent.js` so they
+do not get re-added by accident. If the client wants them, that is their call.
+
+### Stars now come from data
+
+Every review rendered five gold stars and announced "Rated 5 out of 5", with no
+score anywhere in the data. All three new sections use `RatingStars` with
+`review.rating ?? 5`. It still lands on 5 — but from data, and a review that is
+not a five will show as one the moment a score is added. Same class of problem
+as the 4.6→4.7 and "90+"→41 fixes in §3.
+
+### The open one
+
+**Six reviews, two rows, every name on screen twice.** The honest fix is more
+reviews — the profile has 41 — not a trick that hides the repeat. Roughly twelve
+more would fill both rows without repeating.
+
+### Traps found this session
+
+**Do not drive the page with synthetic wheel events.** Lenis amplifies them; a
+settling loop oscillates and overshoots by hundreds of pixels. Anchor clicks
+work properly — `SmoothScrollProvider` has a document-level click handler that
+routes any same-page `#` anchor through `scrollToTarget`. Append a hidden
+`<a href="#id">`, click it, remove it.
+
+**`scrollIntoView` still lies.** Using it to jump to §03 left the closer's
+reveal at `opacity: 0` — the entrance never fired because ScrollTrigger never
+saw the movement. It is not a bug in the section; it is §7's trap, and it will
+waste an hour again.
+
+**Screenshot pixels are not CSS pixels.** A 30px gap measured as ~120 in a
+3× mobile capture. Measure in the DOM, per §7.
+
+### Not a code problem: the Python errors
+
+The `remember` plugin runs a `PostToolUse` hook that shells out to Python, and
+`python` on this machine is the Microsoft Store alias stub — the plugin's own
+error text warns against exactly that. It fired after every tool call. Disabled
+in `.claude/settings.json` (backup at `.claude/settings.json.bak`) and the empty
+`.remember/` folder removed. Nothing in this project needs Python.

@@ -23,7 +23,7 @@ playbook form can actually deliver.
 
 ## The funnel
 
-The homepage is fifteen sections in a deliberate order. The order is the
+The homepage is eighteen sections in a deliberate order. The order is the
 product here — each one answers the question the previous one raises.
 
 | # | Section | Job it does |
@@ -31,7 +31,10 @@ product here — each one answers the question the previous one raises.
 | 01 | Hero | What this is, who it is for, **what it costs** |
 | 02 | Proof bar | Checkable numbers, immediately |
 | 03 | Who it's for | Self-identification |
-| 04 | Proof | Video, reviews, receipts |
+| 04a | Proof wall | The volume of the evidence, and a door |
+| 04b | Interviews | Members, in their own words |
+| 04c | Receipts | Screenshots members posted themselves |
+| 04d | Testimonials | Written Trustpilot reviews, two running rows |
 | 05 | The model | The mechanism — **before** the feature tour |
 | 06 | Three pillars | The page's table of contents |
 | 07 | Feature tour | What the software does |
@@ -80,7 +83,7 @@ src/
 ├── hooks/          useRevealOnScroll, useParallax
 ├── lib/            GSAP setup, shared Lenis handle
 ├── pages/          Home, Pricing, Playbook, 404
-├── sections/       The fifteen homepage sections, one file each
+├── sections/       The homepage sections, one file each
 └── styles/         Design tokens + component classes
 ```
 
@@ -133,8 +136,12 @@ per-route metadata.
 2. Replace the founder initials in `FoundersSection` with real portraits.
 3. Replace `AppFrame` in `FeatureTourSection` with real dashboard screenshots
    (same aspect ratio) — it is an on-brand representation, not a capture.
-4. Point the video facade in `ProofSection` at the real member video.
-5. Confirm the live Trustpilot score in `PROOF_BAR`; it is stated as 4.6 from
-   90+ reviews and must match the profile it links to.
+4. Replace the seven member titles written in `AUDIENCE.people` with real
+   ones if they exist — they are paraphrases of the client’s own sentences,
+   flagged in `siteContent.js`.
+5. Re-check the Trustpilot figures in `PROOF_BAR` before launch. They were
+   corrected to 4.7 from 41 reviews on 29 Aug 2026 and will drift.
+6. Pull more reviews into `PROOF.reviews`. Six are in the deck and the
+   profile has 41; with six, both testimonial rows show every name twice.
 6. Add routes for `/about`, `/blog`, `/contact`, `/help` and the legal pages, or
    keep those footer links pointing at the existing site.
