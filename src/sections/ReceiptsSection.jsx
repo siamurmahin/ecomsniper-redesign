@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import SectionHeading from '../components/ui/SectionHeading';
 import { PROOF } from '../data/siteContent';
@@ -159,6 +160,33 @@ export default function ReceiptsSection() {
         >
           {PROOF.disclaimer}
         </p>
+
+        {/* The door. Four sections of evidence have run by this point, and
+            someone the figures have already convinced should not have to
+            scroll past four more to act on it. */}
+        <div
+          data-reveal
+          data-reveal-group="receipts-closer"
+          className="mt-14 flex flex-col items-center"
+        >
+          <CtaButton href={receiptsSection.closer.cta.href} intent="receipts-primary">
+            {receiptsSection.closer.cta.label}
+          </CtaButton>
+
+          {/* "on the monthly plan" is not optional — see the note in
+              `siteContent`. The bundle and Enterprise plans are final sale. */}
+          <p className="mt-4 inline-flex items-center gap-2 text-sm text-muted">
+            <Icon name="shield" className="size-4 shrink-0 text-signal-green-deep" />
+            {receiptsSection.closer.guarantee}
+          </p>
+
+          {/* Hands over to what the money actually buys. A question rather
+              than a heading, because it is the reader's question at this
+              point and the sections after it are the answer. */}
+          <p className="mt-14 text-center text-[length:var(--text-section)] leading-[0.98]">
+            {receiptsSection.closer.question}
+          </p>
+        </div>
       </div>
 
       {/* ------------------------------------------------------- lightbox */}

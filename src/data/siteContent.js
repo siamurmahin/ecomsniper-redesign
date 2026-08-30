@@ -525,6 +525,20 @@ export const PROOF = {
     eyebrow: 'The receipts',
     headline: 'Screenshots members posted themselves.',
     lead: 'Shared in the community as they happened, not produced for this page.',
+    /* The door, at the end of the evidence. Someone convinced by the figures
+       should not have to scroll past four more sections to act on it.
+
+       `guarantee` carries "on the monthly plan" and must keep carrying it.
+       That qualification is one of the two claim rules this file exists to
+       enforce (see the note at the top): the 10K credits bundle and the
+       Enterprise plan are final sale, so an unqualified "30 day money back
+       guarantee" is a promise the pricing page then contradicts. That exact
+       contradiction was already found and fixed once in section 14. */
+    closer: {
+      cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+      guarantee: '30 day money back guarantee on the monthly plan',
+      question: 'So what do you get?',
+    },
   },
 
   testimonials: {
