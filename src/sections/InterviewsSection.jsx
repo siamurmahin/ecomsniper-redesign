@@ -234,7 +234,7 @@ export default function InterviewsSection() {
                   not a tween: it runs on the compositor and cannot stutter
                   behind whatever else the page is doing. */}
               <img
-                key={lead.id}
+                key={`${lead.id}-poster`}
                 src={thumbUrl(lead.thumb)}
                 alt=""
                 loading="lazy"
@@ -253,7 +253,7 @@ export default function InterviewsSection() {
                 <Icon name="play" className="size-5 translate-x-0.5" />
               </span>
 
-              <span key={lead.id} className="absolute inset-x-0 bottom-0 block animate-[panel-in_0.6s_var(--ease-out-expo)_both] p-5">
+              <span key={`${lead.id}-caption`} className="absolute inset-x-0 bottom-0 block animate-[panel-in_0.6s_var(--ease-out-expo)_both] p-5">
                 <span className="block text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
                   {lead.guest}
                   {lead.views && (
