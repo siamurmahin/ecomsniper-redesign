@@ -100,7 +100,7 @@ export default function TrainingSection() {
               stepping the fourth card in costs it a line of copy to say
               something the numbers already say; the four run full width and
               the travelling mark carries the sequence instead. */}
-          <ol ref={stairsRef} className="flex flex-col gap-3">
+          <ol ref={stairsRef} className="flex flex-col gap-4">
             {TRAINING.steps.map((step, index) => {
               const tone = toneOf(STEP_TONES[index % STEP_TONES.length]);
               const isLast = index === lastIndex;
@@ -122,19 +122,21 @@ export default function TrainingSection() {
                     className={`pointer-events-none absolute inset-0 rounded-2xl border-2 ${tone.edge}`}
                   />
 
-                  {/* The four joined into one run. It sits in the gap between
-                      cards rather than behind them, so it never has to guess a
-                      card's height, and it is placed on the number chip's own
-                      centre line — 34px in at `p-4`, 38px at `sm:p-5`.
+                  {/* The dotted link to the next step, drawn as the count
+                      reaches it. It sits in the gap rather than behind the
+                      cards, so it never has to guess a card's height, and on
+                      the number chip's own centre line — 34px in at `p-4`,
+                      38px from `sm:p-5`.
 
-                      Below `md` only. From there the cards are indented per
-                      step, so every chip sits at a different x and a single
-                      vertical line would pass through none of them; the
-                      staircase is doing the joining by then. */}
+                      Card bottom to card top is what it can honestly join:
+                      the chips are centred inside cards of different heights,
+                      so no line reaches from one chip to the next. */}
                   {!isLast && (
                     <span
                       aria-hidden="true"
-                      className="absolute left-[34px] top-full h-3 w-px bg-hairline sm:left-[38px] md:hidden"
+                      data-step-link
+                      style={{ '--i': index }}
+                      className={`absolute left-[34px] top-full h-4 border-l-2 border-dotted sm:left-[38px] ${tone.edge}`}
                     />
                   )}
                   <span

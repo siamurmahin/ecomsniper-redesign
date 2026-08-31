@@ -885,6 +885,13 @@
   [data-step-last] [data-step-mark] {
     opacity: 1;
   }
+  /* But not while JS is running: the resting mark would sit on step four from
+     first paint and then jump back to step one the moment the count started.
+     With JS the section waits, and the loop is the first thing that lights.
+     Reduced motion puts it back below, with `!important`. */
+  .js-motion [data-step-last] [data-step-mark] {
+    opacity: 0;
+  }
 
   /* The count, on a loop. One 6s cycle; each step holds the mark for a
      quarter of it, so the four are read at walking pace rather than flashed.
@@ -909,6 +916,28 @@
     }
   }
 
+  /* The dotted link between two steps, drawn top-down at the moment the count
+     hands over — 1 to 2 at a quarter through the cycle, 2 to 3 at a half, 3 to
+     4 at three quarters. `scaleY` from the top edge, so it grows toward the
+     step it is reaching rather than appearing whole.
+
+     Its delay is one step ahead of the mark's: the link is drawn by the count
+     arriving at the next step, not by leaving the current one. */
+  [data-steps='in'] [data-step-link] {
+    transform-origin: top;
+    animation: step-link-draw 6000ms linear infinite;
+    animation-delay: calc(2100ms + var(--i) * 1500ms);
+  }
+  @keyframes step-link-draw {
+    0% {
+      transform: scaleY(0);
+    }
+    7%,
+    100% {
+      transform: scaleY(1);
+    }
+  }
+
   /* Reduced motion gets the resting state, not the loop: all four steps
      visible, and the mark parked on the last one. Forcing every mark visible
      instead would put a ring and a tick on all four, which reads as a
@@ -923,6 +952,11 @@
     }
     [data-step-last] [data-step-mark] {
       opacity: 1 !important;
+    }
+    /* The links are the diagram, not the motion — drawn, and left alone. */
+    [data-step-link] {
+      animation: none !important;
+      transform: none !important;
     }
   }
 
