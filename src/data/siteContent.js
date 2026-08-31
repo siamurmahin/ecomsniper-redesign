@@ -695,7 +695,16 @@ export const FEATURES = {
 
 export const COMMUNITY = {
   eyebrow: 'Support and community',
-  headline: 'Here’s what “never alone” looks like.',
+  /* Split three ways so the mark is set in the copy file rather than
+     hardcoded in JSX, like §03's "you" and §06's "One system" — and the full
+     stop stays outside the block.
+
+     The marked words are exactly the two section 07's closing bridge marks:
+     it asks "you are never alone", this answers it in the same words, and now
+     both are set the same way. Rewriting either breaks the hinge. */
+  headline: 'Here’s what',
+  headlineMark: '“never alone”',
+  headlineTail: ' looks like.',
   lead: 'Ask once. We’ve got you.',
   body: 'Get stuck at 2am and a real person answers. Behind that reply is a private community of members walking the same path, and a live meeting every week where you can ask anything.',
   items: [
@@ -829,9 +838,36 @@ export const FOUNDERS = {
     'EcomSniper started as the scripts we wrote to stop doing the same three tasks every night. Everything in it exists because it solved a problem we had first.',
   ],
   closer: 'We still run stores. We still take the questions in chat.',
+
+  /* The free door in this section. "Get the free playbook" is the hero's
+     label and stays the hero's; this one earns its own because of where it
+     sits — under two founders, beside a book that names who the product is
+     wrong for. Saying "before you pay" is the argument the section is already
+     making, and it is a promise the site can keep: the playbook is free and
+     takes no card. No claim about the book's contents is added. */
+  bookCta: { label: 'Read it before you pay', href: '/free-playbook' },
+  /* `story` is each founder's half of `body[0]`, re-homed rather than
+     rewritten: same facts, same figures, no claim that was not already in the
+     paragraph above. It exists so a shape that puts the two men side by side
+     can give each one his own line instead of splitting a sentence in JSX.
+
+     `people` is read by section 09's instructor row as well, so a name or a
+     photo key changed here moves both sections. */
   people: [
-    { name: 'Sammy', role: 'Co-founder', detail: '7 years selling on eBay. Still running stores today.', photo: 'founder-sammy' },
-    { name: 'Marc Augustine', role: 'Co-founder, Head of Training', detail: 'Former security professional. Teaches Dropship Mastery.', photo: 'founder-marc' },
+    {
+      name: 'Sammy',
+      role: 'Co-founder',
+      detail: '7 years selling on eBay. Still running stores today.',
+      story: 'Seven years selling on eBay, starting from a bedroom and a borrowed laptop.',
+      photo: 'founder-sammy',
+    },
+    {
+      name: 'Marc Augustine',
+      role: 'Co-founder, Head of Training',
+      detail: 'Former security professional. Teaches Dropship Mastery.',
+      story: 'Years in security before e-commerce full time. Now teaches the training end to end.',
+      photo: 'founder-marc',
+    },
   ],
 };
 
@@ -1040,6 +1076,16 @@ export const PLAYBOOK = {
   ],
   formCta: 'Send me the playbook',
   smallprint: 'No countdown timers, no fake scarcity. Unsubscribe at the bottom of any email.',
+
+  /* The four things a reader wants settled before typing an email address,
+     from the client's own free-playbook page. "Ten pages" is added from the
+     exit-intent copy because scale is the other thing they want to know.
+
+     `privacy` is a promise the site has to keep, not a decoration: it belongs
+     wherever the form is, and it means the endpoint behind
+     `VITE_PLAYBOOK_ENDPOINT` cannot sell or pass on the address. */
+  reassurances: ['Ten pages', 'No spam', 'No credit card', 'Instant access'],
+  privacy: 'Your information is 100% secure and will never be shared.',
 };
 
 /* This rebuild ships /, /pricing and /free-playbook. The other footer paths

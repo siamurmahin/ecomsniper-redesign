@@ -150,7 +150,13 @@ export default function CommunitySection() {
           <div>
             <SectionHeading
               eyebrow={COMMUNITY.eyebrow}
-              headline={<span id="community-headline">{COMMUNITY.headline}</span>}
+              headline={
+                <span id="community-headline">
+                  {COMMUNITY.headline}{' '}
+                  <span className="headline-mark">{COMMUNITY.headlineMark}</span>
+                  {COMMUNITY.headlineTail}
+                </span>
+              }
               lead={COMMUNITY.lead}
             />
             <p
