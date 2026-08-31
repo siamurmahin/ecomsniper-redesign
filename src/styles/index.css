@@ -829,6 +829,48 @@
   .animate-panel-in {
     animation: panel-in 420ms var(--ease-out-expo) both;
   }
+
+  /* Section 08's "someone is composing a reply" dots. Opacity and transform
+     only, so the three run on the compositor and cannot stutter behind the
+     typing loop writing text on the main thread beside them. The stagger is
+     per-dot delay rather than three keyframes. */
+  @keyframes typing-dot {
+    0%,
+    64%,
+    100% {
+      opacity: 0.3;
+      transform: translate3d(0, 0, 0);
+    }
+    32% {
+      opacity: 1;
+      transform: translate3d(0, -3px, 0);
+    }
+  }
+  .typing-dot {
+    animation: typing-dot 1.25s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+
+  /* The caret sitting at the end of a reply while it types, and only while it
+     types — scoped to the row's own state so a finished reply is not left with
+     a cursor blinking after its full stop. A painted box rather than a text
+     character, for the reason the headline's caret is one: a pipe glyph is
+     thinner than the stems beside it and reads as a rendering fault. */
+  [data-reply='typing'] [data-reply-text]::after {
+    content: '';
+    display: inline-block;
+    width: 0.06em;
+    height: 1em;
+    margin-left: 0.12em;
+    vertical-align: -0.12em;
+    background: currentColor;
+    animation: caret-blink 1s steps(1) infinite;
+  }
 }
 
 /* The global reduced-motion rule collapses every animation to its end frame,

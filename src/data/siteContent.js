@@ -699,10 +699,47 @@ export const COMMUNITY = {
   lead: 'Ask once. We’ve got you.',
   body: 'Get stuck at 2am and a real person answers. Behind that reply is a private community of members walking the same path, and a live meeting every week where you can ask anything.',
   items: [
-    { icon: 'headset', title: '24/7', label: 'Help that never sleeps', body: 'Chat support answered around the clock, 7 days a week.' },
-    { icon: 'people', title: '400+', label: 'A private community', body: 'Members at every stage, from first listing to full-time.' },
-    { icon: 'videoCamera', title: 'Weekly', label: 'Live meetings', body: 'Ask anything, live, with the people who built the tool.' },
+    { icon: 'headset', title: '24/7', label: 'Help that never sleeps', body: 'Chat support answered around the clock, 7 days a week.', tone: 'blue' },
+    { icon: 'people', title: '400+', label: 'A private community', body: 'Members at every stage, from first listing to full-time.', tone: 'gold' },
+    { icon: 'videoCamera', title: 'Weekly', label: 'Live meetings', body: 'Ask anything, live, with the people who built the tool.', tone: 'green' },
   ],
+
+  /* The illustration the section is built on. Labelled in words under the
+     panel, on the hero panel's rule: nothing on this site draws an interface a
+     visitor could mistake for a capture of their own account without saying
+     so. The times are the section's own "get stuck at 2am" claim, shown. */
+  drawn: {
+    channel: '#ask-anything',
+    question: { time: '02:14', body: 'My listing just got blocked. Anyone seen this before?' },
+    replies: [
+      { time: '02:16', body: 'Seen it — it is the category, not the listing. Fix is two clicks.', role: 'EcomSniper team' },
+      { time: '02:17', body: 'Same thing happened to me last week. That fixed it.', role: 'Member' },
+    ],
+    typing: 'Two more members replying',
+    call: {
+      title: 'Weekly live call',
+      body: 'Ask anything, live, with the people who built the tool.',
+      /* Real photographs only, and every one already on this site: both
+         founders from section 10 and one member from the interviews in 04b.
+         No invented names — that member is not named in `PROOF.videos`
+         either, so the pile is decorative to assistive tech and the strip
+         carries the words.
+
+         `at` is the crop, hand-set per image. The interview thumbnails are
+         16:9 with the face right of centre at slightly different heights, so
+         one shared `object-position` puts at least one of them off-centre.
+         The overflow chip is the member figure the section already claims,
+         not a seat count for a call nobody has counted. */
+      faces: [
+        { key: 'founder-sammy', from: 'people', at: '50% 32%' },
+        { key: 'founder-marc', from: 'people', at: '50% 28%' },
+        { key: 'thumb-21-year-old-1600-month', from: 'video', at: '78% 26%' },
+      ],
+      overflow: '+400',
+    },
+    caption: 'An illustration of how a question gets answered — not a capture of a real conversation.',
+  },
+
   // Deck: add one verbatim member quote about support.
   pullQuote: {
     quote:

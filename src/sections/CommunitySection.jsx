@@ -1,18 +1,145 @@
+import { useEffect, useRef } from 'react';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import { COMMUNITY } from '../data/siteContent';
+import { toneOf } from '../lib/signalTones';
+import { thumbUrl } from '../lib/proofMedia';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+import { prefersReducedMotion } from '../lib/motion';
+
+const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, import: 'default' });
+const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
+const faceUrl = (face) => (face.from === 'people' ? portraitUrl(face.key) : thumbUrl(face.key));
+
+/** How long a reply is composed before its first character lands. */
+const THINK_MS = 900;
+/** Per character. ~55 a second — brisk enough not to stall, slow enough to read. */
+const CHAR_MS = 18;
+/** After the last reply, before the two other members are shown replying. */
+const TAIL_MS = 600;
 
 /**
  * 08 — Support and community.
  *
- * The review identified this as the real differentiator against cheaper listing
- * tools, so it gets a full band rather than a row of icons, and it closes on a
- * verbatim member quote about support — the claim and its evidence in the same
- * viewport.
+ * The review identified this as the real differentiator against cheaper
+ * listing tools, so it gets a full band rather than a row of icons.
+ *
+ * The section claims a question at 2am gets answered. This draws that
+ * happening, the way section 07 draws its four steps: DOM and CSS, no player
+ * and no new dependency. Chosen over two other shapes built alongside it: one
+ * standing on the fifteen of eighteen reviews that raise support unprompted,
+ * and one laid out around real captures nobody has supplied yet.
+ *
+ * The thread composes itself — dots, then the reply typing in a character at a
+ * time — because the claim is about a reply *arriving*, and a thread that is
+ * simply present when you reach it shows the aftermath rather than the thing.
+ *
+ * Labelled as an illustration in words, under the panel, on the hero panel's
+ * rule. An invented interface that does not say it is invented is a claim.
  */
 export default function CommunitySection() {
   const sectionRef = useRevealOnScroll();
+  const threadRef = useRef(null);
+  const { drawn } = COMMUNITY;
+  const callTone = toneOf('green');
+
+  /**
+   * The typing runs on one rAF loop writing `textContent` straight to the
+   * nodes. It never touches React state: a character every 18ms through
+   * `setState` would re-render this subtree ~55 times a second, and section 06
+   * already established what putting a component tree on the main thread at
+   * that rate costs.
+   *
+   * Everything is rendered in full first and only cleared once the sequence
+   * actually starts, so a visitor whose observer never fires — or whose JS
+   * never runs at all — reads the finished thread rather than empty bubbles.
+   */
+  useEffect(() => {
+    const thread = threadRef.current;
+    if (!thread || prefersReducedMotion()) return undefined;
+
+    const rows = Array.from(thread.querySelectorAll('[data-reply]'));
+    if (!rows.length) return undefined;
+
+    const steps = rows.map((row) => ({
+      row,
+      out: row.querySelector('[data-reply-text]'),
+      full: row.querySelector('[data-reply-text]')?.textContent ?? '',
+    }));
+    const tail = thread.querySelector('[data-reply-tail]');
+
+    let raf = 0;
+    let started = 0;
+    let index = 0;
+    let phase = 'thinking';
+
+    const reset = () => {
+      steps.forEach((step) => {
+        step.row.dataset.reply = 'pending';
+        step.out.textContent = '';
+      });
+      if (tail) tail.dataset.replyTail = 'pending';
+    };
+
+    const tick = (now) => {
+      /* The tail is handled before anything reads `steps[index]`: once the
+         last reply is done `index` is past the end of the array, and reaching
+         for `step.full` there throws inside the rAF callback — which kills the
+         loop silently and leaves the closing line hidden for good. */
+      if (phase === 'tail') {
+        if (now - started >= TAIL_MS) {
+          if (tail) tail.dataset.replyTail = 'shown';
+          return;
+        }
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
+      const step = steps[index];
+      const elapsed = now - started;
+
+      if (phase === 'thinking') {
+        step.row.dataset.reply = 'thinking';
+        if (elapsed >= THINK_MS) {
+          phase = 'typing';
+          started = now;
+          step.row.dataset.reply = 'typing';
+        }
+      } else {
+        const chars = Math.min(step.full.length, Math.floor(elapsed / CHAR_MS));
+        step.out.textContent = step.full.slice(0, chars);
+
+        if (chars >= step.full.length) {
+          step.row.dataset.reply = 'done';
+          index += 1;
+          started = now;
+          phase = index < steps.length ? 'thinking' : 'tail';
+        }
+      }
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    /* Gated on the card being properly in view rather than on mount: the
+       sequence is ~4s long and running it above the fold means the visitor
+       arrives to a conversation that already finished without them. */
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        reset();
+        started = performance.now();
+        raf = requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(thread);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
     <section
@@ -22,60 +149,190 @@ export default function CommunitySection() {
       className="section-band"
     >
       <div className="site-shell">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start lg:gap-16">
           <div>
             <SectionHeading
               eyebrow={COMMUNITY.eyebrow}
               headline={<span id="community-headline">{COMMUNITY.headline}</span>}
               lead={COMMUNITY.lead}
             />
-
             <p
               data-reveal
-              data-reveal-group="community-body"
+              data-reveal-group="drawn-body"
               className="mt-6 max-w-xl text-[0.98rem] leading-relaxed text-muted"
             >
               {COMMUNITY.body}
             </p>
 
-            <figure
-              data-reveal
-              data-reveal-group="community-quote"
-              className="mt-10 border-l-2 border-ink pl-6"
-            >
-              <blockquote className="font-serif text-xl italic leading-snug sm:text-2xl">
-                “{COMMUNITY.pullQuote.quote}”
-              </blockquote>
-              <figcaption className="mt-3 text-sm text-muted">
-                <span className="font-semibold text-ink">{COMMUNITY.pullQuote.author}</span> ·{' '}
-                {COMMUNITY.pullQuote.source}
-              </figcaption>
-            </figure>
+            <ul className="mt-10 flex flex-col gap-3">
+              {COMMUNITY.items.map((item) => {
+                const tone = toneOf(item.tone);
+                return (
+                  <li
+                    key={item.label}
+                    data-reveal
+                    data-reveal-group="drawn-items"
+                    className="flex items-center gap-4"
+                  >
+                    <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${tone.tile}`}>
+                      <Icon name={item.icon} className="size-[1.1rem]" />
+                    </span>
+                    <span className="flex items-baseline gap-3">
+                      <span className="font-display text-xl font-extrabold tracking-tight">
+                        {item.title}
+                      </span>
+                      <span className="text-sm font-semibold text-muted">{item.label}</span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
-          <ul className="flex flex-col gap-3 lg:pt-4">
-            {COMMUNITY.items.map((item) => (
-              <li
-                key={item.label}
-                data-reveal
-                data-reveal-group="community-items"
-                className="flex items-start gap-5 rounded-2xl border border-hairline bg-white/60 p-6 transition-[transform,border-color] duration-400 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:border-ink/25"
-              >
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-ink text-paper">
-                  <Icon name={item.icon} className="size-5" />
-                </span>
-                <span>
-                  <span className="block font-display text-xl font-extrabold tracking-tight sm:text-2xl">
-                    {item.title}
-                  </span>
-                  <span className="mt-0.5 block font-semibold">{item.label}</span>
-                  <span className="mt-1 block text-[0.9rem] leading-relaxed text-muted">
-                    {item.body}
+          <div>
+            {/* An ink card because a chat at 2am is read with the lights down,
+                and because it separates the illustration from the claims
+                beside it at a glance. */}
+            <div ref={threadRef} className="card-ink overflow-hidden rounded-3xl">
+              {/* Padding steps down below `sm`. At 361px the card was giving
+                  up 48px to its own gutters, 24px more to each reply's indent
+                  and 32px inside the bubble — 104px of a 361px screen before
+                  a word of the conversation. The desktop measure is unchanged. */}
+              <div className="flex items-center justify-between border-b border-paper/10 px-4 py-3.5 sm:px-6 sm:py-4">
+                <span className="flex items-center gap-2.5">
+                  <Icon name="chat" className="size-4 text-muted-dark" aria-hidden="true" />
+                  <span className="font-mono text-[0.82rem] font-semibold text-paper">
+                    {drawn.channel}
                   </span>
                 </span>
-              </li>
-            ))}
-          </ul>
+                <span className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
+                  <span aria-hidden="true" className="size-1.5 rounded-full bg-signal-green" />
+                  Online
+                </span>
+              </div>
+
+              <ol className="flex flex-col gap-4 px-4 py-5 sm:gap-5 sm:px-6 sm:py-7">
+                <li>
+                  <p className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
+                    You · {drawn.question.time}
+                  </p>
+                  <p className="mt-2 rounded-2xl rounded-tl-sm bg-paper/10 px-3.5 py-2.5 text-[0.95rem] leading-relaxed text-paper sm:px-4 sm:py-3">
+                    {drawn.question.body}
+                  </p>
+                </li>
+
+                {drawn.replies.map((reply) => (
+                  <li key={reply.time} data-reply="done" className="group/reply pl-3 sm:pl-6">
+                    <p className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
+                      {reply.role} · {reply.time}
+                    </p>
+
+                    {/* The dots and the bubble share one cell, so the row is
+                        the height of the finished reply from the first frame.
+                        Sized from the real text rather than a guess: a bubble
+                        that grows as it types walks the whole page down the
+                        screen while the visitor is reading it. */}
+                    <div className="mt-2 grid">
+                      <span
+                        aria-hidden="true"
+                        className="flex items-center gap-1.5 self-start rounded-2xl rounded-tr-sm border border-paper/12 bg-paper/[0.04] px-3.5 py-3 opacity-0 transition-opacity duration-200 [grid-area:1/1] group-data-[reply=thinking]/reply:opacity-100 sm:px-4 sm:py-3.5"
+                      >
+                        <span className="typing-dot size-1.5 rounded-full bg-muted-dark" />
+                        <span className="typing-dot size-1.5 rounded-full bg-muted-dark" />
+                        <span className="typing-dot size-1.5 rounded-full bg-muted-dark" />
+                      </span>
+
+                      <p className="grid rounded-2xl rounded-tr-sm border border-paper/12 bg-paper/[0.04] px-3.5 py-2.5 text-[0.95rem] leading-relaxed text-paper/90 [grid-area:1/1] group-data-[reply=pending]/reply:invisible group-data-[reply=thinking]/reply:invisible sm:px-4 sm:py-3">
+                        {/* The accessible copy is the finished sentence. The
+                            typed layer spends most of its life as a fragment,
+                            so it is hidden from assistive tech, and the
+                            invisible copy stacked under it in the same grid
+                            cell is what holds the box at its final height. */}
+                        <span className="sr-only">{reply.body}</span>
+                        <span aria-hidden="true" className="invisible [grid-area:1/1]">
+                          {reply.body}
+                        </span>
+                        <span aria-hidden="true" data-reply-text className="[grid-area:1/1]">
+                          {reply.body}
+                        </span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+
+                <li
+                  data-reply-tail="shown"
+                  className="flex items-center gap-2 pl-3 text-[0.8rem] text-muted-dark transition-opacity duration-300 data-[reply-tail=pending]:opacity-0 sm:pl-6"
+                >
+                  <span aria-hidden="true" className="flex items-center gap-1">
+                    <span className="typing-dot size-1.5 rounded-full bg-muted-dark" />
+                    <span className="typing-dot size-1.5 rounded-full bg-muted-dark" />
+                    <span className="typing-dot size-1.5 rounded-full bg-muted-dark" />
+                  </span>
+                  {drawn.typing}
+                </li>
+              </ol>
+
+              {/* The call sits in the same card rather than beside it: it is
+                  the same promise on a longer clock, not a second product. */}
+              {/* One grid, placed differently at each width rather than two
+                  layouts. Wrapping was the problem: the icon and the face pile
+                  are both fixed, so on a phone the sentence was left competing
+                  for ~137px between them and ran to six lines.
+
+                  Below `sm` the pile sits up on the title's line and the
+                  sentence takes the width of both columns under it. From `sm`
+                  the icon and the pile span both rows and the sentence sits in
+                  its own column, which is the desktop row unchanged. */}
+              <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 border-t border-paper/10 px-4 py-4 sm:gap-x-4 sm:px-6 sm:py-5">
+                <span
+                  className={`col-start-1 row-start-1 grid size-10 shrink-0 place-items-center rounded-xl sm:row-span-2 ${callTone.tile}`}
+                >
+                  <Icon name="videoCamera" className="size-[1.1rem]" />
+                </span>
+                <span className="col-start-2 row-start-1 min-w-0 text-sm font-semibold text-paper">
+                  {drawn.call.title}
+                </span>
+                <span className="col-span-3 col-start-1 row-start-2 text-[0.82rem] leading-relaxed text-muted-dark sm:col-span-1 sm:col-start-2">
+                  {drawn.call.body}
+                </span>
+
+                {/* Faces overlap so five read as a group rather than as five
+                    separate things, and each carries the card's own ground as
+                    its ring so the pile has depth on ink. */}
+                <span
+                  aria-hidden="true"
+                  className="col-start-3 row-start-1 flex shrink-0 items-center justify-self-end sm:row-span-2"
+                >
+                  {drawn.call.faces.map((face) => (
+                    <img
+                      key={face.key}
+                      src={faceUrl(face)}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      style={{ objectPosition: face.at }}
+                      className="-ml-2 size-7 rounded-full object-cover ring-2 ring-ink first:ml-0"
+                    />
+                  ))}
+                  {/* Filled, and filled gold: the chip is the 400+ claim in
+                      the column beside it, so it wears that claim's tone
+                      rather than a neutral tint. Ink type on gold is 7.5:1;
+                      paper on it misses even the 3:1 non-text bar. */}
+                  <span
+                    className={`-ml-2 grid size-7 place-items-center rounded-full text-[0.6rem] font-bold ring-2 ring-ink ${toneOf('gold').tile}`}
+                  >
+                    {drawn.call.overflow}
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <p className="mt-4 flex items-start gap-2 text-[0.82rem] leading-relaxed text-muted">
+              <Icon name="shield" className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+              {drawn.caption}
+            </p>
+          </div>
         </div>
       </div>
     </section>
