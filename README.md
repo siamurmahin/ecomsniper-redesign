@@ -63,9 +63,9 @@ it came out of the 29 Aug scaffold and has not had its pass yet.
 | 04d Testimonials | **Passed** — ink band, two rows, swipe rail on mobile | 31 Aug |
 | 06 Three pillars | **Passed** — wired as one system, cards tilt | 31 Aug |
 | 07 Feature tour | **Passed** — sticky stepper, chosen from five shapes | 31 Aug |
-| 08 Community | **Built** ← next | 29 Aug |
+| 08 Community | **Passed** — the 2am answer, drawn and typed | 1 Sep |
 | 09 Step by step | **Merged** — took section 05; not yet passed as one | 31 Aug |
-| 10 Founders | **Built** | 29 Aug |
+| 10 Founders | **Built** ← next | 29 Aug |
 | 11 Comparison | **Built** | 29 Aug |
 | 12 Pricing preview | **Built** | 29 Aug |
 | 13 FAQ | **Built** | 29 Aug |
@@ -75,6 +75,13 @@ it came out of the 29 Aug scaffold and has not had its pass yet.
 Section 07 ends on a bridge line marked with **"never alone"** — section 08's
 own headline, asked as a question. The two are joined already; rewriting 08's
 headline breaks that hinge.
+
+Section 08 draws a question being answered at 2am rather than asserting that
+it would be: the thread composes itself, dots then typing, and the panel says
+in words that it is an illustration. Two other shapes were built beside it and
+deleted — one standing on the fifteen of eighteen reviews that raise support
+unprompted, one laid out around captures nobody has supplied. If the client
+ever supplies real chat captures, that third shape is the one to rebuild.
 
 ### What changed against the old site, and why
 
@@ -152,6 +159,13 @@ between the homepage and `/pricing` — both render the same objects.
   faded, because an invisible fixed sheet swallows the first click. Its colours
   are literal copies of the CSS tokens — it renders before the stylesheet
   exists. Change a brand token, change these too.
+- **Section 08's thread types on one rAF loop writing `textContent`, never
+  through React state.** A character every 18ms through `setState` re-renders
+  the subtree ~55 times a second. The text is rendered in full first and only
+  cleared once the sequence starts, so no-JS and reduced-motion visitors read
+  the finished conversation; each bubble stacks the typed layer over an
+  invisible copy of the final sentence in one grid cell, so the card holds its
+  height from the first frame instead of growing as it types.
 
 ## Accessibility
 

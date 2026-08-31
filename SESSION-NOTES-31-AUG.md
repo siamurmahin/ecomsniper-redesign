@@ -1,5 +1,9 @@
 # Session notes — 31 Aug 2026 (early hours)
 
+> **Continued in `SESSION-NOTES-01-SEP.md`.** §1 and §7 here are still the
+> orientation and the trap list, but §8's "not decided — ask" is settled:
+> section 08 was decided and built. §9's open list has moved on too.
+
 Handoff for the session that ran **00:04 → 04:11 on 31 Aug** and ended when the
 Claude limit was hit. Written after the fact, from the commits, so it is a
 record rather than a diary — the reasoning is quoted from the commit bodies,
