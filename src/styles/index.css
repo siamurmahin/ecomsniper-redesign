@@ -848,12 +848,11 @@
     opacity: 0;
   }
   [data-steps='in'] [data-step] {
-    animation: step-lay-in 520ms var(--ease-out-expo) both;
-    /* 420ms apart, not the 130ms a stagger would use. The four are being
-       counted, so each one has to visibly finish — and take its tick — before
-       the next arrives. At a stagger's spacing all four land together and the
-       ticks read as one event rather than four. */
-    animation-delay: calc(var(--i) * 420ms);
+    animation: step-lay-in 600ms var(--ease-out-expo) both;
+    /* 500ms apart, not the 130ms a stagger would use. The four are being
+       counted, so each has to visibly arrive before the next one does. At a
+       stagger's spacing all four land together and it reads as one event. */
+    animation-delay: calc(var(--i) * 500ms);
   }
   @keyframes step-lay-in {
     from {
@@ -866,37 +865,64 @@
     }
   }
 
-  /* Each step's tick, after that step has landed rather than with it — the
-     step arrives, then it is marked done, then the next one starts. The delay
-     inherits the same `--i` the step uses, so the count cannot fall out of
-     order however the timings are tuned. */
-  .js-motion [data-step-done] {
+  /* One marker, travelling. The step lands, lights up in its own tone — a
+     ring around the card and a tick beside the copy — and hands the mark to
+     the next one. Four ticks on screen at once say "all done"; one that moves
+     says "one, two, three, four", which is what is being counted.
+
+     It comes to rest on step four rather than switching off, because that step
+     is the payoff and the resting state is the live site's own composition:
+     green border, green tick, on the profit.
+
+     Opacity only. A border-colour transition would repaint the card on every
+     frame; this is a ring drawn over it that fades. */
+  /* Resting state, and what a visitor without JS sees: the mark sits on the
+     last step. That is the live site's own composition — green ring, green
+     tick, on the profit — so the section is never wrong, only still. */
+  [data-step-mark] {
     opacity: 0;
   }
-  [data-steps='in'] [data-step-done] {
-    animation: step-done-pop 380ms var(--ease-out-expo) both;
-    animation-delay: calc(var(--i) * 420ms + 380ms);
+  [data-step-last] [data-step-mark] {
+    opacity: 1;
   }
-  @keyframes step-done-pop {
-    from {
+
+  /* The count, on a loop. One 6s cycle; each step holds the mark for a
+     quarter of it, so the four are read at walking pace rather than flashed.
+     The delay is the step's own quarter, derived from the same `--i` as its
+     indent, and the first is offset far enough to let the staircase finish
+     laying itself down. */
+  [data-steps='in'] [data-step-mark] {
+    animation: step-mark-cycle 6000ms linear infinite;
+    animation-delay: calc(600ms + var(--i) * 1500ms);
+  }
+  @keyframes step-mark-cycle {
+    0% {
       opacity: 0;
-      transform: scale(0.4);
     }
-    to {
+    2%,
+    23% {
       opacity: 1;
-      transform: scale(1);
+    }
+    25%,
+    100% {
+      opacity: 0;
     }
   }
 
-  /* The global reduced-motion rule collapses animations to their end frame,
-     which is correct here — but the elements are hidden by the `.js-motion`
-     rules above until an animation runs at all, so they are forced visible. */
+  /* Reduced motion gets the resting state, not the loop: all four steps
+     visible, and the mark parked on the last one. Forcing every mark visible
+     instead would put a ring and a tick on all four, which reads as a
+     finished checklist rather than as the sequence this is. */
   @media (prefers-reduced-motion: reduce) {
-    .js-motion [data-step],
-    .js-motion [data-step-done] {
+    .js-motion [data-step] {
       opacity: 1 !important;
-      animation: none !important;
       transform: none !important;
+    }
+    [data-step-mark] {
+      animation: none !important;
+    }
+    [data-step-last] [data-step-mark] {
+      opacity: 1 !important;
     }
   }
 

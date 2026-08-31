@@ -16,6 +16,7 @@ export const SIGNAL_TONES = {
     text: 'text-signal-blue-deep', // the hue as text on paper
     dot: 'bg-signal-blue-deep', // small indicators, where the brand value misses 3:1
     ring: 'border-signal-blue/40',
+    edge: 'border-signal-blue', // the tone at full strength, for an active edge
     rule: 'bg-signal-blue', // edge rules
     wash: 'from-signal-blue/10', // corner tint, not a fill
     spotlight: 'rgb(0 100 210 / 0.16)', // SpotlightCard takes a value, not a class
@@ -27,6 +28,7 @@ export const SIGNAL_TONES = {
     text: 'text-signal-red-deep',
     dot: 'bg-signal-red-deep',
     ring: 'border-signal-red/40',
+    edge: 'border-signal-red', // the tone at full strength, for an active edge
     rule: 'bg-signal-red',
     wash: 'from-signal-red/10',
     spotlight: 'rgb(229 50 56 / 0.16)',
@@ -38,6 +40,7 @@ export const SIGNAL_TONES = {
     text: 'text-signal-green-deep',
     dot: 'bg-signal-green-deep',
     ring: 'border-signal-green/50',
+    edge: 'border-signal-green', // the tone at full strength, for an active edge
     rule: 'bg-signal-green',
     wash: 'from-signal-green/12',
     spotlight: 'rgb(134 184 23 / 0.18)',
@@ -49,6 +52,7 @@ export const SIGNAL_TONES = {
     text: 'text-signal-gold-deep',
     dot: 'bg-signal-gold-deep',
     ring: 'border-signal-gold/50',
+    edge: 'border-signal-gold', // the tone at full strength, for an active edge
     rule: 'bg-signal-gold',
     wash: 'from-signal-gold/12',
     spotlight: 'rgb(220 165 76 / 0.18)',

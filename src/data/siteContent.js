@@ -785,6 +785,13 @@ export const TRAINING = {
     lead: 'You never buy stock. You never ship a box.',
     detail: 'No warehouse. No website. No money tied up in stock you might not sell.',
   },
+
+  /* Carries "on the monthly plan" and has to keep carrying it: the 10K credits
+     bundle and Enterprise are final sale, so the unqualified version is
+     contradicted by the pricing page and the FAQ. One of the two claim rules
+     this file exists to enforce. */
+  cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+  guarantee: '30 day money back guarantee on the monthly plan',
   course: {
     eyebrow: 'The course',
     name: 'Dropship Mastery',
@@ -810,7 +817,6 @@ export const TRAINING = {
        course structure and the pricing page may want it; nothing renders it. */
     modules: ['Account setup', 'Finding products', 'Your first listing', 'Scaling up'],
   },
-  cta: { label: 'See what the training covers', href: '/pricing' },
 };
 
 /* 10 — Founders (NEW per deck) Trust in this category rests on the operator, not the software. */

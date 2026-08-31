@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import { TRAINING, FOUNDERS, SITE } from '../data/siteContent';
+import { TRAINING, FOUNDERS } from '../data/siteContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
@@ -94,8 +94,12 @@ export default function TrainingSection() {
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
           {/* The staircase. Each step steps right by its index, which is the
-              whole idea — the indent is the argument, not decoration. Half the
-              travel below `md`, where a full stagger would eat the measure. */}
+              whole idea — the indent is the argument, not decoration.
+
+              No indent at all below `md`. On a phone the column is ~290px, so
+              stepping the fourth card in costs it a line of copy to say
+              something the numbers already say; the four run full width and
+              the travelling mark carries the sequence instead. */}
           <ol ref={stairsRef} className="flex flex-col gap-3">
             {TRAINING.steps.map((step, index) => {
               const tone = toneOf(STEP_TONES[index % STEP_TONES.length]);
@@ -105,11 +109,34 @@ export default function TrainingSection() {
                 <li
                   key={step.n}
                   data-step
+                  data-step-last={isLast || undefined}
                   style={{ '--i': index }}
-                  className={`flex items-center gap-4 rounded-2xl border bg-white p-4 shadow-lift ms-[calc(var(--i)*0.6rem)] sm:p-5 md:ms-[calc(var(--i)*1.6rem)] ${
-                    isLast ? 'border-signal-green/60' : 'border-hairline'
-                  }`}
+                  className="relative flex items-center gap-4 rounded-2xl border border-hairline bg-white p-4 shadow-lift sm:p-5 md:ms-[calc(var(--i)*1.6rem)]"
                 >
+                  {/* The mark, drawn over the card rather than on it: a ring
+                      that fades is one composited layer, where animating the
+                      card's own border-color would repaint it every frame. */}
+                  <span
+                    aria-hidden="true"
+                    data-step-mark
+                    className={`pointer-events-none absolute inset-0 rounded-2xl border-2 ${tone.edge}`}
+                  />
+
+                  {/* The four joined into one run. It sits in the gap between
+                      cards rather than behind them, so it never has to guess a
+                      card's height, and it is placed on the number chip's own
+                      centre line — 34px in at `p-4`, 38px at `sm:p-5`.
+
+                      Below `md` only. From there the cards are indented per
+                      step, so every chip sits at a different x and a single
+                      vertical line would pass through none of them; the
+                      staircase is doing the joining by then. */}
+                  {!isLast && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-[34px] top-full h-3 w-px bg-hairline sm:left-[38px] md:hidden"
+                    />
+                  )}
                   <span
                     className={`grid size-9 shrink-0 place-items-center rounded-lg font-display text-sm font-extrabold ${tone.tile}`}
                   >
@@ -118,16 +145,15 @@ export default function TrainingSection() {
 
                   <p className="text-[0.95rem] leading-relaxed text-ink">{step.text}</p>
 
-                  {/* Every step is ticked as it lands, so the four are counted
-                      off one to four rather than simply appearing. The last
-                      one keeps its green border as well: the others are marked
-                      done, that one is the payoff. */}
+                  {/* The tick travels with the ring — one on screen at a time,
+                      so the four read as a count rather than as a finished
+                      checklist — and the count runs on a loop. Its resting
+                      state, with no JS or under reduced motion, is the mark
+                      parked on the last step: the live site's composition. */}
                   <span
                     aria-hidden="true"
-                    data-step-done
-                    className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full ${
-                      isLast ? toneOf('green').tile : 'bg-signal-green/15 text-signal-green-deep'
-                    }`}
+                    data-step-mark
+                    className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full ${tone.tile}`}
                   >
                     <Icon name="check" className="size-3.5" />
                   </span>
@@ -205,14 +231,23 @@ export default function TrainingSection() {
           </p>
 
           <div className="mt-9">
-            <CtaButton href={SITE.signupUrl} intent="training-signup">
-              Start your eBay business
+            <CtaButton href={TRAINING.cta.href} intent="training-signup">
+              {TRAINING.cta.label}
             </CtaButton>
           </div>
 
-          <p className="mt-4 flex items-center justify-center gap-2 text-[0.85rem] text-muted">
-            <Icon name="checkCircle" className="size-4 text-signal-green-deep" aria-hidden="true" />
-            30 day money back guarantee on the monthly plan
+          {/* The tick flows WITH the text rather than sitting beside it as a
+              flex sibling. As a sibling under `items-center` it centred against
+              the whole block, so the moment the line wrapped on a phone it
+              landed in the gap between the two lines — the same fault section
+              07's closer had. */}
+          <p className="mt-4 text-[0.85rem] leading-relaxed text-muted">
+            <Icon
+              name="checkCircle"
+              className="mr-1.5 inline-block size-4 align-middle text-signal-green-deep"
+              aria-hidden="true"
+            />
+            {TRAINING.guarantee}
           </p>
         </div>
       </div>

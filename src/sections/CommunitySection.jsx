@@ -286,7 +286,12 @@ export default function CommunitySection() {
                   sentence takes the width of both columns under it. From `sm`
                   the icon and the pile span both rows and the sentence sits in
                   its own column, which is the desktop row unchanged. */}
-              <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 border-t border-paper/10 px-4 py-4 sm:gap-x-4 sm:px-6 sm:py-5">
+              {/* Two fixed-width children on one line starve the flexible one.
+                  At 361px the 40px tile and the 108px pile left the title
+                  ~102px and it broke across two lines. Below `sm` the pile
+                  drops to its own row and the title gets the full measure;
+                  from `sm` there is room for all three abreast. */}
+              <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-3 border-t border-paper/10 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-4 sm:gap-y-2 sm:px-6 sm:py-5">
                 <span
                   className={`col-start-1 row-start-1 grid size-10 shrink-0 place-items-center rounded-xl sm:row-span-2 ${callTone.tile}`}
                 >
@@ -295,7 +300,7 @@ export default function CommunitySection() {
                 <span className="col-start-2 row-start-1 min-w-0 text-sm font-semibold text-paper">
                   {drawn.call.title}
                 </span>
-                <span className="col-span-3 col-start-1 row-start-2 text-[0.82rem] leading-relaxed text-muted-dark sm:col-span-1 sm:col-start-2">
+                <span className="col-span-2 col-start-1 row-start-2 text-[0.82rem] leading-relaxed text-muted-dark sm:col-span-1 sm:col-start-2">
                   {drawn.call.body}
                 </span>
 
@@ -305,7 +310,7 @@ export default function CommunitySection() {
                     depth rather than four separate circles. */}
                 <span
                   aria-hidden="true"
-                  className="col-start-3 row-start-1 flex shrink-0 items-center justify-self-end sm:row-span-2"
+                  className="col-span-2 col-start-1 row-start-3 flex shrink-0 items-center justify-self-start sm:col-span-1 sm:col-start-3 sm:row-span-2 sm:row-start-1 sm:justify-self-end"
                 >
                   {drawn.call.initials.map((member) => (
                     <span
