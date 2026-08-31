@@ -740,13 +740,12 @@ export const COMMUNITY = {
     caption: 'An illustration of how a question gets answered — not a capture of a real conversation.',
   },
 
-  // Deck: add one verbatim member quote about support.
-  pullQuote: {
-    quote:
-      'Anytime you have a problem the team is there to help you 24/7 through chat support.',
-    author: 'Clay C',
-    source: 'Trustpilot, United States',
-  },
+  /* The deck asked this section for one verbatim member quote about support.
+     It has one, in 04d: Clay C's "Anytime you have a problem the team is there
+     to help you 24/7 through chat support" is one of the eighteen in
+     `PROOF.reviews`, so it already renders in full on this page with its
+     attribution and a link to the profile. A second copy here would be the
+     page quoting the same member twice. */
 };
 
 /* 09 — The course Deck: rename the middle plan so it stops colliding with the course name. */
