@@ -788,8 +788,21 @@ export const TRAINING = {
       'No inventory, no website',
       'Taught step by step',
       'Updated as eBay and the market change',
-      'Taught by Marc Augustine and Sammy',
     ],
+
+    /* The live site names the instructors under a rule inside the course card
+       rather than as a fourth tick, with both faces. "Taught by Marc Augustine
+       and Sammy" was that bullet; it is redundant beside two portraits and
+       their names, so it is gone rather than said twice.
+
+       The people are read from `FOUNDERS.people` at render, not copied here:
+       two lists of the same two names drift, and section 10 already owns them. */
+    instructorsLabel: 'Your instructors',
+
+    /* `modules` is unused. The live site shows no module list in this section,
+       and adding one put four numbered things on screen twice — the model's
+       steps, then four more inside the course card. Kept because it is real
+       course structure and the pricing page may want it; nothing renders it. */
     modules: ['Account setup', 'Finding products', 'Your first listing', 'Scaling up'],
   },
   cta: { label: 'See what the training covers', href: '/pricing' },

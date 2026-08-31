@@ -830,6 +830,69 @@
     animation: panel-in 420ms var(--ease-out-expo) both;
   }
 
+  /* Section 09's staircase laying itself down, one step at a time.
+
+     CSS keyframes rather than a GSAP timeline, and transform and opacity only,
+     so the four run on the compositor. The delay is derived from `--i`, the
+     same custom property the step already uses for its indent — the step that
+     sits furthest right is the step that arrives last, and one variable keeps
+     those two facts from disagreeing.
+
+     Steps come in from the left because that is the direction the staircase
+     descends in. A rise would read as four cards appearing; this reads as a
+     sequence being laid down, which is what the eyebrow above it says.
+
+     Hidden only under `.js-motion`, so a visitor whose JS never runs reads all
+     four immediately rather than an empty column. */
+  .js-motion [data-step] {
+    opacity: 0;
+  }
+  [data-steps='in'] [data-step] {
+    animation: step-lay-in 620ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i) * 130ms);
+  }
+  @keyframes step-lay-in {
+    from {
+      opacity: 0;
+      transform: translate3d(-20px, 6px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* The payoff tick, after the last step has landed rather than with it. */
+  .js-motion [data-step-done] {
+    opacity: 0;
+  }
+  [data-steps='in'] [data-step-done] {
+    animation: step-done-pop 420ms var(--ease-out-expo) both;
+    animation-delay: 780ms;
+  }
+  @keyframes step-done-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* The global reduced-motion rule collapses animations to their end frame,
+     which is correct here — but the elements are hidden by the `.js-motion`
+     rules above until an animation runs at all, so they are forced visible. */
+  @media (prefers-reduced-motion: reduce) {
+    .js-motion [data-step],
+    .js-motion [data-step-done] {
+      opacity: 1 !important;
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+
   /* Section 08's "someone is composing a reply" dots. Opacity and transform
      only, so the three run on the compositor and cannot stutter behind the
      typing loop writing text on the main thread beside them. The stagger is
