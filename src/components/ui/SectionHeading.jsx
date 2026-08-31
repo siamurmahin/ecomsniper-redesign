@@ -18,14 +18,20 @@ export default function SectionHeading({
   className = '',
 }) {
   const isCentered = align === 'center';
-  const leadTone = tone === 'ink' ? 'text-muted-dark' : 'text-muted';
+  const onInk = tone === 'ink';
+  const leadTone = onInk ? 'text-muted-dark' : 'text-muted';
+  /* `tone="ink"` used to change the lead and leave the eyebrow alone, so an
+     ink section either got the paper eyebrow — whose rule is drawn for a light
+     ground — or had to render its own outside this component. It carries both
+     now, which is the whole point of the tone prop. */
+  const eyebrowTone = onInk ? 'section-eyebrow section-eyebrow-on-ink' : 'section-eyebrow';
 
   return (
     <header
       className={`${isCentered ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'} ${className}`.trim()}
     >
       {eyebrow && (
-        <p className="section-eyebrow" data-reveal data-reveal-group="heading">
+        <p className={eyebrowTone} data-reveal data-reveal-group="heading">
           {eyebrow}
         </p>
       )}

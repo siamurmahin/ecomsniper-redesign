@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Seo from '../components/ui/Seo';
 import FoundersSection from '../sections/FoundersSection';
-import FoundersOrigin from '../sections/founders-lab/FoundersOrigin';
-import FoundersStories from '../sections/founders-lab/FoundersStories';
-import FoundersMessage from '../sections/founders-lab/FoundersMessage';
 import FoundersBook from '../sections/founders-lab/FoundersBook';
+import FoundersBookDark from '../sections/founders-lab/FoundersBookDark';
 
 /**
  * Internal comparison page for section 10. Delete this file, its route and
@@ -23,28 +21,16 @@ const OPTIONS = [
     render: () => <FoundersSection />,
   },
   {
-    n: 'A',
-    name: 'The origin',
-    note: 'Stops introducing them, since §09 does that, and says why the software exists. Faces become a signature; each keeps its credential.',
-    render: (id) => <FoundersOrigin id={id} />,
-  },
-  {
-    n: 'B',
-    name: 'Two stories',
-    note: 'Both men kept, each with a story rather than a role and a line. §09 becomes the name-drop, this is the substance.',
-    render: (id) => <FoundersStories id={id} />,
-  },
-  {
-    n: 'C',
-    name: 'The message',
-    note: 'Register change: an ink band, their words at reading size, signed with both faces. Stands out because it is not another grid.',
-    render: (id) => <FoundersMessage id={id} />,
-  },
-  {
     n: 'D',
-    name: 'The book',
-    note: 'Gives the section something to be about — the free playbook this site hands out was written by one of the two men in it, and nothing says so. Authorship needs confirming.',
+    name: 'The book — paper',
+    note: 'The founders on the page ground, the book on an ink card beside them.',
     render: (id) => <FoundersBook id={id} />,
+  },
+  {
+    n: 'D-dark',
+    name: 'The book — dark',
+    note: 'The whole section on ink. The book card lifts to ink-soft so it still separates from the band.',
+    render: (id) => <FoundersBookDark id={id} />,
   },
 ];
 
