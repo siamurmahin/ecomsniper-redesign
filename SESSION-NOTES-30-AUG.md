@@ -1,5 +1,10 @@
 # Session notes — 29–30 Aug 2026
 
+> **Continued in `SESSION-NOTES-31-AUG.md`.** §1 and §2 here are still the
+> orientation — stack, commands, design system, client conventions — but the
+> open items in §8 and §9 below have moved on: the six-reviews problem is
+> solved (eighteen now), and sections 01–07 have all had their design pass.
+
 Handoff for whoever picks this up next. Everything changed this session, why it
 was changed, what is still uncommitted, and the traps that cost time so you do
 not pay for them twice.

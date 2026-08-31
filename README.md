@@ -23,7 +23,7 @@ playbook form can actually deliver.
 
 ## The funnel
 
-The homepage is eighteen sections in a deliberate order. The order is the
+The homepage is seventeen sections in a deliberate order. The order is the
 product here — each one answers the question the previous one raises.
 
 | # | Section | Job it does |
@@ -35,17 +35,46 @@ product here — each one answers the question the previous one raises.
 | 04b | Interviews | Members, in their own words |
 | 04c | Receipts | Screenshots members posted themselves |
 | 04d | Testimonials | Written Trustpilot reviews, two running rows |
-| 05 | The model | The mechanism — **before** the feature tour |
 | 06 | Three pillars | The page's table of contents |
 | 07 | Feature tour | What the software does |
 | 08 | Community | The real differentiator vs cheaper tools |
-| 09 | Training | What a beginner actually gets |
+| 09 | Step by step | The mechanism, then the course that teaches it |
 | 10 | Founders | Who is behind it |
 | 11 | Comparison | The decision they are making elsewhere |
 | 12 | Pricing | The price, on the page most people see |
 | 13 | FAQ | Last objections, answered in place |
 | 14 | Assurance | Countries + guarantee |
 | 15 | Final CTA | Pay now, **or** take a free door |
+
+### Design pass status
+
+Sections are being reworked top-down, one at a time, against the live site and
+the client's notes. Everything below renders and is on the page; "built" means
+it came out of the 29 Aug scaffold and has not had its pass yet.
+
+| Section | State | Last worked |
+|---------|-------|-------------|
+| 01 Hero | **Passed** — entrance on the compositor, no WebGL | 31 Aug |
+| 02 Proof bar | **Passed** — ink band of tone cards | 29 Aug |
+| 03 Who it's for | **Passed** — rotating panels, font-swap re-measure | 31 Aug |
+| 04a Proof wall | **Passed** — drifting evidence behind an ink card | 31 Aug |
+| 04b Interviews | **Passed** — stage cycles all twelve | 31 Aug |
+| 04c Receipts | **Passed** — figures on plates, closes with a door | 31 Aug |
+| 04d Testimonials | **Passed** — ink band, two rows, swipe rail on mobile | 31 Aug |
+| 06 Three pillars | **Passed** — wired as one system, cards tilt | 31 Aug |
+| 07 Feature tour | **Passed** — sticky stepper, chosen from five shapes | 31 Aug |
+| 08 Community | **Built** ← next | 29 Aug |
+| 09 Step by step | **Merged** — took section 05; not yet passed as one | 31 Aug |
+| 10 Founders | **Built** | 29 Aug |
+| 11 Comparison | **Built** | 29 Aug |
+| 12 Pricing preview | **Built** | 29 Aug |
+| 13 FAQ | **Built** | 29 Aug |
+| 14 Assurance | **Built** | 29 Aug |
+| 15 Final CTA | **Built** | 29 Aug |
+
+Section 07 ends on a bridge line marked with **"never alone"** — section 08's
+own headline, asked as a question. The two are joined already; rewriting 08's
+headline breaks that hinge.
 
 ### What changed against the old site, and why
 
@@ -54,9 +83,12 @@ product here — each one answers the question the previous one raises.
 - **The unverifiable income claim is gone from the hero.** "99% make 1–3k/month"
   is replaced by a Trustpilot score that links to the live profile, the real
   member count, and the entry price.
-- **"How it works" moved up.** It used to sit near the bottom inside the course
-  section, so a cold visitor met the feature tour before learning the business
-  model. Nothing above it means anything without it.
+- **The mechanism is explained where it is taught.** It was tried as its own
+  section (05) a third of the page above the course that teaches the same four
+  steps, and neither half mentioned the other. Section 09 now runs the steps
+  first and the course under them, as the live site does — the steps are the
+  syllabus, so explaining them is the argument for the course. `#how-it-works`
+  stays on the feature tour, which is what the nav points at.
 - **The guarantee reads the same everywhere.** Previously an unqualified
   "no refunds, final sale" contradicted the 30-day guarantee. Refund terms are
   now stated per plan: the monthly plan is covered, the other two are not.
@@ -106,8 +138,20 @@ between the homepage and `/pricing` — both render the same objects.
 - **Reduced motion is a CSS-level guarantee, not a JS one.** Elements are hidden
   by `.js-motion [data-reveal]`, and the `prefers-reduced-motion` block forces
   them visible with `!important`. If the JS never runs, every word still shows.
-- The 3D canvas mounts on `requestIdleCallback`, is skipped entirely for
-  reduced-motion visitors, and ships in its own chunk that nothing else imports.
+- **The homepage runs no WebGL context.** The hero's shader field was dropped on
+  31 Aug: shader compilation is one uninterruptible main-thread block and it
+  landed inside the first second, alongside React mounting, the font swap and
+  the panel's images decoding. The static wash under it always carried the hero
+  alone — it is what reduced-motion visitors already saw.
+- **The hero entrance is CSS keyframes, not a GSAP timeline.** It plays during
+  the busiest moment the page has, and `lagSmoothing(0)` (which Lenis needs)
+  means GSAP jumps a stalled timeline forward rather than stretching it. On the
+  compositor the timing holds through a blocked main thread.
+- **A preloader is inlined in `index.html`**, markup and styles both, on screen
+  at 79ms and removed once the first route paints. It is removed rather than
+  faded, because an invisible fixed sheet swallows the first click. Its colours
+  are literal copies of the CSS tokens — it renders before the stylesheet
+  exists. Change a brand token, change these too.
 
 ## Accessibility
 
@@ -132,16 +176,30 @@ per-route metadata.
 
 ## Before launch
 
-1. Set `VITE_PLAYBOOK_ENDPOINT` and confirm the file actually delivers.
-2. Replace the founder initials in `FoundersSection` with real portraits.
-3. Replace `AppFrame` in `FeatureTourSection` with real dashboard screenshots
-   (same aspect ratio) — it is an on-brand representation, not a capture.
+1. Set `VITE_PLAYBOOK_ENDPOINT` and confirm the file actually delivers. Unset,
+   the form fakes success and logs a warning — and every free door on the site
+   leads to it.
+2. Add routes for `/about`, `/blog`, `/contact`, `/help` and the four legal
+   pages, or point those footer links at the existing site. Eight links 404
+   today, and the guarantee copy leans on a refund policy that is not there.
+3. Replace the step visuals in `FeatureTourSection` with real dashboard
+   screenshots (same aspect ratio) — they are on-brand representations of what
+   each step does, not captures.
 4. Replace the seven member titles written in `AUDIENCE.people` with real
    ones if they exist — they are paraphrases of the client’s own sentences,
    flagged in `siteContent.js`.
 5. Re-check the Trustpilot figures in `PROOF_BAR` before launch. They were
    corrected to 4.7 from 41 reviews on 29 Aug 2026 and will drift.
-6. Pull more reviews into `PROOF.reviews`. Six are in the deck and the
-   profile has 41; with six, both testimonial rows show every name twice.
-6. Add routes for `/about`, `/blog`, `/contact`, `/help` and the legal pages, or
-   keep those footer links pointing at the existing site.
+6. Repoint `FEATURES.items[].links` — Product Hunter, Competitor Research, AI
+   Powered Lister and Price Monitoring go to `ecomsniper.io/*V6` because this
+   site has no feature pages yet.
+7. Remove `/design-lab`, or decide it stays. It is a 303-line internal
+   comparison page from the 29 Aug build, still routed in `App.jsx`, in the
+   production bundle, and not disallowed in `robots.txt`.
+8. Delete `src/components/three/ReticleScene.jsx` and the `three`,
+   `@react-three/fiber` and `@react-three/drei` dependencies, or find the
+   reticle a home. Nothing has imported it since the hero's aurora was dropped.
+
+**Done:** founder portraits are real photographs, resolved through
+`import.meta.glob`; `PROOF.reviews` holds eighteen, so neither testimonial row
+repeats a name.
