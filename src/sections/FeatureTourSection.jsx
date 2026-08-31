@@ -1,3 +1,4 @@
+import ReticleMark from '../components/ui/ReticleMark';
 import { useEffect, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
@@ -143,15 +144,7 @@ function StepVisual({ item, index }) {
           {/* The reticle, drawn rather than fetched — the favicon's own
               artwork, so it cannot go out of step with the brand mark. */}
           <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-white shadow-sm">
-            <svg viewBox="0 0 64 64" className="size-7" aria-hidden="true">
-              <g fill="none" strokeLinecap="round">
-                <circle cx="32" cy="32" r="24" stroke="#86b817" strokeWidth="4" />
-                <circle cx="32" cy="32" r="16.5" stroke="#0064d2" strokeWidth="6" />
-                <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" strokeWidth="6" />
-              </g>
-              <circle cx="32" cy="32" r="9.5" fill="#e53238" />
-              <circle cx="32" cy="32" r="3.6" fill="#fbfbfa" />
-            </svg>
+            <ReticleMark />
           </span>
 
           {/* The packet crossing. Three dots on one keyframe, offset by a

@@ -118,17 +118,19 @@ export default function TrainingSection() {
 
                   <p className="text-[0.95rem] leading-relaxed text-ink">{step.text}</p>
 
-                  {/* The payoff, marked as arrived. Only the last step earns it;
-                      a tick on all four would be four ticks and no payoff. */}
-                  {isLast && (
-                    <span
-                      aria-hidden="true"
-                      data-step-done
-                      className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full ${toneOf('green').tile}`}
-                    >
-                      <Icon name="check" className="size-3.5" />
-                    </span>
-                  )}
+                  {/* Every step is ticked as it lands, so the four are counted
+                      off one to four rather than simply appearing. The last
+                      one keeps its green border as well: the others are marked
+                      done, that one is the payoff. */}
+                  <span
+                    aria-hidden="true"
+                    data-step-done
+                    className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full ${
+                      isLast ? toneOf('green').tile : 'bg-signal-green/15 text-signal-green-deep'
+                    }`}
+                  >
+                    <Icon name="check" className="size-3.5" />
+                  </span>
                 </li>
               );
             })}

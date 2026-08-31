@@ -848,8 +848,12 @@
     opacity: 0;
   }
   [data-steps='in'] [data-step] {
-    animation: step-lay-in 620ms var(--ease-out-expo) both;
-    animation-delay: calc(var(--i) * 130ms);
+    animation: step-lay-in 520ms var(--ease-out-expo) both;
+    /* 420ms apart, not the 130ms a stagger would use. The four are being
+       counted, so each one has to visibly finish — and take its tick — before
+       the next arrives. At a stagger's spacing all four land together and the
+       ticks read as one event rather than four. */
+    animation-delay: calc(var(--i) * 420ms);
   }
   @keyframes step-lay-in {
     from {
@@ -862,13 +866,16 @@
     }
   }
 
-  /* The payoff tick, after the last step has landed rather than with it. */
+  /* Each step's tick, after that step has landed rather than with it — the
+     step arrives, then it is marked done, then the next one starts. The delay
+     inherits the same `--i` the step uses, so the count cannot fall out of
+     order however the timings are tuned. */
   .js-motion [data-step-done] {
     opacity: 0;
   }
   [data-steps='in'] [data-step-done] {
-    animation: step-done-pop 420ms var(--ease-out-expo) both;
-    animation-delay: 780ms;
+    animation: step-done-pop 380ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i) * 420ms + 380ms);
   }
   @keyframes step-done-pop {
     from {

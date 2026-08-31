@@ -1,15 +1,12 @@
 import { useEffect, useRef } from 'react';
+import ReticleMark from '../components/ui/ReticleMark';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import { COMMUNITY } from '../data/siteContent';
 import { toneOf } from '../lib/signalTones';
-import { thumbUrl } from '../lib/proofMedia';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { prefersReducedMotion } from '../lib/motion';
 
-const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, import: 'default' });
-const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
-const faceUrl = (face) => (face.from === 'people' ? portraitUrl(face.key) : thumbUrl(face.key));
 
 /** How long a reply is composed before its first character lands. */
 const THINK_MS = 900;
@@ -198,16 +195,21 @@ export default function CommunitySection() {
                   up 48px to its own gutters, 24px more to each reply's indent
                   and 32px inside the bubble — 104px of a 361px screen before
                   a word of the conversation. The desktop measure is unchanged. */}
-              <div className="flex items-center justify-between border-b border-paper/10 px-4 py-3.5 sm:px-6 sm:py-4">
-                <span className="flex items-center gap-2.5">
-                  <Icon name="chat" className="size-4 text-muted-dark" aria-hidden="true" />
-                  <span className="font-mono text-[0.82rem] font-semibold text-paper">
-                    {drawn.channel}
-                  </span>
+              {/* Headed by the mark and "EcomSniper Support", as the live site
+                  heads it. A channel name claimed a Discord; this claims what
+                  the section actually claims — a person, at any hour. */}
+              <div className="flex items-center gap-3 border-b border-paper/10 px-4 py-3.5 sm:px-6 sm:py-4">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-paper">
+                  <ReticleMark className="size-6" />
                 </span>
-                <span className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
-                  <span aria-hidden="true" className="size-1.5 rounded-full bg-signal-green" />
-                  Online
+                <span className="min-w-0">
+                  <span className="block text-[0.9rem] font-semibold text-paper">
+                    {drawn.support.name}
+                  </span>
+                  <span className="mt-0.5 flex items-center gap-1.5 text-[0.75rem] text-signal-green-soft">
+                    <span aria-hidden="true" className="size-1.5 rounded-full bg-signal-green" />
+                    {drawn.support.status}
+                  </span>
                 </span>
               </div>
 
@@ -297,31 +299,28 @@ export default function CommunitySection() {
                   {drawn.call.body}
                 </span>
 
-                {/* Faces overlap so five read as a group rather than as five
-                    separate things, and each carries the card's own ground as
-                    its ring so the pile has depth on ink. */}
+                {/* Overlapping discs, the way the live site draws them: four
+                    initials in the four signal tones, each ringed in the
+                    card's own ground so the pile reads as one group with
+                    depth rather than four separate circles. */}
                 <span
                   aria-hidden="true"
                   className="col-start-3 row-start-1 flex shrink-0 items-center justify-self-end sm:row-span-2"
                 >
-                  {drawn.call.faces.map((face) => (
-                    <img
-                      key={face.key}
-                      src={faceUrl(face)}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      style={{ objectPosition: face.at }}
-                      className="-ml-2 size-7 rounded-full object-cover ring-2 ring-ink first:ml-0"
-                    />
+                  {drawn.call.initials.map((member) => (
+                    <span
+                      key={member.letter}
+                      className={`-ml-2 grid size-7 place-items-center rounded-full font-display text-[0.72rem] font-extrabold ring-2 ring-ink first:ml-0 ${toneOf(member.tone).tile}`}
+                    >
+                      {member.letter}
+                    </span>
                   ))}
-                  {/* Filled, and filled gold: the chip is the 400+ claim in
-                      the column beside it, so it wears that claim's tone
-                      rather than a neutral tint. Ink type on gold is 7.5:1;
-                      paper on it misses even the 3:1 non-text bar. */}
-                  <span
-                    className={`-ml-2 grid size-7 place-items-center rounded-full text-[0.6rem] font-bold ring-2 ring-ink ${toneOf('gold').tile}`}
-                  >
+                  {/* Neutral, not a fifth tone. The four discs are members;
+                      this is the count of the rest, so it has to read as a
+                      different kind of thing — and gold here sat next to the
+                      gold disc and made two of them. Ink on paper, the
+                      highest contrast available on this card. */}
+                  <span className="-ml-2 grid size-7 place-items-center rounded-full bg-paper text-[0.6rem] font-bold text-ink ring-2 ring-ink">
                     {drawn.call.overflow}
                   </span>
                 </span>

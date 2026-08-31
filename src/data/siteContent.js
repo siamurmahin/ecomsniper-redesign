@@ -709,33 +709,38 @@ export const COMMUNITY = {
      visitor could mistake for a capture of their own account without saying
      so. The times are the section's own "get stuck at 2am" claim, shown. */
   drawn: {
-    channel: '#ask-anything',
+    /* The live site heads this card with the brand mark, "EcomSniper Support"
+       and "Online now" rather than a channel name — which is the more honest
+       label anyway: the claim being made is 24/7 support, not a Discord. */
+    support: { name: 'EcomSniper Support', status: 'Online now' },
     question: { time: '02:14', body: 'My listing just got blocked. Anyone seen this before?' },
     replies: [
-      { time: '02:16', body: 'Seen it — it is the category, not the listing. Fix is two clicks.', role: 'EcomSniper team' },
+      { time: '02:16', body: 'Seen it — it is the category, not the listing. Fix is two clicks.', role: 'EcomSniper Support' },
       { time: '02:17', body: 'Same thing happened to me last week. That fixed it.', role: 'Member' },
     ],
     typing: 'Two more members replying',
     call: {
       title: 'Weekly live call',
       body: 'Ask anything, live, with the people who built the tool.',
-      /* Real photographs only, and every one already on this site: both
-         founders from section 10 and one member from the interviews in 04b.
-         No invented names — that member is not named in `PROOF.videos`
-         either, so the pile is decorative to assistive tech and the strip
-         carries the words.
+      /* Overlapping initial discs, as the live site draws them: four circles
+         in the four signal tones, ringed in the card's own ground, running
+         into the member figure.
 
-         `at` is the crop, hand-set per image. The interview thumbnails are
-         16:9 with the face right of centre at slightly different heights, so
-         one shared `object-position` puts at least one of them off-centre.
-         The overflow chip is the member figure the section already claims,
-         not a seat count for a call nobody has counted. */
-      faces: [
-        { key: 'founder-sammy', from: 'people', at: '50% 32%' },
-        { key: 'founder-marc', from: 'people', at: '50% 28%' },
-        { key: 'thumb-21-year-old-1600-month', from: 'video', at: '78% 26%' },
+         The initials are real members' — Aldair, Samuele, Manor and Lynx all
+         review the community by name in `PROOF.reviews`. The live site's
+         fourth disc is a K that belongs to nobody, and a made-up initial is a
+         made-up member.
+
+         Tones are assigned in the page's usual order. The glyph colour comes
+         from `toneOf`, not from the live site: it puts white on all four, and
+         white on the green and the gold misses even the 3:1 non-text bar. */
+      initials: [
+        { letter: 'A', tone: 'blue' },
+        { letter: 'S', tone: 'red' },
+        { letter: 'M', tone: 'green' },
+        { letter: 'L', tone: 'gold' },
       ],
-      overflow: '+400',
+      overflow: '400+',
     },
     caption: 'An illustration of how a question gets answered — not a capture of a real conversation.',
   },
