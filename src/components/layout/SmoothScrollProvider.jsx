@@ -38,7 +38,7 @@ export default function SmoothScrollProvider({ children }) {
     };
   }, []);
 
-  // Same-page anchors ("#faq", "/#pricing") are routed through Lenis.
+  // Same-page anchors ("#faq", "/#training") are routed through Lenis.
   useEffect(() => {
     const onClick = (event) => {
       // Ignore modified clicks — the visitor wants a new tab or a download.

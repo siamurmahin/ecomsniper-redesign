@@ -32,7 +32,7 @@ import { HERO_READY_EVENT, isHeroReady } from '../../lib/heroReady';
 /**
  * A deep link has to find its target immediately.
  *
- * `/#pricing` scrolls on mount, and a target that has not rendered yet is a
+ * `/#training` scrolls on mount, and a target that has not rendered yet is a
  * target the router cannot find — the page would silently stay at the top.
  * Deferring is a load-time optimisation for the common case; correctness for
  * the deep-link case is worth more than the frame it costs.
