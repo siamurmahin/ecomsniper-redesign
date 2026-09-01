@@ -86,26 +86,33 @@ export default function PricingPreviewSection({ showHeading = true }) {
                 />
 
                 <div className="relative flex flex-1 flex-col">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="font-display text-xl font-extrabold tracking-tight">
-                        {plan.name}
-                      </h3>
-                      <p
-                        className={`mt-1.5 text-sm leading-snug ${
-                          plan.featured ? 'text-muted-dark' : 'text-muted'
-                        }`}
-                      >
-                        {plan.summary}
-                      </p>
-                    </div>
+                  {/* The kicker sits above the name, the way the client's own
+                      cards read it: it says which buyer this card is for
+                      before the name says what it is called. Only the
+                      recommended one is filled — three filled chips and none
+                      of them leads. */}
+                  {plan.badge && (
+                    <span
+                      className={`mb-4 w-fit rounded-full px-3 py-1 font-label text-[0.6rem] uppercase tracking-[0.14em] ${
+                        plan.featured
+                          ? 'bg-accent text-paper'
+                          : `border bg-white ${tone.ring} ${tone.text}`
+                      }`}
+                    >
+                      {plan.badge}
+                    </span>
+                  )}
 
-                    {plan.badge && (
-                      <span className="shrink-0 rounded-full bg-accent px-3 py-1 font-label text-[0.6rem] uppercase tracking-[0.14em] text-paper">
-                        {plan.badge}
-                      </span>
-                    )}
-                  </div>
+                  <h3 className="font-display text-xl font-extrabold tracking-tight">
+                    {plan.name}
+                  </h3>
+                  <p
+                    className={`mt-1.5 text-sm leading-snug ${
+                      plan.featured ? 'text-muted-dark' : 'text-muted'
+                    }`}
+                  >
+                    {plan.summary}
+                  </p>
 
                   {/* The price sits on its own plate. It is the one thing on
                       the card the reader came for, so it is not left as a

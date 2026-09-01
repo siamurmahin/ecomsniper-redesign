@@ -10,10 +10,18 @@
 export const SITE = {
   name: 'EcomSniper',
   domain: 'https://ecomsniper.io',
-  // App links live on a separate host; kept here so a change is one edit.
-  signupUrl: 'https://app.ecomsniper.io/register',
-  loginUrl: 'https://app.ecomsniper.io/login',
-  discordUrl: 'https://discord.gg/ecomsniper',
+  /* Checked against the live site on 1 Sep 2026. All three were wrong,
+     and all three were dead:
+
+     - signup and login sat on app.ecomsniper.io, which does not resolve
+       at all. Every primary CTA on this site pointed at nothing. The real
+       ones are on the main host.
+     - the Discord invite was discord.gg/ecomsniper, which is not a
+       server. discord.gg answers 200 for any code and renders an invalid
+       invite page, so it looked alive to a link checker. */
+  signupUrl: 'https://ecomsniper.io/register',
+  loginUrl: 'https://ecomsniper.io/login',
+  discordUrl: 'https://discord.gg/DGkSJ5QZww',
   trustpilotUrl: 'https://uk.trustpilot.com/review/ecomsniper.io',
 
   /* The guarantee, in one place. "On the monthly plan" is not decoration: the
@@ -948,13 +956,17 @@ export const PRICING = {
   plans: [
     {
       id: 'monthly',
-      name: 'Monthly',
+      /* The plan names were ours, not theirs. A buyer who reads "Monthly"
+         here and is charged for "Dropship Mastery" has been handed a
+         reason to doubt the page. These are the client's own names, and
+         the kickers are their own labels off the same cards. */
+      name: 'Dropship Mastery',
+      badge: 'Most popular',
       priceLabel: '$97',
       priceSuffix: 'first month',
       thereafter: 'then $199 a month',
       featured: true,
-      badge: 'Recommended',
-      summary: 'Everything, with a guarantee behind it.',
+      summary: 'For the one starting from zero.',
       features: [
         'List up to 3,000 products a month',
         'Sniper Chrome Extension, to list and track with automation',
@@ -968,7 +980,8 @@ export const PRICING = {
     },
     {
       id: 'credits',
-      name: '10K credits bundle',
+      name: '10K Credits Bundle',
+      badge: 'Volume deal',
       /* `was` and `saving` are the client's own, off ecomsniper.io/pricing on
          1 Sep 2026: the bundle is listed there at $597 struck through to $499,
          "you save $98". This site was showing only the $499 and dropping a
@@ -984,24 +997,30 @@ export const PRICING = {
       thereafter: 'works out at $166.33 a month',
       recurring: 'Recurring 3-month billing cycle',
       featured: false,
-      summary: 'For sellers who already know the volume they need.',
+      summary: 'For the one ready to list in volume.',
       features: [
         '10,000 credits (9,000 plus a 1,000 bonus)',
         'List 10,000 products',
-        'Same software, same training',
-        'Same community access',
+        // Named, not summarised. "Same software, same training" is our
+        // shorthand; a buyer comparing the two pages wants the same list.
+        'Sniper Chrome Extension, to list and track with automation',
+        'The full Dropship Mastery course',
+        'Private community',
       ],
       guarantee: 'Final sale, no refunds.',
-      cta: { label: 'Choose credits', href: SITE.signupUrl },
+      cta: { label: 'Get the 10K bundle', href: SITE.signupUrl },
     },
     {
       id: 'enterprise',
-      name: 'Enterprise',
+      name: 'Monthly Unlimited',
+      badge: 'Enterprise',
       priceLabel: '$2,000',
       priceSuffix: 'a month',
-      thereafter: 'unlimited listings',
+      // Was "unlimited listings", which is the first feature in the list
+      // below, not a billing term. Their card says billed monthly.
+      thereafter: 'billed monthly',
       featured: false,
-      summary: 'We set it up and run alongside you.',
+      summary: 'For the one building at full scale.',
       features: [
         'Unlimited listings',
         'The full Dropship Mastery course',
@@ -1012,7 +1031,10 @@ export const PRICING = {
         'We will do everything until you build a successful business',
       ],
       guarantee: 'Final sale, no refunds.',
-      cta: { label: 'Talk to us', href: '/contact' },
+      /* Was a contact form. Enterprise is not a sales call on their page:
+         the button buys it, like the other two. Sending a buyer to a form
+         for a plan they can purchase loses the sale. */
+      cta: { label: 'Get the Enterprise plan', href: SITE.signupUrl },
     },
   ],
   /* The /pricing header. It lived in the page component as literal JSX,
