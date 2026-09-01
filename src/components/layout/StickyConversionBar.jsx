@@ -100,7 +100,7 @@ export default function StickyConversionBar() {
           thousand pixels of bar to carry about three hundred of content, and
           read as a toolbar rather than as an offer. */}
       <div className="site-shell pb-3 sm:pb-4">
-        <div className="relative ms-auto flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-ink-line bg-ink/95 py-2.5 pe-2.5 ps-4 text-paper shadow-float backdrop-blur-xl sm:w-fit sm:gap-6 sm:ps-5">
+        <div className="relative ms-auto flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-ink-line bg-ink/95 py-2.5 pe-2.5 ps-4 text-paper shadow-float backdrop-blur-xl sm:w-fit sm:gap-6 sm:ps-5">
           {/* The brand edge, the same mark the plan cards and the dialogs
               carry. It is what makes this the site's own furniture rather
               than a floating advert. */}

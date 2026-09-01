@@ -2,7 +2,10 @@ import { Link } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
-import { FOOTER, SITE } from '../../data/siteContent';
+import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
+
+/** The Trustpilot row of the proof bar, so the score is stated once. */
+const REVIEWS = PROOF_BAR.items.find((item) => item.href === SITE.trustpilotUrl);
 
 /** Renders an internal path as a router link and anything else as an anchor. */
 function FooterLink({ href, label }) {
@@ -153,23 +156,30 @@ export default function SiteFooter() {
                 ))}
               </ul>
 
+              {/* Five filled stars sat here while the actual score is 4.7.
+                  Nobody wrote that as a claim — it was a decoration that
+                  happened to state a number — which is exactly how an
+                  overstated review score gets onto a page. The real figure and
+                  the real count now come from the proof bar's own row. */}
               <a
                 href={SITE.trustpilotUrl}
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2 text-xs font-medium text-muted-dark transition-colors duration-300 hover:border-paper/40 hover:text-paper"
+                aria-label={FOOTER.reviewsCta}
+                className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2 text-xs text-muted-dark transition-colors duration-300 hover:border-paper/40 hover:text-paper"
               >
-                <span className="text-ebay-green" aria-hidden="true">
-                  ★★★★★
-                </span>
-                {FOOTER.reviewsCta}
+                <Icon name="star" className="size-3.5 shrink-0 text-signal-gold" />
+                <span className="font-semibold text-paper">{REVIEWS.value}</span>
+                on Trustpilot
+                <span className="text-paper/40">·</span>
+                {REVIEWS.detail}
               </a>
             </div>
           </div>
         </div>
 
-        <hr className="mt-14 h-px border-0 bg-ink-line" />
+        <hr className="relative mt-14 h-px border-0 bg-ink-line" />
 
-        <div className="mt-6 flex flex-col gap-5 text-xs leading-relaxed text-muted-dark lg:flex-row lg:items-start lg:justify-between">
+        <div className="relative mt-6 flex flex-col gap-5 text-xs leading-relaxed text-muted-dark lg:flex-row lg:items-start lg:justify-between">
           <p className="max-w-3xl">{FOOTER.disclaimer}</p>
           <p className="shrink-0">© {new Date().getFullYear()} EcomSniper. All rights reserved.</p>
         </div>
