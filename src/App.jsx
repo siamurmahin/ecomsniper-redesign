@@ -15,7 +15,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import DesignLabPage from './pages/DesignLabPage';
 import { ScrollTrigger } from './lib/motion';
 import { dismissPreloader } from './lib/preloader';
-import { scrollToTarget } from './lib/smoothScroll';
+import { getLenis, scrollToTarget } from './lib/smoothScroll';
 
 /**
  * Restores scroll position on navigation and honours in-page hash targets.
@@ -36,8 +36,28 @@ function RouteScrollManager() {
         return;
       }
     }
-    // New route: land at the top without an animation across the whole page.
+    /*
+     * New route: land at the top without an animation across the whole page.
+     *
+     * Twice, and the second time after a frame. Every page mounts its content
+     * one frame late through DeferUntilPainted, so at this moment the new
+     * document is only as tall as its hero — Lenis measures that, clamps its
+     * position to it, and then the rest of the page appears underneath a
+     * scroll position that was never reset. Arriving from the foot of the
+     * homepage, that put the reader at the bottom of the page they had just
+     * opened.
+     *
+     * The second pass re-measures first, because a stale document height is
+     * what made the first one wrong.
+     */
     scrollToTarget(0, { immediate: true });
+
+    const frame = requestAnimationFrame(() => {
+      getLenis()?.resize();
+      scrollToTarget(0, { immediate: true });
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, [pathname, hash]);
 
   useEffect(() => {

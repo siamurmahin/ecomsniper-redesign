@@ -592,6 +592,12 @@
   }
   .mouse-cue .mouse-wheel {
     animation: mouse-wheel-run 1.9s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    /* This animates a child of an SVG, which most mobile browsers cannot
+       promote to its own layer — so it repaints the icon every frame, for
+       as long as the page is open, whether or not the cue is on screen.
+       will-change gives the compositor the hint it needs to keep the
+       repaint off the main thread where it can. */
+    will-change: transform, opacity;
   }
 
   /* Slow enough that it is never caught moving: light on a surface, not an

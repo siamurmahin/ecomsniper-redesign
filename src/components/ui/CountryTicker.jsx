@@ -43,7 +43,10 @@ export default function CountryTicker({ onInk = false, className = '' }) {
         aria-hidden="true"
         width={64}
         height={64}
-        loading="lazy"
+        /* Not lazy. Sixteen 16px flags weigh almost nothing, and the
+           IntersectionObserver behind lazy loading has to re-test each one
+           against the viewport while the row is moving — paying observer work
+           every frame to defer a few kilobytes. */
         className="size-4 rounded-[3px] object-contain"
       />
       {country.name}
@@ -66,12 +69,32 @@ export default function CountryTicker({ onInk = false, className = '' }) {
       {/* Faded at both edges so the flags arrive and leave rather than being cut
           off against a hard border. The left fade is shorter: the row starts
           against a label rather than against open space. */}
-      <div className="overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_5%,black_88%,transparent)]">
+      {/* Two painted overlays rather than a mask on the scrolling box.
+
+          A mask has to be composited against its content, so a mask over a
+          layer that moves every frame is re-composited every frame — which a
+          desktop GPU absorbs and a phone does not. These are two static
+          gradients sitting on top: painted once, and they never touch the
+          moving layer at all. */}
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r ${
+          onInk ? 'from-ink' : 'from-paper'
+        } to-transparent`}
+      />
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l ${
+          onInk ? 'from-ink' : 'from-paper'
+        } to-transparent`}
+      />
+
+      <div className="overflow-hidden">
         {/* Two identical copies translated by exactly half the pair's width, so
             the second lands where the first began and the loop has no seam.
             Paused on hover for anyone who wants to actually read a name. */}
         <div
-          className={`micro-label flex w-max animate-marquee-drift hover:[animation-play-state:paused] ${textTone}`}
+          className={`micro-label flex w-max animate-marquee-drift will-change-transform [backface-visibility:hidden] hover:[animation-play-state:paused] ${textTone}`}
           style={{ '--marquee-duration': '38s' }}
         >
           <span className="flex shrink-0">{countries.map(item)}</span>

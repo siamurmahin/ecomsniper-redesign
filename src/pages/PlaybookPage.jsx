@@ -165,9 +165,18 @@ export default function PlaybookPage() {
             <div
               data-reveal
               data-reveal-group="playbook-form"
-              className="rounded-3xl border border-hairline bg-white p-6 shadow-lift sm:p-8 lg:sticky lg:top-28"
+              className="relative overflow-hidden rounded-3xl bg-ink p-6 text-paper shadow-float sm:p-8 lg:sticky lg:top-28"
             >
-              <form onSubmit={onSubmit} noValidate>
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-[3px] bg-[image:var(--gradient-brand)]"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-accent/25 blur-3xl"
+              />
+
+              <form onSubmit={onSubmit} noValidate className="relative">
                 <h2 className="text-xl font-extrabold tracking-tight sm:text-2xl">
                   Where should we send it?
                 </h2>
@@ -187,11 +196,11 @@ export default function PlaybookPage() {
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
                   aria-describedby="playbook-smallprint"
-                  className="mt-2 w-full rounded-2xl border border-hairline bg-paper px-4 py-3.5 text-base outline-none transition-colors duration-200 placeholder:text-muted/60 focus:border-ink"
+                  className="mt-2 w-full rounded-2xl border border-ink-line bg-paper/[0.06] px-4 py-3.5 text-base text-paper outline-none transition-colors duration-200 placeholder:text-muted-dark focus:border-accent-soft"
                 />
 
                 {status === 'error' && (
-                  <p role="alert" className="mt-3 text-sm text-signal-red-deep">
+                  <p role="alert" className="mt-3 text-sm text-signal-red-soft">
                     That did not send. Try again, or email us and we will pass it on manually.
                   </p>
                 )}
@@ -206,10 +215,10 @@ export default function PlaybookPage() {
 
                 <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
                   {PLAYBOOK.reassurances.map((item) => (
-                    <li key={item} className="flex items-center gap-1.5 text-xs text-muted">
+                    <li key={item} className="flex items-center gap-1.5 text-xs text-muted-dark">
                       <Icon
                         name="check"
-                        className="size-3 shrink-0 text-signal-green-deep"
+                        className="size-3 shrink-0 text-signal-green-soft"
                         aria-hidden="true"
                       />
                       {item}
@@ -217,12 +226,12 @@ export default function PlaybookPage() {
                   ))}
                 </ul>
 
-                <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted">
+                <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-dark">
                   <Icon name="shield" className="mt-px size-3.5 shrink-0" aria-hidden="true" />
                   {PLAYBOOK.privacy}
                 </p>
 
-                <p id="playbook-smallprint" className="mt-3 text-xs leading-relaxed text-muted">
+                <p id="playbook-smallprint" className="mt-3 text-xs leading-relaxed text-muted-dark">
                   {PLAYBOOK.smallprint}
                 </p>
               </form>
