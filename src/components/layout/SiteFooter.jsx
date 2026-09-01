@@ -5,6 +5,24 @@ import Icon from '../ui/Icon';
 import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
 
 /**
+ * The oversized wordmark that signs the page off.
+ *
+ * Outlined rather than filled, so it reads as a watermark until a pointer
+ * finds it; each letter then fills with its own signal colour and lifts. One
+ * tone per letter, cycled — the same rule every enumerated set on this site
+ * follows.
+ *
+ * Literal classes, because Tailwind compiles what it can see: a colour built
+ * from an index would produce no stylesheet output at all.
+ */
+const LETTER_COLOUR = [
+  'text-signal-blue',
+  'text-signal-red',
+  'text-signal-green',
+  'text-signal-gold',
+];
+
+/**
  * Each platform's own colour, on the mark only.
  *
  * Written as literal classes rather than built from the link's icon name:
@@ -192,6 +210,33 @@ export default function SiteFooter() {
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Decorative, and hidden from assistive tech: the name is already
+            read out by the logo at the top of this footer, and ten separate
+            letters would be announced as ten separate things. */}
+        <div
+          aria-hidden="true"
+          className="mt-16 flex select-none justify-between whitespace-nowrap font-display text-[clamp(2.25rem,10.5vw,8rem)] font-extrabold leading-[0.86] tracking-[-0.02em]"
+        >
+          {[...'ECOMSNIPER'].map((letter, index) => (
+            <span
+              key={`${letter}-${index}`}
+              className="group/letter relative inline-block transition-transform duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:scale-110"
+            >
+              <span className="block text-transparent [-webkit-text-stroke:1.5px_rgb(251_251_250_/_0.22)]">
+                {letter}
+              </span>
+
+              <span
+                className={`absolute inset-0 block opacity-0 transition-opacity duration-300 group-hover/letter:opacity-100 ${
+                  LETTER_COLOUR[index % LETTER_COLOUR.length]
+                }`}
+              >
+                {letter}
+              </span>
+            </span>
+          ))}
         </div>
 
         <hr className="relative mt-14 h-px border-0 bg-ink-line" />
