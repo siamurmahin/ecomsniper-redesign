@@ -1,2 +1,9 @@
+# The live site serves the playbook at /free-play-book and this rebuild uses
+# /free-playbook. That old URL is published — it is the link in the description
+# of the book's own summary video on the channel — so it has to keep working
+# rather than 404 the moment this site replaces the old one.
+# Must come before the SPA fallback: the first matching rule wins.
+/free-play-book  /free-playbook  301!
+
 # SPA fallback for Netlify-style hosts: every route resolves to index.html.
 /*  /index.html  200

@@ -282,7 +282,20 @@ export const PROOF = {
     { id: 'oEjX-90LJ8w', figure: '$100/day', figureWho: '17-year-old', title: '17-Year-Old Reveals the Secret to Making $100/Day Dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-17-year-old-100-day', views: '1.8K' },
     { id: 'SosyiNFvbVc', figure: '$1,600/month', figureWho: '21-year-old', title: 'Learn how this 21 year old makes $1600 a month dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-21-year-old-1600-month' },
     { id: '2IFJl0gzbpg', figure: '$18K/month', figureWho: 'Beginner', title: 'How This Beginner Makes $18K/Month by Dropshipping from Amazon', guest: 'Member interview', thumb: 'thumb-beginner-18k-month', views: '1.2K' },
-    { id: 'AIy19fmMutw', figure: '300K sales', figureWho: 'Ex-security guard', title: 'From Broke Security Guard to 300K Sales on eBay', guest: 'Member story', thumb: 'thumb-security-guard-300k', views: '958' },
+    /* NOT a member story, despite where it sits. Checked on the channel on
+       1 Sep 2026: the real title ends "— Full Summary of The Invisible Store",
+       it is on Sammy's own channel, and its description links to the free
+       playbook. It is the founder summarising his own book.
+
+       So it carries no `figure`. The 300K in the title belongs to the book's
+       story and is attributed to nobody, and a rail of member results is the
+       last place to put an unattributed number. The `guest` line now says who
+       is actually speaking.
+
+       It still sits among twelve videos introduced as "members on what
+       actually happened", which it is not. Whether it belongs in this set at
+       all is the client's call, not a labelling fix. */
+    { id: 'AIy19fmMutw', title: 'From Broke Security Guard to 300K Sales on eBay — Full Summary of The Invisible Store', guest: 'Sammy, co-founder', thumb: 'thumb-security-guard-300k', views: '958' },
     { id: 'San_W1iQByc', figure: '$3,000/month', figureWho: 'College student', title: 'How This College Student Earns $3,000/Month From Dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-college-student-3000-month', views: '941' },
     { id: 'h0CgxvLsgXw', figure: '$800/week', figureWho: 'Work-from-home dad', title: 'Work-from-Home Dad Makes $800/Week with eBay Dropshipping', guest: 'Member interview', thumb: 'thumb-wfh-dad-800-week', views: '842' },
     { id: 'okyFZuQ0e1c', figure: '$200 on day two', figureWho: 'New starter', title: 'Made $200 Profit on My Second Day Dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-200-profit-second-day', views: '800' },

@@ -12,6 +12,17 @@
   # unset, Netlify picks its own default, which drifts between deploys.
   NODE_VERSION = "22"
 
+# The playbook's published URL. The live site serves it at /free-play-book and
+# this rebuild uses /free-playbook; the old one is the link in the description
+# of the book's own summary video, so it must not 404 when this replaces that
+# site. Declared before the SPA fallback because the first match wins, and
+# forced so it beats the catch-all below.
+[[redirects]]
+  from = "/free-play-book"
+  to = "/free-playbook"
+  status = 301
+  force = true
+
 # SPA fallback. `public/_redirects` says the same thing and ships in the build,
 # but that file is easy to lose in a public/ clear-out and the failure it
 # causes is a 404 on every route except "/" — worth stating twice.

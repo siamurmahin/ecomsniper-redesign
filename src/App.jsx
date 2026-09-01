@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
 import SiteFooter from './components/layout/SiteFooter';
@@ -91,6 +91,10 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/free-playbook" element={<PlaybookPage />} />
+          {/* The live site's URL for the same page. A 301 in netlify.toml and
+              public/_redirects handles it at the edge; this covers local dev and
+              any host that ignores those files. */}
+          <Route path="/free-play-book" element={<Navigate to="/free-playbook" replace />} />
           {/* Internal comparison route; remove with the page once a direction is picked. */}
           <Route path="/design-lab" element={<DesignLabPage />} />
           <Route path="*" element={<NotFoundPage />} />
