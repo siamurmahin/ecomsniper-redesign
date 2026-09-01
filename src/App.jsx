@@ -5,6 +5,7 @@ import SiteHeader from './components/layout/SiteHeader';
 import SiteFooter from './components/layout/SiteFooter';
 import StickyConversionBar from './components/layout/StickyConversionBar';
 import ExitIntentOffer from './components/layout/ExitIntentOffer';
+import ConsultOffer from './components/layout/ConsultOffer';
 import BackToTop from './components/layout/BackToTop';
 import HomePage from './pages/HomePage';
 import PricingPage from './pages/PricingPage';
@@ -106,6 +107,7 @@ export default function App() {
       {/* Conversion furniture, shared across every route. */}
       <StickyConversionBar />
       <BackToTop />
+      <ConsultOffer />
       <ExitIntentOffer />
     </SmoothScrollProvider>
   );

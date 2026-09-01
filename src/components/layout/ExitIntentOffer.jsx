@@ -2,13 +2,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import { EXIT_INTENT } from '../../data/siteContent';
 import { useModalLayer } from '../../hooks/useModalLayer';
+import { alreadyInterrupted, claimInterruption } from '../../lib/interruptions';
 
 /**
  * Exit-intent capture for the visitors who will not buy today — the page
  * otherwise had one exit, pay now, and 95% of traffic left with no way back.
  *
- * Restrained on purpose: desktop pointer-leave only, once per visitor via
- * localStorage, dismissible with Escape or a click outside.
+ * Restrained on purpose: desktop pointer-leave only, dismissible with Escape
+ * or a click outside, and it shares one interruption per visitor with the
+ * consultation dialog — see lib/interruptions.
  */
 export default function ExitIntentOffer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,14 +23,9 @@ export default function ExitIntentOffer() {
   }, []);
 
   useEffect(() => {
-    // Never shown twice, and never on touch devices.
-    let alreadySeen = false;
-    try {
-      alreadySeen = localStorage.getItem(EXIT_INTENT.storageKey) === '1';
-    } catch {
-      alreadySeen = true; // storage blocked — fail closed rather than nag
-    }
-    if (alreadySeen || window.matchMedia('(pointer: coarse)').matches) return undefined;
+    // Never twice, never on touch, and never to someone already stopped once.
+    if (alreadyInterrupted(EXIT_INTENT.storageKey)) return undefined;
+    if (window.matchMedia('(pointer: coarse)').matches) return undefined;
 
     // Give the visitor a fair chance to read the page first.
     let armed = false;
@@ -49,11 +46,7 @@ export default function ExitIntentOffer() {
       if (performance.now() - lastScrollAt < 250) return;
       setIsOpen(true);
       previouslyFocused.current = document.activeElement;
-      try {
-        localStorage.setItem(EXIT_INTENT.storageKey, '1');
-      } catch {
-        /* storage unavailable — showing once per session is acceptable */
-      }
+      claimInterruption(EXIT_INTENT.storageKey);
       document.documentElement.removeEventListener('mouseleave', onPointerLeave);
     };
 

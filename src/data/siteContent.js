@@ -45,6 +45,10 @@ export const SITE = {
   startCta: { label: 'Start your eBay business', href: SIGNUP_URL },
   priceFrom: 'From $97 for your first month',
 
+  /* Said wherever an email is asked for. It is a promise about handling real
+     people's data, so it exists once. */
+  privacyNote: 'Your information is 100% secure and will never be shared.',
+
   /* The four things a member gets, in the order they reach them. Section
      14 and the /pricing header both state these; they were two copies of
      one claim, which is the fault this file exists to prevent. */
@@ -1236,6 +1240,45 @@ export const STICKY_CTA = {
   cta: { label: 'Start now', href: SITE.signupUrl },
 };
 
+/* The consultation offer.
+
+   It opens when section 07 comes into view — the point where the page stops
+   talking about the reader and starts talking about the software, which is
+   where someone either leans in or starts wondering whether any of this
+   applies to them.
+
+   The wording deliberately promises a reply and nothing else. No response
+   time, no named person, no "audit" — those are commitments the business has
+   to keep to real people who hand over an email, and none of them is stated
+   anywhere on the client's own site. Tighten the copy here once the client
+   confirms who answers these and how quickly. */
+
+export const CONSULT = {
+  eyebrow: 'Free, no card',
+  title: 'Not sure it fits your situation?',
+  body: 'Tell us where you are starting from — a full time job, no experience, a store that has stalled — and we will come back with a straight answer on whether this is right for you.',
+  points: [
+    'A straight answer, not a sales call',
+    'What your first month would realistically look like',
+    'Whether EcomSniper is wrong for you',
+  ],
+  fieldLabel: 'Email address',
+  placeholder: 'you@example.com',
+  cta: 'Get a free consultation',
+  dismiss: 'No thanks',
+  /* The same promise the playbook page makes, read from one place. */
+  privacy: SITE.privacyNote,
+  done: {
+    title: 'Got it.',
+    body: 'We will read what you sent and reply to that address. Nothing else lands in your inbox.',
+  },
+  error: 'That did not send. Try again, or email us directly.',
+  /* Section 07. The dialog waits for it rather than for a scroll depth: a
+     percentage is a different place on a phone and on a desktop. */
+  triggerId: 'how-it-works',
+  storageKey: 'ecomsniper:consult-seen',
+};
+
 export const EXIT_INTENT = {
   eyebrow: 'Before you go',
   title: 'Take the playbook with you.',
@@ -1266,7 +1309,7 @@ export const PLAYBOOK = {
      wherever the form is, and it means the endpoint behind
      `VITE_PLAYBOOK_ENDPOINT` cannot sell or pass on the address. */
   reassurances: ['Ten pages', 'No spam', 'No credit card', 'Instant access'],
-  privacy: 'Your information is 100% secure and will never be shared.',
+  privacy: SITE.privacyNote,
 };
 
 /* This rebuild ships /, /pricing and /free-playbook. The other footer paths

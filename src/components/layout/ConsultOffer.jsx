@@ -1,0 +1,260 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Icon from '../ui/Icon';
+import { CONSULT } from '../../data/siteContent';
+import { useModalLayer } from '../../hooks/useModalLayer';
+import { alreadyInterrupted, claimInterruption } from '../../lib/interruptions';
+
+/**
+ * The consultation offer.
+ *
+ * Opens once a visitor reaches section 07 — the point where the page stops
+ * talking about them and starts talking about the software, which is where
+ * someone either leans in or begins wondering whether any of it applies to
+ * them. That is the question this answers, so it is asked there rather than at
+ * a scroll percentage: a percentage is a different place on a phone than on a
+ * desktop, and this one has to land on a specific argument.
+ *
+ * Once per visitor, and it shares one interruption with the exit-intent
+ * dialog, so nobody is stopped twice in a visit.
+ */
+export default function ConsultOffer() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | submitting | done | error
+  const [email, setEmail] = useState('');
+  const dialogRef = useRef(null);
+  const previouslyFocused = useRef(null);
+
+  const endpoint = import.meta.env.VITE_CONSULT_ENDPOINT;
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    previouslyFocused.current?.focus?.();
+  }, []);
+
+  useEffect(() => {
+    if (alreadyInterrupted(CONSULT.storageKey)) return undefined;
+
+    let observer;
+    let openTimer;
+
+    const open = () => {
+      previouslyFocused.current = document.activeElement;
+      claimInterruption(CONSULT.storageKey);
+      setIsOpen(true);
+    };
+
+    /*
+     * The trigger section is mounted a frame after the hero by
+     * DeferUntilPainted, so it does not exist when this effect runs. Looking
+     * it up once and keeping the result is exactly the bug the sticky bar had:
+     * the lookup returns null, stays null, and the thing never fires. Poll
+     * until it appears, then stop polling.
+     */
+    const pollStartedAt = performance.now();
+    const findTarget = window.setInterval(() => {
+      const target = document.getElementById(CONSULT.triggerId);
+
+      // Give up rather than poll forever on a page that has no such section.
+      if (!target) {
+        if (performance.now() - pollStartedAt > 15000) window.clearInterval(findTarget);
+        return;
+      }
+
+      window.clearInterval(findTarget);
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          // A beat after it lands, so the dialog does not race the section in.
+          openTimer = window.setTimeout(open, 900);
+        },
+        // A third of the way in: reached and being read, not merely clipped.
+        { threshold: 0, rootMargin: '-33% 0px -33% 0px' }
+      );
+
+      observer.observe(target);
+    }, 200);
+
+    return () => {
+      window.clearInterval(findTarget);
+      window.clearTimeout(openTimer);
+      observer?.disconnect();
+    };
+  }, []);
+
+  useModalLayer(isOpen, { onClose: close, dialogRef });
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    if (!email || status === 'submitting') return;
+
+    setStatus('submitting');
+
+    // No endpoint configured yet: succeed locally so the flow is demonstrable,
+    // and log loudly so it is obvious this still needs wiring before launch.
+    // Same contract as the playbook form, deliberately.
+    if (!endpoint) {
+      console.warn('[consult] VITE_CONSULT_ENDPOINT is not set — submission not sent.');
+      setStatus('done');
+      return;
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'consultation' }),
+      });
+      setStatus(response.ok ? 'done' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] grid place-items-center overflow-y-auto bg-ink/60 p-5 backdrop-blur-sm"
+      onClick={(event) => event.target === event.currentTarget && close()}
+    >
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="consult-title"
+        tabIndex={-1}
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-ink text-paper shadow-float"
+        style={{ animation: 'consult-in 520ms var(--ease-out-expo) both' }}
+      >
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-[3px] bg-[image:var(--gradient-brand)]"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-accent/25 blur-3xl"
+        />
+
+        {/* A form has to be abandonable without hunting for the backdrop. */}
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-ink-line text-muted-dark transition-colors duration-200 hover:border-paper/40 hover:text-paper"
+        >
+          <Icon name="close" className="size-3" aria-hidden="true" />
+        </button>
+
+        <div className="relative p-7 sm:p-9">
+          {status === 'done' ? (
+            <div>
+              <span
+                aria-hidden="true"
+                className="grid size-11 place-items-center rounded-full bg-signal-green text-ink"
+              >
+                <Icon name="check" className="size-5" />
+              </span>
+
+              <h2 id="consult-title" className="mt-5 font-display text-2xl font-extrabold">
+                {CONSULT.done.title}
+              </h2>
+
+              <p className="mt-3 text-[0.95rem] leading-relaxed text-muted-dark">
+                {CONSULT.done.body}
+              </p>
+
+              <button type="button" onClick={close} className="btn-on-ink mt-7">
+                Back to the page
+              </button>
+            </div>
+          ) : (
+            <>
+              <p className="section-eyebrow section-eyebrow-on-ink">{CONSULT.eyebrow}</p>
+
+              <h2
+                id="consult-title"
+                className="mt-3 font-display text-[length:var(--text-section)] font-extrabold leading-[1.05]"
+              >
+                {CONSULT.title}
+              </h2>
+
+              <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-dark">{CONSULT.body}</p>
+
+              <ul className="mt-6 flex flex-col gap-2.5">
+                {CONSULT.points.map((point) => (
+                  <li key={point} className="flex items-start gap-2.5 text-[0.9rem] leading-snug">
+                    <span
+                      aria-hidden="true"
+                      className="mt-px grid size-[18px] shrink-0 place-items-center rounded-full bg-signal-green text-ink"
+                    >
+                      <Icon name="check" className="size-2.5" />
+                    </span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+
+              <form onSubmit={onSubmit} noValidate className="mt-7">
+                <label htmlFor="consult-email" className="block text-sm font-medium">
+                  {CONSULT.fieldLabel}
+                </label>
+
+                <div className="mt-2.5 flex flex-col gap-2.5 sm:flex-row">
+                  <input
+                    id="consult-email"
+                    name="email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    inputMode="email"
+                    placeholder={CONSULT.placeholder}
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="w-full rounded-full border border-ink-line bg-paper/[0.06] px-5 py-3 text-sm text-paper placeholder:text-muted-dark focus:border-accent-soft focus:outline-none"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={status === 'submitting'}
+                    className="btn-on-ink shrink-0 disabled:opacity-60"
+                    data-cta-intent="consult-submit"
+                  >
+                    {status === 'submitting' ? 'Sending…' : CONSULT.cta}
+                  </button>
+                </div>
+
+                {status === 'error' && (
+                  <p role="alert" className="mt-3 text-xs text-signal-red-soft">
+                    {CONSULT.error}
+                  </p>
+                )}
+
+                <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-dark">
+                  <Icon name="shield" className="mt-px size-3.5 shrink-0" aria-hidden="true" />
+                  {CONSULT.privacy}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={close}
+                  className="mt-4 text-xs text-muted-dark underline-offset-4 transition-colors duration-200 hover:text-paper hover:underline"
+                >
+                  {CONSULT.dismiss}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes consult-in {
+          from { opacity: 0; transform: translateY(16px) scale(0.98); }
+          to   { opacity: 1; transform: none; }
+        }
+      `}</style>
+    </div>
+  );
+}
