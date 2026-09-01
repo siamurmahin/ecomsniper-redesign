@@ -4,6 +4,10 @@ import { CONSULT } from '../../data/siteContent';
 import { useModalLayer } from '../../hooks/useModalLayer';
 import { alreadyInterrupted, claimInterruption } from '../../lib/interruptions';
 
+/** Both fields, so the pair cannot drift apart. */
+const FIELD_CLASS =
+  'mt-2.5 w-full rounded-full border border-ink-line bg-paper/[0.06] px-5 py-3 text-sm text-paper placeholder:text-muted-dark focus:border-accent-soft focus:outline-none';
+
 /**
  * The consultation offer.
  *
@@ -20,6 +24,7 @@ import { alreadyInterrupted, claimInterruption } from '../../lib/interruptions';
 export default function ConsultOffer() {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | submitting | done | error
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const dialogRef = useRef(null);
   const previouslyFocused = useRef(null);
@@ -87,7 +92,7 @@ export default function ConsultOffer() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (!email || status === 'submitting') return;
+    if (!name.trim() || !email || status === 'submitting') return;
 
     setStatus('submitting');
 
@@ -104,7 +109,7 @@ export default function ConsultOffer() {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'consultation' }),
+        body: JSON.stringify({ name, email, source: 'consultation' }),
       });
       setStatus(response.ok ? 'done' : 'error');
     } catch {
@@ -196,16 +201,34 @@ export default function ConsultOffer() {
                 ))}
               </ul>
 
-              <form onSubmit={onSubmit} noValidate className="mt-7">
-                <label htmlFor="consult-email" className="block text-sm font-medium">
-                  {CONSULT.fieldLabel}
-                </label>
+              {/* Stacked, not a row. The button's label is five words long, so
+                  beside it the email field collapsed to about 170px — narrower
+                  than the address it was asking for, with the placeholder
+                  clipped before anyone had typed anything. */}
+              <form onSubmit={onSubmit} noValidate className="mt-7 flex flex-col gap-4">
+                <div>
+                  <label htmlFor="consult-name" className="block text-sm font-medium">
+                    {CONSULT.nameLabel}
+                  </label>
 
-                {/* Stacked, not a row. The button's label is five words long,
-                    so beside it the field collapsed to about 170px — narrower
-                    than the address it is asking for, with the placeholder
-                    already clipped before anyone had typed anything. */}
-                <div className="mt-2.5 flex flex-col gap-2.5">
+                  <input
+                    id="consult-name"
+                    name="name"
+                    type="text"
+                    required
+                    autoComplete="name"
+                    placeholder={CONSULT.namePlaceholder}
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    className={FIELD_CLASS}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="consult-email" className="block text-sm font-medium">
+                    {CONSULT.fieldLabel}
+                  </label>
+
                   <input
                     id="consult-email"
                     name="email"
@@ -216,8 +239,11 @@ export default function ConsultOffer() {
                     placeholder={CONSULT.placeholder}
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    className="w-full rounded-full border border-ink-line bg-paper/[0.06] px-5 py-3 text-sm text-paper placeholder:text-muted-dark focus:border-accent-soft focus:outline-none"
+                    className={FIELD_CLASS}
                   />
+                </div>
+
+                <div className="flex flex-col gap-2.5">
 
                   <button
                     type="submit"
@@ -243,7 +269,7 @@ export default function ConsultOffer() {
                 <button
                   type="button"
                   onClick={close}
-                  className="mt-4 text-xs text-muted-dark underline-offset-4 transition-colors duration-200 hover:text-paper hover:underline"
+                  className="self-start text-xs text-muted-dark underline-offset-4 transition-colors duration-200 hover:text-paper hover:underline"
                 >
                   {CONSULT.dismiss}
                 </button>

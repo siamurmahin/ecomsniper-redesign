@@ -1261,12 +1261,18 @@ export const CONSULT = {
      request for a paragraph the form has nowhere to put: the reader is invited
      to explain themselves into a single-line email field. What the email buys
      is the conversation, and that is what this says now. */
-  body: 'Leave your email and we will arrange a free consultation: a straight conversation about where you are starting from and whether this is right for you.',
+  body: 'Leave your name and email and we will arrange a free consultation: a straight conversation about where you are starting from and whether this is right for you.',
   points: [
     'A conversation, not a sales call',
     'What your first month would realistically look like',
     'Whether EcomSniper is wrong for you',
   ],
+  /* Name first, then the address. A consultation is answered by a person
+     writing to a person, and 'Hi there' is a worse first line than a name.
+     Both are required: an address with nobody attached to it is a lead, not
+     a request for a conversation. */
+  nameLabel: 'Full name',
+  namePlaceholder: 'Your name',
   fieldLabel: 'Email address',
   placeholder: 'you@example.com',
   cta: 'Request my free consultation',
