@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Icon from '../ui/Icon';
-import { CONSULT } from '../../data/siteContent';
-import { useModalLayer } from '../../hooks/useModalLayer';
-import { alreadyInterrupted, claimInterruption } from '../../lib/interruptions';
+import { useCallback, useEffect, useRef, useState } from "react";
+import Icon from "../ui/Icon";
+import { CONSULT } from "../../data/siteContent";
+import { useModalLayer } from "../../hooks/useModalLayer";
+import { alreadyInterrupted, claimInterruption } from "../../lib/interruptions";
 
 /** Both fields, so the pair cannot drift apart. */
 const FIELD_CLASS =
-  'mt-2.5 w-full rounded-full border border-ink-line bg-paper/[0.06] px-5 py-3 text-sm text-paper placeholder:text-muted-dark focus:border-accent-soft focus:outline-none';
+  "mt-2.5 w-full rounded-full border border-ink-line bg-paper/[0.06] px-5 py-3 text-sm text-paper placeholder:text-muted-dark focus:border-accent-soft focus:outline-none";
 
 /**
  * The consultation offer.
@@ -23,9 +23,9 @@ const FIELD_CLASS =
  */
 export default function ConsultOffer() {
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState('idle'); // idle | submitting | done | error
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState("idle"); // idle | submitting | done | error
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const dialogRef = useRef(null);
   const previouslyFocused = useRef(null);
 
@@ -61,7 +61,8 @@ export default function ConsultOffer() {
 
       // Give up rather than poll forever on a page that has no such section.
       if (!target) {
-        if (performance.now() - pollStartedAt > 15000) window.clearInterval(findTarget);
+        if (performance.now() - pollStartedAt > 15000)
+          window.clearInterval(findTarget);
         return;
       }
 
@@ -75,7 +76,7 @@ export default function ConsultOffer() {
           openTimer = window.setTimeout(open, 900);
         },
         // A third of the way in: reached and being read, not merely clipped.
-        { threshold: 0, rootMargin: '-33% 0px -33% 0px' }
+        { threshold: 0, rootMargin: "-33% 0px -33% 0px" },
       );
 
       observer.observe(target);
@@ -92,28 +93,30 @@ export default function ConsultOffer() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (!name.trim() || !email || status === 'submitting') return;
+    if (!name.trim() || !email || status === "submitting") return;
 
-    setStatus('submitting');
+    setStatus("submitting");
 
     // No endpoint configured yet: succeed locally so the flow is demonstrable,
     // and log loudly so it is obvious this still needs wiring before launch.
     // Same contract as the playbook form, deliberately.
     if (!endpoint) {
-      console.warn('[consult] VITE_CONSULT_ENDPOINT is not set — submission not sent.');
-      setStatus('done');
+      console.warn(
+        "[consult] VITE_CONSULT_ENDPOINT is not set — submission not sent.",
+      );
+      setStatus("done");
       return;
     }
 
     try {
       const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, source: 'consultation' }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, source: "consultation" }),
       });
-      setStatus(response.ok ? 'done' : 'error');
+      setStatus(response.ok ? "done" : "error");
     } catch {
-      setStatus('error');
+      setStatus("error");
     }
   };
 
@@ -130,8 +133,8 @@ export default function ConsultOffer() {
         aria-modal="true"
         aria-labelledby="consult-title"
         tabIndex={-1}
-        className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-ink text-paper shadow-float"
-        style={{ animation: 'consult-in 520ms var(--ease-out-expo) both' }}
+        className="relative w-full max-w-xl overflow-hidden rounded-3xl bg-ink text-paper shadow-float"
+        style={{ animation: "consult-in 520ms var(--ease-out-expo) both" }}
       >
         <span
           aria-hidden="true"
@@ -153,7 +156,7 @@ export default function ConsultOffer() {
         </button>
 
         <div className="relative p-7 sm:p-9">
-          {status === 'done' ? (
+          {status === "done" ? (
             <div>
               <span
                 aria-hidden="true"
@@ -162,7 +165,10 @@ export default function ConsultOffer() {
                 <Icon name="check" className="size-5" />
               </span>
 
-              <h2 id="consult-title" className="mt-5 font-display text-2xl font-extrabold">
+              <h2
+                id="consult-title"
+                className="mt-5 font-display text-2xl font-extrabold"
+              >
                 {CONSULT.done.title}
               </h2>
 
@@ -176,7 +182,9 @@ export default function ConsultOffer() {
             </div>
           ) : (
             <>
-              <p className="section-eyebrow section-eyebrow-on-ink">{CONSULT.eyebrow}</p>
+              <p className="section-eyebrow section-eyebrow-on-ink">
+                {CONSULT.eyebrow}
+              </p>
 
               <h2
                 id="consult-title"
@@ -185,11 +193,16 @@ export default function ConsultOffer() {
                 {CONSULT.title}
               </h2>
 
-              <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-dark">{CONSULT.body}</p>
+              <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-dark">
+                {CONSULT.body}
+              </p>
 
               <ul className="mt-6 flex flex-col gap-2.5">
                 {CONSULT.points.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5 text-[0.9rem] leading-snug">
+                  <li
+                    key={point}
+                    className="flex items-start gap-2.5 text-[0.9rem] leading-snug"
+                  >
                     <span
                       aria-hidden="true"
                       className="mt-px grid size-[18px] shrink-0 place-items-center rounded-full bg-signal-green text-ink"
@@ -205,71 +218,89 @@ export default function ConsultOffer() {
                   beside it the email field collapsed to about 170px — narrower
                   than the address it was asking for, with the placeholder
                   clipped before anyone had typed anything. */}
-              <form onSubmit={onSubmit} noValidate className="mt-7 flex flex-col gap-4">
-                <div>
-                  <label htmlFor="consult-name" className="block text-sm font-medium">
-                    {CONSULT.nameLabel}
-                  </label>
+              <form
+                onSubmit={onSubmit}
+                noValidate
+                className="mt-7 flex flex-col gap-4"
+              >
+                {/* Side by side on anything wider than a phone, stacked below.
+                    The pair is one question — who are you and where do we
+                    write — so it reads as one row rather than two steps. */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="consult-name"
+                      className="block text-sm font-medium"
+                    >
+                      {CONSULT.nameLabel}
+                    </label>
 
-                  <input
-                    id="consult-name"
-                    name="name"
-                    type="text"
-                    required
-                    autoComplete="name"
-                    placeholder={CONSULT.namePlaceholder}
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    className={FIELD_CLASS}
-                  />
-                </div>
+                    <input
+                      id="consult-name"
+                      name="name"
+                      type="text"
+                      required
+                      autoComplete="name"
+                      placeholder={CONSULT.namePlaceholder}
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      className={FIELD_CLASS}
+                    />
+                  </div>
 
-                <div>
-                  <label htmlFor="consult-email" className="block text-sm font-medium">
-                    {CONSULT.fieldLabel}
-                  </label>
+                  <div>
+                    <label
+                      htmlFor="consult-email"
+                      className="block text-sm font-medium"
+                    >
+                      {CONSULT.fieldLabel}
+                    </label>
 
-                  <input
-                    id="consult-email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    inputMode="email"
-                    placeholder={CONSULT.placeholder}
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    className={FIELD_CLASS}
-                  />
+                    <input
+                      id="consult-email"
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      inputMode="email"
+                      placeholder={CONSULT.placeholder}
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      className={FIELD_CLASS}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-2.5">
-
                   <button
                     type="submit"
-                    disabled={status === 'submitting'}
+                    disabled={status === "submitting"}
                     className="btn-on-ink w-full disabled:opacity-60"
                     data-cta-intent="consult-submit"
                   >
-                    {status === 'submitting' ? 'Sending…' : CONSULT.cta}
+                    {status === "submitting" ? "Sending…" : CONSULT.cta}
                   </button>
                 </div>
 
-                {status === 'error' && (
+                {status === "error" && (
                   <p role="alert" className="mt-3 text-xs text-signal-red-soft">
                     {CONSULT.error}
                   </p>
                 )}
 
                 <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-dark">
-                  <Icon name="shield" className="mt-px size-3.5 shrink-0" aria-hidden="true" />
+                  <Icon
+                    name="shield"
+                    className="mt-px size-3.5 shrink-0"
+                    aria-hidden="true"
+                  />
                   {CONSULT.privacy}
                 </p>
 
                 <button
                   type="button"
                   onClick={close}
-                  className="self-start text-xs text-muted-dark underline-offset-4 transition-colors duration-200 hover:text-paper hover:underline"
+                  className="self-start text-xs text-muted-dark underline underline-offset-4 transition-colors duration-200 hover:text-paper"
                 >
                   {CONSULT.dismiss}
                 </button>
