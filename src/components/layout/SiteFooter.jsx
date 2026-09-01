@@ -217,7 +217,7 @@ export default function SiteFooter() {
             letters would be announced as ten separate things. */}
         <div
           aria-hidden="true"
-          className="mt-16 flex select-none justify-between whitespace-nowrap font-display text-[clamp(2.25rem,10.5vw,8rem)] font-extrabold leading-[0.86] tracking-[-0.02em]"
+          className="mt-16 flex select-none justify-center whitespace-nowrap font-display text-[clamp(2.5rem,15vw,14rem)] font-extrabold leading-[0.86] tracking-[-0.04em]"
         >
           {[...'ECOMSNIPER'].map((letter, index) => (
             <span
