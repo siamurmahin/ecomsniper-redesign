@@ -133,14 +133,6 @@ export default function ComparisonGap({ id = 'comparison' }) {
           ))}
         </div>
 
-        <p
-          data-reveal
-          data-reveal-group="gap-proof"
-          className="mt-6 flex items-start gap-2.5 text-[0.88rem] leading-relaxed text-muted"
-        >
-          <Icon name="verified" className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-          {COMPARISON.proofNote}
-        </p>
 
         <div
           data-reveal

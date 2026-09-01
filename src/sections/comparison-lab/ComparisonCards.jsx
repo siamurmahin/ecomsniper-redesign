@@ -4,7 +4,7 @@ import Icon from '../../components/ui/Icon';
 import { COMPARISON } from '../../data/siteContent';
 import { toneOf } from '../../lib/signalTones';
 import { useRevealOnScroll } from '../../hooks/useRevealOnScroll';
-import { groupOf, groupedRows } from './groupRows';
+import { groupOf } from './groupRows';
 
 /**
  * A row's state in one column.
@@ -16,8 +16,11 @@ import { groupOf, groupedRows } from './groupRows';
  */
 function State({ value, strong }) {
   if (value === false) {
+    /* Filled red, with a paper glyph. The signal red carries paper at 4.3:1,
+       which is why blue and red take a light glyph and green and gold take an
+       ink one — a white cross on the green would miss even the 3:1 bar. */
     return (
-      <span className="grid size-5 shrink-0 place-items-center rounded-full bg-signal-red/12 text-signal-red-deep">
+      <span className="grid size-5 shrink-0 place-items-center rounded-full bg-signal-red text-paper">
         <Icon name="close" className="size-2.5" aria-label="Not included" />
       </span>
     );
@@ -104,16 +107,14 @@ function Column({ subtitle, title, side, strong }) {
  * Both columns list all eleven rows so each can be read alone — a column
  * showing only what it has is a brochure, not a comparison.
  *
- * The scoreboard above them is counted from the rows themselves, so it can
- * never disagree with the lists underneath it.
+ * A counted scoreboard sat above these and was cut: it answered the section
+ * before the columns did, and the two lists are the section.
  */
 export default function ComparisonCards({ id = 'comparison' }) {
   const sectionRef = useRevealOnScroll();
   const headlineId = `${id}-headline`;
-  const groups = groupedRows();
   const gold = toneOf('gold');
 
-  const TALLY_TONES = { both: 'blue', ours: 'green', theirs: 'gold' };
 
   return (
     <section
@@ -129,47 +130,14 @@ export default function ComparisonCards({ id = 'comparison' }) {
           lead={COMPARISON.lead}
         />
 
-        {/* The shape of the answer before the detail: how many rows fall each
-            way. Counted from the data, so it cannot drift from the lists. */}
-        <ul
-          data-reveal
-          data-reveal-group="comparison-tally"
-          className="mt-10 grid gap-3 sm:grid-cols-3"
-        >
-          {groups.map((group) => {
-            const tone = toneOf(TALLY_TONES[group.key]);
-            return (
-              <li
-                key={group.key}
-                className="flex items-baseline gap-3 rounded-2xl border border-hairline bg-white/60 px-5 py-4"
-              >
-                <span className={`font-display text-2xl font-extrabold leading-none ${tone.text}`}>
-                  {group.rows.length}
-                </span>
-                <span className="text-[0.88rem] font-semibold leading-snug">{group.label}</span>
-              </li>
-            );
-          })}
-        </ul>
-
         <div
           data-reveal
           data-reveal-group="comparison-columns"
-          className="mt-5 grid gap-5 md:grid-cols-2"
+          className="mt-12 grid gap-5 md:grid-cols-2"
         >
           <Column subtitle="What most tools give you" title={COMPARISON.columns[1]} side="them" />
           <Column subtitle="What you get here" title={COMPARISON.columns[0]} side="us" strong />
         </div>
-
-        {/* The four we win on are the four the page has already proved. */}
-        <p
-          data-reveal
-          data-reveal-group="comparison-proof"
-          className="mt-6 flex items-start gap-2.5 text-[0.88rem] leading-relaxed text-muted"
-        >
-          <Icon name="verified" className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-          {COMPARISON.proofNote}
-        </p>
 
         {/* The concession, given its own ground. It is the reason to believe
             the rest of the section, so it is stated rather than left to two

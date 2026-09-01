@@ -1,6 +1,5 @@
 import SectionHeading from '../../components/ui/SectionHeading';
 import CtaButton from '../../components/ui/CtaButton';
-import Icon from '../../components/ui/Icon';
 import { COMPARISON } from '../../data/siteContent';
 import { toneOf } from '../../lib/signalTones';
 import { useRevealOnScroll } from '../../hooks/useRevealOnScroll';
@@ -99,14 +98,6 @@ export default function ComparisonLean({ id = 'comparison' }) {
           of that too, and we are not pretending otherwise.
         </p>
 
-        <p
-          data-reveal
-          data-reveal-group="lean-proof"
-          className="mt-6 flex items-start gap-2.5 text-[0.88rem] leading-relaxed text-muted"
-        >
-          <Icon name="verified" className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-          {COMPARISON.proofNote}
-        </p>
 
         <div data-reveal data-reveal-group="lean-cta" className="mt-9">
           <CtaButton href={COMPARISON.cta.href} intent="comparison-pricing">

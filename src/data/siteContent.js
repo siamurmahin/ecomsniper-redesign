@@ -917,12 +917,6 @@ export const COMPARISON = {
      two dashes at the bottom of a table. */
   concession: 'A bare listing tool is cheaper, and some have a free plan. Both true.',
 
-  /* The four rows only we have are the four things sections 07 to 09 spend
-     3,600px proving. Saying so turns the table from a list of claims into a
-     summary of what the reader has already been shown, and gives a sceptic
-     somewhere to go back to. */
-  proofNote: 'The four above are not claims — the training, the community, the calls and the support each have their own section on this page.',
-
   /* This section sits directly above pricing, so its door is the price. Same
      label the proof bar and section 03 use for the same jump. */
   cta: { label: 'See what it costs', href: '/#pricing' },
