@@ -124,7 +124,7 @@ export default function ConsultOffer() {
 
   return (
     <div
-      className="fixed inset-0 z-[60] grid place-items-center overflow-y-auto bg-ink/60 p-5 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] grid items-start justify-center overflow-y-auto bg-ink/60 p-4 backdrop-blur-sm sm:items-center sm:p-5"
       onClick={(event) => event.target === event.currentTarget && close()}
     >
       <div
@@ -155,7 +155,7 @@ export default function ConsultOffer() {
           <Icon name="close" className="size-3" aria-hidden="true" />
         </button>
 
-        <div className="relative p-7 sm:p-9">
+        <div className="relative p-5 sm:p-9">
           {status === "done" ? (
             <div>
               <span
@@ -188,16 +188,16 @@ export default function ConsultOffer() {
 
               <h2
                 id="consult-title"
-                className="mt-3 font-display text-[length:var(--text-section)] font-extrabold leading-[1.05]"
+                className="mt-3 font-display text-[1.6rem] font-extrabold leading-[1.08] sm:text-[length:var(--text-section)]"
               >
                 {CONSULT.title}
               </h2>
 
-              <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-dark">
+              <p className="mt-3 text-sm leading-relaxed text-muted-dark sm:mt-4 sm:text-[0.95rem]">
                 {CONSULT.body}
               </p>
 
-              <ul className="mt-6 flex flex-col gap-2.5">
+              <ul className="mt-4 flex flex-col gap-2 sm:mt-6 sm:gap-2.5">
                 {CONSULT.points.map((point) => (
                   <li
                     key={point}
@@ -221,12 +221,12 @@ export default function ConsultOffer() {
               <form
                 onSubmit={onSubmit}
                 noValidate
-                className="mt-7 flex flex-col gap-4"
+                className="mt-5 flex flex-col gap-3 sm:mt-7 sm:gap-4"
               >
                 {/* Side by side on anything wider than a phone, stacked below.
                     The pair is one question — who are you and where do we
                     write — so it reads as one row rather than two steps. */}
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-4">
                   <div>
                     <label
                       htmlFor="consult-name"
