@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
+import Icon from '../ui/Icon';
 import { STICKY_CTA } from '../../data/siteContent';
 
 /**
@@ -93,11 +94,29 @@ export default function StickyConversionBar() {
       // Announced only when it actually appears, never as a page-load surprise.
       aria-hidden={!isVisible}
     >
-      <div className="site-shell pb-3">
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-ink-line bg-ink/95 px-4 py-3 text-paper shadow-float backdrop-blur-xl sm:px-5">
+      {/* Full width on a phone, where there is no room to be anything else.
+          Above that it docks to the right at its own width: it used to stretch
+          the whole shell for one short line and a button, which made a
+          thousand pixels of bar to carry about three hundred of content, and
+          read as a toolbar rather than as an offer. */}
+      <div className="site-shell pb-3 sm:pb-4">
+        <div className="relative ms-auto flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-ink-line bg-ink/95 py-2.5 pe-2.5 ps-4 text-paper shadow-float backdrop-blur-xl sm:w-fit sm:gap-6 sm:ps-5">
+          {/* The brand edge, the same mark the plan cards and the dialogs
+              carry. It is what makes this the site's own furniture rather
+              than a floating advert. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-y-0 start-0 w-[3px] bg-[image:var(--gradient-brand)]"
+          />
+
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold">{STICKY_CTA.price}</p>
-            <p className="hidden truncate text-xs text-muted-dark sm:block">{STICKY_CTA.message}</p>
+
+            {/* The risk reversal, not a description of the product. */}
+            <p className="mt-0.5 hidden items-center gap-1.5 text-xs text-signal-green-soft sm:flex">
+              <Icon name="shield" className="size-3 shrink-0" aria-hidden="true" />
+              {STICKY_CTA.message}
+            </p>
           </div>
 
           <CtaButton

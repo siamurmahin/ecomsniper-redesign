@@ -1235,7 +1235,11 @@ export const ASSURANCE = {
 export const STICKY_CTA = {
   // Deck: appears after 25% scroll.
   showAfterScrollRatio: 0.25,
-  message: 'Software, training and community.',
+  /* Was "Software, training and community." — true of the whole site and
+     therefore an argument for nothing. The bar is the offer following the
+     reader down the page, so the second line is the reason to press the
+     button rather than a description of the product. */
+  message: SITE.guarantee,
   price: 'From $97 first month',
   cta: { label: 'Start now', href: SITE.signupUrl },
 };
@@ -1405,6 +1409,16 @@ export const FOOTER = {
         icon: 'facebook',
       },
     ],
+  },
+
+  /* The second door. It lived at the foot of section 15 until that section
+     was cut, and it is the only offer on the site that costs nothing — worth
+     more than the blank space it would otherwise leave here. Copy is the
+     deleted section's, unchanged. */
+  secondDoor: {
+    title: 'Not ready yet?',
+    body: 'Take the free playbook and read it first. No card, no pressure.',
+    cta: { label: 'Get the free playbook', href: '/free-playbook' },
   },
 
   reviewsCta: 'Read the reviews on Trustpilot',

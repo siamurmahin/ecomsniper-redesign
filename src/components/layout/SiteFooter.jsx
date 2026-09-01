@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
+import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
 import { FOOTER, SITE } from '../../data/siteContent';
 
@@ -7,7 +8,8 @@ import { FOOTER, SITE } from '../../data/siteContent';
 function FooterLink({ href, label }) {
   const isRouted = href.startsWith('/') && !href.startsWith('/#');
 
-  const className = 'text-sm text-muted-dark transition-colors duration-200 hover:text-paper';
+  const className =
+    'text-sm text-muted-dark transition-colors duration-200 hover:text-paper';
 
   return isRouted ? (
     <Link to={href} className={className}>
@@ -29,20 +31,50 @@ function FooterLink({ href, label }) {
  *
  * It closes the page and carries the legal copy the claims elsewhere depend
  * on, and it is the one place a visitor looks to answer "are these people
- * real". It could not answer that: there was no phone number, no email, no
- * address and no way to reach the community, and eight of its links pointed
- * at routes this app does not have.
+ * real" — which is why the contact block is here and not buried.
  *
- * The three the site does own — the brand, the contact block and the reviews —
- * now hold the left column, and the four link columns sit beside them.
+ * It is also the last thing on the page now that section 15 is gone, so it
+ * opens with the offer that costs nothing rather than going straight to a wall
+ * of links. Someone who read fifteen sections and did not buy is exactly who
+ * the playbook is for.
  */
 export default function SiteFooter() {
-  const { contact, social } = FOOTER;
+  const { contact, social, secondDoor } = FOOTER;
 
   return (
-    <footer className="bg-ink pb-10 pt-16 text-paper sm:pt-20">
+    <footer className="relative overflow-hidden bg-ink pb-10 pt-16 text-paper sm:pt-20">
+      {/* Ties the foot of the page back to the top of it: the same ramp runs
+          across the plan cards, the dialogs and the sticky bar. */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px bg-[image:var(--gradient-brand)] opacity-60"
+      />
+
       <div className="site-shell">
-        <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16">
+        {/* The free door, first, because it is the only thing here anyone can
+            act on. */}
+        <div className="flex flex-col gap-5 rounded-3xl border border-ink-line bg-paper/[0.04] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div>
+            <p className="font-display text-xl font-extrabold tracking-tight">
+              {secondDoor.title}
+            </p>
+            <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-dark">
+              {secondDoor.body}
+            </p>
+          </div>
+
+          <CtaButton
+            href={secondDoor.cta.href}
+            variant="onInk"
+            intent="footer-playbook"
+            className="shrink-0"
+          >
+            <Icon name="openBook" className="size-4 shrink-0" aria-hidden="true" />
+            {secondDoor.cta.label}
+          </CtaButton>
+        </div>
+
+        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16">
           <div>
             <Link to="/" aria-label="EcomSniper home" className="inline-block text-paper">
               <BrandLogo />
@@ -101,8 +133,8 @@ export default function SiteFooter() {
             </nav>
 
             {/* The rooms the community actually lives in, as marks rather than
-                a fourth list of words. Ruled off, because they are places to
-                go rather than more pages to read. */}
+                a fifth list of words. Ruled off, because they are places to go
+                rather than more pages to read. */}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-ink-line pt-8">
               <h2 className="micro-label text-paper/70">{social.title}</h2>
 
