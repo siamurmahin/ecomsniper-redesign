@@ -8,7 +8,12 @@ import logoReticle from '../../assets/brand/logo-reticle.png';
  * keep their brand colours in both.
  *
  * @param {object} props
- * @param {'ink'|'paper'} [props.tone] Which background the mark sits on.
+ * @param {'ink'|'paper'} [props.tone] The colour of the "Sniper" lettering,
+ *   NOT the background it sits on. `ink` is the black lettering, for a light
+ *   surface; `paper` is the white lettering, for a dark one. It was
+ *   documented the other way round and the footer read it that way: the
+ *   default rendered black lettering onto the ink footer, where half the
+ *   wordmark simply disappeared.
  * @param {boolean} [props.reticleOnly] Render just the target, no wordmark.
  */
 export default function BrandLogo({ tone = 'ink', reticleOnly = false, className = '' }) {

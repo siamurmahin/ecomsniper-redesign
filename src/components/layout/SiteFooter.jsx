@@ -80,7 +80,7 @@ export default function SiteFooter() {
         <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16">
           <div>
             <Link to="/" aria-label="EcomSniper home" className="inline-block text-paper">
-              <BrandLogo />
+              <BrandLogo tone="paper" />
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-dark">
