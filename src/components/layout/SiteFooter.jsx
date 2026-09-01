@@ -4,6 +4,21 @@ import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
 import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
 
+/**
+ * Each platform's own colour, on the mark only.
+ *
+ * Written as literal classes rather than built from the link's icon name:
+ * Tailwind compiles what it can see in the source, and a template literal
+ * produces no stylesheet output at all. These are the platforms' published
+ * brand values, not the site's signal set, which is why they are hex here
+ * rather than tokens — they belong to Discord, YouTube and Facebook.
+ */
+const SOCIAL_COLOUR = {
+  discord: 'text-[#5865F2]',
+  youtube: 'text-[#FF0000]',
+  facebook: 'text-[#1877F2]',
+};
+
 /** The Trustpilot row of the proof bar, so the score is stated once. */
 const REVIEWS = PROOF_BAR.items.find((item) => item.href === SITE.trustpilotUrl);
 
@@ -148,7 +163,9 @@ export default function SiteFooter() {
                       href={link.href}
                       rel="noopener noreferrer"
                       aria-label={link.label}
-                      className="grid size-10 place-items-center rounded-full border border-ink-line text-muted-dark transition-[color,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-paper/40 hover:text-paper"
+                      className={`grid size-10 place-items-center rounded-full border border-ink-line transition-[border-color,transform,background-color] duration-300 hover:-translate-y-0.5 hover:border-paper/25 hover:bg-paper/[0.06] ${
+                        SOCIAL_COLOUR[link.icon] ?? 'text-muted-dark'
+                      }`}
                     >
                       <Icon name={link.icon} className="size-4" aria-hidden="true" />
                     </a>
