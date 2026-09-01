@@ -4,6 +4,8 @@ import PricingPreviewSection from '../sections/PricingPreviewSection';
 import PricingCardsFixed from '../sections/pricing-lab/PricingCardsFixed';
 import PricingLead from '../sections/pricing-lab/PricingLead';
 import PricingDecision from '../sections/pricing-lab/PricingDecision';
+import PricingLiveCards from '../sections/pricing-lab/PricingLiveCards';
+import PricingLiveFull from '../sections/pricing-lab/PricingLiveFull';
 
 /**
  * Internal comparison page for section 12. Delete this file, its route and
@@ -38,6 +40,18 @@ const OPTIONS = [
     name: 'The decision',
     note: 'One price, what it includes, what happens if it is wrong. The other two plans are a sentence.',
     render: (id) => <PricingDecision id={id} />,
+  },
+  {
+    n: 'D',
+    name: 'The live card structure',
+    note: 'Their card order and hierarchy: featured centre and raised, CTA directly under the price, refund terms beneath it, icon and badge per plan. Our plan names kept.',
+    render: (id) => <PricingLiveCards id={id} />,
+  },
+  {
+    n: 'F',
+    name: 'Live, header and all',
+    note: 'D plus the reassurance block their page runs above the cards — guarantee pill, no questions asked, and four chips in the four signal tones.',
+    render: (id) => <PricingLiveFull id={id} />,
   },
 ];
 

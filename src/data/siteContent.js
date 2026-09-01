@@ -950,6 +950,10 @@ export const PRICING = {
     {
       id: 'monthly',
       name: 'Monthly',
+      badge: 'Most popular',
+      tone: 'blue',
+      icon: 'seedling',
+      tagline: 'For the one starting from zero.',
       priceLabel: '$97',
       priceSuffix: 'first month',
       thereafter: 'then $199 a month',
@@ -957,7 +961,7 @@ export const PRICING = {
       summary: 'Everything, with a guarantee behind it.',
       features: [
         'List up to 3,000 products a month',
-        'Chrome extension',
+        'Sniper Chrome Extension, to list and track with automation',
         'The full Dropship Mastery course',
         'Private community',
         'Priority support',
@@ -969,6 +973,10 @@ export const PRICING = {
     {
       id: 'credits',
       name: '10K credits bundle',
+      badge: 'Volume deal',
+      tone: 'gold',
+      icon: 'salesGrowth',
+      tagline: 'For the one ready to list in volume.',
       /* `was` and `saving` are the client's own, off ecomsniper.io/pricing on
          1 Sep 2026: the bundle is listed there at $597 struck through to $499,
          "you save $98". This site was showing only the $499 and dropping a
@@ -987,6 +995,7 @@ export const PRICING = {
       summary: 'For sellers who already know the volume they need.',
       features: [
         '10,000 credits (9,000 plus a 1,000 bonus)',
+        'List 10,000 products',
         'Same software, same training',
         'Same community access',
       ],
@@ -996,16 +1005,46 @@ export const PRICING = {
     {
       id: 'enterprise',
       name: 'Enterprise',
+      badge: 'Enterprise',
+      tone: 'green',
+      icon: 'star',
+      tagline: 'For the one building at full scale.',
       priceLabel: '$2,000',
       priceSuffix: 'a month',
       thereafter: 'unlimited listings',
       featured: false,
       summary: 'We set it up and run alongside you.',
-      features: ['Unlimited listings', 'Done for you setup', '1 on 1 coaching', 'VIP community'],
+      features: [
+        'Unlimited listings',
+        'The full Dropship Mastery course',
+        'VIP community',
+        'Priority 24/7 support',
+        'Done for you setup',
+        '1 on 1 coaching',
+        'We will do everything until you build a successful business',
+      ],
       guarantee: 'Final sale, no refunds.',
       cta: { label: 'Talk to us', href: '/contact' },
     },
   ],
+  /* The reassurance block the live pricing page runs above its cards, in the
+     client's own words: a guarantee pill, "no questions asked" under it, and
+     four chips in the four signal tones — one per thing the money buys.
+
+     Their headline over this block is "Is this going to work for you?", which
+     is section 03's headline on this site. Not reused here; the page would be
+     asking the same question twice. */
+  assurance: {
+    pill: '30-Day Money-Back Guarantee',
+    note: 'No questions asked',
+    chips: [
+      { label: 'The training teaches', tone: 'blue', icon: 'graduationCap' },
+      { label: 'The software lifts', tone: 'red', icon: 'robot' },
+      { label: 'The community catches', tone: 'gold', icon: 'people' },
+      { label: 'The guarantee protects', tone: 'green', icon: 'shield' },
+    ],
+  },
+
   cta: { label: 'See full plan details', href: '/pricing' },
   // Deck: state the real cost of entry so nobody is ambushed later.
   footnote:
