@@ -846,26 +846,25 @@ export const FOUNDERS = {
      making, and it is a promise the site can keep: the playbook is free and
      takes no card. No claim about the book's contents is added. */
   bookCta: { label: 'Read it before you pay', href: '/free-playbook' },
-  /* `story` is each founder's half of `body[0]`, re-homed rather than
-     rewritten: same facts, same figures, no claim that was not already in the
-     paragraph above. It exists so a shape that puts the two men side by side
-     can give each one his own line instead of splitting a sentence in JSX.
+  /* `people` is read by section 09's instructor row as well, so a name or a
+     photo key changed here moves both sections.
 
-     `people` is read by section 09's instructor row as well, so a name or a
-     photo key changed here moves both sections. */
+     Nothing renders `detail`. Section 10 signs off with the name and the role
+     only, because `body[0]` above already says both of these things in full
+     sentences — a card repeating "7 years selling on eBay" under a paragraph
+     that just said "selling on eBay for seven years" reads as a stutter. It
+     stays because it is real copy and the pricing or about pages may want it. */
   people: [
     {
       name: 'Sammy',
       role: 'Co-founder',
       detail: '7 years selling on eBay. Still running stores today.',
-      story: 'Seven years selling on eBay, starting from a bedroom and a borrowed laptop.',
       photo: 'founder-sammy',
     },
     {
       name: 'Marc Augustine',
       role: 'Co-founder, Head of Training',
       detail: 'Former security professional. Teaches Dropship Mastery.',
-      story: 'Years in security before e-commerce full time. Now teaches the training end to end.',
       photo: 'founder-marc',
     },
   ],
