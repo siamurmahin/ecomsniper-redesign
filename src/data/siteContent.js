@@ -263,7 +263,7 @@ export const AUDIENCE = {
        on a way forward rather than on a full stop. This label is written rather
        than from the deck — the shortcut it offers is real, but the wording is
        the first thing to replace. */
-    cta: { label: 'See what it costs', href: '/#pricing', nudge: 'Be next' },
+    cta: { label: 'See what it costs', href: '/pricing', nudge: 'Be next' },
   },
 };
 
@@ -524,7 +524,7 @@ export const PROOF = {
   /* --- Added for the section 04 variants -------------------------------
      A door inside the evidence: someone convinced by the receipts should not
      have to scroll past five more sections before they can act on it. */
-  cta: { label: 'See what it costs', href: '/#pricing' },
+  cta: { label: 'See what it costs', href: '/pricing' },
 
   verifyLabel: 'Verify every review on Trustpilot',
 
@@ -931,9 +931,10 @@ export const COMPARISON = {
      decision back in front of them without arguing. */
   pivot: 'So the only question left is which one you actually want.',
 
-  /* This section sits directly above pricing, so its door is the price. Same
-     label the proof bar and section 03 use for the same jump. */
-  cta: { label: 'See what it costs', href: '/#pricing' },
+  /* The plans live on /pricing rather than on this page, so every door
+     labelled with the price goes there. Same label section 03 and the proof
+     wall use for the same jump. */
+  cta: { label: 'See what it costs', href: '/pricing' },
   closer:
     'If price per month is the only thing that matters to you, a bare listing tool will be cheaper. If you want the business taught and the people around it, that is what we built.',
 };
@@ -952,6 +953,7 @@ export const PRICING = {
       priceSuffix: 'first month',
       thereafter: 'then $199 a month',
       featured: true,
+      badge: 'Recommended',
       summary: 'Everything, with a guarantee behind it.',
       features: [
         'List up to 3,000 products a month',
@@ -1013,7 +1015,21 @@ export const PRICING = {
       cta: { label: 'Talk to us', href: '/contact' },
     },
   ],
-  cta: { label: 'See full plan details', href: '/pricing' },
+  /* The /pricing header. It lived in the page component as literal JSX,
+     which is the one place copy is not allowed to live: the guarantee wording
+     has to be changeable in one file. included is the scan list — what
+     every plan carries — so it is not repeated three times in the cards. */
+  page: {
+    headline: 'Three ways in. One guarantee.',
+    lead: 'The monthly plan is the one most people start on, and the only one covered by the 30 day money back guarantee. The other two trade that protection for a lower effective price.',
+    includedLabel: 'Included in every plan',
+    included: [
+      'The full Dropship Mastery course',
+      'The private community',
+      '24/7 human support',
+      'Price and stock monitoring',
+    ],
+  },
   // Deck: state the real cost of entry so nobody is ambushed later.
   footnote:
     'Budget beyond the subscription: an eBay store subscription and, in the US, an Amazon Prime membership. See the FAQ for typical monthly costs.',

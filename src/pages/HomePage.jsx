@@ -13,11 +13,10 @@ import CommunitySection from '../sections/CommunitySection';
 import TrainingSection from '../sections/TrainingSection';
 import FoundersSection from '../sections/FoundersSection';
 import ComparisonSection from '../sections/ComparisonSection';
-import PricingPreviewSection from '../sections/PricingPreviewSection';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
 import FinalCtaSection from '../sections/FinalCtaSection';
-import { FAQ, PRICING } from '../data/siteContent';
+import { FAQ } from '../data/siteContent';
 
 /**
  * Homepage funnel, in the order a cold visitor needs it.
@@ -40,13 +39,15 @@ import { FAQ, PRICING } from '../data/siteContent';
  *  Both now open 09, which is how the live site runs it.
  *  10 Founders .......... who is behind it
  *  11 Comparison ........ the decision they are already making elsewhere
- *  12 Pricing ........... the price, on the page most people actually see
+ *  12 Comparison close .. the price and the guarantee, then out to /pricing
  *  13 FAQ ............... last objections, answered in place
  *  14 Assurance ......... countries + guarantee
  *  15 Final CTA ......... pay now, or take a free door
  */
 export default function HomePage() {
   // FAQPage + Product schema, built from the same copy the page renders.
+  // No `offers` here: the plans moved to /pricing, and structured data must
+  // not state prices the page does not show. /pricing carries them.
   const schema = [
     {
       '@context': 'https://schema.org',
@@ -64,14 +65,6 @@ export default function HomePage() {
       description:
         'eBay dropshipping automation software with training and a private community. Finds products, bulk lists them, and monitors price and stock 24/7.',
       brand: { '@type': 'Brand', name: 'EcomSniper' },
-      offers: PRICING.plans.map((plan) => ({
-        '@type': 'Offer',
-        name: plan.name,
-        price: plan.priceLabel.replace(/[$,]/g, ''),
-        priceCurrency: 'USD',
-        availability: 'https://schema.org/InStock',
-        url: 'https://ecomsniper.io/pricing',
-      })),
     },
   ];
 
@@ -107,7 +100,6 @@ export default function HomePage() {
         <TrainingSection />
         <FoundersSection />
         <ComparisonSection />
-        <PricingPreviewSection />
         <FaqSection />
         <AssuranceSection />
         <FinalCtaSection />

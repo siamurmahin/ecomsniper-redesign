@@ -121,7 +121,7 @@ function Column({ subtitle, title, side, strong }) {
  * A counted scoreboard sat above these and was cut: it answered the section
  * before the columns did, and the two lists are the section.
  */
-export default function ComparisonSection() {
+export default function ComparisonSection({ cta = COMPARISON.cta }) {
   const sectionRef = useRevealOnScroll();
   const gold = toneOf('gold');
 
@@ -187,8 +187,8 @@ export default function ComparisonSection() {
                 Both sit beside the button rather than under the section, so
                 the objection and its answer are read together. */}
             <div className="lg:border-l lg:border-paper/12 lg:pl-12">
-              <CtaButton href={COMPARISON.cta.href} variant="onInk" intent="comparison-pricing">
-                {COMPARISON.cta.label}
+              <CtaButton href={cta.href} variant="onInk" intent="comparison-pricing">
+                {cta.label}
               </CtaButton>
 
               <ul className="mt-5 flex flex-col gap-2.5">
