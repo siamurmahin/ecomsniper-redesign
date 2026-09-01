@@ -11,7 +11,6 @@ import PricingPage from './pages/PricingPage';
 import PlaybookPage from './pages/PlaybookPage';
 import NotFoundPage from './pages/NotFoundPage';
 import DesignLabPage from './pages/DesignLabPage';
-import ComparisonLabPage from './pages/ComparisonLabPage';
 import { ScrollTrigger } from './lib/motion';
 import { dismissPreloader } from './lib/preloader';
 import { scrollToTarget } from './lib/smoothScroll';
@@ -96,9 +95,8 @@ export default function App() {
               public/_redirects handles it at the edge; this covers local dev and
               any host that ignores those files. */}
           <Route path="/free-play-book" element={<Navigate to="/free-playbook" replace />} />
-          {/* Internal comparison routes; remove with the pages once a direction is picked. */}
+          {/* Internal comparison route; remove with the page once a direction is picked. */}
           <Route path="/design-lab" element={<DesignLabPage />} />
-          <Route path="/comparison-lab" element={<ComparisonLabPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

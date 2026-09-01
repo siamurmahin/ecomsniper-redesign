@@ -1,56 +1,130 @@
 import SectionHeading from '../components/ui/SectionHeading';
+import CtaButton from '../components/ui/CtaButton';
+import Icon from '../components/ui/Icon';
 import { COMPARISON } from '../data/siteContent';
+import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
-/** Renders a cell value: true, false, "partial", or a short label. */
-function ComparisonCell({ value, emphasis }) {
-  if (value === true) {
-    return (
-      <span
-        className={`grid size-6 place-items-center rounded-full text-xs ${
-          emphasis ? 'bg-ebay-green/15 text-ebay-green' : 'bg-ink/8 text-ink/70'
-        }`}
-        role="img"
-        aria-label="Included"
-      >
-        ✓
-      </span>
-    );
-  }
+/**
+ * Which side a row falls on, worked out from its own values rather than
+ * stored beside them: a row we do not have is a loss, a row they do not have
+ * is a win, everything else is shared. Derived, so it cannot drift out of step
+ * with the rows it describes.
+ */
+const groupOf = (row) => {
+  if (row.us === false) return 'theirs';
+  if (row.them === false) return 'ours';
+  return 'both';
+};
 
+/**
+ * A row's state in one column.
+ *
+ * Green is `signal-green-deep` as text, never the brand value: the live
+ * section used the raw green, which is about 2.4:1 on paper and is exactly
+ * what the deep variants exist for. A miss is red rather than grey — grey
+ * reads as "not applicable", and these are things the tool does not do.
+ */
+function State({ value, strong }) {
   if (value === false) {
+    /* Filled red, with a paper glyph. The signal red carries paper at 4.3:1,
+       which is why blue and red take a light glyph and green and gold take an
+       ink one — a white cross on the green would miss even the 3:1 bar. */
     return (
-      <span
-        className="grid size-6 place-items-center rounded-full bg-ink/5 text-xs text-muted"
-        role="img"
-        aria-label="Not included"
-      >
-        —
+      <span className="grid size-5 shrink-0 place-items-center rounded-full bg-signal-red text-paper">
+        <Icon name="close" className="size-2.5" aria-label="Not included" />
       </span>
     );
   }
 
   if (value === 'partial') {
     return (
-      <span className="text-xs text-muted" role="img" aria-label="Partly included">
-        Sometimes
+      <span
+        className="grid size-5 shrink-0 place-items-center rounded-full bg-signal-gold/20 text-[0.7rem] font-bold text-signal-gold-deep"
+        aria-label="Partly included"
+      >
+        ~
       </span>
     );
   }
 
-  return <span className="text-xs font-semibold text-ink">{value}</span>;
+  return (
+    <span
+      className={`grid size-5 shrink-0 place-items-center rounded-full ${
+        strong ? 'bg-signal-green text-ink' : 'bg-signal-green/15 text-signal-green-deep'
+      }`}
+    >
+      <Icon name="check" className="size-3" aria-label="Included" />
+    </span>
+  );
+}
+
+/** One column, read top to bottom on its own. */
+function Column({ subtitle, title, side, strong }) {
+  return (
+    <div
+      className={`relative flex flex-col overflow-hidden rounded-3xl border p-6 sm:p-8 ${
+        strong ? 'border-ink/15 bg-white shadow-float' : 'border-hairline bg-white/45'
+      }`}
+    >
+      {/* The winning column wears the brand ramp as an edge. One line, not a
+          surface — the ramp already carries the hero mark and the primary
+          button, and a third filled surface would stop it signalling. */}
+      {strong && (
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-[3px] bg-[image:var(--gradient-brand)]"
+        />
+      )}
+
+      <p className="micro-label text-muted">{subtitle}</p>
+      <p
+        className={`mt-2 font-display text-xl font-extrabold tracking-tight sm:text-2xl ${
+          strong ? '' : 'text-muted'
+        }`}
+      >
+        {title}
+      </p>
+
+      <ul className="mt-6 flex flex-col gap-3">
+        {COMPARISON.rows.map((row) => {
+          const value = side === 'us' ? row.us : row.them;
+          const dimmed = value === false || (side === 'us' && groupOf(row) === 'theirs');
+
+          return (
+            <li key={row.feature} className="flex items-start gap-3">
+              <State value={value} strong={strong && value === true} />
+              <span className={`text-[0.9rem] leading-snug ${dimmed ? 'text-muted' : ''}`}>
+                {row.feature}
+                {typeof value === 'string' && value !== 'partial' && (
+                  <span className="ml-1.5 text-[0.78rem] font-semibold text-muted">({value})</span>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 /**
- * 11 — Honest comparison. New section.
+ * 11 — Honest comparison.
  *
- * Buyers compare three or four tools before deciding, so the review's argument
- * was that if we do not host the comparison, someone else does. Two rows are
- * deliberately lost — cheapest price and free plan — because a table we win
- * outright is a table nobody believes.
+ * The live table put 925px of feature name between a row and its own answer:
+ * 986px from "Bulk lister" to the tick resolving it. Two columns are read
+ * down rather than across, so nothing has to be tracked.
+ *
+ * Both columns list all eleven rows so each can be read alone — a column
+ * showing only what it has is a brochure, not a comparison.
+ *
+ * A counted scoreboard sat above these and was cut: it answered the section
+ * before the columns did, and the two lists are the section.
  */
 export default function ComparisonSection() {
   const sectionRef = useRevealOnScroll();
+  const gold = toneOf('gold');
+
 
   return (
     <section
@@ -66,72 +140,37 @@ export default function ComparisonSection() {
           lead={COMPARISON.lead}
         />
 
-        {/* Wide table scrolls inside its own container, never the page body. */}
         <div
           data-reveal
-          data-reveal-group="comparison-table"
-          className="mt-12 overflow-x-auto rounded-3xl border border-hairline bg-white/70"
+          data-reveal-group="comparison-columns"
+          className="mt-12 grid gap-5 md:grid-cols-2"
         >
-          <table className="w-full min-w-[34rem] border-collapse text-left">
-            <caption className="sr-only">
-              Feature comparison between EcomSniper and a typical eBay listing tool
-            </caption>
-
-            <thead>
-              <tr className="border-b border-hairline">
-                <th scope="col" className="px-5 py-4 text-sm font-semibold sm:px-7">
-                  Feature
-                </th>
-                <th
-                  scope="col"
-                  className="w-36 px-5 py-4 text-center text-sm font-extrabold sm:px-7"
-                >
-                  {COMPARISON.columns[0]}
-                </th>
-                <th
-                  scope="col"
-                  className="w-40 px-5 py-4 text-center text-sm font-medium text-muted sm:px-7"
-                >
-                  {COMPARISON.columns[1]}
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {COMPARISON.rows.map((row) => (
-                <tr
-                  key={row.feature}
-                  className="border-b border-hairline/70 transition-colors duration-200 last:border-0 hover:bg-ink/[0.03]"
-                >
-                  <th
-                    scope="row"
-                    className="px-5 py-3.5 text-[0.9rem] font-normal sm:px-7"
-                  >
-                    {row.feature}
-                  </th>
-                  <td className="px-5 py-3.5 sm:px-7">
-                    <span className="flex justify-center">
-                      <ComparisonCell value={row.us} emphasis />
-                    </span>
-                  </td>
-                  <td className="px-5 py-3.5 sm:px-7">
-                    <span className="flex justify-center">
-                      <ComparisonCell value={row.them} />
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Column subtitle="What most tools give you" title={COMPARISON.columns[1]} side="them" />
+          <Column subtitle="What you get here" title={COMPARISON.columns[0]} side="us" strong />
         </div>
 
-        <p
+        {/* The concession, given its own ground. It is the reason to believe
+            the rest of the section, so it is stated rather than left to two
+            dashes at the bottom of a list. */}
+        <div
           data-reveal
-          data-reveal-group="comparison-closer"
-          className="mt-7 max-w-2xl text-[0.92rem] leading-relaxed text-muted"
+          data-reveal-group="comparison-concession"
+          className="mt-8 rounded-3xl border border-signal-gold/40 bg-signal-gold/[0.07] p-6 sm:p-8"
         >
-          {COMPARISON.closer}
-        </p>
+          <p className={`micro-label ${gold.text}`}>{COMPARISON.groupLabels.theirs}</p>
+          <p className="mt-3 max-w-2xl font-display text-xl font-extrabold leading-snug tracking-tight sm:text-2xl">
+            {COMPARISON.concession}
+          </p>
+          <p className="mt-4 max-w-2xl text-[0.92rem] leading-relaxed text-muted">
+            {COMPARISON.closer}
+          </p>
+        </div>
+
+        <div data-reveal data-reveal-group="comparison-cta" className="mt-8">
+          <CtaButton href={COMPARISON.cta.href} intent="comparison-pricing">
+            {COMPARISON.cta.label}
+          </CtaButton>
+        </div>
       </div>
     </section>
   );
