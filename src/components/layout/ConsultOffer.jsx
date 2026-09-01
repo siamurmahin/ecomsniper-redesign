@@ -300,7 +300,7 @@ export default function ConsultOffer() {
                 <button
                   type="button"
                   onClick={close}
-                  className="self-start text-xs text-muted-dark underline underline-offset-4 transition-colors duration-200 hover:text-paper"
+                  className="self-center text-xs text-muted-dark underline underline-offset-4 transition-colors duration-200 hover:text-paper sm:self-start"
                 >
                   {CONSULT.dismiss}
                 </button>
