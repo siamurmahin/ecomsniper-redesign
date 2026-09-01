@@ -903,6 +903,19 @@ export const COMPARISON = {
     { feature: 'Cheapest possible price per month', us: false, them: true },
     { feature: 'Free plan', us: false, them: 'partial' },
   ],
+  /* Labels only. Which group a row belongs to is worked out from its own
+     values at render — `us === false` is a loss, `them === false` is a win,
+     anything else is shared — so the grouping cannot drift out of step with
+     the table it describes. */
+  groupLabels: {
+    both: 'Both do this',
+    ours: 'Only EcomSniper',
+    theirs: 'Where a listing tool wins',
+  },
+  /* The two lost rows are the section's whole credibility. Said plainly once,
+     so a shape can lead with it rather than leaving it to be inferred from
+     two dashes at the bottom of a table. */
+  concession: 'A bare listing tool is cheaper, and some have a free plan. Both true.',
   closer:
     'If price per month is the only thing that matters to you, a bare listing tool will be cheaper. If you want the business taught and the people around it, that is what we built.',
 };
