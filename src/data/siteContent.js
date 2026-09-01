@@ -1208,6 +1208,15 @@ export const ASSURANCE = {
     seal: { top: '30', bottom: 'Days' },
     /* The strip. Repeated by the component, so the copy states it once. */
     marquee: '30 day money back guarantee',
+    /* The door. Their own pricing page puts a button under this claim and
+       this section had none — the reader reaches the end of the argument
+       with nowhere to go but the scrollbar. The reassurance names the plan,
+       as every other statement of the guarantee on this site does.
+
+       Section 15 follows with the same door and a free one beside it; this
+       one is for the reader the guarantee just convinced. */
+    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+    reassurance: SITE.guarantee + '.',
     /* Their own closing line, off the live pricing page. It is the whole
        argument of the section in seven words. */
     closer: 'Now you have no risk. So you have no excuses.',
