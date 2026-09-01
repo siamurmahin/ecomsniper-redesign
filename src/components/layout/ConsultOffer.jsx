@@ -288,10 +288,16 @@ export default function ConsultOffer() {
                   </p>
                 )}
 
-                <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-dark">
+                {/* The mark is inline rather than a flex child. As a flex
+                    child the text node took the rest of the row, so there was
+                    nothing for justify-center to move: the sentence centred
+                    inside its own box and the shield stayed pinned to the far
+                    left of the card. Inline, it sits against the first word
+                    and the whole line centres together. */}
+                <p className="mt-4 text-center text-xs leading-relaxed text-muted-dark sm:text-left">
                   <Icon
                     name="shield"
-                    className="mt-px size-3.5 shrink-0"
+                    className="me-2 inline-block size-3.5 align-[-2px]"
                     aria-hidden="true"
                   />
                   {CONSULT.privacy}
