@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import Seo from '../components/ui/Seo';
 import ComparisonSection from '../sections/ComparisonSection';
 import ComparisonCards from '../sections/comparison-lab/ComparisonCards';
-import ComparisonTable from '../sections/comparison-lab/ComparisonTable';
-import ComparisonLosses from '../sections/comparison-lab/ComparisonLosses';
+import ComparisonGap from '../sections/comparison-lab/ComparisonGap';
+import ComparisonLean from '../sections/comparison-lab/ComparisonLean';
+import ComparisonNamed from '../sections/comparison-lab/ComparisonNamed';
 
 /**
  * Internal comparison page for section 11. Delete this file, its route and
@@ -17,26 +18,32 @@ const OPTIONS = [
   {
     n: 0,
     name: 'Live now',
-    note: 'One table, 925px of feature name and both answers pinned to the far right — 986px from a row to its own tick. Green ticks use the raw brand value as text.',
+    note: 'One table, 925px of feature name and both answers pinned to the far right — 986px from a row to its own tick.',
     render: () => <ComparisonSection />,
   },
   {
     n: 'A',
-    name: 'Two columns',
-    note: 'Read down, not across. Each column lists all eleven rows so it can be read on its own; the concession is stated under them.',
+    name: 'Two columns (current)',
+    note: 'Where we got to: scoreboard, red misses, brand edge on the winning column, concession and a door. Static.',
     render: (id) => <ComparisonCards id={id} />,
   },
   {
-    n: 'B',
-    name: 'The table, fixed',
-    note: 'Still a table, which is the format buyers expect — but half-and-quarters so the answers sit beside the question, and banded into both / only us / where they win.',
-    render: (id) => <ComparisonTable id={id} />,
+    n: 'D',
+    name: 'The gap, opening',
+    note: 'One grid instead of two lists, re-ordered into shared / only us / where they win, and the rows land 90ms apart — the five we win on flash as they arrive.',
+    render: (id) => <ComparisonGap id={id} />,
   },
   {
-    n: 'C',
-    name: 'Losses first',
-    note: 'Opens on the two rows we lose, then what the difference buys, then the shared ground compressed. Hands over the objection before the answer.',
-    render: (id) => <ComparisonLosses id={id} />,
+    n: 'E',
+    name: 'Cut to the argument',
+    note: 'No matrix. The concession at headline size, the five differences as tiles, the shared four named in one line. Shortest by far.',
+    render: (id) => <ComparisonLean id={id} />,
+  },
+  {
+    n: 'F',
+    name: 'Named competitors — shape only',
+    note: 'Layout for a three-way comparison, competitor cells deliberately blank. Needs the client to supply names and verified data per row.',
+    render: (id) => <ComparisonNamed id={id} />,
   },
 ];
 

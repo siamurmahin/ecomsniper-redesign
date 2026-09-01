@@ -854,6 +854,54 @@
        stagger's spacing all four land together and it reads as one event. */
     animation-delay: calc(var(--i) * 500ms);
   }
+  /* Section 11's rows arriving, so the gap between the two columns opens
+     while it is being watched rather than being there on arrival. Same
+     mechanism as the section 09 staircase: hidden only under `.js-motion`, a
+     delay derived from each row's own `--i`, transform and opacity only. */
+  .js-motion [data-cmp-row] {
+    opacity: 0;
+  }
+  [data-cmp='in'] [data-cmp-row] {
+    animation: cmp-row-in 460ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i) * 90ms);
+  }
+  @keyframes cmp-row-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 8px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* The five rows a listing tool does not have get a moment as they land —
+     the point of the section is that this is where the two columns diverge. */
+  [data-cmp='in'] [data-cmp-row][data-cmp-gap] {
+    animation:
+      cmp-row-in 460ms var(--ease-out-expo) both,
+      cmp-gap-flash 900ms ease-out both;
+    animation-delay: calc(var(--i) * 90ms), calc(var(--i) * 90ms + 120ms);
+  }
+  @keyframes cmp-gap-flash {
+    0%,
+    100% {
+      background-color: transparent;
+    }
+    30% {
+      background-color: rgb(134 184 23 / 0.16);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js-motion [data-cmp-row] {
+      opacity: 1 !important;
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+
   @keyframes step-lay-in {
     from {
       opacity: 0;
