@@ -13,7 +13,12 @@ const flagUrl = (code) => FLAGS[`../assets/flags/flag-${code.toLowerCase()}.png`
  * The guarantee names the plan it covers, in the same wording as the pricing
  * cards and the FAQ, because an unqualified version contradicted them.
  */
-export default function AssuranceSection() {
+/**
+ * @param {object} props
+ * @param {boolean} [props.showCloser] Set false on /pricing, whose header
+ *   already carries these four lines and carries them above the plans.
+ */
+export default function AssuranceSection({ showCloser = true }) {
   const sectionRef = useRevealOnScroll();
   const { countries, guarantee } = ASSURANCE;
 
@@ -126,9 +131,11 @@ export default function AssuranceSection() {
               </p>
             </div>
 
-            <p className="relative mt-10 font-display text-lg font-bold leading-snug text-paper sm:text-xl">
-              {guarantee.closer}
-            </p>
+            {showCloser && (
+              <p className="relative mt-10 font-display text-lg font-bold leading-snug text-paper sm:text-xl">
+                {guarantee.closer}
+              </p>
+            )}
           </div>
         </div>
       </div>

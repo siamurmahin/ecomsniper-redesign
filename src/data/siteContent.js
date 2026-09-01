@@ -968,10 +968,10 @@ export const PRICING = {
       featured: true,
       summary: 'For the one starting from zero.',
       features: [
-        'List up to 3,000 products a month',
+        'List 3,000 products every month',
         'Sniper Chrome Extension, to list and track with automation',
         'The full Dropship Mastery course',
-        'Private community',
+        'Private Dropshipping Community',
         'Priority support',
         'We will do everything until you get your first sale',
       ],
@@ -1005,10 +1005,10 @@ export const PRICING = {
         // shorthand; a buyer comparing the two pages wants the same list.
         'Sniper Chrome Extension, to list and track with automation',
         'The full Dropship Mastery course',
-        'Private community',
+        'Private Dropshipping Community',
       ],
-      guarantee: 'Final sale, no refunds.',
-      cta: { label: 'Get the 10K bundle', href: SITE.signupUrl },
+      guarantee: 'No refunds on this plan, final sale.',
+      cta: { label: 'Get the 10K Bundle', href: SITE.signupUrl },
     },
     {
       id: 'enterprise',
@@ -1022,35 +1022,44 @@ export const PRICING = {
       featured: false,
       summary: 'For the one building at full scale.',
       features: [
-        'Unlimited listings',
+        'Unlimited product listings',
         'The full Dropship Mastery course',
-        'VIP community',
+        'VIP private community access',
         'Priority 24/7 support',
-        'Done for you setup',
-        '1 on 1 coaching',
-        'We will do everything until you build a successful business',
+        'Done-for-you setup service',
+        '1-on-1 business coaching',
+        'We will do everything until you build a successful dropshipping business',
       ],
-      guarantee: 'Final sale, no refunds.',
+      guarantee: 'No refunds on this plan, final sale.',
       /* Was a contact form. Enterprise is not a sales call on their page:
          the button buys it, like the other two. Sending a buyer to a form
          for a plan they can purchase loses the sale. */
       cta: { label: 'Get the Enterprise plan', href: SITE.signupUrl },
     },
   ],
-  /* The /pricing header. It lived in the page component as literal JSX,
-     which is the one place copy is not allowed to live: the guarantee wording
-     has to be changeable in one file. included is the scan list — what
-     every plan carries — so it is not repeated three times in the cards. */
+  /* The /pricing header, which is the client's own and is better than the
+     one that stood here. Ours opened on the shape of the offer ("Three
+     ways in"); theirs opens on the question the visitor arrived with, and
+     answers it with the guarantee rather than with a plan.
+
+     The four `promises` are the same four lines as
+     `ASSURANCE.guarantee.closer`. They are stated once per page: the
+     assurance section drops its closer on /pricing, because this block
+     already carries them and carries them higher up. */
   page: {
-    headline: 'Three ways in. One guarantee.',
-    lead: 'The monthly plan is the one most people start on, and the only one covered by the 30 day money back guarantee. The other two trade that protection for a lower effective price.',
-    includedLabel: 'Included in every plan',
-    included: [
-      'The full Dropship Mastery course',
-      'The private community',
-      '24/7 human support',
-      'Price and stock monitoring',
-    ],
+    eyebrow: 'The decision',
+    headline: 'Is this going to work for you?',
+    lead: 'One protected month will answer that better than any page.',
+    guarantee: {
+      title: '30 day money back guarantee',
+      note: 'No questions asked',
+      promises: [
+        'The training teaches',
+        'The software lifts',
+        'The community catches',
+        'The guarantee protects',
+      ],
+    },
   },
   // Deck: state the real cost of entry so nobody is ambushed later.
   footnote:

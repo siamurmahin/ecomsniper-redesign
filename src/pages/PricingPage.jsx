@@ -1,11 +1,14 @@
 import Seo from '../components/ui/Seo';
-import Icon from '../components/ui/Icon';
 import PricingPreviewSection from '../sections/PricingPreviewSection';
 import ComparisonSection from '../sections/ComparisonSection';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
 import FinalCtaSection from '../sections/FinalCtaSection';
 import { PRICING, SITE } from '../data/siteContent';
+import { toneOf } from '../lib/signalTones';
+
+/** The four things a member gets, one tone each, in the order they reach them. */
+const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
 
 /**
  * /pricing — the same plan data as the homepage preview, never a second set of
@@ -41,7 +44,7 @@ export default function PricingPage() {
       <div className="site-shell pb-12 pt-36 sm:pt-44">
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
           <div>
-            <p className="section-eyebrow">{PRICING.eyebrow}</p>
+            <p className="section-eyebrow">{PRICING.page.eyebrow}</p>
 
             <h1 className="mt-5 max-w-2xl text-[length:var(--text-hero)] leading-[0.95]">
               {PRICING.page.headline}
@@ -52,28 +55,54 @@ export default function PricingPage() {
             </p>
           </div>
 
-          {/* Fills the second column with the thing buyers are scanning for:
-              what every plan carries, said once here rather than three times
-              down the cards. */}
-          <aside className="relative overflow-hidden rounded-3xl border border-hairline bg-white p-7 shadow-lift">
+          {/* The page asks a question, so the second column answers it before
+              a single price is read. Ink, because it is the answer and not a
+              sidebar: the three plan cards below it are the argument, this is
+              what makes trying any of them safe. */}
+          <aside className="relative overflow-hidden rounded-3xl border border-ink-line bg-ink p-7 text-paper shadow-float sm:p-8">
             <span
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-[3px] bg-[image:var(--gradient-brand)]"
+              className="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-signal-green/25 blur-3xl"
             />
-            <h2 className="micro-label text-muted">{PRICING.page.includedLabel}</h2>
-            <ul className="mt-4 flex flex-col gap-3">
-              {PRICING.page.included.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-[0.9rem] leading-snug">
-                  {/* Was the raw brand green at about 2.4:1 on paper. */}
-                  <span
-                    aria-hidden="true"
-                    className="mt-px grid size-[18px] shrink-0 place-items-center rounded-full bg-signal-green/15 text-signal-green-deep"
-                  >
-                    <Icon name="check" className="size-2.5" />
-                  </span>
-                  {item}
-                </li>
-              ))}
+
+            <div className="relative flex items-start gap-4">
+              {/* The seal, drawn rather than fetched: two words and a ring. */}
+              <span
+                aria-hidden="true"
+                className="grid size-16 shrink-0 place-items-center rounded-full border-2 border-signal-green/50 text-center font-label text-[0.62rem] uppercase leading-tight tracking-[0.08em] text-signal-green-soft"
+              >
+                30
+                <br />
+                days
+              </span>
+
+              <div>
+                <h2 className="font-display text-lg font-extrabold leading-tight tracking-tight sm:text-xl">
+                  {PRICING.page.guarantee.title}
+                </h2>
+                <p className="mt-1 micro-label text-signal-green-soft">
+                  {PRICING.page.guarantee.note}
+                </p>
+              </div>
+            </div>
+
+            {/* One tone each, in the order the four things reach a member:
+                the training, the software, the community, then the guarantee
+                standing behind all three. */}
+            <ul className="relative mt-6 grid gap-2.5 border-t border-paper/12 pt-6 sm:grid-cols-2">
+              {PRICING.page.guarantee.promises.map((promise, index) => {
+                const tone = toneOf(PROMISE_TONES[index % PROMISE_TONES.length]);
+
+                return (
+                  <li key={promise} className="flex items-center gap-2.5 text-[0.9rem] leading-snug">
+                    <span
+                      aria-hidden="true"
+                      className={`size-1.5 shrink-0 rounded-full ${tone.onInkDot}`}
+                    />
+                    {promise}
+                  </li>
+                );
+              })}
             </ul>
           </aside>
         </div>
@@ -84,7 +113,8 @@ export default function PricingPage() {
           already on, so it sends the reader to signup instead. */}
       <ComparisonSection cta={{ label: 'Start for $97', href: SITE.signupUrl }} />
       <FaqSection />
-      <AssuranceSection />
+      {/* Its closer is the same four lines the header already carries. */}
+      <AssuranceSection showCloser={false} />
       <FinalCtaSection />
     </>
   );
