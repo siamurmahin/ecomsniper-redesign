@@ -1,8 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
-import { EXIT_INTENT } from '../../data/siteContent';
+import Icon from '../ui/Icon';
+import { CONSULT, EXIT_INTENT, PLAYBOOK } from '../../data/siteContent';
+import playbookCover from '../../assets/brand/playbook-cover.webp';
 import { useModalLayer } from '../../hooks/useModalLayer';
-import { alreadyInterrupted, claimInterruption } from '../../lib/interruptions';
+import {
+  hasSeen,
+  isDialogOpen,
+  mark,
+  outcomeOf,
+  setDialogOpen,
+  OUTCOME,
+} from '../../lib/interruptions';
 
 /**
  * Exit-intent capture for the visitors who will not buy today — the page
@@ -19,12 +28,17 @@ export default function ExitIntentOffer() {
 
   const close = useCallback(() => {
     setIsOpen(false);
+    setDialogOpen(false);
     previouslyFocused.current?.focus?.();
   }, []);
 
   useEffect(() => {
-    // Never twice, never on touch, and never to someone already stopped once.
-    if (alreadyInterrupted(EXIT_INTENT.storageKey)) return undefined;
+    /* Never twice, never on touch, and never to someone who already gave the
+       consultation dialog their details — they said yes, and a popup on the
+       way out is a poor reward for it. Someone who dismissed that offer is
+       still fair game for a smaller one. */
+    if (hasSeen(EXIT_INTENT.storageKey)) return undefined;
+    if (outcomeOf(CONSULT.storageKey) === OUTCOME.converted) return undefined;
     if (window.matchMedia('(pointer: coarse)').matches) return undefined;
 
     // Give the visitor a fair chance to read the page first.
@@ -44,9 +58,14 @@ export default function ExitIntentOffer() {
       // Only the top edge counts as leaving; sideways is tab-switching.
       if (!armed || !event.isTrusted || event.clientY > 8) return;
       if (performance.now() - lastScrollAt < 250) return;
+      /* Both re-checked at the moment of firing: the consultation dialog may
+         be open, or may have been submitted, since this effect armed. */
+      if (isDialogOpen()) return;
+      if (outcomeOf(CONSULT.storageKey) === OUTCOME.converted) return;
       setIsOpen(true);
+      setDialogOpen(true);
       previouslyFocused.current = document.activeElement;
-      claimInterruption(EXIT_INTENT.storageKey);
+      mark(EXIT_INTENT.storageKey, OUTCOME.dismissed);
       document.documentElement.removeEventListener('mouseleave', onPointerLeave);
     };
 
@@ -71,7 +90,7 @@ export default function ExitIntentOffer() {
 
   return (
     <div
-      className="fixed inset-0 z-[60] grid place-items-center bg-ink/50 p-5 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] grid items-start justify-center overflow-y-auto bg-ink/60 p-4 backdrop-blur-sm sm:items-center sm:p-5"
       onClick={(event) => event.target === event.currentTarget && close()}
     >
       <div
@@ -80,29 +99,85 @@ export default function ExitIntentOffer() {
         aria-modal="true"
         aria-labelledby="exit-intent-title"
         tabIndex={-1}
-        className="w-full max-w-lg rounded-3xl border border-hairline bg-paper p-7 shadow-float sm:p-9"
+        className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-ink text-paper shadow-float"
         style={{ animation: 'exit-intent-in 520ms var(--ease-out-expo) both' }}
       >
-        <p className="section-eyebrow">{EXIT_INTENT.eyebrow}</p>
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-[3px] bg-[image:var(--gradient-brand)]"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-24 -top-24 size-72 rounded-full bg-accent/25 blur-3xl"
+        />
 
-        <h2 id="exit-intent-title" className="mt-3 text-[length:var(--text-display)] leading-[1.02]">
-          {EXIT_INTENT.title}
-        </h2>
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-ink-line text-muted-dark transition-colors duration-200 hover:border-paper/40 hover:text-paper"
+        >
+          <Icon name="close" className="size-3" aria-hidden="true" />
+        </button>
 
-        <p className="mt-4 text-[0.95rem] leading-relaxed text-muted">{EXIT_INTENT.body}</p>
+        {/* The book itself, not a description of it. This offer is a specific
+            object and the cover says in one glance what three lines of copy
+            were being asked to carry. */}
+        <div className="relative grid gap-6 p-5 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-9">
+          <img
+            src={playbookCover}
+            alt=""
+            aria-hidden="true"
+            width={855}
+            height={1370}
+            className="mx-auto w-24 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:w-32"
+          />
 
-        <div className="mt-7 flex flex-wrap items-center gap-3">
-          <CtaButton href={EXIT_INTENT.cta.href} intent="exit-intent-playbook" onClick={close}>
-            {EXIT_INTENT.cta.label}
-          </CtaButton>
+          <div className="text-center sm:text-left">
+            <p className="section-eyebrow section-eyebrow-on-ink justify-center sm:justify-start">
+              {EXIT_INTENT.eyebrow}
+            </p>
 
-          <button
-            type="button"
-            onClick={close}
-            className="rounded-full px-4 py-2 text-sm text-muted transition-colors hover:text-ink"
-          >
-            {EXIT_INTENT.dismiss}
-          </button>
+            <h2
+              id="exit-intent-title"
+              className="mt-3 font-display text-2xl font-extrabold leading-[1.1] sm:text-3xl"
+            >
+              {EXIT_INTENT.title}
+            </h2>
+
+            <p className="mt-3 text-sm leading-relaxed text-muted-dark">{EXIT_INTENT.body}</p>
+
+            {/* The playbook page's own reassurances, so the two descriptions of
+                one thing cannot drift apart. */}
+            <ul className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-2 sm:justify-start">
+              {PLAYBOOK.reassurances.map((item) => (
+                <li key={item} className="flex items-center gap-1.5 text-xs text-muted-dark">
+                  <Icon name="check" className="size-3 shrink-0 text-signal-green-soft" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:items-center">
+              <CtaButton
+                href={EXIT_INTENT.cta.href}
+                variant="onInk"
+                intent="exit-intent-playbook"
+                onClick={close}
+                className="w-full sm:w-auto"
+              >
+                {EXIT_INTENT.cta.label}
+              </CtaButton>
+
+              <button
+                type="button"
+                onClick={close}
+                className="text-xs text-muted-dark underline underline-offset-4 transition-colors duration-200 hover:text-paper"
+              >
+                {EXIT_INTENT.dismiss}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
