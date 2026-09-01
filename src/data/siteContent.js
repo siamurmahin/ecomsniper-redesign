@@ -969,12 +969,27 @@ export const PRICING = {
     {
       id: 'credits',
       name: '10K credits bundle',
+      /* `was` and `saving` are the client's own, off ecomsniper.io/pricing on
+         1 Sep 2026: the bundle is listed there at $597 struck through to $499,
+         "you save $98". This site was showing only the $499 and dropping a
+         real discount on the one section where price is the objection.
+
+         `recurring` is stated because that page says "3-month recurring
+         billing cycle" — "billed every 3 months" implies it and does not say
+         it, and this is a commitment rather than a one-off. */
       priceLabel: '$499',
+      was: '$597',
+      saving: 'You save $98',
       priceSuffix: 'billed every 3 months',
       thereafter: 'works out at $166.33 a month',
+      recurring: 'Recurring 3-month billing cycle',
       featured: false,
       summary: 'For sellers who already know the volume they need.',
-      features: ['List 10,000 products', 'Same software, same training', 'Same community access'],
+      features: [
+        '10,000 credits (9,000 plus a 1,000 bonus)',
+        'Same software, same training',
+        'Same community access',
+      ],
       guarantee: 'Final sale, no refunds.',
       cta: { label: 'Choose credits', href: SITE.signupUrl },
     },
