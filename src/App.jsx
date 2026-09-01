@@ -93,11 +93,11 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/faq" element={<FaqPage />} />
-          <Route path="/free-playbook" element={<PlaybookPage />} />
+          <Route path="/free-play-book" element={<PlaybookPage />} />
           {/* The live site's URL for the same page. A 301 in netlify.toml and
               public/_redirects handles it at the edge; this covers local dev and
               any host that ignores those files. */}
-          <Route path="/free-play-book" element={<Navigate to="/free-playbook" replace />} />
+          <Route path="/free-playbook" element={<Navigate to="/free-play-book" replace />} />
           {/* Internal comparison route; remove with the page once a direction is picked. */}
           <Route path="/design-lab" element={<DesignLabPage />} />
           <Route path="*" element={<NotFoundPage />} />

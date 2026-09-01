@@ -12,14 +12,13 @@
   # unset, Netlify picks its own default, which drifts between deploys.
   NODE_VERSION = "22"
 
-# The playbook's published URL. The live site serves it at /free-play-book and
-# this rebuild uses /free-playbook; the old one is the link in the description
-# of the book's own summary video, so it must not 404 when this replaces that
-# site. Declared before the SPA fallback because the first match wins, and
-# forced so it beats the catch-all below.
+# The playbook keeps the URL the live site already publishes,
+# /free-play-book. /free-playbook was this rebuild's own spelling for a while,
+# so it redirects here rather than 404ing. Declared before the SPA fallback
+# because the first match wins, and forced so it beats the catch-all below.
 [[redirects]]
-  from = "/free-play-book"
-  to = "/free-playbook"
+  from = "/free-playbook"
+  to = "/free-play-book"
   status = 301
   force = true
 

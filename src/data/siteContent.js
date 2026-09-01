@@ -110,7 +110,7 @@ export const HERO = {
   subhead:
     'Software that lists for you. Training that starts from zero. And people who answer at 2 in the morning.',
   primaryCta: SITE.startCta,
-  secondaryCta: { label: 'Get the free playbook', href: '/free-playbook' },
+  secondaryCta: { label: 'Get the free playbook', href: '/free-play-book' },
   /* Deck: price and risk reversal go under the hero buttons, not 900px down.
      Lead and detail are separate so the hero can set them at two weights —
      three equal-weight sentences read as small print. "On the monthly plan"
@@ -909,7 +909,7 @@ export const FOUNDERS = {
      wrong for. Saying "before you pay" is the argument the section is already
      making, and it is a promise the site can keep: the playbook is free and
      takes no card. No claim about the book's contents is added. */
-  bookCta: { label: 'Read it before you pay', href: '/free-playbook' },
+  bookCta: { label: 'Read it before you pay', href: '/free-play-book' },
   /* `people` is read by section 09's instructor row as well, so a name or a
      photo key changed here moves both sections.
 
@@ -1316,7 +1316,7 @@ export const EXIT_INTENT = {
   eyebrow: 'Before you go',
   title: 'Take the playbook with you.',
   body: 'The Invisible Store: how eBay dropshipping actually works when you have no stock, no website and no experience. 83 pages, free, no card.',
-  cta: { label: 'Send me the playbook', href: '/free-playbook' },
+  cta: { label: 'Send me the playbook', href: '/free-play-book' },
   dismiss: 'No thanks',
   storageKey: 'ecomsniper:exit-intent-seen',
 };
@@ -1404,7 +1404,7 @@ export const FOOTER = {
         { label: 'How it works', href: '/#how-it-works' },
         { label: 'Pricing', href: '/pricing' },
         { label: 'Dropship Mastery', href: '/#training' },
-        { label: 'Free playbook', href: '/free-playbook' },
+        { label: 'Free playbook', href: '/free-play-book' },
       ],
     },
     {
@@ -1467,7 +1467,7 @@ export const FOOTER = {
   secondDoor: {
     title: 'Not ready yet?',
     body: 'Take the free playbook and read it first. No card, no pressure.',
-    cta: { label: 'Get the free playbook', href: '/free-playbook' },
+    cta: { label: 'Get the free playbook', href: '/free-play-book' },
   },
 
   reviewsCta: 'Read the reviews on Trustpilot',

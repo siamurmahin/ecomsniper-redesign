@@ -95,7 +95,7 @@
         gap: 20px;
         animation: preloader-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
-      #preloader img {
+      #preloader .reticle-spin {
         width: 62px;
         height: 62px;
       }
@@ -106,18 +106,14 @@
         transform-origin: 50% 50%;
         animation: preloader-spin 1.15s linear infinite;
       }
-      /* Set rather than drawn: the wordmark artwork is a PNG, and inlining it
-         as a data URI to save a request would bloat the very document whose
-         parse speed this depends on. The stack falls back to the system UI
-         face, so it is legible from the first frame whether or not the
-         webfont has arrived. */
+      /* The wordmark itself, not type set to look like it. It used to be the
+         name in the display face with a system fallback, which meant the
+         first frame showed one shape and the frame after the webfont landed
+         showed another. 12.5KB, and it is the black-lettering artwork
+         because this sits on paper. */
       #preloader .preloader-word {
-        font-family: 'Bricolage Grotesque', 'Montserrat', system-ui, sans-serif;
-        font-size: 19px;
-        font-weight: 800;
-        letter-spacing: -0.01em;
-        color: #1e1f23;
-        line-height: 1;
+        width: 124px;
+        height: auto;
       }
       /* An indeterminate sweep, not a progress bar. Nothing here knows how far
          through the load it is, and a bar that pretends to is lying. */
@@ -208,7 +204,14 @@
 
         <!-- aria-hidden: the wrapper's label already says this, and a screen
              reader should not hear the name twice. -->
-        <span class="preloader-word" aria-hidden="true">EcomSniper</span>
+        <img
+          src="/logo-preloader.png"
+          alt=""
+          aria-hidden="true"
+          width="359"
+          height="107"
+          class="preloader-word"
+        />
         <span class="preloader-track" aria-hidden="true"></span>
       </div>
     </div>

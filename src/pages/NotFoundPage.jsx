@@ -32,7 +32,7 @@ export default function NotFoundPage() {
             <CtaButton href="/" intent="404-home">
               Back to the homepage
             </CtaButton>
-            <CtaButton href="/free-playbook" variant="secondary" intent="404-playbook">
+            <CtaButton href="/free-play-book" variant="secondary" intent="404-playbook">
               Get the free playbook
             </CtaButton>
           </div>
