@@ -52,7 +52,12 @@ function Wordmark() {
         1 +
         0.22 * strength
       ).toFixed(3)})`;
-      letter.style.setProperty('--fill', strength.toFixed(3));
+      /* The colour goes to full well before the movement does. Fading the
+         fill in proportion to the lift left the neighbours a washed-out
+         version of their own colour, which reads as a rendering artefact
+         rather than as a choice; only the outermost letter in reach is still
+         coming up. */
+      letter.style.setProperty('--fill', Math.min(1, strength * 3).toFixed(3));
     }
   };
 
@@ -62,7 +67,7 @@ function Wordmark() {
       ref={rowRef}
       onPointerMove={(event) => paint(event.clientX)}
       onPointerLeave={() => paint(null)}
-      className="mt-16 flex select-none justify-center whitespace-nowrap font-display text-[clamp(2.5rem,15vw,14rem)] font-extrabold leading-[0.86] tracking-[-0.04em]"
+      className="mt-16 flex select-none justify-center whitespace-nowrap font-display text-[clamp(2.25rem,12.5vw,11.5rem)] font-extrabold leading-[0.86] tracking-[-0.04em]"
     >
       {[...'ECOMSNIPER'].map((letter, index) => (
         <span
