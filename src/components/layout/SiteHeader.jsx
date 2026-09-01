@@ -87,10 +87,13 @@ export default function SiteHeader() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <a
               href={SITE.loginUrl}
-              className="hidden rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:text-ink sm:block"
+              // whitespace-nowrap and shrink-0: from about 1090px down, the
+              // row got tight enough to break "Log in" across two lines, which
+              // took the header's height with it.
+              className="hidden shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-ink sm:block xl:px-3.5"
             >
               Log in
             </a>

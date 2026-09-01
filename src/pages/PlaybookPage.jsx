@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import Seo from '../components/ui/Seo';
-import { PLAYBOOK, SITE } from '../data/siteContent';
+import { FOUNDERS, PLAYBOOK, SITE } from '../data/siteContent';
+import Icon from '../components/ui/Icon';
+import playbookCover from '../assets/brand/playbook-cover.webp';
+
+/** The author's portrait, resolved the way the founders section resolves it. */
+const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, import: 'default' });
+const author = FOUNDERS.people[0];
+const authorPortrait = PORTRAITS[`../assets/people/${author.photo}.jpg`];
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 /**
@@ -55,9 +62,31 @@ export default function PlaybookPage() {
         path="/free-playbook"
       />
 
-      <section ref={sectionRef} className="pb-24 pt-36 sm:pt-44">
+      <section ref={sectionRef} className="pb-20 pt-36 sm:pt-44">
         <div className="site-shell">
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
+            {/* The book itself. It was the one thing missing from its own
+                landing page: the cover was in the exit-intent dialog and
+                nowhere here, so the page asked for an email in exchange for
+                something the reader could not see. */}
+            <div
+              data-reveal
+              data-reveal-group="playbook"
+              className="relative mx-auto max-w-xs lg:max-w-none"
+            >
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -z-10 scale-90 rounded-full bg-accent/20 blur-3xl"
+              />
+              <img
+                src={playbookCover}
+                alt="The Invisible Store, the free EcomSniper playbook"
+                width={855}
+                height={1370}
+                className="w-full drop-shadow-[0_30px_60px_rgba(30,31,35,0.28)]"
+              />
+            </div>
+
             <div>
               <p className="section-eyebrow" data-reveal data-reveal-group="playbook">
                 {PLAYBOOK.eyebrow}
@@ -79,7 +108,7 @@ export default function PlaybookPage() {
                 {PLAYBOOK.lead}
               </p>
 
-              <ul className="mt-9 flex flex-col gap-3">
+              <ul className="mt-8 flex flex-col gap-3">
                 {PLAYBOOK.bullets.map((bullet) => (
                   <li
                     key={bullet}
@@ -87,82 +116,156 @@ export default function PlaybookPage() {
                     data-reveal-group="playbook-bullets"
                     className="flex items-start gap-3 text-[0.95rem] leading-relaxed"
                   >
+                    {/* Was the raw brand green at about 2.4:1 on paper, the
+                        same fault already fixed in sections 11 and 12. */}
                     <span
                       aria-hidden="true"
-                      className="mt-1.5 grid size-4 shrink-0 place-items-center rounded-full bg-ebay-green/15 text-[0.55rem] text-ebay-green"
+                      className="mt-px grid size-[18px] shrink-0 place-items-center rounded-full bg-signal-green/15 text-signal-green-deep"
                     >
-                      ✓
+                      <Icon name="check" className="size-2.5" />
                     </span>
                     {bullet}
                   </li>
                 ))}
               </ul>
-            </div>
 
-            {/* Capture form */}
-            <div
-              data-reveal
-              data-reveal-group="playbook-form"
-              className="rounded-3xl border border-hairline bg-white/70 p-8 shadow-lift sm:p-10"
-            >
-              {status === 'done' ? (
-                <div role="status">
-                  <h2 className="text-2xl font-extrabold tracking-tight">Check your inbox.</h2>
-                  <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">
-                    The playbook is on its way. If it has not arrived in a couple of minutes, look in
-                    promotions or spam — and reply to it either way. A person reads those.
-                  </p>
-                  <a
-                    href={SITE.discordUrl}
-                    rel="noopener noreferrer"
-                    className="btn-secondary mt-7"
-                  >
-                    Join the Discord while you wait
-                  </a>
-                </div>
-              ) : (
-                <form onSubmit={onSubmit} noValidate>
-                  <h2 className="text-2xl font-extrabold tracking-tight">
-                    Where should we send it?
-                  </h2>
+              {/* Capture form */}
+              <div
+                data-reveal
+                data-reveal-group="playbook-form"
+                className="mt-9 rounded-3xl border border-hairline bg-white p-6 shadow-lift sm:p-8"
+              >
+                {status === 'done' ? (
+                  <div role="status">
+                    <span
+                      aria-hidden="true"
+                      className="grid size-11 place-items-center rounded-full bg-signal-green text-ink"
+                    >
+                      <Icon name="check" className="size-5" />
+                    </span>
 
-                  <label htmlFor="playbook-email" className="mt-6 block text-sm font-medium">
-                    Email address
-                  </label>
-
-                  <input
-                    id="playbook-email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    inputMode="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="you@example.com"
-                    aria-describedby="playbook-smallprint"
-                    className="mt-2 w-full rounded-2xl border border-hairline bg-paper px-4 py-3.5 text-base outline-none transition-colors duration-200 placeholder:text-muted/60 focus:border-ink"
-                  />
-
-                  {status === 'error' && (
-                    <p role="alert" className="mt-3 text-sm text-ebay-red">
-                      That did not send. Try again, or email us and we will pass it on manually.
+                    <h2 className="mt-5 text-2xl font-extrabold tracking-tight">
+                      Check your inbox.
+                    </h2>
+                    <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">
+                      The playbook is on its way. If it has not arrived in a couple of minutes, look
+                      in promotions or spam &mdash; and reply to it either way. A person reads those.
                     </p>
-                  )}
+                    <a
+                      href={SITE.discordUrl}
+                      rel="noopener noreferrer"
+                      className="btn-secondary mt-7"
+                    >
+                      <Icon name="discord" className="size-4 shrink-0" aria-hidden="true" />
+                      Join the Discord while you wait
+                    </a>
+                  </div>
+                ) : (
+                  <form onSubmit={onSubmit} noValidate>
+                    <h2 className="text-xl font-extrabold tracking-tight sm:text-2xl">
+                      Where should we send it?
+                    </h2>
 
-                  <button
-                    type="submit"
-                    disabled={status === 'submitting'}
-                    className="btn-primary mt-5 w-full disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {status === 'submitting' ? 'Sending…' : PLAYBOOK.formCta}
-                  </button>
+                    <label htmlFor="playbook-email" className="mt-5 block text-sm font-medium">
+                      Email address
+                    </label>
 
-                  <p id="playbook-smallprint" className="mt-4 text-xs leading-relaxed text-muted">
-                    {PLAYBOOK.smallprint}
-                  </p>
-                </form>
-              )}
+                    <input
+                      id="playbook-email"
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      inputMode="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="you@example.com"
+                      aria-describedby="playbook-smallprint"
+                      className="mt-2 w-full rounded-2xl border border-hairline bg-paper px-4 py-3.5 text-base outline-none transition-colors duration-200 placeholder:text-muted/60 focus:border-ink"
+                    />
+
+                    {status === 'error' && (
+                      <p role="alert" className="mt-3 text-sm text-signal-red-deep">
+                        That did not send. Try again, or email us and we will pass it on manually.
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={status === 'submitting'}
+                      className="btn-primary mt-5 w-full disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {status === 'submitting' ? 'Sending…' : PLAYBOOK.formCta}
+                    </button>
+
+                    {/* Both of these were already written and neither was on
+                        the page. The exit-intent dialog was the only thing
+                        rendering them. */}
+                    <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
+                      {PLAYBOOK.reassurances.map((item) => (
+                        <li key={item} className="flex items-center gap-1.5 text-xs text-muted">
+                          <Icon
+                            name="check"
+                            className="size-3 shrink-0 text-signal-green-deep"
+                            aria-hidden="true"
+                          />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted">
+                      <Icon name="shield" className="mt-px size-3.5 shrink-0" aria-hidden="true" />
+                      {PLAYBOOK.privacy}
+                    </p>
+
+                    <p id="playbook-smallprint" className="mt-3 text-xs leading-relaxed text-muted">
+                      {PLAYBOOK.smallprint}
+                    </p>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Who wrote it. Their own page runs a "meet the author" block and it is
+          the right instinct: a free book from nobody is a lead magnet, a free
+          book from the person who built the software is the software's own
+          argument. The facts are the founders section's, so there is no second
+          version of his history to keep in step — and none of the figures
+          their page attaches to him. */}
+      <section aria-labelledby="playbook-author" className="section-band bg-paper-sunk">
+        <div className="site-shell">
+          <div className="grid gap-8 rounded-3xl border border-hairline bg-white p-8 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-10 sm:p-10">
+            <img
+              src={authorPortrait}
+              alt={author.name}
+              width={200}
+              height={200}
+              loading="lazy"
+              className="mx-auto size-28 rounded-full object-cover sm:mx-0 sm:size-32"
+            />
+
+            <div>
+              <p className="section-eyebrow">Written by</p>
+
+              <h2
+                id="playbook-author"
+                className="mt-3 font-display text-2xl font-extrabold tracking-tight"
+              >
+                {author.name}
+              </h2>
+
+              <p className="mt-1 text-sm text-muted">{author.role}</p>
+
+              <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-muted">
+                {/* Just his own line. Appending FOUNDERS.closer put "still
+                    running stores today" and "we still run stores" in the same
+                    paragraph. */}
+                {author.detail}
+              </p>
             </div>
           </div>
         </div>

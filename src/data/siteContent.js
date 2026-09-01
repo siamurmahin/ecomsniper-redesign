@@ -75,8 +75,14 @@ export const SITE = {
    same destination the footer already uses. Both were reachable only from the
    footer, which is the wrong place to make somebody scroll to. */
 export const NAV_LINKS = [
-  { label: 'How it works', href: '/#how-it-works' },
+  /* In the order the page itself runs, measured rather than assumed: proof at
+     2218px, how it works at 7270, training at 9946, founders at 11167. A nav
+     that lists a page out of order is a map with the streets rearranged — and
+     it read "How it works, Proof" while the page opens with the proof.
+
+     The two routes and the outside link follow, because they leave the page. */
   { label: 'Proof', href: '/#proof' },
+  { label: 'How it works', href: '/#how-it-works' },
   { label: 'Training', href: '/#training' },
   { label: 'About', href: '/#founders' },
   { label: 'Pricing', href: '/pricing' },

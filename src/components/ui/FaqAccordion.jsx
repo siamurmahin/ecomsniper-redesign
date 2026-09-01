@@ -74,6 +74,11 @@ export default function FaqAccordion({ items, defaultOpen = 0, reveal = true }) 
               </button>
             </h3>
 
+            {/* No right padding: it was reserving room for the plus toggle,
+                which sits in the question row above rather than beside the
+                answer, so it only ever shortened the lines. The measure is
+                held by max-w-2xl, which is a readability decision — this was
+                taking 40px off that on top. */}
             <div
               id={panelId}
               role="region"
@@ -89,7 +94,7 @@ export default function FaqAccordion({ items, defaultOpen = 0, reveal = true }) 
               {...(isOpen ? {} : { 'aria-hidden': 'true' })}
             >
               <p
-                className={`max-w-2xl pb-7 pr-10 text-[0.95rem] leading-relaxed text-muted transition-opacity duration-300 ${
+                className={`max-w-2xl pb-7 text-[0.95rem] leading-relaxed text-muted transition-opacity duration-300 ${
                   isOpen ? 'opacity-100' : 'opacity-0'
                 }`}
               >

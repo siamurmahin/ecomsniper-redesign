@@ -62,7 +62,12 @@ export default function StickyConversionBar() {
      * competing with the thing it exists to stand in for.
      */
     const onScroll = () => {
-      const closer = document.getElementById('guarantee');
+      /* Section 14 where it exists, the footer where it does not.
+         /free-playbook has no guarantee section, so the lookup returned null,
+         nothing was ever "the close", and the bar sat over that page's own
+         footer CTA — two calls to action stacked on top of each other, one of
+         them covering the other. */
+      const closer = document.getElementById('guarantee') ?? document.querySelector('footer');
 
       const scrolled = window.scrollY;
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
