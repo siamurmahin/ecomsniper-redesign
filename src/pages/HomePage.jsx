@@ -15,7 +15,6 @@ import FoundersSection from '../sections/FoundersSection';
 import ComparisonSection from '../sections/ComparisonSection';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
-import FinalCtaSection from '../sections/FinalCtaSection';
 import { FAQ } from '../data/siteContent';
 
 /**
@@ -41,8 +40,7 @@ import { FAQ } from '../data/siteContent';
  *  11 Comparison ........ the decision they are already making elsewhere
  *  12 Comparison close .. the price and the guarantee, then out to /pricing
  *  13 FAQ ............... last objections, answered in place
- *  14 Assurance ......... countries + guarantee
- *  15 Final CTA ......... pay now, or take a free door
+ *  14 Guarantee ......... the last argument, and the door out of it
  */
 export default function HomePage() {
   // FAQPage + Product schema, built from the same copy the page renders.
@@ -102,7 +100,6 @@ export default function HomePage() {
         <ComparisonSection />
         <FaqSection />
         <AssuranceSection />
-        <FinalCtaSection />
       </DeferUntilPainted>
     </>
   );

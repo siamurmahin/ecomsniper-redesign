@@ -4,7 +4,6 @@ import PricingPreviewSection from '../sections/PricingPreviewSection';
 import ComparisonSection from '../sections/ComparisonSection';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
-import FinalCtaSection from '../sections/FinalCtaSection';
 import { PRICING, SITE } from '../data/siteContent';
 import { toneOf } from '../lib/signalTones';
 
@@ -121,7 +120,6 @@ export default function PricingPage() {
       <FaqSection />
       {/* Its closer is the same four lines the header already carries. */}
       <AssuranceSection showCloser={false} />
-      <FinalCtaSection />
     </>
   );
 }

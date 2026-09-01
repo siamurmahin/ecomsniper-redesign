@@ -6,8 +6,8 @@ import { STICKY_CTA } from '../../data/siteContent';
  * Persistent conversion bar.
  *
  * Per the funnel review, the offer has to stay reachable once a visitor is
- * deep in the page: it appears after 25% scroll and hides again over the final
- * CTA, where a second copy of the same button would only compete with itself.
+ * deep in the page: it appears after 25% scroll and hides again over section
+ * 14, where a second copy of the same button would only compete with itself.
  */
 export default function StickyConversionBar() {
   const [isVisible, setIsVisible] = useState(false);
@@ -44,19 +44,35 @@ export default function StickyConversionBar() {
   }, []);
 
   useEffect(() => {
-    const finalCta = document.getElementById('final-cta');
-
+    /*
+     * Looked up on every scroll, not once on mount.
+     *
+     * This used to resolve the element in the effect body and keep it. Every
+     * section below the hero is mounted a frame later by DeferUntilPainted, so
+     * at the moment this effect runs the element does not exist yet — the
+     * lookup returned null, kept null, and the bar simply never hid. It sat
+     * over the closing section and, at the very bottom, over the footer.
+     *
+     * getElementById on an id is cheap and this is already running on scroll.
+     *
+     * The anchor is section 14, which is the page's close since the final CTA
+     * section was removed: it carries the seal, the price and the same signup
+     * button, so a floating copy of that button over the top of it is the bar
+     * competing with the thing it exists to stand in for.
+     */
     const onScroll = () => {
+      const closer = document.getElementById('guarantee');
+
       const scrolled = window.scrollY;
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       const ratio = scrollable > 0 ? scrolled / scrollable : 0;
 
-      // Hide once the real CTA block enters the viewport.
-      const finalCtaVisible = finalCta
-        ? finalCta.getBoundingClientRect().top < window.innerHeight * 0.9
+      // Hide once the real close enters the viewport.
+      const closerVisible = closer
+        ? closer.getBoundingClientRect().top < window.innerHeight * 0.9
         : false;
 
-      setIsVisible(ratio > STICKY_CTA.showAfterScrollRatio && !finalCtaVisible);
+      setIsVisible(ratio > STICKY_CTA.showAfterScrollRatio && !closerVisible);
     };
 
     onScroll();

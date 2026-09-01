@@ -1226,28 +1226,6 @@ export const ASSURANCE = {
   },
 };
 
-/* 15 — Final CTA + the second door Deck: the single most important change on the page. Give the 95% who are not ready to pay a way to stay in touch. */
-
-export const FINAL_CTA = {
-  headlineParts: ['ESCAPE THE 9 TO 5.', 'BUILD SOMETHING OF YOUR OWN.'],
-  /* Their own third line, off the live page. The two-line headline states the
-     escape and the ambition; this states what the thing actually is, which is
-     the sentence a reader repeats to someone else. */
-  lead: 'Create income that can continue while you sleep.',
-  blessing: { arabic: 'In shaa Allah', translation: 'IF GOD WILLS' },
-  primaryCta: { label: 'Start your eBay business, $97', href: SITE.signupUrl },
-  /* Was a third handwritten copy of the guarantee sentence. */
-  reassurance: SITE.guarantee + '.',
-  secondDoor: {
-    title: 'Not ready yet?',
-    body: 'Take the free playbook and read it first. Or join the Discord and watch how members actually work. No card, no pressure.',
-    ctas: [
-      { label: 'Get the free playbook', href: '/free-playbook', variant: 'primary', icon: 'openBook' },
-      { label: 'Join the Discord', href: SITE.discordUrl, variant: 'ghost', icon: 'discord' },
-    ],
-  },
-};
-
 /* Conversion furniture */
 
 export const STICKY_CTA = {
@@ -1296,6 +1274,22 @@ export const PLAYBOOK = {
    before this replaces it, or they land on the 404 page. */
 export const FOOTER = {
   tagline: 'Software, training and community for eBay sellers.',
+
+  /* Every link here was checked against what actually exists.
+
+     Eight of them used to point at routes this app does not have — /about,
+     /blog, /contact, /help, /terms, /privacy, /refunds and
+     /results-disclaimer — so the entire Company, Support and Legal columns
+     were 404s. This rebuild covers the homepage, /pricing and the playbook;
+     the rest of the site is still the live one, so the links go there, at the
+     slugs their own nav and footer use. Note that ecomsniper.io answers 200
+     for any path — it is a single page app with a catch-all — so a link
+     checker will call anything here healthy. These were taken from their
+     markup, not guessed and probed.
+
+     Dropped: Affiliate, which their footer points at /login, and Help centre,
+     which exists nowhere. A link that lands somewhere unrelated is worse than
+     no link. */
   columns: [
     {
       title: 'Product',
@@ -1309,17 +1303,17 @@ export const FOOTER = {
     {
       title: 'Company',
       links: [
-        { label: 'About', href: '/about' },
-        { label: 'Blog', href: '/blog' },
-        { label: 'Contact', href: '/contact' },
-        { label: 'Reviews', href: SITE.trustpilotUrl },
+        { label: 'About', href: 'https://ecomsniper.io/about' },
+        { label: 'Blog', href: 'https://ecomsniper.io/blog' },
+        { label: 'Careers', href: 'https://ecomsniper.io/careers' },
+        { label: 'Contact', href: 'https://ecomsniper.io/contact' },
       ],
     },
     {
       title: 'Support',
       links: [
         { label: 'FAQ', href: '/#faq' },
-        { label: 'Help centre', href: '/help' },
+        { label: 'The guarantee', href: '/#guarantee' },
         { label: 'Join the Discord', href: SITE.discordUrl },
         { label: 'Log in', href: SITE.loginUrl },
       ],
@@ -1327,13 +1321,40 @@ export const FOOTER = {
     {
       title: 'Legal',
       links: [
-        { label: 'Terms', href: '/terms' },
-        { label: 'Privacy', href: '/privacy' },
-        { label: 'Refund policy', href: '/refunds' },
-        { label: 'Results disclaimer', href: '/results-disclaimer' },
+        { label: 'Terms and conditions', href: 'https://ecomsniper.io/terms-and-conditions' },
+        { label: 'Privacy policy', href: 'https://ecomsniper.io/privacy-policy' },
+        { label: 'Reviews', href: SITE.trustpilotUrl },
       ],
     },
   ],
+
+  /* Their own contact block, which this footer did not carry at all. A page
+     that asks for $97 and states no phone number, no email and no address is
+     asking to be taken on faith. Every value is off their live footer. */
+  contact: {
+    title: 'Contact',
+    phone: { label: '1 (800) 994-9831', href: 'tel:+18009949831' },
+    email: { label: 'management@ecomsniper.io', href: 'mailto:management@ecomsniper.io' },
+    location: 'Toronto, Ontario, Canada',
+  },
+
+  /* Telegram is on their footer too and is deliberately not here: their own
+     link points back at the page it sits on, so there is no address to use. */
+  social: {
+    title: 'Join our community',
+    links: [
+      { label: 'Discord', href: SITE.discordUrl, icon: 'discord' },
+      { label: 'YouTube', href: 'https://www.youtube.com/@sammyecomsniper', icon: 'youtube' },
+      {
+        label: 'Facebook',
+        href: 'https://www.facebook.com/profile.php?id=61558534291940',
+        icon: 'facebook',
+      },
+    ],
+  },
+
+  reviewsCta: 'Read the reviews on Trustpilot',
+
   disclaimer:
     'EcomSniper is not affiliated with, endorsed by, or sponsored by eBay Inc. or Amazon.com, Inc. Results shown are from individual members and are not typical. Your results depend on the time you put in, your market, and factors outside anyone’s control.',
 };
