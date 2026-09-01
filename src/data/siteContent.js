@@ -15,6 +15,17 @@ export const SITE = {
   loginUrl: 'https://app.ecomsniper.io/login',
   discordUrl: 'https://discord.gg/ecomsniper',
   trustpilotUrl: 'https://uk.trustpilot.com/review/ecomsniper.io',
+
+  /* The guarantee, in one place. "On the monthly plan" is not decoration: the
+     10K credits bundle and Enterprise are final sale, so the unqualified
+     version is contradicted by the pricing page and the FAQ — one of the two
+     claim rules this file exists to enforce.
+
+     `TRAINING.guarantee` and `FEATURES.closer.guarantee` are older copies of
+     the same sentence and should fold into this one. Three copies of a claim
+     is three places for it to drift. */
+  guarantee: '30 day money back guarantee on the monthly plan',
+  priceFrom: 'From $97 for your first month',
 };
 
 export const NAV_LINKS = [
@@ -890,24 +901,15 @@ export const COMPARISON = {
   headline: 'What you get that a listing tool does not.',
   lead: 'Most dropshipping tools sell you software and leave you to work out the business. Here is the difference, including where we lose.',
   columns: ['EcomSniper', 'Typical listing tool'],
-  /* `proof` points a row at the section that already shows it, and is the
-     whole reason this table is not a list of assertions. A reader who does
-     not believe a row can go and look at it.
-
-     Only rows that genuinely have a section carry one — "done for you setup"
-     is an Enterprise line with nowhere to send anybody, and the shared rows
-     are not in dispute. Anything without a `proof` simply renders no link,
-     so the count can never fall out of step with the copy the way a sentence
-     saying "the four above" did. */
   rows: [
     { feature: 'Bulk lister', us: true, them: true },
     { feature: 'Price and stock monitoring', us: true, them: true },
     { feature: 'Competitor research', us: true, them: true },
     { feature: 'One click fulfilment', us: true, them: 'partial' },
-    { feature: 'Full training course included', us: true, them: false, proof: { href: '/#training', label: 'See the course' } },
-    { feature: 'Private community', us: true, them: false, proof: { href: '/#community', label: 'See the community' } },
-    { feature: 'Live weekly calls', us: true, them: false, proof: { href: '/#community', label: 'See the calls' } },
-    { feature: '24/7 human support', us: true, them: false, proof: { href: '/#community', label: 'See a 2am reply' } },
+    { feature: 'Full training course included', us: true, them: false },
+    { feature: 'Private community', us: true, them: false },
+    { feature: 'Live weekly calls', us: true, them: false },
+    { feature: '24/7 human support', us: true, them: false },
     { feature: 'Done for you setup', us: 'Enterprise plan', them: false },
     { feature: 'Cheapest possible price per month', us: false, them: true },
     { feature: 'Free plan', us: false, them: 'partial' },
@@ -925,6 +927,11 @@ export const COMPARISON = {
      so a shape can lead with it rather than leaving it to be inferred from
      two dashes at the bottom of a table. */
   concession: 'A bare listing tool is cheaper, and some have a free plan. Both true.',
+
+  /* The line that turns the admission into an offer. The concession above it
+     hands the reader the cheaper option; this is the question that puts the
+     decision back in front of them without arguing. */
+  pivot: 'So the only question left is which one you actually want.',
 
   /* This section sits directly above pricing, so its door is the price. Same
      label the proof bar and section 03 use for the same jump. */

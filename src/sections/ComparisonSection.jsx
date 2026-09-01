@@ -1,7 +1,7 @@
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import { COMPARISON } from '../data/siteContent';
+import { COMPARISON, SITE } from '../data/siteContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
@@ -99,20 +99,6 @@ function Column({ subtitle, title, side, strong }) {
                 {typeof value === 'string' && value !== 'partial' && (
                   <span className="ml-1.5 text-[0.78rem] font-semibold text-muted">({value})</span>
                 )}
-
-                {/* The row that carries the claim carries the way to check it.
-                    Only in our column: a link under the other one would be
-                    sending the reader to our own section as evidence about
-                    somebody else's product. */}
-                {strong && row.proof && (
-                  <a
-                    href={row.proof.href}
-                    className="ml-2 inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-accent/30 px-2 py-0.5 align-[0.05em] text-[0.7rem] font-semibold text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-paper"
-                  >
-                    {row.proof.label}
-                    <Icon name="arrowRight" className="size-2.5" aria-hidden="true" />
-                  </a>
-                )}
               </span>
             </li>
           );
@@ -163,27 +149,68 @@ export default function ComparisonSection() {
           <Column subtitle="What you get here" title={COMPARISON.columns[0]} side="us" strong />
         </div>
 
-        {/* The concession, given its own ground. It is the reason to believe
-            the rest of the section, so it is stated rather than left to two
-            dashes at the bottom of a list. */}
+        {/* The close. An admission that ends on nothing converts nothing: the
+            section hands the reader the cheaper option, so the answer to it
+            has to be in the same box, with the price and the risk reversal
+            attached. This is why it is ink rather than a gold tint — it is the
+            end of the argument, not a footnote to the table. */}
         <div
           data-reveal
-          data-reveal-group="comparison-concession"
-          className="mt-8 rounded-3xl border border-signal-gold/40 bg-signal-gold/[0.07] p-6 sm:p-8"
+          data-reveal-group="comparison-close"
+          className="relative mt-8 overflow-hidden rounded-3xl border border-ink-line bg-ink p-7 text-paper shadow-float sm:p-10"
         >
-          <p className={`micro-label ${gold.text}`}>{COMPARISON.groupLabels.theirs}</p>
-          <p className="mt-3 max-w-2xl font-display text-xl font-extrabold leading-snug tracking-tight sm:text-2xl">
-            {COMPARISON.concession}
-          </p>
-          <p className="mt-4 max-w-2xl text-[0.92rem] leading-relaxed text-muted">
-            {COMPARISON.closer}
-          </p>
-        </div>
+          {/* Gold, because this block belongs to the two rows they win. Kept
+              to a wash behind the type rather than a filled surface. */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-signal-gold/25 blur-3xl"
+          />
 
-        <div data-reveal data-reveal-group="comparison-cta" className="mt-8">
-          <CtaButton href={COMPARISON.cta.href} intent="comparison-pricing">
-            {COMPARISON.cta.label}
-          </CtaButton>
+          <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12">
+            <div>
+              <p className={`micro-label ${gold.onInk}`}>{COMPARISON.groupLabels.theirs}</p>
+
+              <p className="mt-4 max-w-xl font-display text-[length:var(--text-section)] font-extrabold leading-[1.1] tracking-tight">
+                {COMPARISON.concession}
+              </p>
+
+              <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-dark">
+                {COMPARISON.closer}
+              </p>
+
+              <p className="mt-5 max-w-xl font-display text-lg font-bold leading-snug">
+                {COMPARISON.pivot}
+              </p>
+            </div>
+
+            {/* The door, with what it costs and what happens if it is wrong.
+                Both sit beside the button rather than under the section, so
+                the objection and its answer are read together. */}
+            <div className="lg:border-l lg:border-paper/12 lg:pl-12">
+              <CtaButton href={COMPARISON.cta.href} variant="onInk" intent="comparison-pricing">
+                {COMPARISON.cta.label}
+              </CtaButton>
+
+              <ul className="mt-5 flex flex-col gap-2.5">
+                <li className="flex items-start gap-2.5 text-[0.85rem] leading-relaxed text-paper">
+                  <Icon
+                    name="salesGrowth"
+                    className="mt-0.5 size-4 shrink-0 text-signal-blue-soft"
+                    aria-hidden="true"
+                  />
+                  {SITE.priceFrom}
+                </li>
+                <li className="flex items-start gap-2.5 text-[0.85rem] leading-relaxed text-paper">
+                  <Icon
+                    name="shield"
+                    className="mt-0.5 size-4 shrink-0 text-signal-green-soft"
+                    aria-hidden="true"
+                  />
+                  {SITE.guarantee}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
