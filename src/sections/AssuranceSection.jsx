@@ -12,25 +12,98 @@ const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
 const INK = '#1e1f23';
 
 /**
- * The stamp. Two rings and two words, drawn rather than fetched — an image
- * would be one more request for something the type already says.
+ * The stamp.
+ *
+ * It was two thin rings around two words, which is a circle with type in it
+ * rather than a seal. A seal has an edge you could feel and it says what it
+ * certifies around the rim, so this one does both: a perforated outer edge, a
+ * tinted field, and the claim itself set on the ring.
+ *
+ * Drawn, not fetched. An image would be one more request for something the
+ * type already says, and it would not take the page's colours with it.
+ *
+ * `textLength` pins the ring text to the circumference and lets the browser
+ * space it, so the copy can be reworded in the deck without the letters
+ * bunching at the top of the circle or running out before they close it.
  */
+const RING_RADIUS = 76;
+const RING_LENGTH = Math.round(2 * Math.PI * RING_RADIUS);
+
 function Seal({ className }) {
-  const { seal } = ASSURANCE.guarantee;
+  const { seal, marquee } = ASSURANCE.guarantee;
 
   return (
-    <span
+    <svg
+      viewBox="0 0 200 200"
       aria-hidden="true"
-      className={`relative grid shrink-0 place-items-center rounded-full border-2 border-signal-green/45 ${className}`}
+      className={`shrink-0 text-signal-green-soft ${className}`}
     >
-      <span className="absolute inset-[7px] rounded-full border border-signal-green/25" />
-      <span className="text-center font-display text-3xl font-extrabold leading-none text-signal-green-soft">
+      <defs>
+        {/* Clockwise from the top, so the words read the right way up. */}
+        <path
+          id="guarantee-seal-ring"
+          fill="none"
+          d={`M100,100 m0,-${RING_RADIUS} a${RING_RADIUS},${RING_RADIUS} 0 1,1 -0.01,0`}
+        />
+      </defs>
+
+      {/* The field. A tint, so the seal reads as pressed into the ink rather
+          than stuck on top of it. */}
+      <circle cx="100" cy="100" r="94" className="fill-signal-green/10" />
+
+      {/* The perforated edge — the part that makes it a stamp and not a badge. */}
+      <circle
+        cx="100"
+        cy="100"
+        r="94"
+        fill="none"
+        strokeWidth="2"
+        strokeDasharray="2 7"
+        strokeLinecap="round"
+        className="stroke-signal-green/60"
+      />
+
+      <text
+        className="font-label uppercase"
+        fill="currentColor"
+        fontSize="11"
+        letterSpacing="1"
+      >
+        <textPath
+          href="#guarantee-seal-ring"
+          startOffset="0"
+          textLength={RING_LENGTH}
+          lengthAdjust="spacing"
+        >
+          {`${marquee} · ${marquee} ·`}
+        </textPath>
+      </text>
+
+      {/* The inner rule separates the certificate from what it certifies. */}
+      <circle cx="100" cy="100" r="58" fill="none" strokeWidth="1" className="stroke-signal-green/30" />
+
+      <text
+        x="100"
+        y="96"
+        textAnchor="middle"
+        fill="currentColor"
+        className="font-display font-extrabold"
+        fontSize="52"
+      >
         {seal.top}
-        <span className="mt-1 block font-label text-[0.58rem] uppercase tracking-[0.18em]">
-          {seal.bottom}
-        </span>
-      </span>
-    </span>
+      </text>
+      <text
+        x="100"
+        y="124"
+        textAnchor="middle"
+        fill="currentColor"
+        className="font-label uppercase"
+        fontSize="13"
+        letterSpacing="3.5"
+      >
+        {seal.bottom}
+      </text>
+    </svg>
   );
 }
 
@@ -78,7 +151,7 @@ export default function AssuranceSection({ showCloser = true }) {
           />
 
           <div className="relative grid gap-8 p-8 sm:p-10 lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-12">
-            <Seal className="size-28 sm:size-32" />
+            <Seal className="size-32 sm:size-40" />
 
             <div>
               <p className="section-eyebrow section-eyebrow-on-ink">{guarantee.eyebrow}</p>
