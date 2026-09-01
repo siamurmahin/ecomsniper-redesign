@@ -890,15 +890,24 @@ export const COMPARISON = {
   headline: 'What you get that a listing tool does not.',
   lead: 'Most dropshipping tools sell you software and leave you to work out the business. Here is the difference, including where we lose.',
   columns: ['EcomSniper', 'Typical listing tool'],
+  /* `proof` points a row at the section that already shows it, and is the
+     whole reason this table is not a list of assertions. A reader who does
+     not believe a row can go and look at it.
+
+     Only rows that genuinely have a section carry one — "done for you setup"
+     is an Enterprise line with nowhere to send anybody, and the shared rows
+     are not in dispute. Anything without a `proof` simply renders no link,
+     so the count can never fall out of step with the copy the way a sentence
+     saying "the four above" did. */
   rows: [
     { feature: 'Bulk lister', us: true, them: true },
     { feature: 'Price and stock monitoring', us: true, them: true },
     { feature: 'Competitor research', us: true, them: true },
     { feature: 'One click fulfilment', us: true, them: 'partial' },
-    { feature: 'Full training course included', us: true, them: false },
-    { feature: 'Private community', us: true, them: false },
-    { feature: 'Live weekly calls', us: true, them: false },
-    { feature: '24/7 human support', us: true, them: false },
+    { feature: 'Full training course included', us: true, them: false, proof: { href: '/#training', label: 'See the course' } },
+    { feature: 'Private community', us: true, them: false, proof: { href: '/#community', label: 'See the community' } },
+    { feature: 'Live weekly calls', us: true, them: false, proof: { href: '/#community', label: 'See the calls' } },
+    { feature: '24/7 human support', us: true, them: false, proof: { href: '/#community', label: 'See a 2am reply' } },
     { feature: 'Done for you setup', us: 'Enterprise plan', them: false },
     { feature: 'Cheapest possible price per month', us: false, them: true },
     { feature: 'Free plan', us: false, them: 'partial' },

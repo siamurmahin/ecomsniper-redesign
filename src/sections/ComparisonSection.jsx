@@ -99,6 +99,20 @@ function Column({ subtitle, title, side, strong }) {
                 {typeof value === 'string' && value !== 'partial' && (
                   <span className="ml-1.5 text-[0.78rem] font-semibold text-muted">({value})</span>
                 )}
+
+                {/* The row that carries the claim carries the way to check it.
+                    Only in our column: a link under the other one would be
+                    sending the reader to our own section as evidence about
+                    somebody else's product. */}
+                {strong && row.proof && (
+                  <a
+                    href={row.proof.href}
+                    className="ml-2 inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-accent/30 px-2 py-0.5 align-[0.05em] text-[0.7rem] font-semibold text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-paper"
+                  >
+                    {row.proof.label}
+                    <Icon name="arrowRight" className="size-2.5" aria-hidden="true" />
+                  </a>
+                )}
               </span>
             </li>
           );
