@@ -38,11 +38,15 @@ export const SITE = {
   /* The four things a member gets, in the order they reach them. Section
      14 and the /pricing header both state these; they were two copies of
      one claim, which is the fault this file exists to prevent. */
+  /* Each carries its own icon, because the icon is part of what the line
+     means and not a position in a list: the training is taught, the software
+     does the lifting, the community catches you, the guarantee is the shield.
+     The tone stays positional — colour is presentation, the mark is not. */
   promises: [
-    'The training teaches',
-    'The software lifts',
-    'The community catches',
-    'The guarantee protects',
+    { text: 'The training teaches', icon: 'graduationCap' },
+    { text: 'The software lifts', icon: 'robot' },
+    { text: 'The community catches', icon: 'people' },
+    { text: 'The guarantee protects', icon: 'shield' },
   ],
 };
 

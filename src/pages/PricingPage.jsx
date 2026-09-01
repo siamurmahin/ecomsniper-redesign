@@ -1,4 +1,5 @@
 import Seo from '../components/ui/Seo';
+import Icon from '../components/ui/Icon';
 import PricingPreviewSection from '../sections/PricingPreviewSection';
 import ComparisonSection from '../sections/ComparisonSection';
 import FaqSection from '../sections/FaqSection';
@@ -94,12 +95,17 @@ export default function PricingPage() {
                 const tone = toneOf(PROMISE_TONES[index % PROMISE_TONES.length]);
 
                 return (
-                  <li key={promise} className="flex items-center gap-2.5 text-[0.9rem] leading-snug">
+                  <li
+                    key={promise.text}
+                    className="flex items-center gap-3 text-[0.9rem] leading-snug"
+                  >
                     <span
                       aria-hidden="true"
-                      className={`size-1.5 shrink-0 rounded-full ${tone.onInkDot}`}
-                    />
-                    {promise}
+                      className={`grid size-7 shrink-0 place-items-center rounded-full bg-paper/[0.07] ${tone.onInk}`}
+                    >
+                      <Icon name={promise.icon} className="size-3.5" />
+                    </span>
+                    {promise.text}
                   </li>
                 );
               })}
