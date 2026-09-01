@@ -201,7 +201,11 @@ export default function ConsultOffer() {
                   {CONSULT.fieldLabel}
                 </label>
 
-                <div className="mt-2.5 flex flex-col gap-2.5 sm:flex-row">
+                {/* Stacked, not a row. The button's label is five words long,
+                    so beside it the field collapsed to about 170px — narrower
+                    than the address it is asking for, with the placeholder
+                    already clipped before anyone had typed anything. */}
+                <div className="mt-2.5 flex flex-col gap-2.5">
                   <input
                     id="consult-email"
                     name="email"
@@ -218,7 +222,7 @@ export default function ConsultOffer() {
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="btn-on-ink shrink-0 disabled:opacity-60"
+                    className="btn-on-ink w-full disabled:opacity-60"
                     data-cta-intent="consult-submit"
                   >
                     {status === 'submitting' ? 'Sending…' : CONSULT.cta}
