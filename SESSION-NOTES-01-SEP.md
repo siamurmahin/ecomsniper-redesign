@@ -11,24 +11,25 @@ session as a whole: **open the live section before designing it.**
 
 ## 1. Where this stopped, and what is next
 
-Sections 08, 09 and 10 have all had their pass. The walk is now at
-**11 Comparison**.
+Sections 08 to 11 have all had their pass. The walk is now at
+**12 Pricing preview**.
 
 ```
-11  Comparison        ← next in the walk
-12  Pricing preview
+12  Pricing preview   ← next in the walk
 13  FAQ
 14  Assurance         (comment trim only)
 15  Final CTA         (comment trim only)
 ```
 
 Commits: `f48692d`, `42d8c76`, `ec164e3`, `b77c8bd`, `63c90f2`, `ceb0ec5`,
-`71d6d04`, `5bc2331`, `40fd14c`, `da12455`, `48b0880`, `aa73867`.
+`71d6d04`, `5bc2331`, `40fd14c`, `da12455`, `48b0880`, `aa73867`, `a02f3a0`,
+`8e194c0`, `d970472`, `d118d81`, `893cca5`, `7f1b58b`.
 
-Three throwaway labs were built and deleted this session — `/community-lab`,
-`/training-lab`, `/founders-lab`. The pattern works and is worth keeping:
-option 0 is what is live, every option carries its measured height, and the
-losing options are deleted with the lab rather than left in the tree.
+Four throwaway labs were built and deleted this session — `/community-lab`,
+`/training-lab`, `/founders-lab`, `/comparison-lab`. The pattern works and is
+worth keeping: option 0 is what is live, every option carries its measured
+height, and the losing options are deleted with the lab rather than left in
+the tree.
 
 **`b7110cc` was sitting unpushed** when this session started, despite the
 31 Aug notes saying all 27 commits were on `main` — the docs commit that wrote
@@ -276,9 +277,56 @@ component. It carries both now.
 
 ---
 
-## 7. Open
+## 7. Section 11 — six shapes before one landed
 
-Unchanged from the 31 Aug list except that sections 08, 09 and 10 are off it:
+Worth recording because the process went badly and the reason is instructive.
+
+The live section was one table: 925px of feature name, both answers pinned to
+the far right, **986px from "Bulk lister" to the tick that resolves it**. It
+also used the raw brand green as text at about 2.4:1 — it predates the tone
+system and never got converted.
+
+Six shapes were built. A table with a half-and-quarters split, a
+losses-first block, two columns, an animated grid that opened the gap as it
+scrolled, a cut-down version with no matrix at all, and a named-competitor
+stub. **Two columns won, and it was the second thing built.**
+
+The lesson is not about the shapes. Three rounds were spent adding things to
+the winning shape that the client then removed — a counted scoreboard, and a
+note tying the rows back to the sections that prove them. Both were mine
+rather than the copy deck's, both were defensible, and neither was asked for.
+**When a shape is approved, change what was asked and stop.**
+
+The note was also wrong: it said "the four above" when five rows are ours
+alone, and "above" while sitting under two columns. It was written against an
+earlier layout and never re-checked when the shape changed. A line invented to
+explain the design is a line nobody proofreads.
+
+**The named-competitor shape was deliberately left unfinished.** Naming a real
+tool and stating what it does is a factual claim about someone else's product:
+the names and a verified yes/no/partial per row have to come from the client,
+with the date checked, and be re-checked as their pricing pages change. The
+shape is deleted; the reasoning is here so it is not rebuilt blind.
+
+Which side a row falls on is derived from its own values — a row we do not
+have is a loss, a row they do not have is a win — and inlined in the section.
+Change a value and the row moves itself.
+
+### Two self-inflicted ones
+
+**`sed -i '/^$/{ /./!d }'` stripped every blank line from a file.** Caught and
+restored from git, no damage survived, but it should never have been run on a
+source file.
+
+**A file restored by `git checkout` comes back with CRLF**, and a regex
+written with bare `\n` then silently matches nothing. Use `\r?\n` for any
+pattern that has to survive a checkout in this repo.
+
+---
+
+## 8. Open
+
+Unchanged from the 31 Aug list except that sections 08 to 11 are off it:
 
 - **`/design-lab` still ships.** 303 lines from the 29 Aug build, still routed
   in `App.jsx`, in the production bundle, not disallowed in `robots.txt`.

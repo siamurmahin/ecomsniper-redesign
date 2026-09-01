@@ -66,8 +66,8 @@ it came out of the 29 Aug scaffold and has not had its pass yet.
 | 08 Community | **Passed** — the 2am answer, drawn and typed | 1 Sep |
 | 09 Step by step | **Passed** — staircase beside the course card, counted on a loop | 1 Sep |
 | 10 Founders | **Passed** — the founder's book, and a third free door | 1 Sep |
-| 11 Comparison | **Built** ← next | 29 Aug |
-| 12 Pricing preview | **Built** | 29 Aug |
+| 11 Comparison | **Passed** — two columns read down, misses in red | 1 Sep |
+| 12 Pricing preview | **Built** ← next | 29 Aug |
 | 13 FAQ | **Built** | 29 Aug |
 | 14 Assurance | **Built** | 29 Aug |
 | 15 Final CTA | **Built** | 29 Aug |
@@ -97,6 +97,15 @@ The playbook is the founder's own book. `ecomsniper.io/free-play-book` states
 it — *"the exact system Sammy (CEO EcomSniper) used"* — and the cover artwork
 in `thumb-security-guard-300k` says the same. That is why section 10 can offer
 it as evidence rather than as another banner.
+
+Section 11 is two columns read down, not a table read across: the version it
+replaced put 925px of feature name between a row and its own answer. Both
+columns carry all eleven rows, because a column showing only what it has is a
+brochure rather than a comparison, and the two rows we lose stay in plain
+sight. **A named-competitor version was built and deleted** — naming a real
+tool means factual claims about someone else's product, which have to come
+from the client with a checked date and be re-checked as their pricing pages
+change.
 
 ### What changed against the old site, and why
 
