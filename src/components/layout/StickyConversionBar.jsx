@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import { STICKY_CTA } from '../../data/siteContent';
 
@@ -11,6 +11,37 @@ import { STICKY_CTA } from '../../data/siteContent';
  */
 export default function StickyConversionBar() {
   const [isVisible, setIsVisible] = useState(false);
+  const barRef = useRef(null);
+
+  /*
+   * Publish the bar's real height, so whatever sits above it can clear it.
+   * The token was a hardcoded 4.25rem and the bar measures 77px on a desktop,
+   * more once the copy wraps on a narrow phone — the back to top button was
+   * being placed 7px above a bar it is meant to sit clear of, and less than
+   * that at any width where the bar grows.
+   */
+  useEffect(() => {
+    const node = barRef.current;
+    if (!node) return undefined;
+
+    const publish = ([entry]) => {
+      const height = Math.round(entry.contentRect.height);
+      if (height > 0) {
+        document.documentElement.style.setProperty('--sticky-cta-height', height + 'px');
+      }
+    };
+
+    /* Once up front: a ResizeObserver only delivers on a rendering
+       opportunity, which a background tab never gives it. */
+    const first = Math.round(node.getBoundingClientRect().height);
+    if (first > 0) {
+      document.documentElement.style.setProperty('--sticky-cta-height', first + 'px');
+    }
+
+    const observer = new ResizeObserver(publish);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const finalCta = document.getElementById('final-cta');
@@ -39,6 +70,7 @@ export default function StickyConversionBar() {
 
   return (
     <div
+      ref={barRef}
       className={`fixed inset-x-0 bottom-0 z-40 transition-[transform,opacity] duration-500 ease-[var(--ease-out-expo)] ${
         isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-full opacity-0'
       }`}

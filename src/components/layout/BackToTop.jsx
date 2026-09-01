@@ -25,8 +25,15 @@ import { scrollToTarget } from '../../lib/smoothScroll';
 /** Roughly a screen and a half down before it is worth offering. */
 const SHOW_AFTER = 1.6;
 
+/** Measured directly, so the first answer does not wait on a frame. */
+const pastThreshold = () =>
+  typeof window !== 'undefined' && window.scrollY > window.innerHeight * SHOW_AFTER;
+
 export default function BackToTop() {
-  const [isVisible, setIsVisible] = useState(false);
+  /* Was false until a requestAnimationFrame resolved. A background tab does
+     not run frames, so a page restored mid-scroll showed no button until the
+     next wheel tick. The first answer is cheap; measure it. */
+  const [isVisible, setIsVisible] = useState(pastThreshold);
   const frameRef = useRef(0);
 
   useEffect(() => {
@@ -34,7 +41,7 @@ export default function BackToTop() {
       if (frameRef.current) return;
       frameRef.current = requestAnimationFrame(() => {
         frameRef.current = 0;
-        setIsVisible(window.scrollY > window.innerHeight * SHOW_AFTER);
+        setIsVisible(pastThreshold());
       });
     };
 
@@ -58,10 +65,11 @@ export default function BackToTop() {
          takes the clicks aimed at whatever is under it, and this one sits over
          the page's own content. */
       hidden={!isVisible}
-      className={`group fixed right-4 z-40 grid size-12 place-items-center rounded-full border border-hairline bg-paper text-ink shadow-float transition-[opacity,transform] duration-400 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:bg-ink hover:text-paper sm:right-6 ${
+      className={`group fixed right-4 z-50 grid size-12 place-items-center rounded-full border border-hairline bg-paper text-ink shadow-float transition-[opacity,transform] duration-400 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:bg-ink hover:text-paper sm:right-6 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
-      style={{ bottom: 'calc(var(--sticky-cta-height) + 1rem)' }}
+      /* The bar measures and publishes its own height; this clears it. */
+      style={{ bottom: 'calc(var(--sticky-cta-height, 4.25rem) + 1rem)' }}
     >
       <Icon
         name="chevronDown"
