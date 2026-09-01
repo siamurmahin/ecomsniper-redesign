@@ -7,6 +7,10 @@
 
 /* Global */
 
+/* The signup host, named before SITE so the door below can be built from
+   it inside the same object literal. */
+const SIGNUP_URL = 'https://ecomsniper.io/register';
+
 export const SITE = {
   name: 'EcomSniper',
   domain: 'https://ecomsniper.io',
@@ -19,7 +23,7 @@ export const SITE = {
      - the Discord invite was discord.gg/ecomsniper, which is not a
        server. discord.gg answers 200 for any code and renders an invalid
        invite page, so it looked alive to a link checker. */
-  signupUrl: 'https://ecomsniper.io/register',
+  signupUrl: SIGNUP_URL,
   loginUrl: 'https://ecomsniper.io/login',
   discordUrl: 'https://discord.gg/DGkSJ5QZww',
   trustpilotUrl: 'https://uk.trustpilot.com/review/ecomsniper.io',
@@ -29,10 +33,16 @@ export const SITE = {
      version is contradicted by the pricing page and the FAQ — one of the two
      claim rules this file exists to enforce.
 
-     `TRAINING.guarantee` and `FEATURES.closer.guarantee` are older copies of
-     the same sentence and should fold into this one. Three copies of a claim
-     is three places for it to drift. */
+     Everything that states this claim reads it from here. It used to be
+     written out in four places, each carrying its own copy of that warning — which is the tell: a
+     rule that has to be restated everywhere is a rule waiting to be missed
+     in one of them. */
   guarantee: '30 day money back guarantee on the monthly plan',
+
+  /* The signup door. Six sections were carrying their own copy of this
+     exact object — the same label, the same href — and each one is a place
+     the label can be reworded without the other five following. */
+  startCta: { label: 'Start your eBay business', href: SIGNUP_URL },
   priceFrom: 'From $97 for your first month',
 
   /* The four things a member gets, in the order they reach them. Section
@@ -77,7 +87,7 @@ export const HERO = {
   markWords: ['SLEEP', 'WORK', 'COMMUTE'],
   subhead:
     'Software that lists for you. Training that starts from zero. And people who answer at 2 in the morning.',
-  primaryCta: { label: 'Start your eBay business', href: SITE.signupUrl },
+  primaryCta: SITE.startCta,
   secondaryCta: { label: 'Get the free playbook', href: '/free-playbook' },
   /* Deck: price and risk reversal go under the hero buttons, not 900px down.
      Lead and detail are separate so the hero can set them at two weights —
@@ -574,15 +584,10 @@ export const PROOF = {
     /* The door, at the end of the evidence. Someone convinced by the figures
        should not have to scroll past four more sections to act on it.
 
-       `guarantee` carries "on the monthly plan" and must keep carrying it.
-       That qualification is one of the two claim rules this file exists to
-       enforce (see the note at the top): the 10K credits bundle and the
-       Enterprise plan are final sale, so an unqualified "30 day money back
-       guarantee" is a promise the pricing page then contradicts. That exact
-       contradiction was already found and fixed once in section 14. */
+       The claim and the door both come from SITE. */
     closer: {
-    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
-      guarantee: '30 day money back guarantee on the monthly plan',
+      cta: SITE.startCta,
+      guarantee: SITE.guarantee,
     },
   },
 
@@ -627,7 +632,7 @@ export const PILLARS = {
      The cards themselves still link into the detail for anyone who wants it. */
   closer: {
     lead: 'Each one plays a different role.',
-    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+    cta: SITE.startCta,
   },
   lead: 'Everything you need to build your eBay business.',
   /* `tone` follows the live site: software blue, community gold, training
@@ -715,16 +720,11 @@ export const FEATURES = {
   /* How the live site closes this section too: the payoff line, a door, and a
      question that hands over to the community section directly below — which
      opens "Here's what 'never alone' looks like", so the bridge and the
-     section it introduces are the same sentence answered.
-
-     `guarantee` carries "on the monthly plan" and has to keep carrying it.
-     That qualification is one of the two claim rules this file exists to
-     enforce: the credits bundle and the Enterprise plan are final sale, so
-     the unqualified version is contradicted by the pricing page and the FAQ. */
+     section it introduces are the same sentence answered. */
   closer: {
     lead: 'More time building. Less time clicking.',
-    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
-    guarantee: '30 day money back guarantee on the monthly plan',
+    cta: SITE.startCta,
+    guarantee: SITE.guarantee,
     /* Marked on exactly the two words the next section's headline puts in
        quotes — "Here's what 'never alone' looks like." The bridge asks it and
        the section below answers it in the same words, so the mark is the
@@ -841,12 +841,8 @@ export const TRAINING = {
     detail: 'No warehouse. No website. No money tied up in stock you might not sell.',
   },
 
-  /* Carries "on the monthly plan" and has to keep carrying it: the 10K credits
-     bundle and Enterprise are final sale, so the unqualified version is
-     contradicted by the pricing page and the FAQ. One of the two claim rules
-     this file exists to enforce. */
-  cta: { label: 'Start your eBay business', href: SITE.signupUrl },
-  guarantee: '30 day money back guarantee on the monthly plan',
+  cta: SITE.startCta,
+  guarantee: SITE.guarantee,
   course: {
     eyebrow: 'The course',
     name: 'Dropship Mastery',
@@ -1222,7 +1218,7 @@ export const ASSURANCE = {
     /* The label above the price in the close panel. Two words, because the
        panel is a door and not a pitch. */
     ctaEyebrow: 'Start today',
-    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+    cta: SITE.startCta,
     reassurance: SITE.guarantee + '.',
     /* Their own closing line, off the live pricing page. It is the whole
        argument of the section in seven words. */
