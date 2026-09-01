@@ -1,4 +1,4 @@
-import { ASSURANCE, SITE } from '../data/siteContent';
+import { ASSURANCE, PRICING, SITE } from '../data/siteContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import LogoLoop from '../components/reactbits/LogoLoop';
 import CtaButton from '../components/ui/CtaButton';
@@ -10,6 +10,9 @@ const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
 
 /** The ink surface, as a value: LogoLoop paints its fade mask, not a class. */
 const INK = '#1e1f23';
+
+/** The plan a reader actually starts on, so its price is stated once. */
+const entryPlan = PRICING.plans.find((plan) => plan.featured) ?? PRICING.plans[0];
 
 /**
  * The stamp.
@@ -198,20 +201,39 @@ export default function AssuranceSection({ showCloser = true }) {
               )}
             </div>
 
-            {/* The door, ruled off the argument rather than trailing it — the
-                same shape section 11 closes with, because it is the same move:
-                the objection and its answer are read together. */}
-            <div className="lg:w-[17rem] lg:border-l lg:border-paper/12 lg:pl-10">
-              <CtaButton
-                href={guarantee.cta.href}
-                variant="onInk"
-                intent="guarantee-primary"
-                className="w-full"
-              >
-                {guarantee.cta.label}
-              </CtaButton>
+            {/* The door.
 
-              <p className="mt-4 flex items-start gap-2 text-[0.8rem] leading-relaxed text-signal-green-soft">
+                A bare button on a rule read as an afterthought pinned to the
+                side of the argument. It is a panel now, and it answers the two
+                things a reader wants at the moment they are convinced: what it
+                costs to walk through, and what happens if they are wrong.
+
+                The price is read from the plan rather than written here, so it
+                cannot drift from /pricing — this section is 12,000px from the
+                cards that state it. */}
+            <div className="rounded-2xl border border-paper/12 bg-paper/[0.06] p-6 lg:w-[17.5rem]">
+              <p className="micro-label text-muted-dark">{guarantee.ctaEyebrow}</p>
+
+              <p className="mt-3 flex flex-wrap items-baseline gap-x-2">
+                <span className="font-display text-4xl font-extrabold leading-none tracking-tight">
+                  {entryPlan.priceLabel}
+                </span>
+                <span className="text-sm text-muted-dark">{entryPlan.priceSuffix}</span>
+              </p>
+              <p className="mt-1.5 text-xs text-muted-dark">{entryPlan.thereafter}</p>
+
+              <div className="mt-5">
+                <CtaButton
+                  href={guarantee.cta.href}
+                  variant="onInk"
+                  intent="guarantee-primary"
+                  className="w-full"
+                >
+                  {guarantee.cta.label}
+                </CtaButton>
+              </div>
+
+              <p className="mt-4 flex items-start gap-2 border-t border-paper/12 pt-4 text-[0.78rem] leading-relaxed text-signal-green-soft">
                 <Icon name="shield" className="mt-px size-3.5 shrink-0" aria-hidden="true" />
                 {guarantee.reassurance}
               </p>

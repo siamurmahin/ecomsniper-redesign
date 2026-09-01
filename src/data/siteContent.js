@@ -577,7 +577,7 @@ export const PROOF = {
        guarantee" is a promise the pricing page then contradicts. That exact
        contradiction was already found and fixed once in section 14. */
     closer: {
-      cta: { label: 'Start your eBay business', href: SITE.signupUrl },
+    cta: { label: 'Start your eBay business', href: SITE.signupUrl },
       guarantee: '30 day money back guarantee on the monthly plan',
     },
   },
@@ -1215,6 +1215,9 @@ export const ASSURANCE = {
 
        Section 15 follows with the same door and a free one beside it; this
        one is for the reader the guarantee just convinced. */
+    /* The label above the price in the close panel. Two words, because the
+       panel is a door and not a pitch. */
+    ctaEyebrow: 'Start today',
     cta: { label: 'Start your eBay business', href: SITE.signupUrl },
     reassurance: SITE.guarantee + '.',
     /* Their own closing line, off the live pricing page. It is the whole
