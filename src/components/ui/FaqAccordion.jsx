@@ -8,8 +8,17 @@ import { useRef, useState, useId } from 'react';
  * is open at a time. Heights are measured from the panel's scrollHeight, which
  * keeps the transition correct when text reflows on resize.
  */
-export default function FaqAccordion({ items }) {
-  const [openIndex, setOpenIndex] = useState(0);
+/**
+ * @param {object} props
+ * @param {Array} props.items Question and answer pairs.
+ * @param {number} [props.defaultOpen] Index open on mount; -1 for none. Several
+ *   accordions on one page would otherwise each open their own first answer.
+ * @param {boolean} [props.reveal] Set false where the list is re-rendered after
+ *   mount — a filtered view, say. The scroll reveal only animates nodes that
+ *   existed when its trigger was built, so later ones would stay hidden.
+ */
+export default function FaqAccordion({ items, defaultOpen = 0, reveal = true }) {
+  const [openIndex, setOpenIndex] = useState(defaultOpen);
   const panelRefs = useRef([]);
   const baseId = useId();
 
@@ -37,7 +46,7 @@ export default function FaqAccordion({ items }) {
         const panelId = `${baseId}-a-${index}`;
 
         return (
-          <div key={item.q} data-reveal data-reveal-group="faq">
+          <div key={item.q} {...(reveal ? { 'data-reveal': '', 'data-reveal-group': 'faq' } : {})}>
             <h3>
               <button
                 id={questionId}
