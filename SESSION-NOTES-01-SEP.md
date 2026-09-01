@@ -4,27 +4,31 @@ Continues `SESSION-NOTES-31-AUG.md`. That file's §1 and §7 are still the
 orientation and the trap list; this one only covers what happened after commit
 `b7110cc`.
 
-Short session, three commits. Read §4 — both traps in it are the kind that
-look like nothing and cost an hour.
+Read §4 and §6 — the traps. §5 is the one lesson worth taking from this
+session as a whole: **open the live section before designing it.**
 
 ---
 
 ## 1. Where this stopped, and what is next
 
-Section 08 has had its pass. The walk is now at **10 Founders**, since 09 was
-merged on 31 Aug and is marked "not yet passed as one" rather than untouched.
+Sections 08, 09 and 10 have all had their pass. The walk is now at
+**11 Comparison**.
 
 ```
-09  Step by step      merged from 05, never passed as a whole
-10  Founders          ← next in the walk
-11  Comparison
+11  Comparison        ← next in the walk
 12  Pricing preview
 13  FAQ
 14  Assurance         (comment trim only)
 15  Final CTA         (comment trim only)
 ```
 
-Commits: `f48692d`, `42d8c76`, `ec164e3`.
+Commits: `f48692d`, `42d8c76`, `ec164e3`, `b77c8bd`, `63c90f2`, `ceb0ec5`,
+`71d6d04`, `5bc2331`, `40fd14c`, `da12455`, `48b0880`, `aa73867`.
+
+Three throwaway labs were built and deleted this session — `/community-lab`,
+`/training-lab`, `/founders-lab`. The pattern works and is worth keeping:
+option 0 is what is live, every option carries its measured height, and the
+losing options are deleted with the lab rather than left in the tree.
 
 **`b7110cc` was sitting unpushed** when this session started, despite the
 31 Aug notes saying all 27 commits were on `main` — the docs commit that wrote
@@ -181,9 +185,100 @@ in §3 were measured at a real 390px viewport after that, not computed.
 
 ---
 
-## 5. Open
+## 5. Sections 09 and 10 — read the live site first
 
-Unchanged from the 31 Aug list except that section 08 is off it:
+Both were designed twice: once from the rebuild's own copy, and again after
+actually opening ecomsniper.io. The second attempt was better both times, and
+the first was wasted. **Open the live section before designing anything.**
+
+### 09 — what the live site does that the rebuild had lost
+
+The rebuild had four numbered steps in a row above a full-width course band,
+109px of a 1,286px section. The live site runs a **staircase** — each pill
+indented past the last, so the shape says "step by step" before a word is read
+— **beside** a portrait course card, with the CTA and guarantee under both.
+That is 1,219px including instructor faces the rebuild did not have, against
+1,286px without them.
+
+The card ends on **the instructors, with faces**, which is what that space is
+for. Every attempt to fill it with a syllabus failed because four module names
+cannot carry half a card — and the live site has no module list at all. Adding
+one is what put four numbered things on screen twice.
+
+Two deliberate departures from live: the guarantee keeps "on the monthly plan",
+and the instructors are read from `FOUNDERS.people` so the two names cannot
+drift from section 10's copy of them.
+
+**The steps count on a loop.** One mark — a ring in the step's tone and a tick
+— travels 1, 2, 3, 4 and starts again on a 6s cycle, 1.5s each. Four ticks on
+screen said "all done"; one that moves says what is being counted. Delays come
+from the same `--i` as the indent, so the count cannot fall out of order. Its
+resting state, with no JS or under reduced motion, is the mark parked on step
+four: green ring, green tick, on the profit, which is the live composition.
+
+### 10 — the section with no live counterpart
+
+ecomsniper.io has nine sections and none is a founders block, so there was
+nothing to read. Three shapes were built and rejected, all of them
+arrangements of the same two paragraphs; **no layout of thin material reads as
+anything but thin**, and section 09 had just spent the faces.
+
+What fixed it was finding more material. `PROOF.videos` had a video labelled
+"Member story / Ex-security guard"; on the channel it is **"Full Summary of
+The Invisible Store" on Sammy's own channel**, and the book it summarises is
+the free playbook this site already gives away. Nothing on the site said the
+founder wrote it. That turns "trust the operator" into something checkable and
+puts a third free door where the reader is asking who these people are.
+
+Two real assets came out of `ecomsniper.io/free-play-book`:
+
+- the **book cover**, 855×1370 with its own transparency — it had been a drawn
+  plate until the artwork was found;
+- a **960×958 photograph of Sammy**, resized to 800 square. The same shot as
+  the 200×200 already in the repo, so every crop still holds. Every design
+  decision about portrait size up to that point had been made around a
+  limitation that did not exist. **Check whether a bigger asset exists before
+  designing around a small one.** Marc is still 200×200.
+
+Authorship is the client's own wording. That page says eight years where this
+site says seven, and 300+ students where this site says 400+ members; the
+client confirmed **this site's figures are the right ones**.
+
+---
+
+## 6. Traps found in the second half
+
+**`window.scrollTo` does not trigger anything on this page.** Lenis owns the
+scroll, so a native jump leaves the position unchanged as far as observers are
+concerned and a scroll-gated animation never fires. This is §7 of the 31 Aug
+notes and it has now cost time three times. Append a hidden `<a href="#id">`,
+click it, remove it.
+
+**A backgrounded tab throttles timers to roughly 1Hz.** A sampling loop with
+210ms waits came back with ~1000ms gaps and every animation reading zero,
+which looks exactly like a regression. `document.hidden` was true. Check it
+before believing a timing measurement.
+
+**A resting state and a JS-driven animation will fight over first paint.** The
+step marks are hidden until the count starts, but the resting mark — the one a
+no-JS visitor sees — was outside that rule, so step four sat ticked from first
+paint and snapped back to step one when the count began. Anything drawn for
+the no-JS case has to be suppressed under `.js-motion` as well.
+
+**A duplicate key in an object literal is silent.** Adding `TRAINING.cta`
+without noticing the existing one meant the last definition won and the first
+was dead. Lint did not flag it.
+
+**`SectionHeading`'s `tone="ink"` only ever changed the lead.** The eyebrow
+stayed on the paper variant, whose rule is drawn for a light ground, which is
+why every ink section had been rendering its own eyebrow outside the
+component. It carries both now.
+
+---
+
+## 7. Open
+
+Unchanged from the 31 Aug list except that sections 08, 09 and 10 are off it:
 
 - **`/design-lab` still ships.** 303 lines from the 29 Aug build, still routed
   in `App.jsx`, in the production bundle, not disallowed in `robots.txt`.
@@ -199,3 +294,11 @@ Unchanged from the 31 Aug list except that section 08 is off it:
 - **Trustpilot figures**: 4.7 from 42 reviews, read off the profile 30 Aug.
   They drift.
 - **No community captures.** If they arrive, see option 3 in §3.
+- **`founder-marc.jpg` is still 200×200.** Sammy's is 800 now. A larger one of
+  Marc is the last thing blocking a founders treatment built on photography.
+- **The founder's book summary is still filed as an interview.** Labelled
+  honestly and stripped of its figure, but section 04b introduces its twelve
+  videos as members. Removing it takes that section to eleven — a content call.
+- **`PLAYBOOK.privacy` is now on the page.** "Your information is 100% secure
+  and will never be shared" sits under the section 10 door, so the endpoint
+  behind `VITE_PLAYBOOK_ENDPOINT` has to be able to keep it.

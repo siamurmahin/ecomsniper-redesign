@@ -64,9 +64,9 @@ it came out of the 29 Aug scaffold and has not had its pass yet.
 | 06 Three pillars | **Passed** — wired as one system, cards tilt | 31 Aug |
 | 07 Feature tour | **Passed** — sticky stepper, chosen from five shapes | 31 Aug |
 | 08 Community | **Passed** — the 2am answer, drawn and typed | 1 Sep |
-| 09 Step by step | **Merged** — took section 05; not yet passed as one | 31 Aug |
-| 10 Founders | **Built** ← next | 29 Aug |
-| 11 Comparison | **Built** | 29 Aug |
+| 09 Step by step | **Passed** — staircase beside the course card, counted on a loop | 1 Sep |
+| 10 Founders | **Passed** — the founder's book, and a third free door | 1 Sep |
+| 11 Comparison | **Built** ← next | 29 Aug |
 | 12 Pricing preview | **Built** | 29 Aug |
 | 13 FAQ | **Built** | 29 Aug |
 | 14 Assurance | **Built** | 29 Aug |
@@ -82,6 +82,21 @@ in words that it is an illustration. Two other shapes were built beside it and
 deleted — one standing on the fifteen of eighteen reviews that raise support
 unprompted, one laid out around captures nobody has supplied. If the client
 ever supplies real chat captures, that third shape is the one to rebuild.
+
+Section 09's shape was read off ecomsniper.io rather than designed: the steps
+are a staircase beside the course card, not a row above it, and the card ends
+on the instructors with both faces. **Check the live site before redesigning a
+section** — this one had drifted a long way from it, and the live version was
+better in three separate ways.
+
+Sections 09 and 10 both introduce the founders, so they divide the job: 09
+names them with their faces, 10 says why the software exists and hands over
+the book. Section 10 is the one section with no live counterpart at all.
+
+The playbook is the founder's own book. `ecomsniper.io/free-play-book` states
+it — *"the exact system Sammy (CEO EcomSniper) used"* — and the cover artwork
+in `thumb-security-guard-300k` says the same. That is why section 10 can offer
+it as evidence rather than as another banner.
 
 ### What changed against the old site, and why
 
@@ -192,7 +207,9 @@ per-route metadata.
 
 1. Set `VITE_PLAYBOOK_ENDPOINT` and confirm the file actually delivers. Unset,
    the form fakes success and logs a warning — and every free door on the site
-   leads to it.
+   leads to it. Section 10 now prints `PLAYBOOK.privacy` next to that door —
+   *"your information is 100% secure and will never be shared"* — so whatever
+   sits behind the endpoint has to be able to keep that promise.
 2. Add routes for `/about`, `/blog`, `/contact`, `/help` and the four legal
    pages, or point those footer links at the existing site. Eight links 404
    today, and the guarantee copy leans on a refund policy that is not there.
@@ -213,7 +230,17 @@ per-route metadata.
 8. Delete `src/components/three/ReticleScene.jsx` and the `three`,
    `@react-three/fiber` and `@react-three/drei` dependencies, or find the
    reticle a home. Nothing has imported it since the hero's aurora was dropped.
+9. Decide whether the founder's book summary belongs in `PROOF.videos`.
+   `AIy19fmMutw` is "Full Summary of The Invisible Store" on Sammy's own
+   channel — it is labelled honestly now and carries no figure, but it still
+   sits among twelve videos section 04b introduces as *"members on what
+   actually happened"*. Removing it takes that section to eleven.
+10. Get a larger portrait of Marc. Sammy's is 800×800 now, taken from the
+    client's own playbook page; `founder-marc.jpg` is still the original
+    200×200, which caps him at roughly 100px on a retina screen.
 
 **Done:** founder portraits are real photographs, resolved through
 `import.meta.glob`; `PROOF.reviews` holds eighteen, so neither testimonial row
-repeats a name.
+repeats a name; `/free-play-book` — the live site's URL for the playbook, and
+the link in that video's own description — 301s to `/free-playbook` in
+`netlify.toml`, `public/_redirects` and the router.
