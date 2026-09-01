@@ -1254,23 +1254,28 @@ export const STICKY_CTA = {
    confirms who answers these and how quickly. */
 
 export const CONSULT = {
-  eyebrow: 'Free, no card',
-  title: 'Not sure it fits your situation?',
-  body: 'Tell us where you are starting from — a full time job, no experience, a store that has stalled — and we will come back with a straight answer on whether this is right for you.',
+  eyebrow: 'Free consultation',
+  title: 'Talk to someone before you decide.',
+  /* The dialog asks for one thing — an email — so the copy asks for one
+     thing. It used to say "tell us where you are starting from", which is a
+     request for a paragraph the form has nowhere to put: the reader is invited
+     to explain themselves into a single-line email field. What the email buys
+     is the conversation, and that is what this says now. */
+  body: 'Leave your email and we will arrange a free consultation: a straight conversation about where you are starting from and whether this is right for you.',
   points: [
-    'A straight answer, not a sales call',
+    'A conversation, not a sales call',
     'What your first month would realistically look like',
     'Whether EcomSniper is wrong for you',
   ],
   fieldLabel: 'Email address',
   placeholder: 'you@example.com',
-  cta: 'Get a free consultation',
+  cta: 'Request my free consultation',
   dismiss: 'No thanks',
   /* The same promise the playbook page makes, read from one place. */
   privacy: SITE.privacyNote,
   done: {
-    title: 'Got it.',
-    body: 'We will read what you sent and reply to that address. Nothing else lands in your inbox.',
+    title: 'Request received.',
+    body: 'We will email that address to arrange your consultation. Nothing else lands in your inbox.',
   },
   error: 'That did not send. Try again, or email us directly.',
   /* Section 07. The dialog waits for it rather than for a scroll depth: a
