@@ -59,7 +59,20 @@ export default function PricingPreviewSection({ showHeading = true }) {
                 {plan.summary}
               </p>
 
-              <p className="mt-6 flex items-baseline gap-2">
+              <p className="mt-6 flex flex-wrap items-baseline gap-x-2.5">
+                {/* The price this one is struck down from, where there is one.
+                    The client's pricing page lists the credits bundle at $597
+                    before $499; this site was showing only the lower number and
+                    dropping a real discount. */}
+                {plan.was && (
+                  <span
+                    className={`text-lg font-semibold line-through ${
+                      plan.featured ? 'text-muted-dark' : 'text-muted'
+                    }`}
+                  >
+                    {plan.was}
+                  </span>
+                )}
                 <span className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
                   {plan.priceLabel}
                 </span>
@@ -71,7 +84,16 @@ export default function PricingPreviewSection({ showHeading = true }) {
                 className={`mt-1 text-sm ${plan.featured ? 'text-accent-soft' : 'text-muted'}`}
               >
                 {plan.thereafter}
+                {plan.saving && <span className="ml-1.5 font-semibold">{plan.saving}</span>}
               </p>
+
+              {/* Stated, not implied: "billed every 3 months" does not say the
+                  cycle repeats, and the client's page calls it recurring. */}
+              {plan.recurring && (
+                <p className={`mt-1 text-xs ${plan.featured ? 'text-muted-dark' : 'text-muted'}`}>
+                  {plan.recurring}
+                </p>
+              )}
 
               <ul className="mt-7 flex flex-1 flex-col gap-2.5">
                 {plan.features.map((feature) => (

@@ -220,7 +220,6 @@ export const AUDIENCE = {
     {
       name: 'Will',
       role: 'Complete beginner, first time online',
-      icon: 'seedling',
       title: 'Never made a dollar online, until he automated it',
       story:
         "Will had never made a dollar online. Found the founder's book on Reddit, figured manual listing wasn't it, automated the whole thing instead.",
@@ -244,7 +243,6 @@ export const AUDIENCE = {
     {
       name: 'Chris',
       role: 'Established seller who scaled up',
-      icon: 'salesGrowth',
       title: 'Night shifts five days a week, still lists daily',
       story:
         '52, married, two kids, already selling on Walmart. Chris works night shifts five days a week and still finds time to list daily. Nearly 1,000 orders.',
@@ -950,10 +948,6 @@ export const PRICING = {
     {
       id: 'monthly',
       name: 'Monthly',
-      badge: 'Most popular',
-      tone: 'blue',
-      icon: 'seedling',
-      tagline: 'For the one starting from zero.',
       priceLabel: '$97',
       priceSuffix: 'first month',
       thereafter: 'then $199 a month',
@@ -973,10 +967,6 @@ export const PRICING = {
     {
       id: 'credits',
       name: '10K credits bundle',
-      badge: 'Volume deal',
-      tone: 'gold',
-      icon: 'salesGrowth',
-      tagline: 'For the one ready to list in volume.',
       /* `was` and `saving` are the client's own, off ecomsniper.io/pricing on
          1 Sep 2026: the bundle is listed there at $597 struck through to $499,
          "you save $98". This site was showing only the $499 and dropping a
@@ -1005,10 +995,6 @@ export const PRICING = {
     {
       id: 'enterprise',
       name: 'Enterprise',
-      badge: 'Enterprise',
-      tone: 'green',
-      icon: 'star',
-      tagline: 'For the one building at full scale.',
       priceLabel: '$2,000',
       priceSuffix: 'a month',
       thereafter: 'unlimited listings',
@@ -1027,24 +1013,6 @@ export const PRICING = {
       cta: { label: 'Talk to us', href: '/contact' },
     },
   ],
-  /* The reassurance block the live pricing page runs above its cards, in the
-     client's own words: a guarantee pill, "no questions asked" under it, and
-     four chips in the four signal tones — one per thing the money buys.
-
-     Their headline over this block is "Is this going to work for you?", which
-     is section 03's headline on this site. Not reused here; the page would be
-     asking the same question twice. */
-  assurance: {
-    pill: '30-Day Money-Back Guarantee',
-    note: 'No questions asked',
-    chips: [
-      { label: 'The training teaches', tone: 'blue', icon: 'graduationCap' },
-      { label: 'The software lifts', tone: 'red', icon: 'robot' },
-      { label: 'The community catches', tone: 'gold', icon: 'people' },
-      { label: 'The guarantee protects', tone: 'green', icon: 'shield' },
-    ],
-  },
-
   cta: { label: 'See full plan details', href: '/pricing' },
   // Deck: state the real cost of entry so nobody is ambushed later.
   footnote:
