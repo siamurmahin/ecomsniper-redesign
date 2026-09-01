@@ -1234,15 +1234,20 @@ export const ASSURANCE = {
 
 export const FINAL_CTA = {
   headlineParts: ['ESCAPE THE 9 TO 5.', 'BUILD SOMETHING OF YOUR OWN.'],
+  /* Their own third line, off the live page. The two-line headline states the
+     escape and the ambition; this states what the thing actually is, which is
+     the sentence a reader repeats to someone else. */
+  lead: 'Create income that can continue while you sleep.',
   blessing: { arabic: 'In shaa Allah', translation: 'IF GOD WILLS' },
   primaryCta: { label: 'Start your eBay business, $97', href: SITE.signupUrl },
-  reassurance: '30 day money back guarantee on the monthly plan.',
+  /* Was a third handwritten copy of the guarantee sentence. */
+  reassurance: SITE.guarantee + '.',
   secondDoor: {
     title: 'Not ready yet?',
     body: 'Take the free playbook and read it first. Or join the Discord and watch how members actually work. No card, no pressure.',
     ctas: [
-      { label: 'Get the free playbook', href: '/free-playbook', variant: 'primary' },
-      { label: 'Join the Discord', href: SITE.discordUrl, variant: 'ghost' },
+      { label: 'Get the free playbook', href: '/free-playbook', variant: 'primary', icon: 'openBook' },
+      { label: 'Join the Discord', href: SITE.discordUrl, variant: 'ghost', icon: 'discord' },
     ],
   },
 };
