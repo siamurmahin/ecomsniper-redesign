@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
 import CtaButton from '../ui/CtaButton';
@@ -7,13 +8,20 @@ import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
 /**
  * The oversized wordmark that signs the page off.
  *
- * Outlined rather than filled, so it reads as a watermark until a pointer
- * finds it; each letter then fills with its own signal colour and lifts. One
- * tone per letter, cycled — the same rule every enumerated set on this site
- * follows.
+ * Outlined until a pointer comes near, then each letter fills with its own
+ * colour and rises. The letter under the pointer moves most and its
+ * neighbours less, falling off with distance, so the row bends rather than
+ * one letter switching on alone — which is what the client's own footer does,
+ * and it is the difference between a hover state and something that feels
+ * like it is being touched.
  *
- * Literal classes, because Tailwind compiles what it can see: a colour built
- * from an index would produce no stylesheet output at all.
+ * Written straight to the DOM on pointermove rather than through state.
+ * Ten elements restyled on every pointer event is nothing; ten React renders
+ * on every pointer event is a dropped frame, and this is the pattern the rest
+ * of this site already uses for anything driven by a cursor or a clock.
+ *
+ * transform-origin sits at the bottom so the letters grow up off a shared
+ * baseline instead of swelling around their middles.
  */
 const LETTER_COLOUR = [
   'text-signal-blue',
@@ -21,6 +29,62 @@ const LETTER_COLOUR = [
   'text-signal-green',
   'text-signal-gold',
 ];
+
+/** How far the effect reaches, as a multiple of one letter's width. */
+const REACH = 2.2;
+
+function Wordmark() {
+  const rowRef = useRef(null);
+
+  const paint = (pointerX) => {
+    const row = rowRef.current;
+    if (!row) return;
+
+    for (const letter of row.children) {
+      const box = letter.getBoundingClientRect();
+      const distance = Math.abs(pointerX - (box.left + box.width / 2));
+      // 1 under the pointer, 0 once it is REACH letters away.
+      const near = pointerX === null ? 0 : Math.max(0, 1 - distance / (box.width * REACH));
+      // Eased, so the falloff is a curve rather than a cone.
+      const strength = near * near;
+
+      letter.style.transform = `translateY(${(-14 * strength).toFixed(2)}px) scale(${(
+        1 +
+        0.22 * strength
+      ).toFixed(3)})`;
+      letter.style.setProperty('--fill', strength.toFixed(3));
+    }
+  };
+
+  return (
+    <div
+      aria-hidden="true"
+      ref={rowRef}
+      onPointerMove={(event) => paint(event.clientX)}
+      onPointerLeave={() => paint(null)}
+      className="mt-16 flex select-none justify-center whitespace-nowrap font-display text-[clamp(2.5rem,15vw,14rem)] font-extrabold leading-[0.86] tracking-[-0.04em]"
+    >
+      {[...'ECOMSNIPER'].map((letter, index) => (
+        <span
+          key={`${letter}-${index}`}
+          className="relative inline-block origin-bottom transition-transform duration-300 ease-out motion-reduce:!transform-none"
+        >
+          <span className="block text-transparent [-webkit-text-stroke:1.5px_rgb(251_251_250_/_0.22)]">
+            {letter}
+          </span>
+
+          <span
+            className={`absolute inset-0 block opacity-[var(--fill,0)] transition-opacity duration-200 ${
+              LETTER_COLOUR[index % LETTER_COLOUR.length]
+            }`}
+          >
+            {letter}
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
 
 /**
  * Each platform's own colour, on the mark only.
@@ -215,29 +279,7 @@ export default function SiteFooter() {
         {/* Decorative, and hidden from assistive tech: the name is already
             read out by the logo at the top of this footer, and ten separate
             letters would be announced as ten separate things. */}
-        <div
-          aria-hidden="true"
-          className="mt-16 flex select-none justify-center whitespace-nowrap font-display text-[clamp(2.5rem,15vw,14rem)] font-extrabold leading-[0.86] tracking-[-0.04em]"
-        >
-          {[...'ECOMSNIPER'].map((letter, index) => (
-            <span
-              key={`${letter}-${index}`}
-              className="group/letter relative inline-block transition-transform duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:scale-110"
-            >
-              <span className="block text-transparent [-webkit-text-stroke:1.5px_rgb(251_251_250_/_0.22)]">
-                {letter}
-              </span>
-
-              <span
-                className={`absolute inset-0 block opacity-0 transition-opacity duration-300 group-hover/letter:opacity-100 ${
-                  LETTER_COLOUR[index % LETTER_COLOUR.length]
-                }`}
-              >
-                {letter}
-              </span>
-            </span>
-          ))}
-        </div>
+        <Wordmark />
 
         <hr className="relative mt-14 h-px border-0 bg-ink-line" />
 
