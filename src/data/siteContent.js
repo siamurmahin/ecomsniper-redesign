@@ -975,6 +975,9 @@ export const PRICING = {
         'Priority support',
         'We will do everything until you get your first sale',
       ],
+      /* Only this plan is covered. The card reads the flag rather than the
+         sentence, so the tick and the shield cannot end up on a final sale. */
+      guaranteeProtected: true,
       guarantee: 'Protected by the 30 day money back guarantee.',
       cta: { label: 'Start for $97', href: SITE.signupUrl },
     },
