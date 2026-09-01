@@ -1,6 +1,7 @@
 import SectionHeading from '../components/ui/SectionHeading';
 import FaqAccordion from '../components/ui/FaqAccordion';
 import CtaButton from '../components/ui/CtaButton';
+import Icon from '../components/ui/Icon';
 import { FAQ, SITE } from '../data/siteContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
@@ -66,7 +67,9 @@ export default function FaqSection() {
               <p className="font-display text-base font-extrabold">{FAQ.support.title}</p>
               <p className="mt-2 text-sm leading-relaxed text-muted">{FAQ.support.body}</p>
               <div className="mt-5">
+                {/* The button already carries the gap; .btn is inline-flex. */}
                 <CtaButton href={SITE.discordUrl} variant="secondary" intent="faq-discord">
+                  <Icon name="discord" className="size-4 shrink-0" aria-hidden="true" />
                   {FAQ.support.cta.label}
                 </CtaButton>
               </div>
