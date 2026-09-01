@@ -12,6 +12,7 @@ import {
   setDialogOpen,
   OUTCOME,
 } from '../../lib/interruptions';
+import { isPreviewing } from '../../lib/dialogPreview';
 
 /**
  * Exit-intent capture for the visitors who will not buy today — the page
@@ -37,6 +38,13 @@ export default function ExitIntentOffer() {
        consultation dialog their details — they said yes, and a popup on the
        way out is a poor reward for it. Someone who dismissed that offer is
        still fair game for a smaller one. */
+    // See lib/dialogPreview: development only, dropped from the build.
+    if (isPreviewing('exit')) {
+      setDialogOpen(true);
+      setIsOpen(true);
+      return undefined;
+    }
+
     if (hasSeen(EXIT_INTENT.storageKey)) return undefined;
     if (outcomeOf(CONSULT.storageKey) === OUTCOME.converted) return undefined;
     if (window.matchMedia('(pointer: coarse)').matches) return undefined;

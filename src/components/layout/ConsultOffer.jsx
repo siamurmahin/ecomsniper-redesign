@@ -3,6 +3,7 @@ import Icon from '../ui/Icon';
 import { CONSULT } from '../../data/siteContent';
 import { useModalLayer } from '../../hooks/useModalLayer';
 import { hasSeen, mark, setDialogOpen, OUTCOME } from '../../lib/interruptions';
+import { isPreviewing } from '../../lib/dialogPreview';
 
 /** Both fields, so the pair cannot drift apart. */
 const FIELD_CLASS =
@@ -42,6 +43,13 @@ export default function ConsultOffer() {
   }, [status]);
 
   useEffect(() => {
+    // See lib/dialogPreview: development only, dropped from the build.
+    if (isPreviewing('consult')) {
+      setDialogOpen(true);
+      setIsOpen(true);
+      return undefined;
+    }
+
     if (hasSeen(CONSULT.storageKey)) return undefined;
 
     let observer;
