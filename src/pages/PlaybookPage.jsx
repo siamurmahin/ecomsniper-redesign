@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Seo from '../components/ui/Seo';
 import { FOUNDERS, PLAYBOOK, SITE } from '../data/siteContent';
 import Icon from '../components/ui/Icon';
+import CtaButton from '../components/ui/CtaButton';
 import playbookCover from '../assets/brand/playbook-cover.webp';
 
 /** The author's portrait, resolved the way the founders section resolves it. */
@@ -58,7 +59,7 @@ export default function PlaybookPage() {
     <>
       <Seo
         title="The Invisible Store — Free eBay Dropshipping Playbook | EcomSniper"
-        description="A free 10 page playbook on how eBay dropshipping actually works with no stock, no website and no experience. Includes whether it is even allowed, and who EcomSniper is wrong for."
+        description="A free 83 page playbook on how eBay dropshipping actually works with no stock, no website and no experience. Includes whether it is even allowed, and who EcomSniper is wrong for."
         path="/free-playbook"
       />
 
@@ -145,20 +146,66 @@ export default function PlaybookPage() {
                     </span>
 
                     <h2 className="mt-5 text-2xl font-extrabold tracking-tight">
-                      Check your inbox.
+                      {PLAYBOOK.done.title}
                     </h2>
+
                     <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">
-                      The playbook is on its way. If it has not arrived in a couple of minutes, look
-                      in promotions or spam &mdash; and reply to it either way. A person reads those.
+                      {PLAYBOOK.done.body}
                     </p>
+
+                    {/* The file, handed over here rather than only promised by
+                        email. `download` so it saves instead of opening a
+                        reader in a new tab and losing the page behind it. */}
                     <a
-                      href={SITE.discordUrl}
-                      rel="noopener noreferrer"
-                      className="btn-secondary mt-7"
+                      href={PLAYBOOK.file.href}
+                      download={PLAYBOOK.file.name}
+                      data-cta-intent="playbook-download"
+                      className="btn-primary mt-6 w-full"
                     >
-                      <Icon name="discord" className="size-4 shrink-0" aria-hidden="true" />
-                      Join the Discord while you wait
+                      <Icon name="openBook" className="size-4 shrink-0" aria-hidden="true" />
+                      {PLAYBOOK.done.downloadCta}
                     </a>
+
+                    <p className="mt-3 text-center text-xs text-muted">
+                      PDF · {PLAYBOOK.file.pages} pages · {PLAYBOOK.file.size}
+                    </p>
+
+                    {/* The only place on this site that asks for money from
+                        somebody who has just been given something free, so it
+                        is ruled off as a separate thought and carries the
+                        guarantee rather than pressing. */}
+                    <div className="mt-7 border-t border-hairline pt-6">
+                      <p className="font-display text-lg font-bold leading-snug">
+                        {PLAYBOOK.done.upsell.title}
+                      </p>
+
+                      <p className="mt-2 text-[0.9rem] leading-relaxed text-muted">
+                        {PLAYBOOK.done.upsell.body}
+                      </p>
+
+                      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <CtaButton
+                          href={SITE.startCta.href}
+                          intent="playbook-signup"
+                          className="w-full sm:w-auto"
+                        >
+                          Start for $97
+                        </CtaButton>
+
+                        <a
+                          href={SITE.discordUrl}
+                          rel="noopener noreferrer"
+                          className="text-sm text-muted underline underline-offset-4 transition-colors hover:text-ink"
+                        >
+                          Or join the Discord first
+                        </a>
+                      </div>
+
+                      <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-signal-green-deep">
+                        <Icon name="shield" className="mt-px size-3.5 shrink-0" aria-hidden="true" />
+                        {SITE.guarantee}.
+                      </p>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={onSubmit} noValidate>

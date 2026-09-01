@@ -1315,7 +1315,7 @@ export const CONSULT = {
 export const EXIT_INTENT = {
   eyebrow: 'Before you go',
   title: 'Take the playbook with you.',
-  body: 'The Invisible Store: how eBay dropshipping actually works when you have no stock, no website and no experience. Ten pages, free, no card.',
+  body: 'The Invisible Store: how eBay dropshipping actually works when you have no stock, no website and no experience. 83 pages, free, no card.',
   cta: { label: 'Send me the playbook', href: '/free-playbook' },
   dismiss: 'No thanks',
   storageKey: 'ecomsniper:exit-intent-seen',
@@ -1335,13 +1335,44 @@ export const PLAYBOOK = {
   smallprint: 'No countdown timers, no fake scarcity. Unsubscribe at the bottom of any email.',
 
   /* The four things a reader wants settled before typing an email address,
-     from the client's own free-playbook page. "Ten pages" is added from the
+     from the client's own free-playbook page. The page count is read off the
      exit-intent copy because scale is the other thing they want to know.
 
      `privacy` is a promise the site has to keep, not a decoration: it belongs
      wherever the form is, and it means the endpoint behind
      `VITE_PLAYBOOK_ENDPOINT` cannot sell or pass on the address. */
-  reassurances: ['Ten pages', 'No spam', 'No credit card', 'Instant access'],
+  reassurances: ['83 pages', 'No spam', 'No credit card', 'Instant access'],
+
+  /* The book. Counted from the PDF rather than described: 83 pages, 16MB.
+     Every "ten pages" on this site was wrong, including the meta description
+     search results were showing. */
+  file: {
+    href: '/the-invisible-store.pdf',
+    name: 'the-invisible-store.pdf',
+    pages: 83,
+    size: '16 MB',
+  },
+
+  /* What they see once the address is in.
+
+     It hands over the file immediately rather than only promising an email:
+     somebody who just typed their address has earned the thing they typed it
+     for, and a download that works whether or not the mail lands is the
+     difference between a lead magnet and a bait and switch. The email still
+     goes out, and the copy says so.
+
+     The offer underneath is the only place on this site that asks for money
+     from someone who has just been given something free, so it is framed as
+     the next step rather than as a pitch, and it carries the guarantee. */
+  done: {
+    title: 'It is yours.',
+    body: 'The download starts from the button below. A copy is on its way to your inbox too — if it has not arrived in a few minutes, look in promotions, and reply to it either way. A person reads those.',
+    downloadCta: 'Download the playbook',
+    upsell: {
+      title: 'Read it first. Then, if it makes sense, start.',
+      body: 'The playbook is the whole model with nothing held back. The software is what stops you doing it by hand.',
+    },
+  },
   privacy: SITE.privacyNote,
 };
 

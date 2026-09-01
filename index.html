@@ -95,14 +95,15 @@
         gap: 20px;
         animation: preloader-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
-      #preloader svg {
+      #preloader img {
         width: 62px;
         height: 62px;
       }
-      /* Only the rings and spikes turn. The centre dot is the thing being
-         aimed with, so it holds still and the reticle rolls around it. */
+      /* The whole mark turns. The drawn version kept its centre dot still
+         and rolled the rings around it, which a single flat image cannot do —
+         and at 62px, spinning it whole reads the same. */
       #preloader .reticle-spin {
-        transform-origin: 32px 32px;
+        transform-origin: 50% 50%;
         animation: preloader-spin 1.15s linear infinite;
       }
       /* Set rather than drawn: the wordmark artwork is a PNG, and inlining it
@@ -191,15 +192,19 @@
   <body>
     <div id="preloader" role="status" aria-label="Loading EcomSniper">
       <div class="preloader-stack">
-        <svg viewBox="0 0 64 64" aria-hidden="true">
-          <g class="reticle-spin" fill="none" stroke-linecap="round">
-            <circle cx="32" cy="32" r="24" stroke="#86b817" stroke-width="4" />
-            <circle cx="32" cy="32" r="16.5" stroke="#0064d2" stroke-width="6" />
-            <path d="M32 5v11M32 48v11M5 32h11M48 32h11" stroke="#f5af02" stroke-width="6" />
-          </g>
-          <circle cx="32" cy="32" r="9.5" fill="#e53238" />
-          <circle cx="32" cy="32" r="3.6" fill="#fbfbfa" />
-        </svg>
+        <!-- The real mark, not a redrawing of it. The hand-built SVG that
+             stood here was close but not the artwork: its ring weights and
+             spike lengths were guesses, and it was the one place on the site
+             showing a logo nobody had approved. 19KB, fetched in parallel
+             with the bundle it is covering for. -->
+        <img
+          src="/logo-reticle.png"
+          alt=""
+          aria-hidden="true"
+          width="335"
+          height="333"
+          class="reticle-spin"
+        />
 
         <!-- aria-hidden: the wrapper's label already says this, and a screen
              reader should not hear the name twice. -->
