@@ -34,6 +34,16 @@ export const SITE = {
      is three places for it to drift. */
   guarantee: '30 day money back guarantee on the monthly plan',
   priceFrom: 'From $97 for your first month',
+
+  /* The four things a member gets, in the order they reach them. Section
+     14 and the /pricing header both state these; they were two copies of
+     one claim, which is the fault this file exists to prevent. */
+  promises: [
+    'The training teaches',
+    'The software lifts',
+    'The community catches',
+    'The guarantee protects',
+  ],
 };
 
 export const NAV_LINKS = [
@@ -228,6 +238,7 @@ export const AUDIENCE = {
     {
       name: 'Will',
       role: 'Complete beginner, first time online',
+      icon: 'seedling',
       title: 'Never made a dollar online, until he automated it',
       story:
         "Will had never made a dollar online. Found the founder's book on Reddit, figured manual listing wasn't it, automated the whole thing instead.",
@@ -251,6 +262,7 @@ export const AUDIENCE = {
     {
       name: 'Chris',
       role: 'Established seller who scaled up',
+      icon: 'salesGrowth',
       title: 'Night shifts five days a week, still lists daily',
       story:
         '52, married, two kids, already selling on Walmart. Chris works night shifts five days a week and still finds time to list daily. Nearly 1,000 orders.',
@@ -1056,12 +1068,7 @@ export const PRICING = {
     guarantee: {
       title: '30 day money back guarantee',
       note: 'No questions asked',
-      promises: [
-        'The training teaches',
-        'The software lifts',
-        'The community catches',
-        'The guarantee protects',
-      ],
+      promises: SITE.promises,
     },
   },
   // Deck: state the real cost of entry so nobody is ambushed later.
@@ -1173,7 +1180,10 @@ export const ASSURANCE = {
   countries: {
     eyebrow: 'Supported countries',
     headline: 'Will it work where you live?',
-    body: 'EcomSniper supports the United States, the United Kingdom, Germany, France, Australia, Canada, Spain and Italy. Wherever you start, it is the same training, the same software, the same support.',
+    body: 'EcomSniper supports the United States, the United Kingdom, Germany, France, Australia, Canada, Spain and Italy.',
+    /* Split out of `body`. On their own page it closes the block after the
+       flags rather than trailing the sentence that lists them. */
+    closer: 'Wherever you start, it is the same training, the same software, the same support.',
     list: [
       { name: 'United States', code: 'US' },
       { name: 'United Kingdom', code: 'UK' },
@@ -1189,7 +1199,18 @@ export const ASSURANCE = {
     eyebrow: 'The guarantee',
     headline: 'Still not sure?',
     body: 'Try the monthly plan for 30 days. If it is not for you, message us and we send your money back. No questions asked.',
-    closer: 'The training teaches. The software lifts. The community catches. The guarantee protects.',
+    /* Four lines, not one sentence. Run together in a paragraph they read
+       as a slogan; stacked they read as four separate promises, which is
+       what they are. Shared with /pricing so neither can drift. */
+    promises: SITE.promises,
+    /* The stamp. Two words, because it is read as a mark and not as a
+       sentence. */
+    seal: { top: '30', bottom: 'Days' },
+    /* The strip. Repeated by the component, so the copy states it once. */
+    marquee: '30 day money back guarantee',
+    /* Their own closing line, off the live pricing page. It is the whole
+       argument of the section in seven words. */
+    closer: 'Now you have no risk. So you have no excuses.',
   },
 };
 
