@@ -64,12 +64,24 @@ export const SITE = {
   ],
 };
 
+/* The nav is a map of this page, not of the site — everything here except
+   Pricing and Contact is a section on the homepage, which is what a
+   single-page pitch should offer.
+
+   Two were missing and both are things a visitor goes looking for by name.
+   "About" is the founders section, which answers who is behind this; it points
+   at our own section rather than off-site, so the visitor stays on the page.
+   Contact has no equivalent here, so it goes to the live site's page — the
+   same destination the footer already uses. Both were reachable only from the
+   footer, which is the wrong place to make somebody scroll to. */
 export const NAV_LINKS = [
   { label: 'How it works', href: '/#how-it-works' },
   { label: 'Proof', href: '/#proof' },
   { label: 'Training', href: '/#training' },
+  { label: 'About', href: '/#founders' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'FAQ', href: '/#faq' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: 'https://ecomsniper.io/contact' },
 ];
 
 /* 01 — Hero Deck: keep the strike-through, replace the 99% claim with a price signal, add a second, free door for the 95% who are not ready to pay today. */
@@ -1370,7 +1382,7 @@ export const FOOTER = {
     {
       title: 'Support',
       links: [
-        { label: 'FAQ', href: '/#faq' },
+        { label: 'FAQ', href: '/faq' },
         { label: 'The guarantee', href: '/#guarantee' },
         { label: 'Join the Discord', href: SITE.discordUrl },
         { label: 'Log in', href: SITE.loginUrl },

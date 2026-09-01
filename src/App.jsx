@@ -9,6 +9,7 @@ import ConsultOffer from './components/layout/ConsultOffer';
 import BackToTop from './components/layout/BackToTop';
 import HomePage from './pages/HomePage';
 import PricingPage from './pages/PricingPage';
+import FaqPage from './pages/FaqPage';
 import PlaybookPage from './pages/PlaybookPage';
 import NotFoundPage from './pages/NotFoundPage';
 import DesignLabPage from './pages/DesignLabPage';
@@ -91,6 +92,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/free-playbook" element={<PlaybookPage />} />
           {/* The live site's URL for the same page. A 301 in netlify.toml and
               public/_redirects handles it at the edge; this covers local dev and

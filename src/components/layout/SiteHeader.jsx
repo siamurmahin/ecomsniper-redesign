@@ -64,12 +64,23 @@ export default function SiteHeader() {
             <BrandLogo />
           </Link>
 
-          <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+          {/* shrink-0 and nowrap, because seven items wrapped onto a second
+              row between 1024px and about 1400px and took the whole header
+              from 62px to 94px with it. The logo is the flexible one — it
+              already carries min-w-0 and a clamped size for exactly this — so
+              the nav holds its line and the mark gives up the pixels.
+
+              Padding tightens below xl rather than the nav disappearing: a
+              desktop at 1280 should not be handed the phone menu. */}
+          <nav
+            aria-label="Primary"
+            className="hidden shrink-0 items-center gap-0.5 whitespace-nowrap lg:flex xl:gap-1"
+          >
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors duration-200 hover:bg-ink/5 hover:text-ink"
+                className="rounded-full px-2.5 py-2 text-sm font-medium text-muted transition-colors duration-200 hover:bg-ink/5 hover:text-ink xl:px-3.5"
               >
                 {link.label}
               </a>

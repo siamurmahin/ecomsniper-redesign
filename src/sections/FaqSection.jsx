@@ -19,7 +19,12 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
  * grouped now — four groups, one signal tone each, in the order an objection
  * actually arrives — and that column carries the map and the way out.
  */
-export default function FaqSection() {
+/**
+ * @param {object} props
+ * @param {boolean} [props.showHeading] Set false on /faq, which states this
+ *   headline as its own h1 a moment earlier.
+ */
+export default function FaqSection({ showHeading = true }) {
   const sectionRef = useRevealOnScroll();
 
   return (
@@ -27,11 +32,13 @@ export default function FaqSection() {
       <div className="site-shell">
         <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <SectionHeading
-              eyebrow={FAQ.eyebrow}
-              headline={<span id="faq-headline">{FAQ.headline}</span>}
-              lead={FAQ.lead}
-            />
+            {showHeading && (
+              <SectionHeading
+                eyebrow={FAQ.eyebrow}
+                headline={<span id="faq-headline">{FAQ.headline}</span>}
+                lead={FAQ.lead}
+              />
+            )}
 
             {/* Jump links, not a filter: every answer stays in the document
                 for the FAQPage markup and for anyone reading straight down.
