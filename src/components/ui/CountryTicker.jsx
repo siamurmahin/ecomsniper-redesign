@@ -61,13 +61,9 @@ export default function CountryTicker({ onInk = false, className = '' }) {
       {/* Faded at both edges so the flags arrive and leave rather than being cut
           off against a hard border. The left fade is shorter: the row starts
           against a label rather than against open space. */}
-      {/* Two painted overlays rather than a mask on the scrolling box.
-
-          A mask has to be composited against its content, so a mask over a
-          layer that moves every frame is re-composited every frame — which a
-          desktop GPU absorbs and a phone does not. These are two static
-          gradients sitting on top: painted once, and they never touch the
-          moving layer at all. */}
+      {/* Two painted overlays, not a mask on the scrolling box: a mask is
+          composited against its content, so over a layer that moves every
+          frame it is re-composited every frame. A phone feels that. */}
       <span
         aria-hidden="true"
         className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r ${

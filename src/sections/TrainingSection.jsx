@@ -115,11 +115,9 @@ export default function TrainingSection() {
 
                   <p className="text-[0.95rem] leading-relaxed text-ink">{step.text}</p>
 
-                  {/* The tick travels with the ring — one on screen at a time,
-                      so the four read as a count rather than as a finished
-                      checklist — and the count runs on a loop. Its resting
-                      state, with no JS or under reduced motion, is the mark
-                      parked on the last step: the live site's composition. */}
+                  {/* One tick at a time, travelling, so the four read as a count
+                      rather than a finished checklist. With no JS it rests on
+                      the last step, which is the live site's composition. */}
                   <span
                     aria-hidden="true"
                     data-step-mark
@@ -206,11 +204,8 @@ export default function TrainingSection() {
             </CtaButton>
           </div>
 
-          {/* The tick flows WITH the text rather than sitting beside it as a
-              flex sibling. As a sibling under `items-center` it centred against
-              the whole block, so the moment the line wrapped on a phone it
-              landed in the gap between the two lines — the same fault section
-              07's closer had. */}
+          {/* The tick flows with the text. As a flex sibling it centred on the
+              whole block and dropped into the gap when the line wrapped. */}
           <p className="mt-4 text-[0.85rem] leading-relaxed text-muted">
             <Icon
               name="checkCircle"

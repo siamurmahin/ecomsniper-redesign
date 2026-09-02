@@ -119,12 +119,9 @@ export default function HeroSection() {
         mask: 'lines',
         autoSplit: true,
         linesClass: 'overflow-hidden',
-        /* The split is the only part that has to be JavaScript — the copy
-           wraps differently at every width, so the lines can only be found
-           from rendered text. The animation itself is handed to CSS: each
-           word is tagged and given its step, and the stylesheet runs it on
-           the compositor. See the hero entrance block in `index.css` for why
-           that matters more here than anywhere else on the page. */
+        /* Only the split has to be JavaScript — the copy wraps differently at
+           every width, so lines can only be found from rendered text. The
+           animation is handed to CSS and runs on the compositor. */
         onSplit: (self) => {
           self.words.forEach((word, index) => {
             word.setAttribute('data-hero-word', '');
@@ -330,11 +327,9 @@ export default function HeroSection() {
                     fill="none"
                     className="h-11 w-[4.5rem] shrink-0 text-signal-blue motion-safe:animate-nudge-x"
                   >
-                    {/* Mirrored inside the SVG rather than with a scale class:
-                        the nudge animation owns `transform` on this element and
-                        would overwrite one outright. The -38deg tilt lifts the
-                        head so it meets the button rather than running level
-                        into its side. */}
+                    {/* Mirrored inside the SVG, not with a scale class: the
+                        nudge animation owns transform here and would
+                        overwrite it. */}
                     <g transform="rotate(-38 24 14) translate(0,28) scale(1,-1)">
                       {/* One stroke, tail to head, so it reads as a pen mark
                           rather than a UI glyph. */}

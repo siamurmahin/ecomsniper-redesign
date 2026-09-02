@@ -35,12 +35,9 @@ export default function HeroDots() {
     <div
       ref={hostRef}
       aria-hidden="true"
-      /* Transparent over the copy, solid towards the edges. Two masks: from
-         lg the copy is a left column, so the hole is radial; stacked below lg
-         there is no column, so the field is just held back at the top.
-
-         Softened, not cut. A fully transparent top left the part everyone sees
-         first completely flat. */
+      /* Transparent over the copy, solid at the edges. Two masks: radial
+         where the copy is a column, a soft top where it is stacked. Softened
+         rather than cut — a clear top left the hero flat. */
       className="pointer-events-none absolute inset-0 -z-[25] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.55),#000_32%)] lg:[mask-image:radial-gradient(46%_46%_at_26%_40%,transparent_30%,black_82%)]"
     >
       {isRunning && (

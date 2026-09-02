@@ -41,13 +41,9 @@ export default function InterviewsSection() {
   const listRef = useRef(null);
   const rowRefs = useRef(new Map());
 
-  /* Follow the stage with the list. The highlighted row is useless if it has
-     scrolled out of the panel, and by the twelfth interview it has.
-
-     Only ever `scrollTop` on the list itself — `scrollIntoView` walks every
-     scrollable ancestor including the page, and the page belongs to Lenis.
-     This cannot fight a reader either: the turn only happens when the pointer
-     is nowhere near the section, because hovering either half holds it. */
+  /* Follow the stage with the list, or the highlighted row scrolls out of
+     sight. scrollTop only: scrollIntoView walks every scrollable ancestor
+     including the page, and the page belongs to Lenis. */
   useEffect(() => {
     const list = listRef.current;
     const row = rowRefs.current.get(PROOF.videos[leadIndex].id);
@@ -73,13 +69,9 @@ export default function InterviewsSection() {
     return () => observer.disconnect();
   }, []);
 
-  /* Paused while the lightbox is open — turning the stage under someone who
-     is watching would change what they come back to.
-
-     A bare timer: this drove a progress bar for a while, which is why section
-     03 runs its rotation off a tween. Without a bar to keep in step there is
-     nothing to synchronise, and a countdown the reader cannot see does not
-     need one. */
+  /* Paused while the lightbox is open — turning the stage under someone
+     watching changes what they come back to. A bare timer: there is no
+     progress bar here to keep in step with. */
   useEffect(() => {
     if (isStatic || isHeld || !isInView || openIndex !== null) return undefined;
 
@@ -125,11 +117,8 @@ export default function InterviewsSection() {
       />
 
       <div className="site-shell">
-        {/* Stacked below sm so the channel link sits under the heading rather
-            than beside it. Wrapping alone put it on its own line but still
-            hard against the left edge of a 500px column, reading as a stray
-            control; below the lead it reads as what follows the section's
-            own words. */}
+        {/* Stacked below sm so the channel link sits under the heading. Beside
+            it, hard against the edge of a 500px column, it read as a stray. */}
         <div className="flex flex-col items-start gap-y-6 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-x-8 sm:gap-y-5">
           <header className="max-w-2xl">
             <p
@@ -158,19 +147,9 @@ export default function InterviewsSection() {
             </p>
           </header>
 
-          {/* A pill, and red, so it reads as "this leaves for YouTube" before
-              the label is read.
-
-              Outlined rather than filled. A solid red button here would carry
-              more weight than "Start your eBay business" further down the
-              page, and this is the secondary door — it sends people to
-              someone else's site. The glyph is the thing that is solid red;
-              the pill only fills on hover, when the intent is already there.
-
-              Red is `ebay-red`, the palette's red, not YouTube's #FF0000. The
-              icon already used it, the section is on an ink band, and one
-              foreign red in a page built on four signal tones would read as a
-              pasted-in widget. */}
+          {/* Red, so it reads as "this leaves for YouTube" before the label
+              does. Outlined, not filled: it must not outweigh the real CTA.
+              ebay-red, not YouTube's own — a foreign red would look pasted in. */}
           <a
             href={interviews.channelHref}
             target="_blank"
@@ -191,11 +170,9 @@ export default function InterviewsSection() {
           </a>
         </div>
 
-        {/* The numbers, before the thumbnails. Eight of the twelve carry a
-            figure in their title, and buried mid-sentence in a scrolling list
-            none of them lands. Read across, they make the section's whole
-            argument before anyone opens anything: twelve people, twelve
-            different results. Each pill plays its interview. */}
+        {/* The numbers before the thumbnails. Read across they make the
+            section's argument before anything is opened: twelve people,
+            twelve different results. Each pill plays its interview. */}
         <div className="mt-9" data-reveal data-reveal-group="interviews-figures">
           <FigureRail videos={PROOF.videos} onSelect={openAt} />
         </div>
@@ -265,18 +242,9 @@ export default function InterviewsSection() {
             </p>
           </div>
 
-          {/* All twelve, including the one currently on stage — the stage
-              cycles through them now, so a list of "the others" would change
-              membership every five seconds and nothing would stay where the
-              reader last saw it.
-
-              Holding the pointer here stops the turn too: picking a row off a
-              list that is quietly rotating behind you is how you end up
-              opening the wrong interview.
-
-              `data-lenis-prevent` hands the wheel back to this panel; without
-              it Lenis scrolls the page while the pointer is over a list that
-              plainly scrolls itself. */}
+          {/* All twelve, including the one on stage: a list of "the others"
+              would change membership every five seconds. Hovering stops the
+              turn, and data-lenis-prevent hands the wheel to this panel. */}
           <div
             data-reveal
             data-reveal-group="interviews-list"

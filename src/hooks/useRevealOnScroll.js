@@ -70,13 +70,9 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
             duration: MOTION.duration,
             ease: MOTION.ease,
             stagger: MOTION.stagger,
-            /* Promote for the entrance and then hand the layer back. The
-               stylesheet used to carry `will-change` permanently, which left
-               ~97 compositor layers alive on the homepage long after every
-               entrance had finished — the compositor then squashes and
-               re-rasterises them during scroll, and it reads as flicker.
-               These reveals are `once: true`, so after this there is nothing
-               left to promote for. */
+            /* Promote for the entrance, then hand the layer back. A permanent
+               will-change left ~97 live compositor layers on the homepage,
+               which the compositor re-rasterises during scroll. */
             onStart: () => gsap.set(els, { willChange: 'transform, opacity' }),
             onComplete: () => gsap.set(els, { willChange: 'auto' }),
             scrollTrigger: { trigger: els[0], start, once: true },

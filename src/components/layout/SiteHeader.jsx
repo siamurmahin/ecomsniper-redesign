@@ -64,14 +64,9 @@ export default function SiteHeader() {
             <BrandLogo />
           </Link>
 
-          {/* shrink-0 and nowrap, because seven items wrapped onto a second
-              row between 1024px and about 1400px and took the whole header
-              from 62px to 94px with it. The logo is the flexible one — it
-              already carries min-w-0 and a clamped size for exactly this — so
-              the nav holds its line and the mark gives up the pixels.
-
-              Padding tightens below xl rather than the nav disappearing: a
-              desktop at 1280 should not be handed the phone menu. */}
+          {/* shrink-0 and nowrap: seven items wrapped to a second row between
+              1024 and ~1400px and took the header from 62px to 94px. The logo
+              gives up the pixels instead — it is already clamped for this. */}
           <nav
             aria-label="Primary"
             className="hidden shrink-0 items-center gap-0.5 whitespace-nowrap lg:flex xl:gap-1"

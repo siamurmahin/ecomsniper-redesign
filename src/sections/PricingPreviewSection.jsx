@@ -86,11 +86,9 @@ export default function PricingPreviewSection({ showHeading = true }) {
                 />
 
                 <div className="relative flex flex-1 flex-col">
-                  {/* The kicker sits above the name, the way the client's own
-                      cards read it: it says which buyer this card is for
-                      before the name says what it is called. Only the
-                      recommended one is filled — three filled chips and none
-                      of them leads. */}
+                  {/* The kicker sits above the name, as the client's cards read
+                      it. Only the recommended one is filled — three filled
+                      chips and none of them leads. */}
                   {plan.badge && (
                     <span
                       className={`mb-4 w-fit rounded-full px-3 py-1 font-label text-[0.6rem] uppercase tracking-[0.14em] ${
@@ -108,11 +106,9 @@ export default function PricingPreviewSection({ showHeading = true }) {
                   </h3>
                   <p className="mt-1.5 text-sm leading-snug text-muted-dark">{plan.summary}</p>
 
-                  {/* The price sits on its own plate, and the three plates are
-                      held to one height on the wide layout so the feature
-                      lists start on the same line: the credits plan carries
-                      two extra lines of billing terms, and without this the
-                      lists sit at three heights and stop being comparable. */}
+                  {/* The price on its own plate, all three held to one height so
+                      the feature lists start on the same line and stay
+                      comparable. */}
                   <div className="mt-6 flex flex-col justify-center rounded-2xl border border-paper/12 bg-paper/[0.06] p-5 lg:min-h-[9.5rem]">
                     <p className="flex flex-wrap items-baseline gap-x-2.5">
                       {/* The price this one is struck down from, where there is
@@ -168,11 +164,9 @@ export default function PricingPreviewSection({ showHeading = true }) {
                     ))}
                   </ul>
 
-                  {/* Refund terms are per-plan, which is what removes the old
-                      contradiction: only the monthly plan is covered. The icon
-                      follows the flag on the plan, never the sentence — a
-                      shield beside "no refunds" would say the opposite of the
-                      words next to it. */}
+                  {/* Refund terms are per-plan — only the monthly one is covered.
+                      The icon follows the flag, never the sentence: a shield
+                      beside "no refunds" would contradict the words. */}
                   <p
                     className={`mt-7 flex items-start gap-2 border-t border-paper/12 pt-4 text-xs leading-relaxed ${
                       plan.guaranteeProtected ? 'text-signal-green-soft' : 'text-muted-dark'

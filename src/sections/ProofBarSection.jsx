@@ -87,12 +87,8 @@ export default function ProofBarSection() {
           {/* self-center only while the label is stacked above the ticker:
               once it sits beside it the row handles alignment, and centring a
               pinned label would pull it off the flags it introduces. */}
-          {/* The soft step, not the brand green: #86b817 on ink sits at about
-              4:1, which is under the bar for text this small.
-
-              The eyebrow's rule takes the same hue at under half strength. Left
-              grey it read as a leftover from the default style, and at full
-              strength it competed with the words it is only there to lead into. */}
+          {/* The soft step, not the brand green: #86b817 on ink is about 4:1,
+              under the bar for text this small. */}
           <p className="section-eyebrow section-eyebrow-on-ink shrink-0 self-center text-signal-green-soft before:bg-signal-green-soft/45 sm:self-auto">
             Trusted by sellers in {countryCount} countries
           </p>

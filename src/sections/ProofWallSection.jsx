@@ -174,13 +174,8 @@ export default function ProofWallSection() {
       </div>
 
       {/* The still thing. Ink against a paper wall, so it separates by value
-          and not only by shadow — a paper card on a paper wall needs a heavy
-          shadow to hold, and the shadow is what makes those look generic.
-
-          It carries the question and the door, nothing else. The interview,
-          the receipts and the reviews moved to 04b: a card big enough to hold
-          them is a card that covers the wall it is supposed to be standing in
-          front of, and then neither half works. */}
+          rather than by shadow. It carries the question and the door only — a
+          card big enough for more would cover the wall behind it. */}
       <div className="site-shell relative flex min-h-[34rem] flex-col lg:min-h-[40rem]">
         {/* The card centres in whatever space is left after the disclaimer
             takes the bottom. Centring the two together instead parks the
@@ -234,18 +229,9 @@ export default function ProofWallSection() {
           </div>
         </div>
 
-        {/* The wall itself carries earnings screenshots, so the qualification
-            has to sit in this section and not only under the readable copies
-            in 04b.
-
-            Set as a solid card rather than a translucent wash. At 85% over
-            drifting evidence cards the type was competing with whatever
-            happened to be behind it, and a disclaimer that cannot be read
-            comfortably is not doing the job it is there for. Opaque paper, a
-            hairline, a lift and a tone rule down the leading edge — the same
-            parts every other surface on this page is built from, so it reads
-            as a deliberate note and not as a caption that lost its
-            background. */}
+        {/* The wall carries earnings screenshots, so the qualification belongs
+            here. A solid card, not a wash: at 85% over drifting cards the type
+            competed with whatever was behind it. */}
         <div className="mx-auto flex max-w-3xl overflow-hidden rounded-xl border border-hairline bg-paper shadow-lift">
           <span aria-hidden="true" className={`w-1 shrink-0 ${toneOf('gold').rule}`} />
           <p className="px-5 py-4 text-center text-xs leading-relaxed text-muted">

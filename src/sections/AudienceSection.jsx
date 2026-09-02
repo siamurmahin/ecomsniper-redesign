@@ -365,12 +365,9 @@ export default function AudienceSection() {
                   }`}
                 />
 
-                {/* Closed: the glyph and the name, turned on their side on a
-                    desktop where the panel is a tall sliver, and left upright on
-                    a phone where it is a wide strip. The name only — these roles
-                    run to five words, and set vertically in a 95px panel one of
-                    them would be a column of text taller than the panel. The
-                    role is what the panel opens to say. */}
+                {/* Closed: glyph and name, sideways on a desktop sliver and
+                    upright on a phone strip. Name only — a five-word role set
+                    vertically would be taller than the panel. */}
                 <span
                   ref={(el) => (shutRefs.current[index] = el)}
                   className="absolute inset-0 flex items-center gap-3 px-3 py-2 md:flex-col md:items-start md:justify-between md:px-2 md:py-3 lg:px-3 lg:py-4"
@@ -398,15 +395,10 @@ export default function AudienceSection() {
                   ref={(el) => (openRefs.current[index] = el)}
                   aria-hidden={!isOpen}
                   style={{ opacity: 0 }}
-                  /* Anchored to the TOP below md, to the bottom above it.
-                     `justify-end` everywhere meant that when a story needed a
-                     few pixels more than the row was measured for, the excess
-                     came out of the TOP of the flex box and pushed the glyph
-                     tile hard against the panel's edge — no scrollbar, no
-                     overflow, nothing to notice. Stacked on a phone the
-                     stories are at their tallest and it showed on every
-                     member. Anchoring to the start there keeps the tile on its
-                     padding whatever the copy does. */
+                  /* Anchored to the top below md, the bottom above it. With
+                     justify-end everywhere, a story needing a few extra pixels
+                     pushed them out of the top and the glyph hit the edge —
+                     silently, with no overflow to notice. */
                   className="absolute inset-y-0 left-0 flex w-full flex-col justify-start gap-5 p-6 md:justify-end md:w-[var(--panel-open-w)] lg:p-7"
                 >
                   <span
@@ -434,12 +426,9 @@ export default function AudienceSection() {
                       </span>
                     </span>
 
-                    {/* The label sits beside the name only once the panel is
-                        wide enough for both. Between md and xl the open panel
-                        is around 300px, where "Career switcher, corporate job"
-                        and the label were splitting that between them and the
-                        role broke over four lines. Stacked, each gets the full
-                        measure. */}
+                    {/* Label beside the name only once there is room. Between
+                        md and xl the panel is ~300px, where the role broke
+                        over four lines. */}
                     <span className="mt-5 flex flex-col gap-1.5 border-t border-ink-line pt-4 xl:flex-row xl:items-end xl:gap-3">
                       <span className="min-w-0">
                         <span className="block text-sm font-semibold">{person.name}</span>
@@ -490,14 +479,9 @@ export default function AudienceSection() {
           title. The deep step of the green, since #86b817 on this band is about
           2.4:1 and unreadable at this size.
         */}
-        {/* Two weights, not one line. Setting the whole closer at a single size
-            was what made it read as another heading; the first sentence is the
-            setup and sits back, the question is the only part that asks for
-            anything and keeps the weight.
-
-            `join(' ')` rather than spacing the beats with margin: a gap made of
-            margin looks identical and reads as "Different lives.Same system."
-            to a screen reader, a copy and paste, or a search. */}
+        {/* Two weights: the first sentence sets up, the question asks. Joined
+            with a space, not spaced by margin — margin reads as
+            "Different lives.Same system." to a screen reader or a copy-paste. */}
         <p
           data-reveal
           data-reveal-group="audience-closer"
