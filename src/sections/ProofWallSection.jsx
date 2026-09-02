@@ -3,6 +3,7 @@ import CtaButton from '../components/ui/CtaButton';
 import RatingStars from '../components/ui/RatingStars';
 import { useMemo } from 'react';
 import { useContent } from '../hooks/useContent';
+import { useNearViewport } from '../hooks/useNearViewport';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { receiptUrl, thumbUrl } from '../lib/proofMedia';
 import { toneOf } from '../lib/signalTones';
@@ -129,6 +130,9 @@ export default function ProofWallSection() {
   const { PROOF, SITE, A11Y } = useContent();
   const COLUMNS = useMemo(() => dealColumns(PROOF), [PROOF]);
   const sectionRef = useRevealOnScroll();
+  /* Half of this section is the second copy of its own evidence, and none of
+     it can be seen from the top of the page. */
+  const isNear = useNearViewport(sectionRef);
 
   return (
     <section
@@ -151,7 +155,10 @@ export default function ProofWallSection() {
                 className={`${index === 2 ? 'hidden lg:block' : ''} rail-viewport overflow-hidden`}
               >
                 <div
-                  className={COLUMN_SETTINGS[index].direction}
+                  /* The drift waits for the copy that closes its loop: the
+                     keyframe walks the column up by half its own height, and
+                     half of one copy is the middle of the evidence. */
+                  className={isNear ? COLUMN_SETTINGS[index].direction : undefined}
                   style={{ '--rail-duration': COLUMN_SETTINGS[index].duration }}
                 >
                   <ul className="flex flex-col gap-4">
@@ -162,14 +169,17 @@ export default function ProofWallSection() {
                     ))}
                   </ul>
                   {/* Second copy closes the loop; same content, so it is
-                      hidden rather than read out twice. */}
-                  <ul aria-hidden="true" className="mt-4 flex flex-col gap-4">
-                    {column.map((entry) => (
-                      <li key={`echo-${entry.id}`}>
-                        <WallCard entry={entry} />
-                      </li>
-                    ))}
-                  </ul>
+                      hidden rather than read out twice. Built when the wall is
+                      approached — see `useNearViewport`. */}
+                  {isNear && (
+                    <ul aria-hidden="true" className="mt-4 flex flex-col gap-4">
+                      {column.map((entry) => (
+                        <li key={`echo-${entry.id}`}>
+                          <WallCard entry={entry} />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             ))}

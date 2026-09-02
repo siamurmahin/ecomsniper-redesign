@@ -3,6 +3,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import RatingStars from '../components/ui/RatingStars';
 import { useContent } from '../hooks/useContent';
+import { useNearViewport } from '../hooks/useNearViewport';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 /** Below this the wall becomes a swipe rail. Matches Tailwind's `sm`. */
@@ -154,6 +155,9 @@ export default function TestimonialsSection() {
   const { PROOF, SITE } = useContent();
   const COLUMNS = useMemo(() => dealColumns(PROOF), [PROOF]);
   const sectionRef = useRevealOnScroll();
+  /* Half of this section is the second copy of its own evidence, and none of
+     it can be seen from the top of the page. */
+  const isNear = useNearViewport(sectionRef);
   const { testimonials } = PROOF;
 
   /* Decided in JS, not by hiding one with CSS: rendering both would put 54
@@ -225,7 +229,9 @@ export default function TestimonialsSection() {
                   className={index === 2 ? 'hidden lg:block' : index === 1 ? 'hidden sm:block' : ''}
                 >
                   <div
-                    className={COLUMN_SETTINGS[index].direction}
+                    /* The drift waits for the copy that closes its loop: half
+                       of one copy is the middle of the reviews. */
+                    className={isNear ? COLUMN_SETTINGS[index].direction : undefined}
                     style={{ '--rail-duration': COLUMN_SETTINGS[index].duration }}
                   >
                     <div className="flex flex-col gap-5">
@@ -237,12 +243,15 @@ export default function TestimonialsSection() {
                     {/* Second copy closes the loop — the keyframe walks the
                       column up by half its own height, so the seam never
                       reaches the viewport. Same content, so it is hidden
-                      rather than read out twice. */}
-                    <div aria-hidden="true" className="mt-5 flex flex-col gap-5">
-                      {column.map((review) => (
-                        <ReviewCard key={`echo-${review.name}${review.title}`} review={review} />
-                      ))}
-                    </div>
+                      rather than read out twice. Built when the wall is
+                      approached — see `useNearViewport`. */}
+                    {isNear && (
+                      <div aria-hidden="true" className="mt-5 flex flex-col gap-5">
+                        {column.map((review) => (
+                          <ReviewCard key={`echo-${review.name}${review.title}`} review={review} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
