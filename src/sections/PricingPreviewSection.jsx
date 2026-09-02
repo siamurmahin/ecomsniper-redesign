@@ -14,23 +14,15 @@ import { toneOf } from '../lib/signalTones';
 const PLAN_TONES = ['blue', 'gold', 'green'];
 
 /**
- * 12 — Pricing.
+ * 12 — Pricing. These run on /pricing only: section 11 states the entry price
+ * and the guarantee on the homepage and sends the reader here.
  *
- * The review's sharpest finding: the "$" symbol appeared nowhere on the
- * homepage, so most visitors never learned the price because most visitors
- * never load /pricing. That is answered now by §11, which states the entry
- * price and the guarantee and sends the reader here, so these cards run on
- * /pricing only.
+ * Each plan carries its own refund terms, because they differ — only the
+ * monthly plan is covered.
  *
- * All three plans carry their own refund terms, because they differ: only the
- * monthly plan is covered by the guarantee.
- *
- * The three cards are one design and one height. An earlier pass gave the
- * recommended plan its own treatment — ink against two white cards, and taller
- * by a negative margin. It read as three offers from three places, and the two
- * white cards read as the cheap seats. The recommended one is now marked the
- * way the client marks it, with a chip and the brand ramp, and nothing else
- * separates them.
+ * One design and one height for all three. The recommended plan used to be ink
+ * against two white cards and taller, which read as three offers from three
+ * places. It is marked with a chip and the brand ramp instead.
  */
 /**
  * @param {object} props

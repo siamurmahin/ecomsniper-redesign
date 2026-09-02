@@ -1,19 +1,12 @@
 /**
- * The signal that the first screen has finished animating.
+ * The signal that the hero has finished animating.
  *
- * The homepage defers sixteen sections until after the hero has painted, and
- * "after painted" turned out to be the wrong moment: mounting ~4,000 nodes one
- * frame after first paint drops the work squarely into the middle of the
- * hero's entrance. Measured, the first frames of a reload ran
- * 16.7, 83.4, 16.8, 16.7, 283.5, 33.4 … ms — a 283ms frame is seventeen
- * dropped in a row, and the hero visibly stutters through its own animation.
+ * The page defers sixteen sections until the hero is done, not merely painted:
+ * mounting ~4,000 nodes one frame after first paint drops the work into the
+ * middle of the entrance, and a 283ms frame is seventeen dropped in a row.
  *
- * So the mount waits for this instead. The hero says when it is done, and the
- * rest of the page mounts into a main thread nobody is animating on.
- *
- * A plain window event rather than context or a store: the two ends are a
- * section and a layout wrapper that never meet in the tree, and this needs to
- * work whether the hero is on the page at all.
+ * A plain window event, because the two ends never meet in the tree and this
+ * has to work whether the hero is on the page at all.
  */
 export const HERO_READY_EVENT = 'ecomsniper:hero-ready';
 

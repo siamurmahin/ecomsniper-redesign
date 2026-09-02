@@ -3,17 +3,10 @@ import Icon from './Icon';
 import { useModalLayer } from '../../hooks/useModalLayer';
 
 /**
- * A YouTube interview, played over the page.
- *
- * The player only exists while this is open, so the section's promise — that
- * nothing loads from YouTube until you press play — still holds. Opening the
- * lightbox IS pressing play: there is no poster-then-iframe step here the way
- * there is in `YouTubeFacade`, because the click that opened it was already
- * the decision to watch.
- *
- * `key` on the iframe in the parent is not enough to stop a video when the
- * selection changes — the src has to change, and it does, because the whole
- * component unmounts when `video` goes null.
+ * A YouTube interview played over the page. The player only exists while this
+ * is open, so "nothing loads until you press play" stays true — opening it is
+ * pressing play. Changing key is not enough to stop a video; the component
+ * unmounts when video goes null, which is what does it.
  *
  * @param {object} props
  * @param {object|null} props.video The video to play, or null when closed.

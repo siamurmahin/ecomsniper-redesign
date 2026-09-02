@@ -6,23 +6,16 @@ import { useModalLayer } from '../../hooks/useModalLayer';
 import playbookCover from '../../assets/brand/playbook-cover.webp';
 
 /**
- * What a visitor gets the moment the address is in: the file, and one offer.
+ * What a visitor gets once the address is in: the file, and one offer.
  *
- * A dialog rather than a panel replacing the form. The page behind it is spent
- * — it is a form they have already filled in — and a modal is what stops the
- * download competing with it for attention.
+ * A dialog, not a panel replacing the form — the page behind it is spent. The
+ * download is a real file, not a promise of an email: someone who just typed
+ * their address has earned it, and it works whether or not the mail lands.
  *
- * The download is a real `download` link to a file in `public/`, not a promise
- * of an email. Somebody who has just typed their address has earned the thing
- * they typed it for, and a hand-over that works whether or not the mail lands
- * is the difference between a lead magnet and a bait and switch. The email
- * still goes out and the copy says so.
- *
- * Closing leaves for the homepage: see `closeDone` on the page.
+ * Closing leaves for the homepage; see closeDone on the page.
  *
  * @param {object} props
- * @param {() => void} props.onClose Runs on Escape, the backdrop, and both
- *   close controls.
+ * @param {() => void} props.onClose Runs on Escape, the backdrop and both close controls.
  */
 export default function PlaybookDelivered({ onClose }) {
   const dialogRef = useRef(null);

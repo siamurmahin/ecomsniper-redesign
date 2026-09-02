@@ -7,18 +7,13 @@ import { receiptUrl, thumbUrl } from '../lib/proofMedia';
 import { toneOf } from '../lib/signalTones';
 
 /**
- * 04 — Proof, variant C: a wall of evidence with the argument standing still
- * in front of it.
+ * 04 — A wall of evidence with the argument standing still in front of it.
+ * The quantity is the argument: what registers first is that there are a lot
+ * of them. The centre card is the only thing not moving, so it reads as the
+ * thing to act on.
  *
- * The other two variants present the proof one piece at a time. This one makes
- * the quantity itself the argument: the first thing a visitor registers is not
- * any single receipt but that there are a lot of them, and they keep coming.
- * The centre card is the only thing not moving, which is what makes it read as
- * the thing to act on.
- *
- * The wall is real content in a real list — the same receipts and reviews,
- * uncut — not a decorative texture. That is the whole point: a wall of
- * placeholder shapes would be a lie about how much proof exists.
+ * The wall is real content, uncut — placeholder shapes would be a lie about
+ * how much proof exists.
  */
 
 /** Three columns, each a different speed and direction so no row lines up. */

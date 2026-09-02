@@ -9,19 +9,14 @@ import { toneOf } from '../lib/signalTones';
 import { receiptUrl } from '../lib/proofMedia';
 
 /**
- * 04c — The receipts.
+ * 04c — The receipts. Three cards, and the screenshot opens when you click one.
  *
- * Three cards, and the screenshot opens properly when you click one.
+ * The card can only be a thumbnail: a sales dashboard in a 256px window is a
+ * picture of evidence rather than evidence. The figure carries the claim; the
+ * click is for the reader who wants to check it.
  *
- * The card can only ever be a thumbnail: an eBay sales dashboard set into a
- * 256px window is a picture OF evidence rather than evidence you can read. The
- * figure on the plate carries the claim in the row, and the click is there for
- * the reader who wants to check it — which is the whole point of calling them
- * receipts.
- *
- * In the lightbox the screenshot is `object-contain`, not `object-cover`. The
- * card crops on purpose so the row stays even; cropping it a second time in
- * the one place it is meant to be legible would defeat the click.
+ * object-contain in the lightbox — the card crops to keep the row even, and
+ * cropping again where it is meant to be legible would defeat the click.
  */
 
 /** One signal tone each, the way every other enumerated set here is coloured. */

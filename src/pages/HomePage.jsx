@@ -26,21 +26,19 @@ import { FAQ } from '../data/siteContent';
  *  04 Proof wall ........ the volume of it, and the door
  *  04b Interviews ....... members, in their own words
  *  04c Receipts ......... screenshots members posted
- *  04d Testimonials ..... written reviews, two running rows
+ *  04d Testimonials ..... written reviews
  *  06 Three pillars ..... the page's table of contents
- *  07 Feature tour ...... what the software actually does
+ *  07 Feature tour ...... what the software does
  *  08 Community ......... the real differentiator
- *  09 Step by step ...... the four-step model, then the course that teaches it
- *
- *  05 is gone. It explained the same four steps on its own band a third of the
- *  page above the course, so the page described the mechanism and then later
- *  offered to teach the mechanism without either half mentioning the other.
- *  Both now open 09, which is how the live site runs it.
+ *  09 Step by step ...... the four steps, then the course that teaches them
  *  10 Founders .......... who is behind it
- *  11 Comparison ........ the decision they are already making elsewhere
- *  12 Comparison close .. the price and the guarantee, then out to /pricing
+ *  11 Comparison ........ the decision they are already making
+ *  12 Comparison close .. price and guarantee, then out to /pricing
  *  13 FAQ ............... last objections, answered in place
  *  14 Guarantee ......... the last argument, and the door out of it
+ *
+ * 05 is gone: it explained the same four steps a third of a page above the
+ * course that teaches them. Both now open 09, as the live site does.
  */
 export default function HomePage() {
   // FAQPage + Product schema, built from the same copy the page renders.

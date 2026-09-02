@@ -1,15 +1,11 @@
 import Icon from './Icon';
 
 /**
- * A score drawn as stars, filled to the fraction the score actually is.
+ * Stars filled to the exact fraction of the score. Two rows stacked: a dim
+ * track and a bright one clipped to width. Rounding to a half star would round
+ * the evidence, and 4.7 has to look like 4.7.
  *
- * Two identical rows stacked: a dim one for the track, a bright one clipped to
- * the score's width. Rounding to the nearest whole or half star would round the
- * evidence — 4.7 has to look like 4.7, on a bar whose whole argument is that its
- * numbers are checkable.
- *
- * Decoration only: the figure itself is always rendered as text beside this, so
- * the stars are hidden from assistive tech rather than read out twice.
+ * Decoration only — the figure is always written beside it as text.
  *
  * @param {object} props
  * @param {number} props.rating Score to fill to.

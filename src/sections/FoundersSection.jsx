@@ -10,32 +10,16 @@ const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, impo
 const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
 
 /**
- * 10 — Founders.
+ * 10 — Founders. In this category trust rests on the operator, and neither
+ * founder story appeared anywhere on the homepage. No live version to follow.
  *
- * The review's reasoning: in this category trust rests on the operator, not
- * the software, and neither founder story surfaced anywhere on the homepage.
- * There is no live version to follow — ecomsniper.io has nine sections and
- * none of them is a founders block.
+ * Section 09 already introduces both men with their faces, so this section is
+ * about something else: the free playbook this site hands out was written by
+ * one of them, and nothing on the site said so. That turns "trust the
+ * operator" into something checkable.
  *
- * Section 09 now introduces both men with their faces, two sections above
- * this one, so this section stops introducing them. Three shapes that only
- * rearranged the two paragraphs were built and rejected; this one gives the
- * section something to be about: the free playbook this site hands out —
- * "The Invisible Store" — was written by one of the two men in it, and
- * nothing anywhere on the site said so.
- *
- * That is worth a section on its own terms. It turns "trust the operator" from
- * an assertion into something checkable, and it puts a third free door on the
- * page at the point where a reader is asking who these people are.
- *
- * Authorship is the client's own wording, from ecomsniper.io/free-play-book:
- * "the exact system Sammy (CEO EcomSniper) used for 8 years". The cover in
- * `thumb-security-guard-300k` says the same — "Sammy, Founder of EcomSniper" —
- * and the summary video sits on his channel.
- *
- * That page says eight years where `FOUNDERS` says seven. The client confirmed
- * this site's figure is the right one, so seven stands and nothing here
- * repeats the number.
+ * Their own page says eight years where FOUNDERS says seven. The client
+ * confirmed seven, so nothing here repeats the number.
  */
 export default function FoundersSection() {
   const sectionRef = useRevealOnScroll();

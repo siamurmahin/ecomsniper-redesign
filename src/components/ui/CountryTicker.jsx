@@ -7,19 +7,11 @@ const FLAGS = import.meta.glob('../../assets/flags/*.png', { eager: true, import
 const flagUrl = (code) => FLAGS[`../../assets/flags/flag-${code.toLowerCase()}.png`];
 
 /**
- * The supported countries as a slow ticker of flags.
+ * Supported countries as a slow ticker of flags. Eight names in a sentence get
+ * skimmed; eight flags are read at a glance, and moving says "more than fits".
  *
- * A sentence naming eight countries is a sentence people skim past; eight flags
- * are read at a glance, and moving them says "more than fits here" in a way a
- * static row of exactly eight cannot. It is deliberately slow — this is a
- * texture beside the figures, not something competing with them.
- *
- * The list comes from the same deck the countries section renders, so the two
- * can never disagree about where EcomSniper works.
- *
- * Decorative throughout: whatever renders this states the count in a visible
- * label, and the countries are named in full in the countries section, so a
- * screen reader gains nothing from eight more flags and a repeated list.
+ * Decorative: the count is stated in a label beside it and the countries are
+ * named in full elsewhere, so a screen reader gains nothing here.
  *
  * @param {object} props
  * @param {boolean} [props.onInk] Sitting on a dark band rather than paper.

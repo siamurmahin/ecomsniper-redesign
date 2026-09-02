@@ -11,25 +11,15 @@ import { thumbUrl } from '../lib/proofMedia';
 const DWELL = 5;
 
 /**
- * 04b — Member interviews.
+ * 04b — Member interviews, on an ink band: video is the proof that wants the
+ * lights down, and it separates the three kinds of evidence either side.
  *
- * Its own section, on an ink band. Video is the one kind of proof that asks
- * for the lights down, and the band also separates it from the paper sections
- * either side so the three kinds of evidence stop reading as one long list.
+ * A lead interview beside a list of the rest, the shape a channel already has
+ * — twelve in a grid would be four rows of thumbnails and most of a screen.
  *
- * Twelve interviews in a grid would be four rows of large thumbnails and most
- * of a screen. A lead interview beside a list of the rest is the shape a
- * channel already has: one thing offered, the rest waiting, and the whole
- * library legible without scrolling past it.
- *
- * EVERY THUMBNAIL PLAYS. It used to be a stage plus a playlist, where clicking
- * the list only *selected* and you then had to press play on the stage — two
- * clicks, and the first one looked like it should have started the video. Now
- * the lead card and all eleven list rows open the same lightbox, so there is
- * one thing a thumbnail can do and it is the thing it looks like it does.
- *
- * The player lives in the lightbox and nowhere else, so the privacy note below
- * stays true: nothing is requested from YouTube until something is opened.
+ * Every thumbnail plays. It used to select, so you clicked twice and the first
+ * click looked like it should have started it. The player lives in the
+ * lightbox only, so nothing loads from YouTube until something is opened.
  */
 export default function InterviewsSection() {
   const sectionRef = useRevealOnScroll();

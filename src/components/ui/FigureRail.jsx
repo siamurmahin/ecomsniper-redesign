@@ -1,28 +1,18 @@
 import { useParallax } from '../../hooks/useParallax';
 
 /**
- * The member figures as two rows of pills that slide past each other on scroll.
+ * Member figures as two rows of pills sliding past each other on scroll.
  *
- * PARALLAX AND NOT A MARQUEE, deliberately. The page already carries seven
- * things that move on a timer — the aurora and dot field in the hero, the
- * country ticker, the audience rotation, and three drifting columns each in
- * the proof wall and the reviews. An eighth would read as noise. These move
- * only while the reader is scrolling, in opposite directions, so the effect is
- * depth rather than another thing demanding attention. Standing still, the
- * section is still.
+ * Parallax, not a marquee: the page already has seven things moving on a
+ * timer, and an eighth reads as noise. These move only while scrolling, so
+ * standing still the section is still.
  *
- * The two must not be combined: `useParallax` writes `x` through GSAP while a
- * marquee keyframe writes `transform`, and in Tailwind v4 those are separate
- * properties that multiply rather than override. That is the hour-costing trap
- * already recorded for `scale-y-0`.
- *
- * Each pill opens its interview, so this is a fast index into the twelve for
- * someone scanning for a number rather than a name — and the numbers make the
- * section's argument on their own: twelve people, twelve different results.
+ * Do not combine the two — useParallax writes x through GSAP while a marquee
+ * keyframe writes transform, and in Tailwind v4 those multiply, not override.
  *
  * @param {object} props
- * @param {Array} props.videos Full video list; entries without a `figure` are skipped.
- * @param {(index: number, event: Event) => void} props.onSelect Given the index in `videos`.
+ * @param {Array} props.videos Full video list; entries without a figure are skipped.
+ * @param {(index: number, event: Event) => void} props.onSelect Given the index in videos.
  */
 export default function FigureRail({ videos, onSelect }) {
   const topRef = useParallax(0.09, { axis: 'x' });
