@@ -28,94 +28,93 @@ import { getLenis, scrollToTarget } from './lib/smoothScroll';
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
+  /* The browser's own scroll restoration fights the reset below: it puts the
+     previous position back after a navigation, asynchronously, which on a
+     phone is the difference between landing at the top and landing wherever
+     the last page happened to be. This app decides where a route lands. */
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   useEffect(() => {
     /*
      * Where a new route lands.
      *
-     * The hard part is that no page has its content yet when this runs. Every
-     * section below the hero is mounted a frame late by DeferUntilPainted, so
-     * at this moment the document is only as tall as its hero and the section
-     * a hash points at does not exist.
+     * Two things make this harder than it looks.
      *
-     * That broke both directions. Without a hash, Lenis measured the short
-     * document, clamped the position to it, and the rest of the page then
-     * appeared underneath a position that was never reset — arriving from the
-     * foot of the homepage put the reader at the bottom of the page they had
-     * just opened. With a hash, querySelector found nothing and the code fell
-     * through to "scroll to the top", which is why /#proof from /pricing
-     * landed on the homepage hero rather than the proof section.
+     * No page has its content when this runs. Every section below the hero is
+     * mounted a frame late by DeferUntilPainted, so the document is briefly
+     * only as tall as its hero: a hash target does not exist yet, and the
+     * sections above one that does are still arriving, so its offset is about
+     * to change. Worse, the short document means the browser clamps the
+     * inherited scroll position to that small height — and then the rest of
+     * the page mounts underneath a position nobody reset. Coming from the foot
+     * of the homepage, that is how the playbook page opened at its footer.
      *
-     * Both wait for the page to exist instead of assuming it does, and each
-     * attempt re-measures first, because a stale document height is what made
-     * the first one wrong.
+     * And Lenis is not always there. SmoothScrollProvider skips it for coarse
+     * pointers and reduced motion, so on a phone getLenis() is null for the
+     * life of the page. Anything that waits for Lenis waits forever there,
+     * which is exactly what the previous version of this did.
+     *
+     * So: settle first, then move, and treat Lenis as optional throughout.
      */
     let frame = 0;
+    const startedAt = performance.now();
+    let lastHeight = -1;
+    let stableFrames = 0;
 
-    if (hash) {
-      /* Wait for the section, then go. The position is left alone while
-         waiting: jumping to the top first and then to the section would show
-         the hero for a frame on the way past. Capped so a hash naming nothing
-         settles at the top rather than spinning. */
-      const startedAt = performance.now();
-      let lastHeight = -1;
-      let stableFrames = 0;
+    /* Two frames at the same document height. One is not enough — a frame
+       between two mounts reads as stable and is not. */
+    const settled = () => {
+      const height = document.documentElement.scrollHeight;
+      stableFrames = height === lastHeight ? stableFrames + 1 : 0;
+      lastHeight = height;
+      return stableFrames >= 2;
+    };
 
-      const findTarget = () => {
+    const land = () => {
+      const lenis = getLenis();
+      const isSettled = settled();
+      const timedOut = performance.now() - startedAt > 1500;
+
+      if (hash) {
         const target = document.querySelector(hash);
-        const lenis = getLenis();
-        const height = document.documentElement.scrollHeight;
 
-        /* Existing is not enough: the sections ABOVE the target are mounting
-           too, so an element found on the first frame is sitting at an offset
-           that is about to change. Scrolling to it then lands somewhere that
-           promptly moves. Wait until the document stops growing as well. */
-        stableFrames = height === lastHeight ? stableFrames + 1 : 0;
-        lastHeight = height;
-
-        /* Lenis has to exist first. Scrolling before it starts moves the
-           page natively, and Lenis then begins from its own stored position —
-           zero — and snaps straight back. Same desync the shared helper's
-           comment warns about, arrived at from the other end. */
-        if (target && lenis && stableFrames >= 2) {
-          lenis.resize();
-          /* Eased, not immediate. A cross-page hash is the same gesture as an
-             in-page one — the reader asked for a section, not for a different
-             page — so it travels the way every other jump on this site does.
-             It reads as the page arriving at the right place rather than
-             flickering through the hero on the way. */
-          scrollToTarget(target);
-          return;
-        }
-
-        if (performance.now() - startedAt < 1500) {
-          frame = requestAnimationFrame(findTarget);
-          return;
-        }
-
-        /* Out of time. Go where we can rather than leaving them at the top of
-           a page they did not ask for. */
-        if (target) {
+        if (target && (isSettled || timedOut)) {
           lenis?.resize();
-          scrollToTarget(target, { immediate: true });
+          /* Eased where Lenis drives it, immediate otherwise: the native
+             fallback would be a browser smooth-scroll racing this one. */
+          scrollToTarget(target, { immediate: !lenis });
           return;
         }
 
-        scrollToTarget(0, { immediate: true });
-      };
+        if (!timedOut) {
+          frame = requestAnimationFrame(land);
+          return;
+        }
 
-      frame = requestAnimationFrame(findTarget);
-      return () => cancelAnimationFrame(frame);
-    }
+        // A hash naming nothing. Fall through to the top.
+      }
 
-    /* No hash: top, immediately so the old position is never shown, and once
-       more after a frame when the real height is known. Exactly twice — any
-       longer and it would fight a reader who scrolls the moment they land. */
-    scrollToTarget(0, { immediate: true });
-
-    frame = requestAnimationFrame(() => {
-      getLenis()?.resize();
+      lenis?.resize();
       scrollToTarget(0, { immediate: true });
-    });
+
+      /* Keep resetting until the page stops growing. Without Lenis the browser
+         owns the scroll position, and it restores its own idea of it as the
+         deferred sections arrive — one reset lands before that happens and is
+         quietly undone. */
+      if (!isSettled && !timedOut) {
+        frame = requestAnimationFrame(land);
+      }
+    };
+
+    /* Immediately as well, so the inherited position is never painted even
+       once while the first frame is waited for. */
+    if (!hash) scrollToTarget(0, { immediate: true });
+
+    frame = requestAnimationFrame(land);
 
     return () => cancelAnimationFrame(frame);
   }, [pathname, hash]);
