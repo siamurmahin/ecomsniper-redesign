@@ -65,6 +65,8 @@ const DotField = memo(({
       };
 
       buildDots(w, h);
+      // A resized field has to be drawn again, asleep or not.
+      wake();
     }
 
     function buildDots(w, h) {
@@ -87,10 +89,34 @@ const DotField = memo(({
       dotsRef.current = dots;
     }
 
+    /*
+     * The field draws only while something is moving.
+     *
+     * The loop used to re-queue itself unconditionally: clearRect, a fresh
+     * gradient and every dot re-arced, sixty times a second, for as long as
+     * the hero was on screen — on a page nobody had touched, where every one
+     * of those frames drew the identical picture. Traced at 20x CPU it was
+     * 60-140ms frames still arriving forty seconds in, which is a main thread
+     * that never goes quiet: the page cannot be called interactive, and a
+     * laptop on battery is rendering a still image.
+     *
+     * A pointer wakes it; it settles itself back to sleep once the dots have
+     * returned to their anchors. Nothing about how it looks or responds
+     * changes — it is the same loop, asleep when there is nothing to draw.
+     */
+    let isAsleep = false;
+
+    function wake() {
+      if (!isAsleep) return;
+      isAsleep = false;
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
     function onMouseMove(e) {
       const s = sizeRef.current;
       mouseRef.current.x = e.pageX - s.offsetX;
       mouseRef.current.y = e.pageY - s.offsetY;
+      wake();
     }
 
     function updateMouseSpeed() {
@@ -144,6 +170,10 @@ const DotField = memo(({
 
       ctx.beginPath();
 
+      /* How far the furthest dot still is from where it belongs. Under a
+         quarter of a pixel is a dot at rest — see `isAsleep`. */
+      let unrest = 0;
+
       for (let i = 0; i < len; i++) {
         const d = dots[i];
         const dx = m.x - d.ax;
@@ -178,6 +208,11 @@ const DotField = memo(({
           d.sy += (d.y - d.sy) * 0.1;
         }
 
+        const offX = d.sx - d.ax;
+        const offY = d.sy - d.ay;
+        const off = offX * offX + offY * offY;
+        if (off > unrest) unrest = off;
+
         let drawX = d.sx;
         let drawY = d.sy;
         if (p.waveAmplitude > 0) {
@@ -202,6 +237,23 @@ const DotField = memo(({
 
       ctx.fill();
 
+      /* Asleep only when nothing is left to draw: the pointer has stopped
+         mattering, the halo has faded out, no dot is still travelling, and
+         there is no per-frame effect that would change the picture on its
+         own. The last frame is the field at rest, so it stays on screen. */
+      const isStill =
+        eng === 0 &&
+        glowOpacity.current < 0.001 &&
+        unrest < 0.0625 &&
+        !p.sparkle &&
+        !(p.waveAmplitude > 0);
+
+      if (isStill) {
+        isAsleep = true;
+        rafRef.current = null;
+        return;
+      }
+
       rafRef.current = requestAnimationFrame(tick);
     }
 
@@ -212,7 +264,10 @@ const DotField = memo(({
 
     rebuildRef.current = () => {
       const { w, h } = sizeRef.current;
-      if (w > 0 && h > 0) buildDots(w, h);
+      if (w > 0 && h > 0) {
+        buildDots(w, h);
+        wake();
+      }
     };
 
     return () => {
