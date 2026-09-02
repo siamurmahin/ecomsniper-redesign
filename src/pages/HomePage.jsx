@@ -1,21 +1,15 @@
+import { lazy, Suspense } from 'react';
 import Seo from '../components/ui/Seo';
 import DeferUntilPainted from '../components/layout/DeferUntilPainted';
 import HeroSection from '../sections/HeroSection';
 import ProofBarSection from '../sections/ProofBarSection';
-import AudienceSection from '../sections/AudienceSection';
-import ProofWallSection from '../sections/ProofWallSection';
-import InterviewsSection from '../sections/InterviewsSection';
-import ReceiptsSection from '../sections/ReceiptsSection';
-import TestimonialsSection from '../sections/TestimonialsSection';
-import PillarsSection from '../sections/PillarsSection';
-import FeatureTourSection from '../sections/FeatureTourSection';
-import CommunitySection from '../sections/CommunitySection';
-import TrainingSection from '../sections/TrainingSection';
-import FoundersSection from '../sections/FoundersSection';
-import ComparisonSection from '../sections/ComparisonSection';
-import FaqSection from '../sections/FaqSection';
-import AssuranceSection from '../sections/AssuranceSection';
 import { useContent } from '../hooks/useContent';
+
+/* The rest of the page is a chunk of its own, asked for only once the hero
+   has finished. Statically imported, its thirteen sections had to be parsed
+   and executed before React could paint the first screen. See
+   `HomeBelowFold`. */
+const HomeBelowFold = lazy(() => import('./HomeBelowFold'));
 
 /**
  * Homepage funnel, in the order a cold visitor needs it.
@@ -76,24 +70,15 @@ export default function HomePage() {
       <HeroSection />
       <ProofBarSection />
 
-      {/* Everything below, mounted one frame after the hero has painted.
+      {/* Everything below, fetched and mounted once the hero has painted.
           Sixteen sections, ~4,000 nodes and sixteen GSAP setups used to run
           before the first frame with the screen blank behind them. See
-          `DeferUntilPainted` — including why this is not viewport-based. */}
+          `DeferUntilPainted` — including why this is not viewport-based —
+          and `MountInSlices` for why they no longer arrive in one pass. */}
       <DeferUntilPainted>
-        <AudienceSection />
-        <ProofWallSection />
-        <InterviewsSection />
-        <ReceiptsSection />
-        <TestimonialsSection />
-        <PillarsSection />
-        <FeatureTourSection />
-        <CommunitySection />
-        <TrainingSection />
-        <FoundersSection />
-        <ComparisonSection />
-        <FaqSection />
-        <AssuranceSection />
+        <Suspense fallback={null}>
+          <HomeBelowFold />
+        </Suspense>
       </DeferUntilPainted>
     </>
   );
