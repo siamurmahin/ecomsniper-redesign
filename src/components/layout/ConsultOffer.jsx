@@ -23,7 +23,7 @@ const FIELD_CLASS =
  * dialog, so nobody is stopped twice in a visit.
  */
 export default function ConsultOffer() {
-  const { CONSULT } = useContent();
+  const { CONSULT, A11Y } = useContent();
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | submitting | done | error
   const [name, setName] = useState('');
@@ -166,7 +166,7 @@ export default function ConsultOffer() {
         <button
           type="button"
           onClick={close}
-          aria-label="Close"
+          aria-label={A11Y.close}
           className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-ink-line text-muted-dark transition-colors duration-200 hover:border-paper/40 hover:text-paper"
         >
           <Icon name="close" className="size-3" aria-hidden="true" />

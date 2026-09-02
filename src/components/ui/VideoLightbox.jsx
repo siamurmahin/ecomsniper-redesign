@@ -1,3 +1,4 @@
+import { useContent } from '../../hooks/useContent';
 import { useCallback, useRef } from 'react';
 import Icon from './Icon';
 import { useModalLayer } from '../../hooks/useModalLayer';
@@ -16,6 +17,7 @@ import { useModalLayer } from '../../hooks/useModalLayer';
  * @param {number} [props.total]
  */
 export default function VideoLightbox({ video, onClose, onStep, index, total }) {
+  const { A11Y } = useContent();
   const dialogRef = useRef(null);
 
   const close = useCallback(() => onClose(), [onClose]);
@@ -111,7 +113,7 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
                 <button
                   type="button"
                   onClick={() => onStep(-1)}
-                  aria-label="Previous interview"
+                  aria-label={A11Y.prevInterview}
                   className="grid size-10 place-items-center rounded-full border border-ink-line text-paper transition-colors duration-300 hover:bg-paper/10"
                 >
                   <Icon name="arrowRight" className="size-4 rotate-180" />
@@ -119,7 +121,7 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
                 <button
                   type="button"
                   onClick={() => onStep(1)}
-                  aria-label="Next interview"
+                  aria-label={A11Y.nextInterview}
                   className="grid size-10 place-items-center rounded-full border border-ink-line text-paper transition-colors duration-300 hover:bg-paper/10"
                 >
                   <Icon name="arrowRight" className="size-4" />
@@ -130,7 +132,7 @@ export default function VideoLightbox({ video, onClose, onStep, index, total }) 
             <button
               type="button"
               onClick={close}
-              aria-label="Close"
+              aria-label={A11Y.close}
               className="ml-1 grid size-10 place-items-center rounded-full border border-ink-line text-paper transition-colors duration-300 hover:bg-paper/10"
             >
               <Icon name="close" className="size-4" />

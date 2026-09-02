@@ -12,7 +12,7 @@ import { useContent } from '../../hooks/useContent';
  * Escape, which is what people expect from a marketing menu.
  */
 export default function SiteHeader() {
-  const { NAV_LINKS, SITE } = useContent();
+  const { NAV_LINKS, SITE, A11Y } = useContent();
   const [isCondensed, setIsCondensed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -66,7 +66,7 @@ export default function SiteHeader() {
               isCondensed ? 'opacity-70' : 'opacity-0'
             }`}
           />
-          <Link to={homeHref} aria-label="EcomSniper home" className="min-w-0 shrink">
+          <Link to={homeHref} aria-label={A11Y.home} className="min-w-0 shrink">
             <BrandLogo />
           </Link>
 
@@ -74,7 +74,7 @@ export default function SiteHeader() {
               1024 and ~1400px and took the header from 62px to 94px. The logo
               gives up the pixels instead — it is already clamped for this. */}
           <nav
-            aria-label="Primary"
+            aria-label={A11Y.navPrimary}
             className="hidden shrink-0 items-center gap-0.5 whitespace-nowrap lg:flex xl:gap-1"
           >
             {NAV_LINKS.map((link) => (
@@ -103,7 +103,7 @@ export default function SiteHeader() {
               // took the header's height with it.
               className="hidden shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-ink sm:block xl:px-3.5"
             >
-              Log in
+              {SITE.loginLabel}
             </a>
 
             <CtaButton
@@ -114,7 +114,7 @@ export default function SiteHeader() {
               // line, which doubled the height of the whole header.
               className="whitespace-nowrap !px-3 !py-2.5 text-[0.82rem] sm:!px-5"
             >
-              Start for $97
+              {SITE.headerCta}
             </CtaButton>
 
             {/* Mobile menu toggle */}
@@ -148,7 +148,7 @@ export default function SiteHeader() {
           hidden={!isMenuOpen}
           className="mt-2 overflow-hidden rounded-3xl border border-hairline bg-paper/95 p-2 shadow-float backdrop-blur-xl lg:hidden"
         >
-          <nav aria-label="Mobile" className="flex flex-col">
+          <nav aria-label={A11Y.navMobile} className="flex flex-col">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
@@ -162,7 +162,7 @@ export default function SiteHeader() {
               href={SITE.loginUrl}
               className="rounded-2xl px-4 py-3.5 text-base font-medium text-muted transition-colors hover:bg-ink/5"
             >
-              Log in
+              {SITE.loginLabel}
             </a>
 
             {/* Ruled off: a language is a setting, not another destination. */}

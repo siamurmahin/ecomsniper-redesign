@@ -54,9 +54,7 @@ function ToolPills({ links }) {
 function StepNumber({ item, size = 'md', isActive = true }) {
   const tone = toneOf(item.tone);
   const box = size === 'lg' ? 'size-12 text-base' : 'size-10 text-sm';
-  const skin = isActive
-    ? tone.tile
-    : 'border border-hairline bg-paper-sunk text-muted';
+  const skin = isActive ? tone.tile : 'border border-hairline bg-paper-sunk text-muted';
 
   return (
     <span
@@ -182,7 +180,9 @@ function StepVisual({ item, index }) {
               key={ring}
               aria-hidden="true"
               className={`absolute size-24 rounded-full border-2 ${tone.ring}`}
-              style={{ animation: `step-sonar 3s cubic-bezier(0.2, 0.6, 0.4, 1) ${ring * 1}s infinite` }}
+              style={{
+                animation: `step-sonar 3s cubic-bezier(0.2, 0.6, 0.4, 1) ${ring * 1}s infinite`,
+              }}
             />
           ))}
           <span className={`relative grid size-12 place-items-center rounded-2xl ${tone.tile}`}>
@@ -230,7 +230,7 @@ function StepVisual({ item, index }) {
 }
 
 export default function FeatureTourSection() {
-  const { FEATURES } = useContent();
+  const { FEATURES, A11Y } = useContent();
   const sectionRef = useRevealOnScroll();
   const stepRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -394,7 +394,7 @@ export default function FeatureTourSection() {
                   <div className="flex items-center gap-4">
                     <StepNumber item={active} size="lg" isActive />
                     <span className="micro-label text-muted">
-                      Step {active.n} of {FEATURES.items.length}
+                      {A11Y.step.replace('{n}', active.n).replace('{total}', FEATURES.items.length)}
                     </span>
                   </div>
 

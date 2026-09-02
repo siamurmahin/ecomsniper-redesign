@@ -23,7 +23,7 @@ import { isPreviewing } from '../../lib/dialogPreview';
  * consultation dialog — see lib/interruptions.
  */
 export default function ExitIntentOffer() {
-  const { CONSULT, EXIT_INTENT, PLAYBOOK } = useContent();
+  const { CONSULT, EXIT_INTENT, PLAYBOOK, A11Y } = useContent();
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef(null);
   const previouslyFocused = useRef(null);
@@ -123,7 +123,7 @@ export default function ExitIntentOffer() {
         <button
           type="button"
           onClick={close}
-          aria-label="Close"
+          aria-label={A11Y.close}
           className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-ink-line text-muted-dark transition-colors duration-200 hover:border-paper/40 hover:text-paper"
         >
           <Icon name="close" className="size-3" aria-hidden="true" />

@@ -28,6 +28,11 @@ export const SITE = {
 
   /* Said wherever we ask for an email, so it exists once. */
   privacyNote: 'Your information is 100% secure and will never be shared.',
+  /* Chrome the layout writes rather than a section: the header buttons and
+     the skip link. In the deck so they translate too. */
+  loginLabel: 'Log in',
+  headerCta: 'Start for $97',
+  skipLabel: 'Skip to content',
 
   /* The four things a member gets, in the order they reach them. Section 14
      and the /pricing header both read this list. */
@@ -153,6 +158,9 @@ export const HERO_PANEL = {
 
 export const PROOF_BAR = {
   intro: 'Trusted by sellers in the US, UK, Canada, Australia, Germany, France, Spain and Italy',
+  /* The count is filled in from the country list, so the number cannot
+     drift away from the flags beside it. */
+  countriesLabel: 'Trusted by sellers in {count} countries',
   /* countTo opts a figure into the count-up; value is what it settles on. */
   items: [
     {
@@ -660,7 +668,9 @@ export const COMMUNITY = {
  */
 export const TRAINING = {
   eyebrow: 'Step by step',
-  headline: 'Starting from zero?',
+  headline: 'Starting from ',
+  headlineMark: 'zero',
+  headlineTail: '?',
   lead: 'Dropship Mastery teaches the entire process, step by step.',
   steps: [
     { n: '01', text: 'Find an item on a retailer’s site and list it on eBay for a higher price.' },
@@ -1227,4 +1237,74 @@ export const FOOTER = {
 
   disclaimer:
     'EcomSniper is not affiliated with, endorsed by, or sponsored by eBay Inc. or Amazon.com, Inc. Results shown are from individual members and are not typical. Your results depend on the time you put in, your market, and factors outside anyone’s control.',
+};
+
+/**
+ * What each page tells search engines and the browser tab.
+ *
+ * In the deck rather than in the pages so it translates with everything else:
+ * a German search result showed an English title before this.
+ */
+export const SEO = {
+  home: {
+    title: 'EcomSniper — eBay Dropshipping Software, Training & Community',
+    description:
+      'Find products already selling, list them in one click, and let EcomSniper watch your eBay store 24/7. Software, step-by-step training and a 400+ member community. From $97, 30 day money back guarantee on the monthly plan.',
+  },
+  pricing: {
+    title: 'Pricing — EcomSniper eBay Dropshipping Software',
+    description:
+      'Start for $97 your first month, then $199 a month, with a 30 day money back guarantee on the monthly plan. Every plan includes the full Dropship Mastery course, the private community and 24/7 support.',
+  },
+  faq: {
+    title: 'FAQ — EcomSniper eBay Dropshipping Software',
+    description:
+      'The questions we actually get: whether eBay dropshipping is allowed, what it costs to start in total, how credits work, refunds, supported countries, and what happens to your listings if you cancel.',
+  },
+  playbook: {
+    title: 'The Invisible Store — Free eBay Dropshipping Playbook | EcomSniper',
+    description:
+      'A free 83 page playbook on how eBay dropshipping actually works with no stock, no website and no experience. Includes whether it is even allowed, and who EcomSniper is wrong for.',
+  },
+  notFound: {
+    title: 'Page not found — EcomSniper',
+    description: 'That page does not exist. Head back to the homepage or take the free playbook.',
+  },
+};
+
+/** 404 copy. In the deck so the German 404 is German too. */
+export const NOT_FOUND = {
+  eyebrow: 'Error 404',
+  headline: 'That page is not here.',
+  body: 'The link may be old, or the page may have moved. Either way, the two things worth reading are below.',
+  homeCta: 'Back to the homepage',
+  playbookCta: 'Get the free playbook',
+};
+
+/**
+ * Labels only assistive tech reads, plus the few visible ones the layout
+ * writes itself. Hardcoded in the JSX before this, so a screen reader on the
+ * German site announced every one of them in English.
+ *
+ * {n} and {total} are filled in at the call site.
+ */
+export const A11Y = {
+  close: 'Close',
+  backToTop: 'Back to top',
+  home: 'EcomSniper home',
+  navPrimary: 'Primary',
+  navMobile: 'Mobile',
+  navFooter: 'Footer',
+  navQuestionGroups: 'Question groups',
+  proofRegion: 'Proof and trust signals',
+  prevReview: 'Previous review',
+  nextReview: 'Next review',
+  prevInterview: 'Previous interview',
+  nextInterview: 'Next interview',
+  included: 'Included',
+  partlyIncluded: 'Partly included',
+  notIncluded: 'Not included',
+  rating: 'Rated {n} out of 5',
+  step: 'Step {n} of {total}',
+  stepWithTitle: 'Step {n} of {total}: {title}',
 };

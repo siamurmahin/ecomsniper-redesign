@@ -1,3 +1,4 @@
+import { useContent } from '../../hooks/useContent';
 import { useCallback, useEffect, useState } from 'react';
 import Icon from '../ui/Icon';
 import { scrollToTarget } from '../../lib/smoothScroll';
@@ -19,6 +20,7 @@ const pastThreshold = () =>
   typeof window !== 'undefined' && window.scrollY > window.innerHeight * SHOW_AFTER;
 
 export default function BackToTop() {
+  const { A11Y } = useContent();
   /* Was false until a requestAnimationFrame resolved. A background tab does
      not run frames, so a page restored mid-scroll showed no button until the
      next wheel tick. The first answer is cheap; measure it. */
@@ -48,7 +50,7 @@ export default function BackToTop() {
     <button
       type="button"
       onClick={toTop}
-      aria-label="Back to top"
+      aria-label={A11Y.backToTop}
       /* `hidden` rather than only faded out: an invisible fixed button still
          takes the clicks aimed at whatever is under it, and this one sits over
          the page's own content. */

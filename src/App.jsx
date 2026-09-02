@@ -13,6 +13,7 @@ import FaqPage from './pages/FaqPage';
 import PlaybookPage from './pages/PlaybookPage';
 import NotFoundPage from './pages/NotFoundPage';
 import DesignLabPage from './pages/DesignLabPage';
+import { useContent } from './hooks/useContent';
 import { ScrollTrigger } from './lib/motion';
 import { dismissPreloader } from './lib/preloader';
 import { getLenis, scrollToTarget } from './lib/smoothScroll';
@@ -178,6 +179,7 @@ function PreloaderRelease() {
 }
 
 export default function App() {
+  const { SITE } = useContent();
   return (
     <SmoothScrollProvider>
       <PreloaderRelease />
@@ -189,7 +191,7 @@ export default function App() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:text-paper"
       >
-        Skip to content
+        {SITE.skipLabel}
       </a>
 
       <SiteHeader />

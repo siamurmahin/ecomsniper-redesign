@@ -26,13 +26,14 @@ const groupOf = (row) => {
  * reads as "not applicable", and these are things the tool does not do.
  */
 function State({ value, strong }) {
+  const { A11Y } = useContent();
   if (value === false) {
     /* Filled red, with a paper glyph. The signal red carries paper at 4.3:1,
        which is why blue and red take a light glyph and green and gold take an
        ink one — a white cross on the green would miss even the 3:1 bar. */
     return (
       <span className="grid size-5 shrink-0 place-items-center rounded-full bg-signal-red text-paper">
-        <Icon name="close" className="size-2.5" aria-label="Not included" />
+        <Icon name="close" className="size-2.5" aria-label={A11Y.notIncluded} />
       </span>
     );
   }
@@ -41,7 +42,7 @@ function State({ value, strong }) {
     return (
       <span
         className="grid size-5 shrink-0 place-items-center rounded-full bg-signal-gold/20 text-[0.7rem] font-bold text-signal-gold-deep"
-        aria-label="Partly included"
+        aria-label={A11Y.partlyIncluded}
       >
         ~
       </span>
@@ -54,14 +55,14 @@ function State({ value, strong }) {
         strong ? 'bg-signal-green text-ink' : 'bg-signal-green/15 text-signal-green-deep'
       }`}
     >
-      <Icon name="check" className="size-3" aria-label="Included" />
+      <Icon name="check" className="size-3" aria-label={A11Y.included} />
     </span>
   );
 }
 
 /** One column, read top to bottom on its own. */
 function Column({ subtitle, title, side, strong }) {
-  const { COMPARISON } = useContent();
+  const { COMPARISON, A11Y } = useContent();
   return (
     <div
       className={`relative flex flex-col overflow-hidden rounded-3xl border p-6 sm:p-8 ${
@@ -129,7 +130,6 @@ export default function ComparisonSection({ cta }) {
   const resolvedCta = cta ?? COMPARISON.cta;
   const sectionRef = useRevealOnScroll();
   const gold = toneOf('gold');
-
 
   return (
     <section

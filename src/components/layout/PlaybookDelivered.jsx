@@ -18,7 +18,7 @@ import playbookCover from '../../assets/brand/playbook-cover.webp';
  * @param {() => void} props.onClose Runs on Escape, the backdrop and both close controls.
  */
 export default function PlaybookDelivered({ onClose }) {
-  const { PLAYBOOK, SITE } = useContent();
+  const { PLAYBOOK, SITE, A11Y } = useContent();
   const dialogRef = useRef(null);
 
   useModalLayer(true, { onClose, dialogRef });
@@ -49,7 +49,7 @@ export default function PlaybookDelivered({ onClose }) {
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close"
+          aria-label={A11Y.close}
           className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-ink-line text-muted-dark transition-colors duration-200 hover:border-paper/40 hover:text-paper"
         >
           <Icon name="close" className="size-3" aria-hidden="true" />

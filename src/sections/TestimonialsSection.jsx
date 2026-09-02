@@ -30,6 +30,7 @@ function dealColumns(PROOF) {
 }
 
 function ReviewCard({ review }) {
+  const { A11Y } = useContent();
   return (
     <article className="card-ink flex w-full flex-col">
       <div className="flex items-center gap-3">
@@ -53,7 +54,7 @@ function ReviewCard({ review }) {
           five until every review started carrying a rating. */}
       <p className="mt-4 flex items-center gap-2">
         <RatingStars rating={review.rating ?? 5} />
-        <span className="sr-only">Rated {review.rating ?? 5} out of 5</span>
+        <span className="sr-only">{A11Y.rating.replace('{n}', review.rating ?? 5)}</span>
       </p>
 
       <h4 className="mt-2 text-sm font-semibold text-paper">{review.title}</h4>
@@ -73,6 +74,7 @@ function ReviewCard({ review }) {
  * No data-lenis-prevent: that would trap the page's own scroll under a thumb.
  */
 function ReviewRail() {
+  const { PROOF, A11Y } = useContent();
   const railRef = useRef(null);
   const [edges, setEdges] = useState({ start: true, end: false });
 
@@ -129,7 +131,7 @@ function ReviewRail() {
           type="button"
           onClick={() => step(-1)}
           disabled={edges.start}
-          aria-label="Previous review"
+          aria-label={A11Y.prevReview}
           className="grid size-11 place-items-center rounded-full border border-ink-line bg-ink-soft text-paper transition-colors duration-300 hover:bg-paper/10 disabled:pointer-events-none disabled:opacity-35"
         >
           <Icon name="arrowRight" className="size-4 rotate-180" />
@@ -138,7 +140,7 @@ function ReviewRail() {
           type="button"
           onClick={() => step(1)}
           disabled={edges.end}
-          aria-label="Next review"
+          aria-label={A11Y.nextReview}
           className="grid size-11 place-items-center rounded-full border border-ink-line bg-ink-soft text-paper transition-colors duration-300 hover:bg-paper/10 disabled:pointer-events-none disabled:opacity-35"
         >
           <Icon name="arrowRight" className="size-4" />
@@ -186,8 +188,7 @@ export default function TestimonialsSection() {
           align="center"
           headline={
             <span id="testimonials-headline">
-              {testimonials.headline}{' '}
-              {/* Inverted: the ink block would vanish on this band. */}
+              {testimonials.headline} {/* Inverted: the ink block would vanish on this band. */}
               <span className="headline-mark-on-ink">{testimonials.headlineMark}</span>
               {testimonials.headlineTail}
             </span>
@@ -209,45 +210,45 @@ export default function TestimonialsSection() {
           it reads as a wall rather than three sliding lists. rail-hold pauses
           rather than stops, so a column holds its place under the pointer. */}
       {!isNarrow && (
-      <div className="site-shell mt-12">
-        {/* Height sets how many reviews are on screen. At 34rem it showed two
+        <div className="site-shell mt-12">
+          {/* Height sets how many reviews are on screen. At 34rem it showed two
             cards a column, which reads as a list; 48rem clears a third, which
             is the point — written reviews argue by accumulation. */}
-        <div className="rail-hold edge-fade-y h-[38rem] overflow-hidden lg:h-[48rem]">
-          <div className="grid h-full grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {COLUMNS.map((column, index) => (
-              <div
-                key={COLUMN_SETTINGS[index].direction + index}
-                /* The third column is the one to drop first: two columns of
+          <div className="rail-hold edge-fade-y h-[38rem] overflow-hidden lg:h-[48rem]">
+            <div className="grid h-full grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {COLUMNS.map((column, index) => (
+                <div
+                  key={COLUMN_SETTINGS[index].direction + index}
+                  /* The third column is the one to drop first: two columns of
                    reviews still read as a wall, three at tablet width squeeze
                    every card to a measure nobody can read. */
-                className={index === 2 ? 'hidden lg:block' : index === 1 ? 'hidden sm:block' : ''}
-              >
-                <div
-                  className={COLUMN_SETTINGS[index].direction}
-                  style={{ '--rail-duration': COLUMN_SETTINGS[index].duration }}
+                  className={index === 2 ? 'hidden lg:block' : index === 1 ? 'hidden sm:block' : ''}
                 >
-                  <div className="flex flex-col gap-5">
-                    {column.map((review) => (
-                      <ReviewCard key={review.name + review.title} review={review} />
-                    ))}
-                  </div>
+                  <div
+                    className={COLUMN_SETTINGS[index].direction}
+                    style={{ '--rail-duration': COLUMN_SETTINGS[index].duration }}
+                  >
+                    <div className="flex flex-col gap-5">
+                      {column.map((review) => (
+                        <ReviewCard key={review.name + review.title} review={review} />
+                      ))}
+                    </div>
 
-                  {/* Second copy closes the loop — the keyframe walks the
+                    {/* Second copy closes the loop — the keyframe walks the
                       column up by half its own height, so the seam never
                       reaches the viewport. Same content, so it is hidden
                       rather than read out twice. */}
-                  <div aria-hidden="true" className="mt-5 flex flex-col gap-5">
-                    {column.map((review) => (
-                      <ReviewCard key={`echo-${review.name}${review.title}`} review={review} />
-                    ))}
+                    <div aria-hidden="true" className="mt-5 flex flex-col gap-5">
+                      {column.map((review) => (
+                        <ReviewCard key={`echo-${review.name}${review.title}`} review={review} />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
       )}
 
       {/* A button: this is the reader checking the claim. Bordered, not

@@ -96,8 +96,7 @@ const SOCIAL_COLOUR = {
 function FooterLink({ href, label, language }) {
   const isRouted = href.startsWith('/') && !href.startsWith('/#');
 
-  const className =
-    'text-sm text-muted-dark transition-colors duration-200 hover:text-paper';
+  const className = 'text-sm text-muted-dark transition-colors duration-200 hover:text-paper';
 
   return isRouted ? (
     <Link to={pathForLanguage(href, language)} className={className}>
@@ -123,7 +122,7 @@ function FooterLink({ href, label, language }) {
  * the offer that costs nothing.
  */
 export default function SiteFooter() {
-  const { FOOTER, PROOF_BAR, SITE } = useContent();
+  const { FOOTER, PROOF_BAR, SITE, A11Y } = useContent();
   /* The Trustpilot row of the proof bar, so the score is stated once. */
   const REVIEWS = PROOF_BAR.items.find((item) => item.href === SITE.trustpilotUrl);
   const { contact, social, secondDoor } = FOOTER;
@@ -149,33 +148,39 @@ export default function SiteFooter() {
         {/* The free door, first, because it is the only thing here anyone can
             act on. */}
         {showSecondDoor && (
-        <div className="flex flex-col gap-5 rounded-3xl border border-ink-line bg-paper/[0.04] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-          <div>
-            <p className="font-display text-xl font-extrabold tracking-tight">
-              {secondDoor.title}
-            </p>
-            <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-dark">
-              {secondDoor.body}
-            </p>
-          </div>
+          <div className="flex flex-col gap-5 rounded-3xl border border-ink-line bg-paper/[0.04] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+            <div>
+              <p className="font-display text-xl font-extrabold tracking-tight">
+                {secondDoor.title}
+              </p>
+              <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-dark">
+                {secondDoor.body}
+              </p>
+            </div>
 
-          <CtaButton
-            href={secondDoor.cta.href}
-            variant="onInk"
-            intent="footer-playbook"
-            className="shrink-0"
-          >
-            <Icon name="openBook" className="size-4 shrink-0" aria-hidden="true" />
-            {secondDoor.cta.label}
-          </CtaButton>
-        </div>
+            <CtaButton
+              href={secondDoor.cta.href}
+              variant="onInk"
+              intent="footer-playbook"
+              className="shrink-0"
+            >
+              <Icon name="openBook" className="size-4 shrink-0" aria-hidden="true" />
+              {secondDoor.cta.label}
+            </CtaButton>
+          </div>
         )}
 
-        <div className={`grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 ${
-          showSecondDoor ? 'mt-14' : ''
-        }`}>
+        <div
+          className={`grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 ${
+            showSecondDoor ? 'mt-14' : ''
+          }`}
+        >
           <div>
-            <Link to={pathForLanguage('/', languageFromPath(pathname))} aria-label="EcomSniper home" className="inline-block text-paper">
+            <Link
+              to={pathForLanguage('/', languageFromPath(pathname))}
+              aria-label={A11Y.home}
+              className="inline-block text-paper"
+            >
               <BrandLogo tone="paper" />
             </Link>
 
@@ -216,7 +221,7 @@ export default function SiteFooter() {
           </div>
 
           <div className="flex flex-col gap-10">
-            <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+            <nav aria-label={A11Y.navFooter} className="grid grid-cols-2 gap-8 sm:grid-cols-4">
               {FOOTER.columns.map((column) => (
                 <div key={column.title}>
                   <h2 className="micro-label text-paper/70">{column.title}</h2>

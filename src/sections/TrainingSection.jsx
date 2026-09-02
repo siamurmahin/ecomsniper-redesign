@@ -65,7 +65,9 @@ export default function TrainingSection() {
           eyebrow={TRAINING.eyebrow}
           headline={
             <span id="training-headline">
-              Starting from <span className="headline-mark">zero?</span>
+              {TRAINING.headline}
+              <span className="headline-mark">{TRAINING.headlineMark}</span>
+              {TRAINING.headlineTail}
             </span>
           }
           lead={TRAINING.lead}
@@ -152,7 +154,10 @@ export default function TrainingSection() {
 
             <ul className="mt-6 flex flex-col gap-2.5">
               {course.bullets.map((bullet) => (
-                <li key={bullet} className="flex items-start gap-2.5 text-[0.9rem] font-semibold text-paper">
+                <li
+                  key={bullet}
+                  className="flex items-start gap-2.5 text-[0.9rem] font-semibold text-paper"
+                >
                   <Icon
                     name="checkCircle"
                     className="mt-0.5 size-4 shrink-0 text-signal-green-soft"

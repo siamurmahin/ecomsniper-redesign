@@ -26,7 +26,8 @@ export const LANGUAGE_COOKIE = 'ecomsniper_lang';
 export function languageFromPath(pathname) {
   const match = LANGUAGES.find(
     (language) =>
-      language.prefix && (pathname === language.prefix || pathname.startsWith(`${language.prefix}/`))
+      language.prefix &&
+      (pathname === language.prefix || pathname.startsWith(`${language.prefix}/`)),
   );
 
   return match ? match.code : DEFAULT_LANGUAGE;
@@ -35,8 +36,7 @@ export function languageFromPath(pathname) {
 /** The same page without its language prefix, always starting with a slash. */
 export function stripLanguage(pathname) {
   const language = LANGUAGES.find(
-    (item) =>
-      item.prefix && (pathname === item.prefix || pathname.startsWith(`${item.prefix}/`))
+    (item) => item.prefix && (pathname === item.prefix || pathname.startsWith(`${item.prefix}/`)),
   );
 
   if (!language) return pathname;
@@ -53,6 +53,11 @@ export function stripLanguage(pathname) {
 export function pathForLanguage(target, code) {
   const language = LANGUAGES.find((item) => item.code === code);
   if (!language || !target) return target;
+
+  /* Anything with a scheme belongs to someone else. Without this the nav's
+     Contact link became "/dehttps://ecomsniper.io/contact" on every German
+     page — a prefix on an address this app does not own. */
+  if (/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(target)) return target;
 
   const cut = target.search(/[#?]/);
   const path = cut === -1 ? target : target.slice(0, cut);

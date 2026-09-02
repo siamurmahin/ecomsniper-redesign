@@ -49,7 +49,7 @@ function ProofFigure({ item }) {
 }
 
 export default function ProofBarSection() {
-  const { ASSURANCE, PROOF_BAR } = useContent();
+  const { ASSURANCE, PROOF_BAR, A11Y } = useContent();
   const sectionRef = useRevealOnScroll({ start: 'top 92%' });
   // Read once at mount: a number ticking upward is motion like any other.
   const staticNumbers = prefersReducedMotion();
@@ -59,7 +59,7 @@ export default function ProofBarSection() {
   return (
     <section
       ref={sectionRef}
-      aria-label="Proof and trust signals"
+      aria-label={A11Y.proofRegion}
       className="relative isolate overflow-hidden bg-ink py-12 text-paper sm:py-14"
     >
       {/* The signal set as a hairline along the top edge, as on the header. It
@@ -91,7 +91,7 @@ export default function ProofBarSection() {
           {/* The soft step, not the brand green: #86b817 on ink is about 4:1,
               under the bar for text this small. */}
           <p className="section-eyebrow section-eyebrow-on-ink shrink-0 self-center text-signal-green-soft before:bg-signal-green-soft/45 sm:self-auto">
-            Trusted by sellers in {countryCount} countries
+            {PROOF_BAR.countriesLabel.replace('{count}', countryCount)}
           </p>
           <CountryTicker onInk className="min-w-0 flex-1" />
         </div>
@@ -192,7 +192,11 @@ export default function ProofBarSection() {
             third button here would compete with it, and the job of this band is
             to be checkable rather than to sell again. It points at the section
             that shows the working. */}
-        <p className="mt-7 text-center text-sm text-muted-dark" data-reveal data-reveal-group="proof-bar">
+        <p
+          className="mt-7 text-center text-sm text-muted-dark"
+          data-reveal
+          data-reveal-group="proof-bar"
+        >
           <a
             href="#proof"
             className="group inline-flex items-center gap-1.5 font-semibold text-paper underline decoration-paper/30 underline-offset-4 transition-colors hover:text-signal-green-soft hover:decoration-signal-green-soft/60"

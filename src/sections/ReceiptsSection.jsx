@@ -23,7 +23,7 @@ import { receiptUrl } from '../lib/proofMedia';
 const TONES = ['blue', 'gold', 'green'];
 
 export default function ReceiptsSection() {
-  const { PROOF } = useContent();
+  const { PROOF, A11Y } = useContent();
   const sectionRef = useRevealOnScroll();
   const { receiptsSection } = PROOF;
 
@@ -206,15 +206,14 @@ export default function ReceiptsSection() {
                   id="receipt-dialog-title"
                   className="mt-2 font-display text-2xl font-extrabold leading-tight tracking-tight"
                 >
-                  {active.figure}{' '}
-                  <span className="font-bold text-muted">{active.figureLabel}</span>
+                  {active.figure} <span className="font-bold text-muted">{active.figureLabel}</span>
                 </h3>
               </div>
 
               <button
                 type="button"
                 onClick={close}
-                aria-label="Close"
+                aria-label={A11Y.close}
                 className="grid size-10 shrink-0 place-items-center rounded-full border border-hairline bg-white text-ink transition-colors duration-300 hover:bg-paper-sunk"
               >
                 <Icon name="close" className="size-4" />

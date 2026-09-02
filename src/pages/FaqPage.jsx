@@ -18,7 +18,7 @@ import { useContent } from '../hooks/useContent';
  * with the door beside it.
  */
 export default function FaqPage() {
-  const { FAQ } = useContent();
+  const { FAQ, SEO } = useContent();
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -31,12 +31,7 @@ export default function FaqPage() {
 
   return (
     <>
-      <Seo
-        title="FAQ — EcomSniper eBay Dropshipping Software"
-        description="The questions we actually get: whether eBay dropshipping is allowed, what it costs to start in total, how credits work, refunds, supported countries, and what happens to your listings if you cancel."
-        path="/faq"
-        schema={schema}
-      />
+      <Seo title={SEO.faq.title} description={SEO.faq.description} path="/faq" schema={schema} />
 
       {/* The page needs its own h1; the section carries an h2. */}
       <div className="site-shell pb-4 pt-36 sm:pt-44">

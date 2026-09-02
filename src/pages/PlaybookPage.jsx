@@ -22,7 +22,7 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
  * VITE_PLAYBOOK_ENDPOINT to the list that fires the 5-email sequence.
  */
 export default function PlaybookPage() {
-  const { FOUNDERS, PLAYBOOK } = useContent();
+  const { FOUNDERS, PLAYBOOK, SEO } = useContent();
   const author = FOUNDERS.people[0];
   const authorPortrait = PORTRAITS[`../assets/people/${author.photo}.jpg`];
   const sectionRef = useRevealOnScroll({ start: 'top 95%' });
@@ -67,8 +67,8 @@ export default function PlaybookPage() {
   return (
     <>
       <Seo
-        title="The Invisible Store — Free eBay Dropshipping Playbook | EcomSniper"
-        description="A free 83 page playbook on how eBay dropshipping actually works with no stock, no website and no experience. Includes whether it is even allowed, and who EcomSniper is wrong for."
+        title={SEO.playbook.title}
+        description={SEO.playbook.description}
         path="/free-play-book"
       />
 
@@ -232,7 +232,10 @@ export default function PlaybookPage() {
                   {PLAYBOOK.privacy}
                 </p>
 
-                <p id="playbook-smallprint" className="mt-3 text-xs leading-relaxed text-muted-dark">
+                <p
+                  id="playbook-smallprint"
+                  className="mt-3 text-xs leading-relaxed text-muted-dark"
+                >
                   {PLAYBOOK.smallprint}
                 </p>
               </form>

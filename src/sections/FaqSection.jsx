@@ -25,7 +25,7 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
  *   headline as its own h1 a moment earlier.
  */
 export default function FaqSection({ showHeading = true }) {
-  const { FAQ, SITE } = useContent();
+  const { FAQ, SITE, A11Y } = useContent();
   const sectionRef = useRevealOnScroll();
 
   return (
@@ -45,7 +45,7 @@ export default function FaqSection({ showHeading = true }) {
                 for the FAQPage markup and for anyone reading straight down.
                 Hidden below lg — there is no sticky rail to navigate from on
                 one column, and it would only push the questions down. */}
-            <nav aria-label="Question groups" className="mt-8 hidden lg:block">
+            <nav aria-label={A11Y.navQuestionGroups} className="mt-8 hidden lg:block">
               <ul className="flex flex-col gap-1">
                 {FAQ.groups.map((group) => {
                   const tone = toneOf(group.tone);

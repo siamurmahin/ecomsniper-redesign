@@ -43,6 +43,7 @@ function dealColumns(PROOF) {
 }
 
 function WallCard({ entry }) {
+  const { A11Y } = useContent();
   if (entry.kind === 'receipt') {
     const { item } = entry;
     return (
@@ -115,7 +116,7 @@ function WallCard({ entry }) {
 
       <p className="mt-3 flex items-center gap-2">
         <RatingStars rating={item.rating ?? 5} />
-        <span className="sr-only">Rated {item.rating ?? 5} out of 5</span>
+        <span className="sr-only">{A11Y.rating.replace('{n}', item.rating ?? 5)}</span>
       </p>
 
       <h4 className="mt-2 text-sm font-semibold">{item.title}</h4>
@@ -125,7 +126,7 @@ function WallCard({ entry }) {
 }
 
 export default function ProofWallSection() {
-  const { PROOF, SITE } = useContent();
+  const { PROOF, SITE, A11Y } = useContent();
   const COLUMNS = useMemo(() => dealColumns(PROOF), [PROOF]);
   const sectionRef = useRevealOnScroll();
 
@@ -190,44 +191,46 @@ export default function ProofWallSection() {
             data-reveal-group="proof-card"
             className="w-full max-w-xl rounded-[1.75rem] border border-ink-line bg-ink p-7 text-center text-paper shadow-float sm:p-10"
           >
-          <p className="section-eyebrow section-eyebrow-on-ink justify-center before:hidden">
-            {PROOF.eyebrow}
-          </p>
+            <p className="section-eyebrow section-eyebrow-on-ink justify-center before:hidden">
+              {PROOF.eyebrow}
+            </p>
 
-          <h2
-            id="proof-headline"
-            className="mt-4 text-[length:var(--text-section)] leading-[0.98] text-paper"
-          >
-            {PROOF.headline}{' '}
-            <span className="inline-block bg-paper px-2.5 pb-1 text-ink">{PROOF.headlineMark}</span>{' '}
-            {PROOF.headlineTail}
-          </h2>
+            <h2
+              id="proof-headline"
+              className="mt-4 text-[length:var(--text-section)] leading-[0.98] text-paper"
+            >
+              {PROOF.headline}{' '}
+              <span className="inline-block bg-paper px-2.5 pb-1 text-ink">
+                {PROOF.headlineMark}
+              </span>{' '}
+              {PROOF.headlineTail}
+            </h2>
 
-          <p className="mt-5 text-[length:var(--text-lead)] leading-relaxed text-muted-dark">
-            {PROOF.lead}
-          </p>
+            <p className="mt-5 text-[length:var(--text-lead)] leading-relaxed text-muted-dark">
+              {PROOF.lead}
+            </p>
 
-          <div className="mt-8 flex flex-col items-center gap-4">
-            <CtaButton href={PROOF.cta.href} variant="onInk" intent="proof-pricing">
-              {PROOF.cta.label}
-            </CtaButton>
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <CtaButton href={PROOF.cta.href} variant="onInk" intent="proof-pricing">
+                {PROOF.cta.label}
+              </CtaButton>
 
-            {/* Left as a link, deliberately, unlike the matching one in 04d.
+              {/* Left as a link, deliberately, unlike the matching one in 04d.
                 It sits directly under "See what it costs" — the page's own
                 CTA — and two buttons stacked would make the reader choose
                 between them. This one is the quiet second option. */}
-            <a
-              href={SITE.trustpilotUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-1.5 text-sm font-medium text-muted-dark transition-colors hover:text-paper"
-            >
-              {PROOF.verifyLabel}
-              <Icon
-                name="arrowRight"
-                className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </a>
+              <a
+                href={SITE.trustpilotUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1.5 text-sm font-medium text-muted-dark transition-colors hover:text-paper"
+              >
+                {PROOF.verifyLabel}
+                <Icon
+                  name="arrowRight"
+                  className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </a>
             </div>
           </div>
         </div>

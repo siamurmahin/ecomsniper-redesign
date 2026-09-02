@@ -41,7 +41,7 @@ import { useContent } from '../hooks/useContent';
  * course that teaches them. Both now open 09, as the live site does.
  */
 export default function HomePage() {
-  const { FAQ } = useContent();
+  const { FAQ, SEO } = useContent();
   // FAQPage + Product schema, built from the same copy the page renders.
   // No `offers` here: the plans moved to /pricing, and structured data must
   // not state prices the page does not show. /pricing carries them.
@@ -67,12 +67,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Seo
-        title="EcomSniper — eBay Dropshipping Software, Training & Community"
-        description="Find products already selling, list them in one click, and let EcomSniper watch your eBay store 24/7. Software, step-by-step training and a 400+ member community. From $97, 30 day money back guarantee."
-        path="/"
-        schema={schema}
-      />
+      <Seo title={SEO.home.title} description={SEO.home.description} path="/" schema={schema} />
 
       {/* The first screen, mounted synchronously. The hero holds a full
           viewport, so the proof bar is already below the fold — it is eager

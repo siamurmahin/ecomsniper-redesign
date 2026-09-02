@@ -21,7 +21,7 @@ const BEAT_MS = 3800;
  * every step at once, which is also the no-JS rendering.
  */
 export default function PipelinePanel() {
-  const { HERO_PANEL } = useContent();
+  const { HERO_PANEL, A11Y } = useContent();
   const { beats, finale } = HERO_PANEL;
   // The offer is the last step, not an afterword bolted to the side of one.
   const steps = [...beats, { ...finale, isFinale: true }];
@@ -145,7 +145,9 @@ export default function PipelinePanel() {
                             : isDone
                               ? `border-transparent opacity-85 ${step.isFinale ? 'brand-fill text-paper' : tone.tile}`
                               : `bg-ink-soft text-muted-dark hover:border-paper/40 ${
-                                  step.isFinale ? 'border-dashed border-paper/35' : 'border-ink-line'
+                                  step.isFinale
+                                    ? 'border-dashed border-paper/35'
+                                    : 'border-ink-line'
                                 }`
                         }`}
                       >
@@ -170,7 +172,7 @@ export default function PipelinePanel() {
                           key={isActive ? `run-${activeIndex}` : `state-${index}`}
                           onAnimationEnd={() => {
                             if (isActive && isAutoPlaying) {
-                                                        setActiveIndex(index + 1);
+                              setActiveIndex(index + 1);
                             }
                           }}
                           style={isActive ? { animationDuration: `${BEAT_MS}ms` } : undefined}
@@ -195,7 +197,10 @@ export default function PipelinePanel() {
 
             {/* Steps */}
             <p aria-live="polite" className="sr-only">
-              {`Step ${activeIndex + 1} of ${total}: ${activeStep.title}`}
+              {A11Y.stepWithTitle
+                .replace('{n}', activeIndex + 1)
+                .replace('{total}', total)
+                .replace('{title}', activeStep.title)}
             </p>
 
             {/* Fixed height so the panel does not resize as steps come
@@ -252,7 +257,6 @@ export default function PipelinePanel() {
           </ul>
         </div>
       </div>
-
     </div>
   );
 }

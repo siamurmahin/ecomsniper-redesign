@@ -16,7 +16,7 @@ const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
  * refund terms can never drift between the two pages.
  */
 export default function PricingPage() {
-  const { PRICING, SITE } = useContent();
+  const { PRICING, SITE, SEO, ASSURANCE } = useContent();
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -35,8 +35,8 @@ export default function PricingPage() {
   return (
     <>
       <Seo
-        title="Pricing — EcomSniper eBay Dropshipping Software"
-        description="Start for $97 your first month, then $199 a month, with a 30 day money back guarantee. Every plan includes the full Dropship Mastery course, the private community and 24/7 support."
+        title={SEO.pricing.title}
+        description={SEO.pricing.description}
         path="/pricing"
         schema={schema}
       />
@@ -72,9 +72,9 @@ export default function PricingPage() {
                 aria-hidden="true"
                 className="grid size-16 shrink-0 place-items-center rounded-full border-2 border-signal-green/50 text-center font-label text-[0.62rem] uppercase leading-tight tracking-[0.08em] text-signal-green-soft"
               >
-                30
+                {ASSURANCE.guarantee.seal.top}
                 <br />
-                days
+                {ASSURANCE.guarantee.seal.bottom}
               </span>
 
               <div>
