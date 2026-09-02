@@ -313,10 +313,6 @@ export default function HeroSection() {
                         deletingSpeed={34}
                         pauseDuration={2200}
                         initialDelay={900}
-                        // Its own cursor is a glyph wide enough to read as
-                        // a gap before the full stop; `.headline-type::after`
-                        // draws a thin one instead.
-                        showCursor={false}
                         loop
                       />
                     )}
