@@ -1,0 +1,63 @@
+# Everything that has to stay true, checked before it can merge.
+#
+# The site's performance was won by removing things, and that kind of work
+# comes undone quietly: a library added for one section, a component made
+# eager to fix something at midnight, a route that stops being lazy. This is
+# the difference between finding out at review time and finding out from a
+# GTmetrix run six weeks later with no idea which commit did it.
+#
+# Order is deliberate — the cheap checks fail first, so a missing semicolon
+# does not wait on a Lighthouse run to tell you about it.
+
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Matches .nvmrc and the version netlify.toml pins the deploy to.
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      # Raw bytes on the critical path. See scripts/check-budget.mjs for what
+      # counts as eager and why lazy chunks deliberately do not.
+      - name: Budget
+        run: npm run budget
+
+      # Runs against the built output on a local server — no deploy, no
+      # network, nothing to be flaky about except the runner's own CPU, which
+      # is why the score thresholds warn and the byte thresholds fail.
+      - name: Lighthouse
+        run: npx lhci autorun --config=lighthouserc.json
+
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          retention-days: 14
+          if-no-files-found: ignore

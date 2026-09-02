@@ -12,7 +12,8 @@
     "optimize:images": "node scripts/optimize-images.mjs",
     "fetch:fonts": "node scripts/fetch-fonts.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "budget": "node scripts/check-budget.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",
