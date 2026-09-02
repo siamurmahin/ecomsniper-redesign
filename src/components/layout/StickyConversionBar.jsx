@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
-import { STICKY_CTA } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 
 /**
  * The offer, following the reader down the page. Appears after 25% scroll and
  * hides over section 14, where it would compete with the real thing.
  */
 export default function StickyConversionBar() {
+  const { STICKY_CTA } = useContent();
   const [isVisible, setIsVisible] = useState(false);
   const barRef = useRef(null);
 
@@ -72,7 +73,7 @@ export default function StickyConversionBar() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, []);
+  }, [STICKY_CTA.showAfterScrollRatio]);
 
   return (
     <div

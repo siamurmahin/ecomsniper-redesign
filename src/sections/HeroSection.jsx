@@ -4,7 +4,7 @@ import Icon from '../components/ui/Icon';
 import HeroDots from '../components/hero/HeroDots';
 import PipelinePanel from '../components/hero/PipelinePanel';
 import TextType from '../components/reactbits/TextType';
-import { HERO } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { announceHeroReady } from '../lib/heroReady';
 // The hero's entrance is CSS; its easing comes from the stylesheet.
 import { gsap, prefersReducedMotion, SplitText } from '../lib/motion';
@@ -33,6 +33,7 @@ const WORD_DURATION_MS = 550;
 const SUPPORT_END_MS = 500 + 2 * STAGGER_MS + 450;
 
 export default function HeroSection() {
+  const { HERO } = useContent();
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
 
@@ -244,12 +245,21 @@ export default function HeroSection() {
               {/* Only the fixed copy is split. SplitText rebuilds and clones
                   nodes, so a React component inside it would keep updating a
                   node that is no longer on screen. */}
+              {/* Read from the deck, not written here: this was hardcoded, so
+                  the German page kept an English headline. Everything up to
+                  the marked phrase is the fixed half; the mark is typed below. */}
               <span ref={headlineRef} className="block">
-                ESCAPE THE{' '}
-                <span className="whitespace-nowrap">
-                  <span className="headline-strike">9 TO 5</span>.
-                </span>{' '}
-                BUILD PASSIVE INCOME THAT RUNS
+                {HERO.headlineParts
+                  .slice(0, HERO.headlineParts.findIndex((part) => part.tone === 'mark'))
+                  .map((part, index) =>
+                    part.tone === 'strike' ? (
+                      <span key={index} className="whitespace-nowrap">
+                        <span className="headline-strike">{part.text}</span>
+                      </span>
+                    ) : (
+                      <span key={index}>{part.text}</span>
+                    )
+                  )}
               </span>
 
               {/* nowrap: the block's width changes with every keystroke,

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
-import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import { languageFromPath, pathForLanguage } from '../../lib/language';
 
 /**
@@ -92,9 +92,6 @@ const SOCIAL_COLOUR = {
   facebook: 'text-[#1877F2]',
 };
 
-/** The Trustpilot row of the proof bar, so the score is stated once. */
-const REVIEWS = PROOF_BAR.items.find((item) => item.href === SITE.trustpilotUrl);
-
 /** Renders an internal path as a router link and anything else as an anchor. */
 function FooterLink({ href, label, language }) {
   const isRouted = href.startsWith('/') && !href.startsWith('/#');
@@ -126,6 +123,9 @@ function FooterLink({ href, label, language }) {
  * the offer that costs nothing.
  */
 export default function SiteFooter() {
+  const { FOOTER, PROOF_BAR, SITE } = useContent();
+  /* The Trustpilot row of the proof bar, so the score is stated once. */
+  const REVIEWS = PROOF_BAR.items.find((item) => item.href === SITE.trustpilotUrl);
   const { contact, social, secondDoor } = FOOTER;
   const { pathname } = useLocation();
   const language = languageFromPath(pathname);

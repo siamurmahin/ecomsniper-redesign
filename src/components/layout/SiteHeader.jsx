@@ -4,7 +4,7 @@ import BrandLogo from '../ui/BrandLogo';
 import LanguageSwitcher from './LanguageSwitcher';
 import { languageFromPath, pathForLanguage } from '../../lib/language';
 import CtaButton from '../ui/CtaButton';
-import { NAV_LINKS, SITE } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 
 /**
  * Fixed header in two states: transparent over the hero, condensed and frosted
@@ -12,6 +12,7 @@ import { NAV_LINKS, SITE } from '../../data/siteContent';
  * Escape, which is what people expect from a marketing menu.
  */
 export default function SiteHeader() {
+  const { NAV_LINKS, SITE } = useContent();
   const [isCondensed, setIsCondensed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
