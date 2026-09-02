@@ -612,7 +612,6 @@ export const de = {
     headline: 'Fängst du bei ',
     headlineMark: 'null',
     headlineTail: ' an?',
-    headline: 'Fängst du bei null an?',
     lead: 'Dropship Mastery erklärt den kompletten Ablauf, Schritt für Schritt.',
     steps: [
       {
