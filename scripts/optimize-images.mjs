@@ -77,9 +77,12 @@ async function processFile(file, targetWidth, webpQuality) {
   if (KEEP_FULL_SIZE.has(path.basename(file))) {
     /* Full size, but still worth the format: this one is the lead card and
        the largest image on the page. */
-    if (!webpQuality) return { file, skipped: 'kept full size (rendered large elsewhere)', before, width: null };
+    if (!webpQuality)
+      return { file, skipped: 'kept full size (rendered large elsewhere)', before, width: null };
 
-    const kept = await sharp(await readFile(file)).webp({ quality: webpQuality, effort: 6 }).toBuffer();
+    const kept = await sharp(await readFile(file))
+      .webp({ quality: webpQuality, effort: 6 })
+      .toBuffer();
     const keptTarget = file.replace(/\.(jpe?g|png)$/i, '.webp');
     await writeFile(keptTarget, kept);
     await rm(file);

@@ -54,7 +54,9 @@ function PillarCard({ item, index }) {
       // One write per frame. A raw pointermove fires far faster than the screen
       // refreshes, and every extra write is a layout read nobody sees.
       cancelAnimationFrame(frameRef.current);
-      frameRef.current = requestAnimationFrame(() => setTilt(-py * MAX_TILT * 2, px * MAX_TILT * 2));
+      frameRef.current = requestAnimationFrame(() =>
+        setTilt(-py * MAX_TILT * 2, px * MAX_TILT * 2),
+      );
     },
     [setTilt],
   );

@@ -26,25 +26,25 @@ playbook form can actually deliver.
 The homepage is seventeen sections in a deliberate order. The order is the
 product here — each one answers the question the previous one raises.
 
-| # | Section | Job it does |
-|---|---------|-------------|
-| 01 | Hero | What this is, who it is for, **what it costs** |
-| 02 | Proof bar | Checkable numbers, immediately |
-| 03 | Who it's for | Self-identification |
-| 04a | Proof wall | The volume of the evidence, and a door |
-| 04b | Interviews | Members, in their own words |
-| 04c | Receipts | Screenshots members posted themselves |
-| 04d | Testimonials | Written Trustpilot reviews, two running rows |
-| 06 | Three pillars | The page's table of contents |
-| 07 | Feature tour | What the software does |
-| 08 | Community | The real differentiator vs cheaper tools |
-| 09 | Step by step | The mechanism, then the course that teaches it |
-| 10 | Founders | Who is behind it |
-| 11 | Comparison | The decision they are making elsewhere |
-| 12 | Pricing | The price, on the page most people see |
-| 13 | FAQ | Last objections, answered in place |
-| 14 | Assurance | Countries + guarantee |
-| 15 | Final CTA | Pay now, **or** take a free door |
+| #   | Section       | Job it does                                    |
+| --- | ------------- | ---------------------------------------------- |
+| 01  | Hero          | What this is, who it is for, **what it costs** |
+| 02  | Proof bar     | Checkable numbers, immediately                 |
+| 03  | Who it's for  | Self-identification                            |
+| 04a | Proof wall    | The volume of the evidence, and a door         |
+| 04b | Interviews    | Members, in their own words                    |
+| 04c | Receipts      | Screenshots members posted themselves          |
+| 04d | Testimonials  | Written Trustpilot reviews, two running rows   |
+| 06  | Three pillars | The page's table of contents                   |
+| 07  | Feature tour  | What the software does                         |
+| 08  | Community     | The real differentiator vs cheaper tools       |
+| 09  | Step by step  | The mechanism, then the course that teaches it |
+| 10  | Founders      | Who is behind it                               |
+| 11  | Comparison    | The decision they are making elsewhere         |
+| 12  | Pricing       | The price, on the page most people see         |
+| 13  | FAQ           | Last objections, answered in place             |
+| 14  | Assurance     | Countries + guarantee                          |
+| 15  | Final CTA     | Pay now, **or** take a free door               |
 
 ### Design pass status
 
@@ -52,25 +52,25 @@ Sections are being reworked top-down, one at a time, against the live site and
 the client's notes. Everything below renders and is on the page; "built" means
 it came out of the 29 Aug scaffold and has not had its pass yet.
 
-| Section | State | Last worked |
-|---------|-------|-------------|
-| 01 Hero | **Passed** — entrance on the compositor, no WebGL | 31 Aug |
-| 02 Proof bar | **Passed** — ink band of tone cards | 29 Aug |
-| 03 Who it's for | **Passed** — rotating panels, font-swap re-measure | 31 Aug |
-| 04a Proof wall | **Passed** — drifting evidence behind an ink card | 31 Aug |
-| 04b Interviews | **Passed** — stage cycles all twelve | 31 Aug |
-| 04c Receipts | **Passed** — figures on plates, closes with a door | 31 Aug |
-| 04d Testimonials | **Passed** — ink band, two rows, swipe rail on mobile | 31 Aug |
-| 06 Three pillars | **Passed** — wired as one system, cards tilt | 31 Aug |
-| 07 Feature tour | **Passed** — sticky stepper, chosen from five shapes | 31 Aug |
-| 08 Community | **Passed** — the 2am answer, drawn and typed | 1 Sep |
-| 09 Step by step | **Passed** — staircase beside the course card, counted on a loop | 1 Sep |
-| 10 Founders | **Passed** — the founder's book, and a third free door | 1 Sep |
-| 11 Comparison | **Passed** — two columns read down, misses in red | 1 Sep |
-| 12 Pricing preview | **Built** ← next | 29 Aug |
-| 13 FAQ | **Built** | 29 Aug |
-| 14 Assurance | **Built** | 29 Aug |
-| 15 Final CTA | **Built** | 29 Aug |
+| Section            | State                                                            | Last worked |
+| ------------------ | ---------------------------------------------------------------- | ----------- |
+| 01 Hero            | **Passed** — entrance on the compositor, no WebGL                | 31 Aug      |
+| 02 Proof bar       | **Passed** — ink band of tone cards                              | 29 Aug      |
+| 03 Who it's for    | **Passed** — rotating panels, font-swap re-measure               | 31 Aug      |
+| 04a Proof wall     | **Passed** — drifting evidence behind an ink card                | 31 Aug      |
+| 04b Interviews     | **Passed** — stage cycles all twelve                             | 31 Aug      |
+| 04c Receipts       | **Passed** — figures on plates, closes with a door               | 31 Aug      |
+| 04d Testimonials   | **Passed** — ink band, two rows, swipe rail on mobile            | 31 Aug      |
+| 06 Three pillars   | **Passed** — wired as one system, cards tilt                     | 31 Aug      |
+| 07 Feature tour    | **Passed** — sticky stepper, chosen from five shapes             | 31 Aug      |
+| 08 Community       | **Passed** — the 2am answer, drawn and typed                     | 1 Sep       |
+| 09 Step by step    | **Passed** — staircase beside the course card, counted on a loop | 1 Sep       |
+| 10 Founders        | **Passed** — the founder's book, and a third free door           | 1 Sep       |
+| 11 Comparison      | **Passed** — two columns read down, misses in red                | 1 Sep       |
+| 12 Pricing preview | **Built** ← next                                                 | 29 Aug      |
+| 13 FAQ             | **Built**                                                        | 29 Aug      |
+| 14 Assurance       | **Built**                                                        | 29 Aug      |
+| 15 Final CTA       | **Built**                                                        | 29 Aug      |
 
 Section 07 ends on a bridge line marked with **"never alone"** — section 08's
 own headline, asked as a question. The two are joined already; rewriting 08's
@@ -94,7 +94,7 @@ names them with their faces, 10 says why the software exists and hands over
 the book. Section 10 is the one section with no live counterpart at all.
 
 The playbook is the founder's own book. `ecomsniper.io/free-play-book` states
-it — *"the exact system Sammy (CEO EcomSniper) used"* — and the cover artwork
+it — _"the exact system Sammy (CEO EcomSniper) used"_ — and the cover artwork
 in `thumb-security-guard-300k` says the same. That is why section 10 can offer
 it as evidence rather than as another banner.
 
@@ -217,7 +217,7 @@ per-route metadata.
 1. Set `VITE_PLAYBOOK_ENDPOINT` and confirm the file actually delivers. Unset,
    the form fakes success and logs a warning — and every free door on the site
    leads to it. Section 10 now prints `PLAYBOOK.privacy` next to that door —
-   *"your information is 100% secure and will never be shared"* — so whatever
+   _"your information is 100% secure and will never be shared"_ — so whatever
    sits behind the endpoint has to be able to keep that promise.
 2. Add routes for `/about`, `/blog`, `/contact`, `/help` and the four legal
    pages, or point those footer links at the existing site. Eight links 404
@@ -242,8 +242,8 @@ per-route metadata.
 9. Decide whether the founder's book summary belongs in `PROOF.videos`.
    `AIy19fmMutw` is "Full Summary of The Invisible Store" on Sammy's own
    channel — it is labelled honestly now and carries no figure, but it still
-   sits among twelve videos section 04b introduces as *"members on what
-   actually happened"*. Removing it takes that section to eleven.
+   sits among twelve videos section 04b introduces as _"members on what
+   actually happened"_. Removing it takes that section to eleven.
 10. Get a larger portrait of Marc. Sammy's is 800×800 now, taken from the
     client's own playbook page; `founder-marc.jpg` is still the original
     200×200, which caps him at roughly 100px on a retina screen.

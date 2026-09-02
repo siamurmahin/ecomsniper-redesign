@@ -17,8 +17,7 @@ gsap.defaults({ ease: 'expo.out', duration: 1 });
 
 /** True when the visitor has asked the OS to reduce motion. */
 export const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Shared easing and distances so every section animates with one voice. */
 export const MOTION = {

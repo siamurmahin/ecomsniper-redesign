@@ -62,10 +62,9 @@ export default function InterviewsSection() {
     if (!stage) return undefined;
 
     // Nothing rotates where nobody is looking.
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsInView(entry.isIntersecting),
-      { threshold: 0.35 },
-    );
+    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), {
+      threshold: 0.35,
+    });
     observer.observe(stage);
     return () => observer.disconnect();
   }, []);
@@ -221,7 +220,10 @@ export default function InterviewsSection() {
                 <Icon name="play" className="size-5 translate-x-0.5" />
               </span>
 
-              <span key={`${lead.id}-caption`} className="absolute inset-x-0 bottom-0 block animate-[panel-in_0.6s_var(--ease-out-expo)_both] p-5">
+              <span
+                key={`${lead.id}-caption`}
+                className="absolute inset-x-0 bottom-0 block animate-[panel-in_0.6s_var(--ease-out-expo)_both] p-5"
+              >
                 <span className="block text-[0.7rem] uppercase tracking-[0.14em] text-muted-dark">
                   {lead.guest}
                   {lead.views && (

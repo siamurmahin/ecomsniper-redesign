@@ -41,7 +41,13 @@ export default function Seo({ title, description, path = '/', schema, noindex = 
     document.title = title;
 
     upsertTag('meta', 'name', 'description', 'content', description);
-    upsertTag('meta', 'name', 'robots', 'content', noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
+    upsertTag(
+      'meta',
+      'name',
+      'robots',
+      'content',
+      noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large',
+    );
 
     upsertTag('meta', 'property', 'og:title', 'content', title);
     upsertTag('meta', 'property', 'og:description', 'content', description);
@@ -67,12 +73,20 @@ export default function Seo({ title, description, path = '/', schema, noindex = 
         'hreflang',
         item.code,
         'href',
-        `${SITE.domain}${pathForLanguage(path, item.code)}`
+        `${SITE.domain}${pathForLanguage(path, item.code)}`,
       );
-      document.head.querySelector(`link[hreflang="${item.code}"]`)?.setAttribute('rel', 'alternate');
+      document.head
+        .querySelector(`link[hreflang="${item.code}"]`)
+        ?.setAttribute('rel', 'alternate');
     }
 
-    upsertTag('link', 'hreflang', 'x-default', 'href', `${SITE.domain}${pathForLanguage(path, 'en')}`);
+    upsertTag(
+      'link',
+      'hreflang',
+      'x-default',
+      'href',
+      `${SITE.domain}${pathForLanguage(path, 'en')}`,
+    );
     document.head.querySelector('link[hreflang="x-default"]')?.setAttribute('rel', 'alternate');
 
     upsertTag('meta', 'property', 'og:locale', 'content', language === 'de' ? 'de_DE' : 'en_US');

@@ -7,7 +7,6 @@ import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { prefersReducedMotion } from '../lib/motion';
 
-
 /** How long a reply is composed before its first character lands. */
 const THINK_MS = 900;
 /** Per character. ~55 a second — brisk enough not to stall, slow enough to read. */
@@ -165,7 +164,9 @@ export default function CommunitySection() {
                     data-reveal-group="drawn-items"
                     className="flex items-center gap-4"
                   >
-                    <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${tone.tile}`}>
+                    <span
+                      className={`grid size-10 shrink-0 place-items-center rounded-xl ${tone.tile}`}
+                    >
                       <Icon name={item.icon} className="size-[1.1rem]" />
                     </span>
                     <span className="flex items-baseline gap-3">

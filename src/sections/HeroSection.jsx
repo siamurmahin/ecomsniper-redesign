@@ -98,7 +98,11 @@ export default function HeroSection() {
   /* The half of the headline that does not change. The marked phrase after it
      is typed, and a component inside a split would be fighting for the same
      nodes. */
-  const { nodes: headlineNodes, count: wordCount, text: fixedHeadline } = useMemo(() => {
+  const {
+    nodes: headlineNodes,
+    count: wordCount,
+    text: fixedHeadline,
+  } = useMemo(() => {
     const fixed = HERO.headlineParts.slice(
       0,
       HERO.headlineParts.findIndex((part) => part.tone === 'mark'),
@@ -236,10 +240,7 @@ export default function HeroSection() {
                   bare text node, so on a phone it became its own flex line and
                   pushed the live dot up onto a line of its own. The dot is a
                   fixed item on the left now and never moves. */}
-              <span
-                aria-hidden="true"
-                className="relative grid size-2 shrink-0 place-items-center"
-              >
+              <span aria-hidden="true" className="relative grid size-2 shrink-0 place-items-center">
                 <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
                 <span className="size-2 rounded-full bg-signal-green-soft" />
               </span>
@@ -255,9 +256,7 @@ export default function HeroSection() {
                   // never compile — the reduced-motion case is handled by
                   // isStatic gating the measurement instead.
                   className={`flex ${
-                    isEyebrowOverflowing
-                      ? 'w-max animate-marquee-drift'
-                      : 'justify-center'
+                    isEyebrowOverflowing ? 'w-max animate-marquee-drift' : 'justify-center'
                   }`}
                   style={isEyebrowOverflowing ? { '--marquee-duration': '14s' } : undefined}
                 >
@@ -352,7 +351,11 @@ export default function HeroSection() {
               </span>
               <span data-hero-cta style={{ '--hero-stagger': 1 }} className="relative">
                 {/* The second door: for the majority who will not buy today. */}
-                <CtaButton href={HERO.secondaryCta.href} variant="brandOutline" intent="hero-playbook">
+                <CtaButton
+                  href={HERO.secondaryCta.href}
+                  variant="brandOutline"
+                  intent="hero-playbook"
+                >
                   {HERO.secondaryCta.label}
                 </CtaButton>
 
@@ -393,7 +396,6 @@ export default function HeroSection() {
                   <span className="-translate-y-3 font-serif text-[0.95rem] italic leading-tight text-signal-blue-deep">
                     {HERO.secondaryNote}
                   </span>
-
                 </span>
               </span>
             </div>

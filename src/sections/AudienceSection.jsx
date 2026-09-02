@@ -233,10 +233,9 @@ export default function AudienceSection() {
   useEffect(() => {
     const scope = sectionRef.current;
     if (!scope) return undefined;
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsInView(entry.isIntersecting),
-      { threshold: 0.3 },
-    );
+    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), {
+      threshold: 0.3,
+    });
     observer.observe(scope);
     return () => observer.disconnect();
   }, [sectionRef]);

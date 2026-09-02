@@ -14,10 +14,34 @@ import { prefersReducedMotion } from '../lib/motion';
  */
 function AppFrame({ activeIndex }) {
   const rows = [
-    { label: 'Wireless earbuds, ANC', source: 'Amazon', price: '$24.10', sell: '$41.99', margin: '+$17.89' },
-    { label: 'Stainless water bottle 1L', source: 'Amazon', price: '$11.40', sell: '$22.50', margin: '+$11.10' },
-    { label: 'LED desk lamp, dimmable', source: 'Amazon', price: '$18.75', sell: '$34.99', margin: '+$16.24' },
-    { label: 'Cable organiser, 6 pack', source: 'Amazon', price: '$6.20', sell: '$14.99', margin: '+$8.79' },
+    {
+      label: 'Wireless earbuds, ANC',
+      source: 'Amazon',
+      price: '$24.10',
+      sell: '$41.99',
+      margin: '+$17.89',
+    },
+    {
+      label: 'Stainless water bottle 1L',
+      source: 'Amazon',
+      price: '$11.40',
+      sell: '$22.50',
+      margin: '+$11.10',
+    },
+    {
+      label: 'LED desk lamp, dimmable',
+      source: 'Amazon',
+      price: '$18.75',
+      sell: '$34.99',
+      margin: '+$16.24',
+    },
+    {
+      label: 'Cable organiser, 6 pack',
+      source: 'Amazon',
+      price: '$6.20',
+      sell: '$14.99',
+      margin: '+$8.79',
+    },
   ];
 
   return (
@@ -116,8 +140,10 @@ export default function FeatureTourSection() {
   const onKeyDown = (event) => {
     const last = FEATURES.items.length - 1;
     let next = null;
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = activeIndex === last ? 0 : activeIndex + 1;
-    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = activeIndex === 0 ? last : activeIndex - 1;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight')
+      next = activeIndex === last ? 0 : activeIndex + 1;
+    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft')
+      next = activeIndex === 0 ? last : activeIndex - 1;
     if (event.key === 'Home') next = 0;
     if (event.key === 'End') next = last;
     if (next === null) return;
@@ -170,7 +196,9 @@ export default function FeatureTourSection() {
                   data-reveal
                   data-reveal-group="features"
                   className={`relative border-l-2 py-5 pl-6 pr-4 text-left transition-[border-color,opacity] duration-400 ${
-                    isActive ? 'border-ink opacity-100' : 'border-hairline opacity-60 hover:opacity-90'
+                    isActive
+                      ? 'border-ink opacity-100'
+                      : 'border-hairline opacity-60 hover:opacity-90'
                   }`}
                 >
                   <span className="flex items-baseline gap-3">

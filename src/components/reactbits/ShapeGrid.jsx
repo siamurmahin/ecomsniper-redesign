@@ -9,7 +9,7 @@ const ShapeGrid = ({
   hoverFillColor = '#222',
   shape = 'square',
   hoverTrailAmount = 0,
-  className = ''
+  className = '',
 }) => {
   const canvasRef = useRef(null);
   const requestRef = useRef(null);
@@ -116,7 +116,7 @@ const ShapeGrid = ({
           for (let row = -2; row < rows; row++) {
             const cx = col * halfW + offsetX;
             const cy = row * squareSize + squareSize / 2 + offsetY;
-            const flip = ((col + colShift + row + rowShift) % 2 + 2) % 2 !== 0;
+            const flip = (((col + colShift + row + rowShift) % 2) + 2) % 2 !== 0;
 
             const cellKey = `${col},${row}`;
             const alpha = cellOpacities.current.get(cellKey);
@@ -193,7 +193,7 @@ const ShapeGrid = ({
         0,
         canvas.width / 2,
         canvas.height / 2,
-        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
+        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2,
       );
       gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
 
@@ -266,7 +266,7 @@ const ShapeGrid = ({
       }
     };
 
-    const handleMouseMove = event => {
+    const handleMouseMove = (event) => {
       const rect = canvas.getBoundingClientRect();
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;
@@ -289,7 +289,8 @@ const ShapeGrid = ({
         ) {
           if (hoveredSquare.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquare.current });
-            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+            if (trailCells.current.length > hoverTrailAmount)
+              trailCells.current.length = hoverTrailAmount;
           }
           hoveredSquare.current = { x: col, y: row };
         }
@@ -311,7 +312,8 @@ const ShapeGrid = ({
         ) {
           if (hoveredSquare.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquare.current });
-            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+            if (trailCells.current.length > hoverTrailAmount)
+              trailCells.current.length = hoverTrailAmount;
           }
           hoveredSquare.current = { x: col, y: row };
         }
@@ -332,7 +334,8 @@ const ShapeGrid = ({
         ) {
           if (hoveredSquare.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquare.current });
-            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+            if (trailCells.current.length > hoverTrailAmount)
+              trailCells.current.length = hoverTrailAmount;
           }
           hoveredSquare.current = { x: col, y: row };
         }
@@ -353,7 +356,8 @@ const ShapeGrid = ({
         ) {
           if (hoveredSquare.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquare.current });
-            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+            if (trailCells.current.length > hoverTrailAmount)
+              trailCells.current.length = hoverTrailAmount;
           }
           hoveredSquare.current = { x: col, y: row };
         }
@@ -363,7 +367,8 @@ const ShapeGrid = ({
     const handleMouseLeave = () => {
       if (hoveredSquare.current && hoverTrailAmount > 0) {
         trailCells.current.unshift({ ...hoveredSquare.current });
-        if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+        if (trailCells.current.length > hoverTrailAmount)
+          trailCells.current.length = hoverTrailAmount;
       }
       hoveredSquare.current = null;
     };
@@ -391,7 +396,7 @@ const ShapeGrid = ({
         isVisible = entry.isIntersecting;
         isVisible ? tryStart() : tryStop();
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
     io.observe(canvas);
 

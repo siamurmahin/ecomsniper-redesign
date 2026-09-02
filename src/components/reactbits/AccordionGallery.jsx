@@ -8,7 +8,7 @@ const DEFAULT_ITEMS = [
   { image: 'https://picsum.photos/id/1018/900/1200', label: 'Ridgeline', link: '#' },
   { image: 'https://picsum.photos/id/1039/900/1200', label: 'Falls', link: '#' },
   { image: 'https://picsum.photos/id/1043/900/1200', label: 'Harbour', link: '#' },
-  { image: 'https://picsum.photos/id/1044/900/1200', label: 'Skyline', link: '#' }
+  { image: 'https://picsum.photos/id/1044/900/1200', label: 'Skyline', link: '#' },
 ];
 
 const AccordionGallery = ({
@@ -30,7 +30,7 @@ const AccordionGallery = ({
   trigger = 'hover',
   showLabels = true,
   grayscale = true,
-  className = ''
+  className = '',
 }) => {
   const rootRef = useRef(null);
   const panelRefs = useRef([]);
@@ -51,7 +51,7 @@ const AccordionGallery = ({
       : false;
 
   const applyLayout = useCallback(
-    animate => {
+    (animate) => {
       const panels = panelRefs.current;
       if (!panels.length) return;
 
@@ -89,15 +89,19 @@ const AccordionGallery = ({
               '--ag-gray': gray,
               '--ag-dim': isActive ? 0 : 0.35,
               duration: dur,
-              ease
+              ease,
             },
-            0
+            0,
           );
         }
 
         if (showLabels && bar && text) {
           if (isActive) {
-            tl.to([bar, text], { opacity: 1, x: 0, duration: dur, ease, stagger: prefersReduced ? 0 : stagger }, 0);
+            tl.to(
+              [bar, text],
+              { opacity: 1, x: 0, duration: dur, ease, stagger: prefersReduced ? 0 : stagger },
+              0,
+            );
           } else {
             tl.to([bar, text], { opacity: 0, x: -14, duration: dur * 0.6, ease }, 0);
           }
@@ -118,8 +122,8 @@ const AccordionGallery = ({
       grayscale,
       showLabels,
       stagger,
-      prefersReduced
-    ]
+      prefersReduced,
+    ],
   );
 
   useEffect(() => {
@@ -151,10 +155,10 @@ const AccordionGallery = ({
     () => () => {
       tlRef.current?.kill();
     },
-    []
+    [],
   );
 
-  const handleEnter = i => {
+  const handleEnter = (i) => {
     if (trigger === 'hover') setActive(i);
   };
 
@@ -185,7 +189,7 @@ const AccordionGallery = ({
         '--ag-text': textColor,
         '--ag-gap': `${gap}px`,
         '--ag-radius': `${radius}px`,
-        height: vertical ? `${Math.round(height * 1.6)}px` : `${height}px`
+        height: vertical ? `${Math.round(height * 1.6)}px` : `${height}px`,
       }}
       role="list"
       aria-label="Image accordion gallery"
@@ -196,29 +200,29 @@ const AccordionGallery = ({
         return (
           <Tag
             key={i}
-            ref={el => (panelRefs.current[i] = el)}
+            ref={(el) => (panelRefs.current[i] = el)}
             className={`ag-panel${isActive ? ' ag-panel--active' : ''}`}
             style={{ borderRadius: `${radius}px` }}
             href={item.link || undefined}
-            onClick={e => handleClick(i, e)}
+            onClick={(e) => handleClick(i, e)}
             onMouseEnter={() => handleEnter(i)}
             onFocus={() => setActive(i)}
-            onKeyDown={e => handleKeyDown(i, e)}
+            onKeyDown={(e) => handleKeyDown(i, e)}
             role="listitem"
             tabIndex={0}
             aria-current={isActive ? 'true' : undefined}
             aria-label={item.label}
           >
             <span className="ag-panel__frame">
-              <span className="ag-panel__media" ref={el => (mediaRefs.current[i] = el)}>
+              <span className="ag-panel__media" ref={(el) => (mediaRefs.current[i] = el)}>
                 <img src={item.image} alt={item.alt || item.label || ''} draggable="false" />
               </span>
               <span className="ag-panel__overlay" aria-hidden="true" />
             </span>
             {showLabels && (
               <span className="ag-panel__label" aria-hidden="true">
-                <span className="ag-panel__bar" ref={el => (barRefs.current[i] = el)} />
-                <span className="ag-panel__text" ref={el => (textRefs.current[i] = el)}>
+                <span className="ag-panel__bar" ref={(el) => (barRefs.current[i] = el)} />
+                <span className="ag-panel__text" ref={(el) => (textRefs.current[i] = el)}>
                   {item.label}
                 </span>
               </span>

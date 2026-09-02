@@ -57,12 +57,7 @@ function Seal({ className }) {
         className="stroke-signal-green/60"
       />
 
-      <text
-        className="font-label uppercase"
-        fill="currentColor"
-        fontSize="11"
-        letterSpacing="1"
-      >
+      <text className="font-label uppercase" fill="currentColor" fontSize="11" letterSpacing="1">
         <textPath
           href="#guarantee-seal-ring"
           startOffset="0"
@@ -74,7 +69,14 @@ function Seal({ className }) {
       </text>
 
       {/* The inner rule separates the certificate from what it certifies. */}
-      <circle cx="100" cy="100" r="58" fill="none" strokeWidth="1" className="stroke-signal-green/30" />
+      <circle
+        cx="100"
+        cy="100"
+        r="58"
+        fill="none"
+        strokeWidth="1"
+        className="stroke-signal-green/30"
+      />
 
       <text
         x="100"

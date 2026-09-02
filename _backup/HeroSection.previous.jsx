@@ -89,16 +89,16 @@ export default function HeroSection() {
           className="pointer-events-none absolute inset-0 -z-10 opacity-95 [mask-image:radial-gradient(70rem_45rem_at_70%_45%,black,transparent_72%)]"
         >
           <Suspense fallback={null}>
-          <DotGrid
-            dotSize={4}
-            gap={26}
-            baseColor="#b7c4d6"
-            activeColor="#0064d2"
-            proximity={130}
-            shockRadius={220}
-            shockStrength={4}
-            returnDuration={1.4}
-          />
+            <DotGrid
+              dotSize={4}
+              gap={26}
+              baseColor="#b7c4d6"
+              activeColor="#0064d2"
+              proximity={130}
+              shockRadius={220}
+              shockStrength={4}
+              returnDuration={1.4}
+            />
           </Suspense>
         </div>
       )}
@@ -160,11 +160,7 @@ export default function HeroSection() {
               </span>
               <span data-hero-cta>
                 {/* The second door: for the majority who will not buy today. */}
-                <CtaButton
-                  href={HERO.secondaryCta.href}
-                  variant="secondary"
-                  intent="hero-playbook"
-                >
+                <CtaButton href={HERO.secondaryCta.href} variant="secondary" intent="hero-playbook">
                   {HERO.secondaryCta.label}
                 </CtaButton>
               </span>

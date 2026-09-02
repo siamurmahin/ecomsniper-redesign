@@ -97,39 +97,47 @@ const VARIANTS = {
     gap: 5,
     speed: 35,
     colors: '#f8fafc,#f1f5f9,#cbd5e1',
-    noFocus: false
+    noFocus: false,
   },
   blue: {
     activeColor: '#e0f2fe',
     gap: 10,
     speed: 25,
     colors: '#e0f2fe,#7dd3fc,#0ea5e9',
-    noFocus: false
+    noFocus: false,
   },
   yellow: {
     activeColor: '#fef08a',
     gap: 3,
     speed: 20,
     colors: '#fef08a,#fde047,#eab308',
-    noFocus: false
+    noFocus: false,
   },
   pink: {
     activeColor: '#fecdd3',
     gap: 6,
     speed: 80,
     colors: '#fecdd3,#fda4af,#e11d48',
-    noFocus: true
-  }
+    noFocus: true,
+  },
 };
 
-export default function PixelCard({ variant = 'default', gap, speed, colors, noFocus, className = '', children }) {
+export default function PixelCard({
+  variant = 'default',
+  gap,
+  speed,
+  colors,
+  noFocus,
+  className = '',
+  children,
+}) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const pixelsRef = useRef([]);
   const animationRef = useRef(null);
   const timePreviousRef = useRef(performance.now());
   const reducedMotion = useRef(
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   ).current;
 
   const variantCfg = VARIANTS[variant] || VARIANTS.default;
@@ -162,13 +170,23 @@ export default function PixelCard({ variant = 'default', gap, speed, colors, noF
         const distance = Math.sqrt(dx * dx + dy * dy);
         const delay = reducedMotion ? 0 : distance;
 
-        pxs.push(new Pixel(canvasRef.current, ctx, x, y, color, getEffectiveSpeed(finalSpeed, reducedMotion), delay));
+        pxs.push(
+          new Pixel(
+            canvasRef.current,
+            ctx,
+            x,
+            y,
+            color,
+            getEffectiveSpeed(finalSpeed, reducedMotion),
+            delay,
+          ),
+        );
       }
     }
     pixelsRef.current = pxs;
   };
 
-  const doAnimate = fnName => {
+  const doAnimate = (fnName) => {
     animationRef.current = requestAnimationFrame(() => doAnimate(fnName));
     const timeNow = performance.now();
     const timePassed = timeNow - timePreviousRef.current;
@@ -195,18 +213,18 @@ export default function PixelCard({ variant = 'default', gap, speed, colors, noF
     }
   };
 
-  const handleAnimation = name => {
+  const handleAnimation = (name) => {
     cancelAnimationFrame(animationRef.current);
     animationRef.current = requestAnimationFrame(() => doAnimate(name));
   };
 
   const onMouseEnter = () => handleAnimation('appear');
   const onMouseLeave = () => handleAnimation('disappear');
-  const onFocus = e => {
+  const onFocus = (e) => {
     if (e.currentTarget.contains(e.relatedTarget)) return;
     handleAnimation('appear');
   };
-  const onBlur = e => {
+  const onBlur = (e) => {
     if (e.currentTarget.contains(e.relatedTarget)) return;
     handleAnimation('disappear');
   };

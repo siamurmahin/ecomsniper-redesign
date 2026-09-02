@@ -37,10 +37,7 @@ export default function RatingStars({
   return (
     <span aria-hidden="true" className={`relative inline-flex ${className}`.trim()}>
       {row(track)}
-      <span
-        className="absolute inset-y-0 left-0 overflow-hidden"
-        style={{ width: `${pct}%` }}
-      >
+      <span className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${pct}%` }}>
         {row(fill)}
       </span>
     </span>

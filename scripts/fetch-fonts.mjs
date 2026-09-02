@@ -57,7 +57,11 @@ const UA =
 const OUT_DIR = 'public/fonts';
 const CSS_OUT = 'src/styles/fonts.css';
 
-const slug = (family) => family.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const slug = (family) =>
+  family
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 const kb = (n) => (n / 1024).toFixed(1) + 'KB';
 
 const source = process.argv[2]
@@ -65,7 +69,9 @@ const source = process.argv[2]
   : await (await fetch(CSS_URL, { headers: { 'User-Agent': UA } })).text();
 
 /* Each face in Google's CSS is preceded by a comment naming its subset. */
-const blocks = [...source.matchAll(/\/\* (?<subset>[a-z-]+) \*\/\s*@font-face \{(?<body>[^}]+)\}/g)];
+const blocks = [
+  ...source.matchAll(/\/\* (?<subset>[a-z-]+) \*\/\s*@font-face \{(?<body>[^}]+)\}/g),
+];
 if (!blocks.length) throw new Error('No @font-face blocks found — did the request return HTML?');
 
 const field = (body, name) => new RegExp(`${name}:\\s*([^;]+);`).exec(body)?.[1].trim();

@@ -10,7 +10,7 @@ export const ChromaGrid = ({
   rows = 2,
   damping = 0.45,
   fadeOut = 0.6,
-  ease = 'power3.out'
+  ease = 'power3.out',
 }) => {
   const rootRef = useRef(null);
   const fadeRef = useRef(null);
@@ -26,7 +26,7 @@ export const ChromaGrid = ({
       handle: '@alexrivera',
       borderColor: '#4F46E5',
       gradient: 'linear-gradient(145deg, #4F46E5, #000)',
-      url: 'https://github.com/'
+      url: 'https://github.com/',
     },
     {
       image: 'https://i.pravatar.cc/300?img=11',
@@ -35,7 +35,7 @@ export const ChromaGrid = ({
       handle: '@jordanchen',
       borderColor: '#10B981',
       gradient: 'linear-gradient(210deg, #10B981, #000)',
-      url: 'https://linkedin.com/in/'
+      url: 'https://linkedin.com/in/',
     },
     {
       image: 'https://i.pravatar.cc/300?img=3',
@@ -44,7 +44,7 @@ export const ChromaGrid = ({
       handle: '@morganblake',
       borderColor: '#F59E0B',
       gradient: 'linear-gradient(165deg, #F59E0B, #000)',
-      url: 'https://dribbble.com/'
+      url: 'https://dribbble.com/',
     },
     {
       image: 'https://i.pravatar.cc/300?img=16',
@@ -53,7 +53,7 @@ export const ChromaGrid = ({
       handle: '@caseypark',
       borderColor: '#EF4444',
       gradient: 'linear-gradient(195deg, #EF4444, #000)',
-      url: 'https://kaggle.com/'
+      url: 'https://kaggle.com/',
     },
     {
       image: 'https://i.pravatar.cc/300?img=25',
@@ -62,7 +62,7 @@ export const ChromaGrid = ({
       handle: '@thesamkim',
       borderColor: '#8B5CF6',
       gradient: 'linear-gradient(225deg, #8B5CF6, #000)',
-      url: 'https://github.com/'
+      url: 'https://github.com/',
     },
     {
       image: 'https://i.pravatar.cc/300?img=60',
@@ -71,8 +71,8 @@ export const ChromaGrid = ({
       handle: '@tylerrod',
       borderColor: '#06B6D4',
       gradient: 'linear-gradient(135deg, #06B6D4, #000)',
-      url: 'https://aws.amazon.com/'
-    }
+      url: 'https://aws.amazon.com/',
+    },
   ];
   const data = items?.length ? items : demo;
 
@@ -97,11 +97,11 @@ export const ChromaGrid = ({
         setX.current?.(pos.current.x);
         setY.current?.(pos.current.y);
       },
-      overwrite: true
+      overwrite: true,
     });
   };
 
-  const handleMove = e => {
+  const handleMove = (e) => {
     const r = rootRef.current.getBoundingClientRect();
     moveTo(e.clientX - r.left, e.clientY - r.top);
     gsap.to(fadeRef.current, { opacity: 0, duration: 0.25, overwrite: true });
@@ -111,17 +111,17 @@ export const ChromaGrid = ({
     gsap.to(fadeRef.current, {
       opacity: 1,
       duration: fadeOut,
-      overwrite: true
+      overwrite: true,
     });
   };
 
-  const handleCardClick = url => {
+  const handleCardClick = (url) => {
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
-  const handleCardMove = e => {
+  const handleCardMove = (e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -137,7 +137,7 @@ export const ChromaGrid = ({
       style={{
         '--r': `${radius}px`,
         '--cols': columns,
-        '--rows': rows
+        '--rows': rows,
       }}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
@@ -151,7 +151,7 @@ export const ChromaGrid = ({
           style={{
             '--card-border': c.borderColor || 'transparent',
             '--card-gradient': c.gradient,
-            cursor: c.url ? 'pointer' : 'default'
+            cursor: c.url ? 'pointer' : 'default',
           }}
         >
           <div className="chroma-img-wrapper">

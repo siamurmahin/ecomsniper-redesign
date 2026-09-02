@@ -98,7 +98,9 @@ export default function Icon({ name, label, className = 'size-4', ...rest }) {
       // The source files hard-code height/width="1em"; the class controls size.
       height={undefined}
       width={undefined}
-      {...(label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true', focusable: 'false' })}
+      {...(label
+        ? { role: 'img', 'aria-label': label }
+        : { 'aria-hidden': 'true', focusable: 'false' })}
       {...rest}
     />
   );

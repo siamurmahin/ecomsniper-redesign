@@ -26,10 +26,7 @@ export default function CountryTicker({ onInk = false, className = '' }) {
   const textTone = onInk ? 'text-muted-dark' : 'text-muted';
 
   const item = (country, index) => (
-    <span
-      key={`${country.code}-${index}`}
-      className="flex shrink-0 items-center gap-2 px-3.5"
-    >
+    <span key={`${country.code}-${index}`} className="flex shrink-0 items-center gap-2 px-3.5">
       <img
         src={flagUrl(country.code)}
         alt=""

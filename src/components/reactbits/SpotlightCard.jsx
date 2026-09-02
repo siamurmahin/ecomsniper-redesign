@@ -6,10 +6,14 @@
 import { useRef } from 'react';
 import './SpotlightCard.css';
 
-const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)' }) => {
+const SpotlightCard = ({
+  children,
+  className = '',
+  spotlightColor = 'rgba(255, 255, 255, 0.25)',
+}) => {
   const divRef = useRef(null);
 
-  const handleMouseMove = e => {
+  const handleMouseMove = (e) => {
     const rect = divRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;

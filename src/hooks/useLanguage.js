@@ -1,11 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  LANGUAGES,
-  languageFromPath,
-  pathForLanguage,
-  rememberLanguage,
-} from '../lib/language';
+import { LANGUAGES, languageFromPath, pathForLanguage, rememberLanguage } from '../lib/language';
 
 /**
  * The current language, and a way to switch it.
@@ -32,7 +27,7 @@ export function useLanguage() {
       // Same page, other language — keep the hash so a section stays put.
       navigate(`${pathForLanguage(pathname, next)}${hash}`);
     },
-    [code, hash, navigate, pathname]
+    [code, hash, navigate, pathname],
   );
 
   return { code, current, languages: LANGUAGES, switchTo };

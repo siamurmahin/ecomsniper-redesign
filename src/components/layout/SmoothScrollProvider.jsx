@@ -25,30 +25,32 @@ export default function SmoothScrollProvider({ children }) {
     let tick = null;
     let cancelled = false;
 
-    Promise.all([import('lenis'), loadScrollTrigger()]).then(([{ default: Lenis }, ScrollTrigger]) => {
-      if (cancelled) return;
+    Promise.all([import('lenis'), loadScrollTrigger()]).then(
+      ([{ default: Lenis }, ScrollTrigger]) => {
+        if (cancelled) return;
 
-      lenis = new Lenis({
-        duration: 1.05,
-        // Gentle exponential ease-out: fast to respond, quiet to settle.
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        touchMultiplier: 1.6,
-      });
+        lenis = new Lenis({
+          duration: 1.05,
+          // Gentle exponential ease-out: fast to respond, quiet to settle.
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          touchMultiplier: 1.6,
+        });
 
-      registerLenis(lenis);
+        registerLenis(lenis);
 
-      // ScrollTrigger must read Lenis' virtual position, not window.scrollY.
-      lenis.on('scroll', ScrollTrigger.update);
+        // ScrollTrigger must read Lenis' virtual position, not window.scrollY.
+        lenis.on('scroll', ScrollTrigger.update);
 
-      tick = (time) => lenis.raf(time * 1000); // gsap ticker is in seconds
-      gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(0);
+        tick = (time) => lenis.raf(time * 1000); // gsap ticker is in seconds
+        gsap.ticker.add(tick);
+        gsap.ticker.lagSmoothing(0);
 
-      /* It takes over a page the visitor may already have moved. Without this
+        /* It takes over a page the visitor may already have moved. Without this
          Lenis starts from a virtual zero and the page jumps back to the top. */
-      lenis.scrollTo(window.scrollY, { immediate: true });
-    });
+        lenis.scrollTo(window.scrollY, { immediate: true });
+      },
+    );
 
     return () => {
       cancelled = true;
@@ -64,7 +66,13 @@ export default function SmoothScrollProvider({ children }) {
   useEffect(() => {
     const onClick = (event) => {
       // Ignore modified clicks — the visitor wants a new tab or a download.
-      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) {
+      if (
+        event.defaultPrevented ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.button !== 0
+      ) {
         return;
       }
 

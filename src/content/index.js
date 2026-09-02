@@ -55,7 +55,7 @@ export function contentFor(language) {
   const overlay = OVERLAYS[language];
   const resolved = overlay
     ? Object.fromEntries(
-        Object.entries(english).map(([key, value]) => [key, merge(value, overlay[key])])
+        Object.entries(english).map(([key, value]) => [key, merge(value, overlay[key])]),
       )
     : { ...english };
 

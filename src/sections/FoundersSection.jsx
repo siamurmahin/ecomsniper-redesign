@@ -27,7 +27,12 @@ export default function FoundersSection() {
   const tone = toneOf('blue');
 
   return (
-    <section ref={sectionRef} id="founders" aria-labelledby="founders-headline" className="section-band">
+    <section
+      ref={sectionRef}
+      id="founders"
+      aria-labelledby="founders-headline"
+      className="section-band"
+    >
       <div className="site-shell">
         <div className="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center lg:gap-16">
           <div>
@@ -131,7 +136,10 @@ export default function FoundersSection() {
                   more than one that does not. */}
               <ul className="relative mt-7 flex flex-col gap-2.5 border-t border-paper/10 pt-6">
                 {PLAYBOOK.bullets.map((bullet) => (
-                  <li key={bullet} className="flex items-start gap-2.5 text-[0.88rem] leading-relaxed">
+                  <li
+                    key={bullet}
+                    className="flex items-start gap-2.5 text-[0.88rem] leading-relaxed"
+                  >
                     <Icon
                       name="checkCircle"
                       className="mt-0.5 size-4 shrink-0 text-signal-green-soft"
@@ -143,11 +151,7 @@ export default function FoundersSection() {
               </ul>
 
               <div className="relative mt-7">
-                <CtaButton
-                  href={FOUNDERS.bookCta.href}
-                  variant="onInk"
-                  intent="founders-playbook"
-                >
+                <CtaButton href={FOUNDERS.bookCta.href} variant="onInk" intent="founders-playbook">
                   {FOUNDERS.bookCta.label}
                 </CtaButton>
 

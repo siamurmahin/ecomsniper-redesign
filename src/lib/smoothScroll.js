@@ -84,10 +84,7 @@ export function scrollToTarget(target, { immediate = false } = {}) {
         ? target
         : from + target.getBoundingClientRect().top - HEADER_SCROLL_OFFSET;
     const distance = Math.abs(to - from);
-    const duration = Math.min(
-      MAX_DURATION,
-      Math.max(MIN_DURATION, distance * SECONDS_PER_PIXEL),
-    );
+    const duration = Math.min(MAX_DURATION, Math.max(MIN_DURATION, distance * SECONDS_PER_PIXEL));
 
     /* No offset for an element: Lenis reads `scroll-margin-top` off the target
        itself, and every anchored section carries the header's 6rem in the

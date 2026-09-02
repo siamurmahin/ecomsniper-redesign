@@ -157,7 +157,10 @@
     scroll-margin-top: 6rem;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-weight: 800;
     letter-spacing: -0.025em;
@@ -180,7 +183,9 @@
     color: var(--color-ink);
   }
 
-  img, video, canvas {
+  img,
+  video,
+  canvas {
     max-width: 100%;
     height: auto;
   }
@@ -317,7 +322,8 @@
   .btn-brand-outline {
     @apply btn text-ink shadow-lift hover:-translate-y-0.5 hover:shadow-float;
     border: 2px solid transparent;
-    background-image: linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
+    background-image:
+      linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
     background-origin: border-box;
     background-clip: padding-box, border-box;
     background-size:
@@ -592,17 +598,30 @@
   }
 
   @keyframes marquee-drift {
-    from { transform: translate3d(0, 0, 0); }
-    to { transform: translate3d(-50%, 0, 0); }
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
   }
   .animate-marquee-drift {
     animation: marquee-drift var(--marquee-duration, 40s) linear infinite;
   }
 
   @keyframes pulse-ring {
-    0%   { transform: scale(0.9); opacity: 0.7; }
-    70%  { transform: scale(1.6); opacity: 0; }
-    100% { transform: scale(1.6); opacity: 0; }
+    0% {
+      transform: scale(0.9);
+      opacity: 0.7;
+    }
+    70% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
   }
   .animate-pulse-ring {
     animation: pulse-ring 2.6s var(--ease-out-expo) infinite;
@@ -612,16 +631,26 @@
      duration is set inline. Linear because an eased bar lies about the time
      left. */
   @keyframes beat-fill {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
   }
   .animate-beat-fill {
     animation: beat-fill linear forwards;
   }
 
   @keyframes row-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .motion-safe\:animate-row-in {
     animation: row-in 520ms var(--ease-out-expo) both;
@@ -632,8 +661,13 @@
      quint ease parked it at both ends and read as static; this curve keeps it
      moving through the middle of the travel. */
   @keyframes nudge-x {
-    0%, 100% { transform: translate(0, 0); }
-    50%      { transform: translate(-14px, -12px); }
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-14px, -12px);
+    }
   }
   .motion-safe\:animate-nudge-x {
     animation: nudge-x 1.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -645,10 +679,20 @@
      Units are viewBox units, not pixels, so it scales with whatever size the
      icon is asked for. */
   @keyframes mouse-wheel-run {
-    0%   { transform: translateY(0); opacity: 0; }
-    22%  { opacity: 1; }
-    68%  { opacity: 1; }
-    100% { transform: translateY(5px); opacity: 0; }
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    22% {
+      opacity: 1;
+    }
+    68% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(5px);
+      opacity: 0;
+    }
   }
   .mouse-cue .mouse-wheel {
     animation: mouse-wheel-run 1.9s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -663,9 +707,15 @@
   /* Slow enough that it is never caught moving: light on a surface, not an
      animation. */
   @keyframes brand-drift {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 }
 
@@ -699,12 +749,20 @@
      continuous. Up and down are separate keyframes rather than one with
      `animation-direction: reverse`, which reverses the timing function too. */
   @keyframes rail-drift-up {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(0, -50%, 0); }
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(0, -50%, 0);
+    }
   }
   @keyframes rail-drift-down {
-    from { transform: translate3d(0, -50%, 0); }
-    to   { transform: translate3d(0, 0, 0); }
+    from {
+      transform: translate3d(0, -50%, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
   }
   .animate-rail-up {
     animation: rail-drift-up var(--rail-duration, 52s) linear infinite;
@@ -889,8 +947,14 @@
   }
 
   @keyframes panel-in {
-    from { opacity: 0; transform: translate3d(0, 10px, 0); }
-    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
   .animate-panel-in {
     animation: panel-in 420ms var(--ease-out-expo) both;
@@ -1137,8 +1201,12 @@
      A separate keyframe rather than `animation-direction: reverse` because
      that reverses the timing function as well as the path. */
   @keyframes marquee-drift-back {
-    from { transform: translate3d(-50%, 0, 0); }
-    to   { transform: translate3d(0, 0, 0); }
+    from {
+      transform: translate3d(-50%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
   }
   .animate-marquee-back {
     animation: marquee-drift-back var(--marquee-duration, 40s) linear infinite;
