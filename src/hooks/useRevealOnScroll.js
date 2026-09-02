@@ -26,6 +26,20 @@ const scheduleRefresh = () => {
 };
 
 /**
+ * How far ahead of the viewport a section builds its triggers.
+ *
+ * Creating a ScrollTrigger measures the page there and then, and fifteen
+ * sections were doing that inside the commit that mounted them. A trace at 4x
+ * CPU put 40-80% of every blocking frame in forced layout — the browser being
+ * asked for geometry it had just been told to recompute.
+ *
+ * A screen and a half ahead: far enough that the trigger is always in place
+ * before its section can be reached, even on a flick, and near enough that a
+ * section three screens down costs nothing at load.
+ */
+const BUILD_MARGIN = '1500px 0px';
+
+/**
  * Reveals every `[data-reveal]` descendant of the returned ref as it scrolls
  * in. The hiding CSS only applies while JS runs, so no-JS and reduced-motion
  * visitors never lose content. A shared `data-reveal-group` staggers together.
@@ -48,7 +62,7 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
       return undefined;
     }
 
-    const ctx = gsap.context(() => {
+    const setUp = () => {
       const targets = gsap.utils.toArray('[data-reveal]', scope);
       if (!targets.length) return;
 
@@ -79,13 +93,40 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
           },
         );
       });
-    }, scope);
+    };
 
-    // Layout settles after fonts load; refresh so triggers use final positions.
-    // Shared and frame-collapsed — see `scheduleRefresh` above.
-    document.fonts?.ready.then(scheduleRefresh);
+    let ctx = null;
 
-    return () => ctx.revert();
+    const build = () => {
+      ctx = gsap.context(setUp, scope);
+
+      /* Layout settles after fonts load; refresh so triggers use final
+         positions. Shared and frame-collapsed — see `scheduleRefresh` above.
+         Only while the fonts are still arriving: a section built later
+         measured itself against the final glyphs already, and a global
+         refresh per section mid-scroll is the work this hook exists to
+         avoid. */
+      if (document.fonts && document.fonts.status !== 'loaded') {
+        document.fonts.ready.then(scheduleRefresh);
+      }
+    };
+
+    /* Built on approach rather than on mount — see `BUILD_MARGIN`. */
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        build();
+      },
+      { rootMargin: BUILD_MARGIN },
+    );
+
+    observer.observe(scope);
+
+    return () => {
+      observer.disconnect();
+      ctx?.revert();
+    };
   }, [start, y]);
 
   return scopeRef;
