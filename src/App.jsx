@@ -2,11 +2,6 @@ import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
-import SiteFooter from './components/layout/SiteFooter';
-import StickyConversionBar from './components/layout/StickyConversionBar';
-import ExitIntentOffer from './components/layout/ExitIntentOffer';
-import ConsultOffer from './components/layout/ConsultOffer';
-import BackToTop from './components/layout/BackToTop';
 import HomePage from './pages/HomePage';
 import { useContent } from './hooks/useContent';
 import { ScrollTrigger } from './lib/motion';
@@ -25,6 +20,10 @@ import {
 /* Only the homepage is part of the first paint. The other routes load when
    someone asks for them, which keeps their code out of the bundle every
    visitor downloads. */
+/* The footer and the conversion furniture. None of it is on the first screen
+   and all of it used to mount in the commit that drew one. */
+const SiteChrome = lazy(() => import('./components/layout/SiteChrome'));
+
 const PricingPage = lazy(() => import('./pages/PricingPage'));
 const FaqPage = lazy(() => import('./pages/FaqPage'));
 const PlaybookPage = lazy(() => import('./pages/PlaybookPage'));
@@ -274,13 +273,12 @@ export default function App() {
         </Suspense>
       </main>
 
-      <SiteFooter />
-
-      {/* Conversion furniture, shared across every route. */}
-      <StickyConversionBar />
-      <BackToTop />
-      <ConsultOffer />
-      <ExitIntentOffer />
+      {/* The footer and the conversion furniture, shared across every route.
+          Nothing here is on screen when the page paints, so none of it is in
+          the bundle the first screen waits for — see `SiteChrome`. */}
+      <Suspense fallback={null}>
+        <SiteChrome />
+      </Suspense>
     </SmoothScrollProvider>
   );
 }
