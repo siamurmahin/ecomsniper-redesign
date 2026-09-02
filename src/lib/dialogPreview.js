@@ -1,22 +1,12 @@
 /**
- * Opening a self-triggering dialog on demand, in development only.
+ * Open a self-triggering dialog on demand, in development only.
  *
- * Neither of these can be opened by hand. The consultation dialog waits for
- * section 07 to scroll into view and then never shows again on that browser;
- * the exit-intent one additionally requires a trusted pointer leaving the top
- * edge of the window, which no script can fake — event.isTrusted is false for
- * anything dispatched from JavaScript, and that check is the whole reason the
- * dialog does not fire on every stray mouse event.
+ * Neither can be opened by hand — the exit-intent one needs a trusted pointer
+ * event, which no script can fake — so the only way to see them was to edit
+ * the component and put it back, which is how a temporary edit gets committed.
  *
- * That left the only way to see either one being to edit the component,
- * reload, look, and put the code back — which is a change to shipping code in
- * order to look at shipping code, and it is how a temporary edit ends up
- * committed.
- *
- * So: `?dialog=consult` or `?dialog=exit` opens one immediately, skipping the
- * trigger, the timer and the once-per-visitor record. Guarded on
- * import.meta.env.DEV, so it is dead code in a production build — Vite
- * replaces the flag with false and the branch is dropped entirely.
+ * ?dialog=consult or ?dialog=exit opens one now, skipping the trigger and the
+ * once-per-visitor record. DEV-only, so it is dropped from the build.
  *
  * @param {'consult'|'exit'} name
  * @returns {boolean} true if this dialog should open now

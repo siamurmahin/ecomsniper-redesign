@@ -13,33 +13,15 @@ const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
 const STEP_TONES = ['blue', 'red', 'gold', 'green'];
 
 /**
- * 09 — Step by step: the model and the course, in one section.
+ * 09 — Step by step: the steps and the course together. They used to be two
+ * sections explaining the same four steps a third of a page apart.
  *
- * This absorbed section 05 on 31 Aug. "The model, in plain English" ran the
- * same four steps on its own band a third of the page above the course that
- * teaches them, and neither half mentioned the other. The steps are the
- * syllabus, so explaining them is the argument for the course.
+ * Shape taken from the live site: a staircase rather than a row, so the layout
+ * says "step by step" before a word is read; the course card beside the steps,
+ * not under them; and the card ending on the instructors, with faces.
  *
- * The shape was read off ecomsniper.io on 1 Sep 2026. The rebuild had drifted
- * a long way from it and the live version is better in three specific ways:
- *
- * The steps are a staircase, not a row. Each one is indented past the last, so
- * the shape says "step by step" before a word is read — which is the section's
- * own eyebrow. A row of four says "four things".
- *
- * The course card sits beside the steps rather than under them, so the offer
- * and the mechanism are one viewport instead of two, and the card is a portrait
- * shape that does not need a second column filling it.
- *
- * The card ends on the instructors, with faces. That is what the right side of
- * that card is for — not a syllabus. Trust in this category rests on the
- * operator, which is the argument section 10 makes at length.
- *
- * Two deliberate departures from live: the guarantee keeps "on the monthly
- * plan", because the credits bundle and Enterprise are final sale and the
- * unqualified version contradicts both the pricing page and the FAQ; and the
- * instructors are read from `FOUNDERS.people` so the two names cannot drift
- * from section 10's copy of them.
+ * Two departures: the guarantee keeps "on the monthly plan", and the
+ * instructors are read from FOUNDERS.people so the names cannot drift.
  */
 export default function TrainingSection() {
   const sectionRef = useRevealOnScroll();
@@ -48,13 +30,9 @@ export default function TrainingSection() {
   const lastIndex = TRAINING.steps.length - 1;
 
   /**
-   * The staircase runs once, when it is properly in view. The steps are
-   * deliberately outside the shared `data-reveal` system: that reveals a group
-   * together on one stagger, and this needs its own, longer beat to read as a
-   * sequence rather than as four cards arriving at once.
-   *
-   * All this does is set an attribute — the animation itself is CSS keyframes
-   * driven by each step's `--i`, so nothing here touches a style on any node.
+   * The staircase runs once, in view. Outside the shared reveal system, which
+   * staggers a group together — this needs a longer beat to read as a
+   * sequence. All this sets is an attribute; the animation is CSS.
    */
   useEffect(() => {
     const stairs = stairsRef.current;
@@ -93,13 +71,9 @@ export default function TrainingSection() {
         />
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
-          {/* The staircase. Each step steps right by its index, which is the
-              whole idea — the indent is the argument, not decoration.
-
-              No indent at all below `md`. On a phone the column is ~290px, so
-              stepping the fourth card in costs it a line of copy to say
-              something the numbers already say; the four run full width and
-              the travelling mark carries the sequence instead. */}
+          {/* Each step steps right by its index — the indent is the argument.
+              No indent below md: on a ~290px column it would cost a line of
+              copy to say what the numbers already say. */}
           <ol ref={stairsRef} className="flex flex-col gap-4">
             {TRAINING.steps.map((step, index) => {
               const tone = toneOf(STEP_TONES[index % STEP_TONES.length]);
@@ -123,14 +97,8 @@ export default function TrainingSection() {
                   />
 
                   {/* The dotted link to the next step, drawn as the count
-                      reaches it. It sits in the gap rather than behind the
-                      cards, so it never has to guess a card's height, and on
-                      the number chip's own centre line — 34px in at `p-4`,
-                      38px from `sm:p-5`.
-
-                      Card bottom to card top is what it can honestly join:
-                      the chips are centred inside cards of different heights,
-                      so no line reaches from one chip to the next. */}
+                      reaches it. In the gap rather than behind the cards, so
+                      it never has to guess a card's height. */}
                   {!isLast && (
                     <span
                       aria-hidden="true"

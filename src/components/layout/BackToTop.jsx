@@ -3,23 +3,12 @@ import Icon from '../ui/Icon';
 import { scrollToTarget } from '../../lib/smoothScroll';
 
 /**
- * Back to the top of a very long page.
+ * Back to the top of a very long page — 17,000px on a desktop, 22,000 on a
+ * phone, with the nav the only other way back.
  *
- * The homepage runs to about 17,000px on a desktop and 22,000px on a phone.
- * Getting back to the header from the FAQ is a long drag on a trackpad and a
- * lot of thumb on a phone, and the nav is the only way back to any of the
- * anchors.
- *
- * SCROLLS THROUGH LENIS, never `window.scrollTo`. Lenis owns the scroll
- * position and keeps its own target; a native scroll behind its back leaves it
- * stale and the page slides back on the next wheel tick. `scrollToTarget`
- * is the shared helper every other jump on this site already routes through,
- * and it eases from rest rather than using Lenis' own wheel curve, which puts
- * a third of the distance into the first 50ms and reads as a teleport on a
- * trip this long.
- *
- * It sits above the sticky conversion bar, offset by that bar's own height
- * token so the two cannot overlap when it is showing.
+ * Goes through scrollToTarget, never window.scrollTo: Lenis keeps its own
+ * position, and scrolling behind its back leaves it stale. Sits above the
+ * sticky bar, offset by that bar's published height.
  */
 
 /** Roughly a screen and a half down before it is worth offering. */
@@ -36,14 +25,9 @@ export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(pastThreshold);
 
   /*
-   * Set straight from the scroll handler, not batched into a frame.
-   *
-   * The frame was the bug. requestAnimationFrame does not run in a background
-   * tab, so the first scroll set a pending id that never resolved, and every
-   * later scroll returned early on that same id — the button stayed hidden for
-   * the rest of the session. The work being deferred is one comparison, and
-   * React drops a setState that does not change the value, so there is nothing
-   * here worth a frame.
+   * Set straight from the scroll handler. Batching it into a frame was the
+   * bug: rAF does not run in a background tab, so the first pending id never
+   * resolved and every later scroll returned early on it.
    */
   useEffect(() => {
     const onScroll = () => setIsVisible(pastThreshold());

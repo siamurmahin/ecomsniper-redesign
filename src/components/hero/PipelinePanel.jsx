@@ -10,25 +10,15 @@ import { toneOf } from '../../lib/signalTones';
 const BEAT_MS = 3800;
 
 /**
- * The hero's right-hand side: one product through the software — found,
- * listed, watched, paid — then the ask.
+ * The hero's right side: one product through the software — found, listed,
+ * watched, paid — then the ask.
  *
- * The fifth step ends the run rather than looping it. A demonstration that
- * restarts itself spends the highest-intent moment on a repeat, so autoplay
- * stops there and the offer sits waiting. Replay is offered, not forced.
- *
- * The connectors are the clock: the one out of the active step animates for
- * `BEAT_MS` and its `animationend` advances the step, so the bar cannot drift
- * from the content and pausing it pauses the sequence. Completed connectors
- * stay filled — an earlier rail refilled from zero each beat, which read as
- * progress going backwards.
- *
- * React Bits' `Stepper` was tried first and is the wrong shape (uncontrolled
- * state, a Back/Continue footer for forms, a hardcoded accent), so only its
- * pattern is reused.
+ * The fifth step ends the run rather than looping: a demo that restarts spends
+ * the highest-intent moment on a repeat. The connectors are the clock, so the
+ * bar cannot drift from the content and pausing one pauses both.
  *
  * Nodes are real buttons and a click ends autoplay. Reduced motion renders
- * every step at once as a plain list, which is also the no-JS rendering.
+ * every step at once, which is also the no-JS rendering.
  */
 export default function PipelinePanel() {
   const { beats, finale } = HERO_PANEL;
@@ -220,13 +210,10 @@ export default function PipelinePanel() {
                     key={step.chip}
                     aria-hidden={!isActive}
                     /*
-                     * A crossfade, staggered rather than simultaneous: the old
-                     * step fades out over 500ms, and the new one waits 420ms
-                     * before taking 900ms to arrive. The two overlap for about
-                     * 80ms, which is short enough that no one reads both, and
-                     * the gap in between is what makes it a fade rather than a
-                     * swap. Opacity only — the slide it replaces was the thing
-                     * making a 2.9s step feel hurried.
+                     * A staggered crossfade: the old step leaves over 500ms,
+                     * the new one waits 420ms. They overlap for ~80ms, short
+                     * enough that nobody reads both. Opacity only — the slide
+                     * it replaced made a 2.9s step feel hurried.
                      */
                     className={`absolute inset-x-5 top-0 ${
                       isActive

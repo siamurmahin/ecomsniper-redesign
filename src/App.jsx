@@ -28,10 +28,8 @@ import { getLenis, scrollToTarget } from './lib/smoothScroll';
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
-  /* The browser's own scroll restoration fights the reset below: it puts the
-     previous position back after a navigation, asynchronously, which on a
-     phone is the difference between landing at the top and landing wherever
-     the last page happened to be. This app decides where a route lands. */
+  /* The browser puts the old position back after a navigation, asynchronously.
+     This app decides where a route lands, so turn that off. */
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -42,23 +40,13 @@ function RouteScrollManager() {
     /*
      * Where a new route lands.
      *
-     * Two things make this harder than it looks.
+     * No page has its content yet when this runs — DeferUntilPainted mounts
+     * everything below the hero a frame late — so a hash target may not exist,
+     * and the short document makes the browser clamp the inherited scroll
+     * position. That is how the playbook page opened at its own footer.
      *
-     * No page has its content when this runs. Every section below the hero is
-     * mounted a frame late by DeferUntilPainted, so the document is briefly
-     * only as tall as its hero: a hash target does not exist yet, and the
-     * sections above one that does are still arriving, so its offset is about
-     * to change. Worse, the short document means the browser clamps the
-     * inherited scroll position to that small height — and then the rest of
-     * the page mounts underneath a position nobody reset. Coming from the foot
-     * of the homepage, that is how the playbook page opened at its footer.
-     *
-     * And Lenis is not always there. SmoothScrollProvider skips it for coarse
-     * pointers and reduced motion, so on a phone getLenis() is null for the
-     * life of the page. Anything that waits for Lenis waits forever there,
-     * which is exactly what the previous version of this did.
-     *
-     * So: settle first, then move, and treat Lenis as optional throughout.
+     * And Lenis is absent on touch and reduced motion, so nothing here may
+     * wait for it. Settle first, then move, and treat Lenis as optional.
      */
     let frame = 0;
     const startedAt = performance.now();

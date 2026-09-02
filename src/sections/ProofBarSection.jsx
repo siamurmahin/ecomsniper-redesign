@@ -11,24 +11,17 @@ import { toneOf } from '../lib/signalTones';
 
 /**
  * 02 — Proof bar. Its whole value is that every number is checkable: the score
- * links to the live profile and the member count matches the rest of the site.
- * Inconsistent numbers read as advertising; consistent ones read as evidence.
+ * links to the live profile, the member count matches the rest of the site.
  *
- * Ink rather than paper because this sits between a white hero and a near-white
- * section, and a bordered white card on a white page is a box with nothing in
- * it. The cards themselves are the hero's support tiles rebuilt for a dark
- * ground — corner wash, filled glyph tile, hover lift — so the two read as one
- * system rather than as a hero and then a caption.
+ * Ink because it sits between a white hero and a near-white section, where a
+ * bordered white card is a box with nothing in it. The cards are the hero's
+ * tiles rebuilt for a dark ground, so the two read as one system.
  */
 
 /**
- * Presentation per figure, aligned to PROOF_BAR.items by index.
- *
- * `spotlight` is the pointer highlight, and it is set here rather than taken
- * from the tone: the values in the tone table are mixed for paper, where a
- * tint darkens the surface it lands on. On ink the highlight has to add light
- * instead, so each one is the tone's soft step — the one drawn to survive on a
- * dark ground — carried a little further up.
+ * Presentation per figure, matched to PROOF_BAR.items by index. spotlight is
+ * set here, not taken from the tone: tone values are mixed for paper, where a
+ * tint darkens. On ink the highlight has to add light instead.
  */
 const ITEM_META = [
   { kind: 'rating', tone: 'gold', icon: 'star', spotlight: 'rgb(232 184 102 / 0.22)' },
@@ -38,12 +31,9 @@ const ITEM_META = [
 ];
 
 /**
- * A figure that counts up and then states the exact number.
- *
- * `CountUp` uses a spring, and a spring approaches its target asymptotically —
- * it settled on "4.5" and "392+". On a bar claiming these numbers are
- * checkable, landing near the number is landing wrong. So the moment it reports
- * done it is swapped for the copy deck's string, which also unmounts the spring.
+ * Counts up, then states the exact number. CountUp uses a spring, and a spring
+ * never quite lands — it settled on "4.5" and "392+". On a bar claiming these
+ * are checkable, near enough is wrong, so the deck's string replaces it.
  */
 function ProofFigure({ item }) {
   const [settled, setSettled] = useState(false);

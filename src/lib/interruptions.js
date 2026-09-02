@@ -1,28 +1,13 @@
 /**
- * What the self-opening dialogs know about each other.
+ * What the two self-opening dialogs know about each other, so nobody is
+ * stopped twice in a visit. The rule is the outcome, not just "has it shown":
  *
- * Two exist: the consultation offer at section 07 and the exit-intent playbook
- * offer. Each remembers whether it has been shown, which is not enough on its
- * own — a visitor who declined the first was eligible for the second, so the
- * page could stop the same person twice in a visit.
+ * - never while another dialog is open
+ * - gave their details: never asked again
+ * - dismissed it: one more, smaller ask on the way out
  *
- * They used to share a single claim: whichever fired first took it and the
- * other stood down for good. That is quiet, but it spends the one interruption
- * on whoever gets there first and leaves the playbook offer reaching almost
- * nobody, since the consultation dialog opens partway down the page.
- *
- * So the rule is now the outcome, not the fact:
- *
- * - nobody is interrupted while another dialog is open
- * - a visitor who GAVE their details is never asked again. They said yes; a
- *   second popup on the way out is the reward for converting
- * - a visitor who DISMISSED the first offer can be asked once more on the way
- *   out, with a different and smaller thing to say yes to
- *
- * Storage access fails closed throughout — Safari in private mode and a
- * browser set to block site data both throw outright. An unreadable store
- * counts as already seen, because nagging someone whose browser we cannot read
- * is worse than missing one capture.
+ * Storage fails closed — an unreadable store counts as already seen, because
+ * nagging someone we cannot read is worse than missing one capture.
  */
 
 /** What a dialog did, once it has been shown. */
@@ -31,10 +16,7 @@ export const OUTCOME = {
   converted: 'converted',
 };
 
-/**
- * Whether a dialog has already had its turn with this visitor, whatever came
- * of it. Fails closed: an unreadable store answers yes.
- */
+/** Has this dialog had its turn, whatever came of it? Fails closed. */
 export function hasSeen(key) {
   try {
     return localStorage.getItem(key) !== null;
@@ -43,11 +25,7 @@ export function hasSeen(key) {
   }
 }
 
-/**
- * What became of a dialog: an OUTCOME, or null if it has never been shown.
- * Fails closed to `converted`, which is the answer that stops another dialog
- * from opening.
- */
+/** What became of a dialog, or null if never shown. Fails closed to converted. */
 export function outcomeOf(key) {
   try {
     return localStorage.getItem(key);
@@ -56,7 +34,7 @@ export function outcomeOf(key) {
   }
 }
 
-/** Record what became of a dialog. Call it as the outcome happens. */
+/** Record what became of a dialog, as it happens. */
 export function mark(key, outcome) {
   try {
     localStorage.setItem(key, outcome);
@@ -66,9 +44,8 @@ export function mark(key, outcome) {
 }
 
 /*
- * Whether a dialog is on screen right now. Deliberately a module variable and
- * not storage: it describes this page view, and a value that outlived a crash
- * or a reload would lock every dialog out permanently.
+ * Is a dialog on screen right now? A module variable, not storage: it
+ * describes this page view, and a stale value would lock every dialog out.
  */
 let dialogOpen = false;
 

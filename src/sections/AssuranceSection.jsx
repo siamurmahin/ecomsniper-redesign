@@ -15,19 +15,12 @@ const INK = '#1e1f23';
 const entryPlan = PRICING.plans.find((plan) => plan.featured) ?? PRICING.plans[0];
 
 /**
- * The stamp.
+ * The stamp. It was two thin rings around two words, which is a circle with
+ * type in it — a seal has an edge and says what it certifies around the rim.
  *
- * It was two thin rings around two words, which is a circle with type in it
- * rather than a seal. A seal has an edge you could feel and it says what it
- * certifies around the rim, so this one does both: a perforated outer edge, a
- * tinted field, and the claim itself set on the ring.
- *
- * Drawn, not fetched. An image would be one more request for something the
- * type already says, and it would not take the page's colours with it.
- *
- * `textLength` pins the ring text to the circumference and lets the browser
- * space it, so the copy can be reworded in the deck without the letters
- * bunching at the top of the circle or running out before they close it.
+ * Drawn, not fetched: an image is another request for something the type
+ * already says, and it would not take the page's colours with it. textLength
+ * pins the ring text, so the copy can be reworded without the letters bunching.
  */
 const RING_RADIUS = 76;
 const RING_LENGTH = Math.round(2 * Math.PI * RING_RADIUS);
@@ -113,18 +106,13 @@ function Seal({ className }) {
 /**
  * 14 — The guarantee.
  *
- * This carried a supported-countries block as well, and for a while that block
- * was half the section. It was the third time the page stated the same fact:
- * the hero eyebrow says eight countries, section 03 pins "trusted by sellers in
- * 8 countries" to a marquee of the same eight flags, and the FAQ answers "does
- * it work in my country?" in words one screen above this. By the third telling
- * the flags were decoration, so section 03 keeps them and they are gone from
- * here. `ASSURANCE.countries` stays in the deck — those two still read it.
+ * It used to carry a supported-countries block too, which was the third time
+ * the page said the same thing: the hero eyebrow, section 03's flag marquee
+ * and the FAQ all state it. Section 03 keeps the flags. ASSURANCE.countries
+ * stays in the deck, since those two still read it.
  *
- * What is left is the last argument the page makes before it asks for money,
- * and it now has a door: the reader this convinces had nowhere to go but the
- * scrollbar. The claim names the plan it covers, in the same wording as the
- * pricing cards and the FAQ, because an unqualified version contradicts both.
+ * What is left is the last argument before the page asks for money, and it
+ * has a door now. The claim names the plan it covers, as it does everywhere.
  */
 /**
  * @param {object} props
@@ -176,12 +164,9 @@ export default function AssuranceSection({ showCloser = true }) {
                 {guarantee.closer}
               </p>
 
-              {/* Four lines, not one sentence. Run together in a paragraph they
-                  read as a slogan; separated they read as four promises, which
-                  is what they are. */}
-              {/* Two by two, not a wrapping row: with the door taking a column
-                  the four broke three and one, which reads as a list that ran
-                  out of room rather than as four matched promises. */}
+              {/* Four separate lines, two by two. Run together they read as a
+                  slogan; wrapped three-and-one they read as a list that ran
+                  out of room. */}
               {showCloser && (
                 <ul className="mt-6 grid gap-x-7 gap-y-3 sm:grid-cols-2">
                   {SITE.promises.map((promise, index) => {
@@ -206,16 +191,10 @@ export default function AssuranceSection({ showCloser = true }) {
               )}
             </div>
 
-            {/* The door.
-
-                A bare button on a rule read as an afterthought pinned to the
-                side of the argument. It is a panel now, and it answers the two
-                things a reader wants at the moment they are convinced: what it
-                costs to walk through, and what happens if they are wrong.
-
-                The price is read from the plan rather than written here, so it
-                cannot drift from /pricing — this section is 12,000px from the
-                cards that state it. */}
+            {/* The door. A bare button on a rule read as an afterthought; a
+                panel answers the two things a convinced reader wants — what it
+                costs, and what happens if they are wrong. The price is read
+                from the plan, so it cannot drift from /pricing. */}
             <div className="rounded-2xl border border-paper/12 bg-paper/[0.06] p-6 lg:w-[17.5rem]">
               <p className="micro-label text-muted-dark">{guarantee.ctaEyebrow}</p>
 

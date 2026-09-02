@@ -9,24 +9,11 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 const NARROW_QUERY = '(max-width: 639px)';
 
 /**
- * 04d — Written reviews, as a drifting wall.
+ * 04d — Written reviews as a drifting wall, three columns at different speeds.
  *
- * Three columns of reviews moving at different speeds, the same device the
- * proof wall in 04a uses. Worth saying plainly: 04a already drifts three
- * columns, and running the same device twice in one section is the exact thing
- * the row version was chosen to avoid. What keeps them apart is that 04a's
- * columns sit BEHIND an ink card and carry mixed evidence — video, receipts,
- * reviews — while this is a plain wall of one kind of thing with nothing over
- * it. If the two still read as one idea repeated, this is the one to change,
- * because 04a is making the harder argument.
- *
- * Eighteen reviews, dealt round-robin into the columns rather than sliced.
- * Sliced, one column gets the run of short recent ones and another gets the
- * long older ones, and the columns visibly differ in density.
- *
- * Every card is unique — no name appears twice anywhere in the section. That
- * was the open problem when there were six reviews, and it was fixed by
- * collecting more of them rather than by a layout that hides the repeat.
+ * The eighteen are dealt round-robin, not sliced: sliced, one column gets all
+ * the short recent ones and the columns visibly differ in density. No name
+ * appears twice — fixed by collecting more reviews, not by hiding the repeat.
  */
 
 /** Three columns, each a different speed and direction so no row lines up. */
@@ -79,19 +66,11 @@ function ReviewCard({ review }) {
 }
 
 /**
- * The mobile shape: one row you swipe, with arrows for anyone who would rather
- * press something.
+ * The mobile shape: one row you swipe, with arrows for anyone who would
+ * rather press something. A wall needs columns and there is only room for one.
  *
- * A wall needs columns, and below `sm` there is only room for one — a single
- * column of reviews drifting past is a much weaker thing than the wall it is
- * standing in for. Across, the same eighteen read as a stack you move through.
- *
- * Native `overflow-x` with scroll snapping, so the swipe is the browser's own
- * and costs nothing: momentum, rubber-banding and the scrollbar all come free.
- * Lenis is not a concern here — it disables itself entirely on coarse
- * pointers, and it only ever drives the vertical axis anyway, so there is
- * deliberately no `data-lenis-prevent`: that would trap the page's own scroll
- * under a thumb that is trying to leave the section.
+ * Native overflow-x with snapping, so momentum and rubber-banding come free.
+ * No data-lenis-prevent: that would trap the page's own scroll under a thumb.
  */
 function ReviewRail() {
   const railRef = useRef(null);
@@ -173,13 +152,9 @@ export default function TestimonialsSection() {
   const sectionRef = useRevealOnScroll();
   const { testimonials } = PROOF;
 
-  /* Which shape to build, decided in JS rather than by hiding one with CSS.
-     Both are eighteen cards, and the wall duplicates its columns to close the
-     loop — rendering both would put fifty-four review cards in a document
-     already carrying about 4,500 nodes, for the sake of showing eighteen.
-
-     Read synchronously on the first render so a phone never paints the wall
-     and then swaps it out. */
+  /* Decided in JS, not by hiding one with CSS: rendering both would put 54
+     review cards in the document to show 18. Read on the first render so a
+     phone never paints the wall and then swaps it. */
   const [isNarrow, setIsNarrow] = useState(
     () => typeof window !== 'undefined' && window.matchMedia(NARROW_QUERY).matches,
   );
@@ -197,14 +172,9 @@ export default function TestimonialsSection() {
       ref={sectionRef}
       id="testimonials"
       aria-labelledby="testimonials-headline"
-      /* Ink, for two reasons. The band before this is paper-sunk and the one
-         after is paper, so on paper it had no edges — the section-band padding
-         either side read as dead space rather than as separation, worst of all
-         against the pillars below. And written reviews are the quietest
-         evidence on the page; the lights down is what makes a wall of them
-         feel like something rather than a list.
-
-         Sequence is now sunk → ink → sunk → ink → paper across 04a to 06. */
+      /* Ink. On paper it had no edges — the bands either side are paper too,
+         so the padding read as dead space. Written reviews are the quietest
+         evidence here, and turning the lights down is what makes them land. */
       className="section-band relative overflow-hidden bg-ink text-paper"
     >
       <div className="site-shell">
@@ -233,22 +203,14 @@ export default function TestimonialsSection() {
         </div>
       )}
 
-      {/* The wall. A fixed height with a mask top and bottom: the columns run
-          past it in both directions, which is what makes it read as a wall
-          rather than as three lists that happen to be sliding.
-
-          `rail-hold` pauses rather than stops, so a column holds its place
-          under the pointer instead of snapping back to the top. */}
+      {/* Fixed height, masked top and bottom, so the columns run past it and
+          it reads as a wall rather than three sliding lists. rail-hold pauses
+          rather than stops, so a column holds its place under the pointer. */}
       {!isNarrow && (
       <div className="site-shell mt-12">
-        {/* Height is what sets how many reviews are on screen at once, and at
-            34rem the wall showed about two cards per column — enough to read
-            as a list, not enough to read as a wall. 48rem clears a third card
-            in every column, which is the point: the argument a written review
-            makes is cumulative, and one more row is one more of it.
-
-            A card here runs 200–320px depending on how long the review is, so
-            this is sized off the tallest rather than an average. */}
+        {/* Height sets how many reviews are on screen. At 34rem it showed two
+            cards a column, which reads as a list; 48rem clears a third, which
+            is the point — written reviews argue by accumulation. */}
         <div className="rail-hold edge-fade-y h-[38rem] overflow-hidden lg:h-[48rem]">
           <div className="grid h-full grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {COLUMNS.map((column, index) => (
@@ -286,17 +248,9 @@ export default function TestimonialsSection() {
       </div>
       )}
 
-      {/* A button, because this is the section's one real action: eighteen
-          reviews are a claim, and this is the reader checking it. As a line of
-          muted text under a wall of cards it read as a caption.
-
-          Bordered rather than filled. It leaves for somebody else's site, so
-          it must not carry more weight than "Start your eBay business" — the
-          same reasoning as the YouTube pill in 04b, and the two now match.
-
-          The star stays gold: every RatingStars on this page is gold, and
-          reaching for Trustpilot's own green here would put a fifth colour on
-          a page built from four signal tones. */}
+      {/* A button: this is the reader checking the claim. Bordered, not
+          filled — it leaves for someone else's site, so it must not outweigh
+          "Start your eBay business". The star stays gold, like every other. */}
       <div className="site-shell mt-12 flex justify-center">
         <a
           href={SITE.trustpilotUrl}

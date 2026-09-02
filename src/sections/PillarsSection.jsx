@@ -9,32 +9,16 @@ import { prefersReducedMotion } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
 /**
- * 06 — Three things, one system.
+ * 06 — Three things, one system. The page's table of contents, so it has to
+ * stay scannable in about four seconds.
  *
- * The page's table of contents. It has to stay scannable in about four
- * seconds, so nothing here is allowed to make the three harder to compare.
+ * The depth is the design. These were three flat rectangles; each card is now
+ * a small stage where the pointer tilts it and the contents sit at different
+ * depths. The oversized number is what tells them apart at a glance.
  *
- * THE DEPTH IS THE DESIGN. This was three flat rectangles in a row, and no
- * amount of colour on a rectangle stops it being a rectangle. Each card is now
- * a small stage: the pointer tilts it, and the things inside sit at different
- * depths so they slide against each other as it moves — the wash furthest
- * back, the number floating behind the words, the content nearest the reader.
- * That is real parallax rather than a drop shadow pretending to be one.
- *
- * The oversized number is doing the work the dashed 9px chip could not. Every
- * card needs something big enough to tell them apart at a glance, and the
- * numbers were already in the content.
- *
- * The wire from the previous pass stays. The tiles are still nodes on it, and
- * the tilt is per-card so the row's alignment never breaks.
- *
- * COST. The tilt is two custom properties written straight to the node inside
- * a rAF, never through React state — a `mousemove` that re-renders three cards
- * would put a component tree on the main thread sixty times a second, and this
- * page has already learned what that does. Everything animated is `transform`,
- * so it composites. Touch and reduced motion get no tilt at all: there is no
- * pointer to follow, and a card that lurches when a thumb lands on it is worse
- * than a flat one.
+ * The tilt writes two custom properties straight to the node inside a rAF,
+ * never through React state. Touch and reduced motion get no tilt: there is
+ * no pointer to follow, and a card that lurches under a thumb is worse.
  */
 
 /** Degrees at the far corner. Past about 8 it stops reading as depth and starts reading as a bug. */
@@ -173,16 +157,10 @@ export default function PillarsSection() {
       ref={sectionRef}
       id="the-system"
       aria-labelledby="pillars-headline"
-      /* Standard band, less lead-in at the top. This follows the ink
-         testimonials band, and a hard colour edge already does the separating
-         that padding does between two sections of the same ground — 96px of
-         ink and then 132px of paper measured as 228px of nothing between the
-         Trustpilot button and this heading.
-
-         Safe to make asymmetric here specifically because this section paints
-         no background of its own. On a coloured band uneven padding would sit
-         the band visibly off-centre, which is why `section-band` is symmetric
-         in the first place. */
+      /* Less lead-in at the top: this follows an ink band, and the colour
+         edge already separates them — 96px of ink then 132px of paper read as
+         228px of nothing. Safe here only because this section paints no
+         background of its own. */
       className="section-band pt-12 sm:pt-14 lg:pt-16"
     >
       <div className="site-shell">
@@ -199,14 +177,9 @@ export default function PillarsSection() {
         />
 
         <div className="relative mt-14">
-          {/* The wire. Threaded through the centre of the icon tiles so they
-              read as things ON it rather than near it: the card's `sm:p-8` is
-              32px and the tile is `size-11`, so the centre is 54px — 3.375rem.
-              Measured; 3.75rem put it 6px low and the tiles floated off it.
-
-              Only from `md`, where the three sit across. Stacked on a phone a
-              vertical wire down a column would be a decoration pretending to
-              be a diagram. */}
+          {/* The wire, threaded through the centre of the tiles so they read
+              as things on it. 3.375rem, measured — 3.75rem left them floating.
+              Only from md: stacked, a vertical wire is a fake diagram. */}
           <div
             aria-hidden="true"
             className="system-wire left-[16.66%] right-[16.66%] top-[3.375rem] hidden h-px rounded-full bg-hairline md:block"

@@ -4,22 +4,17 @@ import Icon from '../ui/Icon';
 import { STICKY_CTA } from '../../data/siteContent';
 
 /**
- * Persistent conversion bar.
- *
- * Per the funnel review, the offer has to stay reachable once a visitor is
- * deep in the page: it appears after 25% scroll and hides again over section
- * 14, where a second copy of the same button would only compete with itself.
+ * The offer, following the reader down the page. Appears after 25% scroll and
+ * hides over section 14, where it would compete with the real thing.
  */
 export default function StickyConversionBar() {
   const [isVisible, setIsVisible] = useState(false);
   const barRef = useRef(null);
 
   /*
-   * Publish the bar's real height, so whatever sits above it can clear it.
-   * The token was a hardcoded 4.25rem and the bar measures 77px on a desktop,
-   * more once the copy wraps on a narrow phone — the back to top button was
-   * being placed 7px above a bar it is meant to sit clear of, and less than
-   * that at any width where the bar grows.
+   * Publish the real height so what sits above can clear it. The token was a
+   * hardcoded 4.25rem and the bar is 77px, more when the copy wraps — the back
+   * to top button was being placed inside a bar it should clear.
    */
   useEffect(() => {
     const node = barRef.current;
@@ -46,20 +41,9 @@ export default function StickyConversionBar() {
 
   useEffect(() => {
     /*
-     * Looked up on every scroll, not once on mount.
-     *
-     * This used to resolve the element in the effect body and keep it. Every
-     * section below the hero is mounted a frame later by DeferUntilPainted, so
-     * at the moment this effect runs the element does not exist yet — the
-     * lookup returned null, kept null, and the bar simply never hid. It sat
-     * over the closing section and, at the very bottom, over the footer.
-     *
-     * getElementById on an id is cheap and this is already running on scroll.
-     *
-     * The anchor is section 14, which is the page's close since the final CTA
-     * section was removed: it carries the seal, the price and the same signup
-     * button, so a floating copy of that button over the top of it is the bar
-     * competing with the thing it exists to stand in for.
+     * Looked up on every scroll, not once on mount. DeferUntilPainted mounts
+     * this element a frame late, so resolving it here once returned null and
+     * kept null — the bar never hid at all. getElementById is cheap.
      */
     const onScroll = () => {
       /* Section 14 where it exists, the footer where it does not.

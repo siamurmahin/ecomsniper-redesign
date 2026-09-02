@@ -16,23 +16,15 @@ const CHAR_MS = 18;
 const TAIL_MS = 600;
 
 /**
- * 08 — Support and community.
+ * 08 — Support and community, the real differentiator against cheaper tools,
+ * so it gets a full band rather than a row of icons.
  *
- * The review identified this as the real differentiator against cheaper
- * listing tools, so it gets a full band rather than a row of icons.
+ * The section claims a question at 2am gets answered, so it draws that
+ * happening — DOM and CSS, like section 07. The thread composes itself,
+ * because the claim is about a reply arriving, not about one already there.
  *
- * The section claims a question at 2am gets answered. This draws that
- * happening, the way section 07 draws its four steps: DOM and CSS, no player
- * and no new dependency. Chosen over two other shapes built alongside it: one
- * standing on the fifteen of eighteen reviews that raise support unprompted,
- * and one laid out around real captures nobody has supplied yet.
- *
- * The thread composes itself — dots, then the reply typing in a character at a
- * time — because the claim is about a reply *arriving*, and a thread that is
- * simply present when you reach it shows the aftermath rather than the thing.
- *
- * Labelled as an illustration in words, under the panel, on the hero panel's
- * rule. An invented interface that does not say it is invented is a claim.
+ * Labelled in words as an illustration: an invented interface that does not
+ * say so is a claim.
  */
 export default function CommunitySection() {
   const sectionRef = useRevealOnScroll();
@@ -41,15 +33,10 @@ export default function CommunitySection() {
   const callTone = toneOf('green');
 
   /**
-   * The typing runs on one rAF loop writing `textContent` straight to the
-   * nodes. It never touches React state: a character every 18ms through
-   * `setState` would re-render this subtree ~55 times a second, and section 06
-   * already established what putting a component tree on the main thread at
-   * that rate costs.
-   *
-   * Everything is rendered in full first and only cleared once the sequence
-   * actually starts, so a visitor whose observer never fires — or whose JS
-   * never runs at all — reads the finished thread rather than empty bubbles.
+   * One rAF loop writing textContent straight to the nodes, never React state:
+   * a character every 18ms through setState re-renders this subtree ~55 times
+   * a second. Rendered in full first and cleared when the sequence starts, so
+   * anyone without JS reads the finished thread instead of empty bubbles.
    */
   useEffect(() => {
     const thread = threadRef.current;
@@ -283,15 +270,9 @@ export default function CommunitySection() {
 
               {/* The call sits in the same card rather than beside it: it is
                   the same promise on a longer clock, not a second product. */}
-              {/* One grid, placed differently at each width rather than two
-                  layouts. Wrapping was the problem: the icon and the face pile
-                  are both fixed, so on a phone the sentence was left competing
-                  for ~137px between them and ran to six lines.
-
-                  Below `sm` the pile sits up on the title's line and the
-                  sentence takes the width of both columns under it. From `sm`
-                  the icon and the pile span both rows and the sentence sits in
-                  its own column, which is the desktop row unchanged. */}
+              {/* One grid placed differently at each width, not two layouts.
+                  The icon and the face pile are fixed, so wrapping left the
+                  sentence ~137px and six lines on a phone. */}
               {/* Two fixed-width children on one line starve the flexible one.
                   At 361px the 40px tile and the 108px pile left the title
                   ~102px and it broke across two lines. Below `sm` the pile

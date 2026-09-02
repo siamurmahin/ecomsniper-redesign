@@ -1,8 +1,7 @@
 /**
  * Shared handle on the page's Lenis instance. Everything that moves the page
- * goes through here: native smooth scrolling and Lenis ease toward different
- * targets every frame and the page visibly drifts. Falls back to an instant
- * jump when Lenis is absent (touch, reduced motion, no JS).
+ * goes through here, or native scrolling and Lenis fight over the position.
+ * Falls back to an instant jump when Lenis is absent — touch, reduced motion.
  */
 
 let lenisInstance = null;
@@ -21,13 +20,9 @@ export const unregisterLenis = () => {
 export const getLenis = () => lenisInstance;
 
 /**
- * Eased at both ends, for travel the reader did not initiate with a wheel.
- *
- * Lenis' own curve is an exponential ease-out, which is right for a wheel — it
- * answers the hand instantly. It is wrong for a jump between sections: it puts
- * about a third of the distance into the first 50ms, so a 4,700px trip covers
- * 1,400px in three frames and reads as a teleport followed by a glide. Starting
- * from rest instead makes the same trip legible as movement.
+ * Eased at both ends, for travel the reader did not start with a wheel.
+ * Lenis' own curve puts a third of the distance into the first 50ms, which
+ * reads as a teleport on a long trip.
  */
 const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 
@@ -37,7 +32,7 @@ const MIN_DURATION = 0.7;
 const MAX_DURATION = 1.5;
 
 /**
- * Scrolls to an element or an absolute Y position.
+ * Scroll to an element or a Y position.
  *
  * @param {Element|number} target Element to reveal, or a Y offset.
  * @param {object} [options]
@@ -48,10 +43,8 @@ export function scrollToTarget(target, { immediate = false } = {}) {
 
   if (lenis) {
     /*
-     * Time scales with the trip. One fixed duration has to serve both a hop to
-     * the next section and a run the length of the page: set for the hop it
-     * makes the long one frantic, set for the long one it makes the hop feel
-     * stuck. Bounded at both ends so neither extreme gets silly.
+     * Time scales with the trip: one fixed duration cannot serve both a hop
+     * to the next section and a run the length of the page.
      */
     const from = window.scrollY;
     const to =
