@@ -3,6 +3,8 @@ import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import { AUDIENCE } from '../data/siteContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+import { useLocation } from 'react-router-dom';
+import { languageFromPath, pathForLanguage } from '../lib/language';
 import { gsap, prefersReducedMotion, MOTION, SplitText } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
@@ -31,6 +33,7 @@ const DWELL = 5;
 
 export default function AudienceSection() {
   const sectionRef = useRevealOnScroll();
+  const language = languageFromPath(useLocation().pathname);
   const rowRef = useRef(null);
   const panelRefs = useRef([]);
   const openRefs = useRef([]);
@@ -497,8 +500,9 @@ export default function AudienceSection() {
         </p>
 
         <div className="mt-4 flex justify-center">
+          {/* Keeps the language, like every other internal link. */}
           <a
-            href={AUDIENCE.closer.cta.href}
+            href={pathForLanguage(AUDIENCE.closer.cta.href, language)}
             aria-label={AUDIENCE.closer.cta.label}
             data-cta-intent="audience-to-pricing-mouse"
             // Fills on hover so the whole cue is the target; contents invert with it.

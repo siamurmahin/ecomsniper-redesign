@@ -22,6 +22,12 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/de/free-playbook"
+  to = "/de/free-play-book"
+  status = 301
+  force = true
+
 # SPA fallback. `public/_redirects` says the same thing and ships in the build,
 # but that file is easy to lose in a public/ clear-out and the failure it
 # causes is a 404 on every route except "/" — worth stating twice.

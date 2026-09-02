@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { SITE } from '../../data/siteContent';
+import { LANGUAGES, languageFromPath, pathForLanguage } from '../../lib/language';
 
 /** Creates or updates a single <meta>/<link> tag, keyed by attribute. */
 function upsertTag(tagName, keyAttr, keyValue, valueAttr, value) {
@@ -26,8 +28,14 @@ function upsertTag(tagName, keyAttr, keyValue, valueAttr, value) {
  * @param {boolean} [props.noindex] Keep the route out of search results.
  */
 export default function Seo({ title, description, path = '/', schema, noindex = false }) {
+  const { pathname } = useLocation();
+  const language = languageFromPath(pathname);
+
   useEffect(() => {
-    const canonical = `${SITE.domain}${path}`;
+    /* The canonical follows the language, so /de/pricing does not declare
+       itself a duplicate of /pricing. `path` is the plain route; the prefix
+       comes from where we actually are. */
+    const canonical = `${SITE.domain}${pathForLanguage(path, language)}`;
 
     document.title = title;
 
@@ -48,7 +56,26 @@ export default function Seo({ title, description, path = '/', schema, noindex = 
       document.head.appendChild(link);
     }
     link.setAttribute('href', canonical);
-  }, [title, description, path, noindex]);
+
+    /* One alternate per language, plus x-default. This is how a search engine
+       is told the pages are the same content in different languages rather
+       than two pages competing for the same terms. */
+    for (const item of LANGUAGES) {
+      upsertTag(
+        'link',
+        'hreflang',
+        item.code,
+        'href',
+        `${SITE.domain}${pathForLanguage(path, item.code)}`
+      );
+      document.head.querySelector(`link[hreflang="${item.code}"]`)?.setAttribute('rel', 'alternate');
+    }
+
+    upsertTag('link', 'hreflang', 'x-default', 'href', `${SITE.domain}${pathForLanguage(path, 'en')}`);
+    document.head.querySelector('link[hreflang="x-default"]')?.setAttribute('rel', 'alternate');
+
+    upsertTag('meta', 'property', 'og:locale', 'content', language === 'de' ? 'de_DE' : 'en_US');
+  }, [title, description, path, noindex, language]);
 
   useEffect(() => {
     if (!schema) return undefined;

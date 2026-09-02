@@ -6,7 +6,8 @@
 # shared, so it redirects here rather than 404ing.
 #
 # Must come before the SPA fallback: the first matching rule wins.
-/free-playbook  /free-play-book  301!
+/free-playbook     /free-play-book     301!
+/de/free-playbook  /de/free-play-book  301!
 
 # SPA fallback for Netlify-style hosts: every route resolves to index.html.
 /*  /index.html  200

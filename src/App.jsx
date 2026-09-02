@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
 import SiteFooter from './components/layout/SiteFooter';
@@ -16,6 +16,12 @@ import DesignLabPage from './pages/DesignLabPage';
 import { ScrollTrigger } from './lib/motion';
 import { dismissPreloader } from './lib/preloader';
 import { getLenis, scrollToTarget } from './lib/smoothScroll';
+import {
+  DEFAULT_LANGUAGE,
+  languageFromPath,
+  pathForLanguage,
+  rememberedLanguage,
+} from './lib/language';
 
 /**
  * Restores scroll position on navigation and honours in-page hash targets.
@@ -25,6 +31,38 @@ import { getLenis, scrollToTarget } from './lib/smoothScroll';
  * ScrollTrigger is refreshed after the new route paints, otherwise triggers
  * registered by the outgoing page leave stale measurements behind.
  */
+/**
+ * Sends a returning visitor back to the language they chose.
+ *
+ * Only on an unprefixed URL, and only once per page load: someone who is
+ * already on /de needs nothing, and someone who has just switched to English
+ * has "en" stored, so nothing happens to them either. Without this, a German
+ * reader who bookmarks the homepage lands in English every time.
+ *
+ * replace, not push, so the back button still leaves the site rather than
+ * bouncing between the two languages.
+ */
+function LanguageMemory() {
+  const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+  const handled = useRef(false);
+
+  useEffect(() => {
+    if (handled.current) return;
+    handled.current = true;
+
+    // An explicit language in the URL always wins over a remembered one.
+    if (languageFromPath(pathname) !== DEFAULT_LANGUAGE) return;
+
+    const saved = rememberedLanguage();
+    if (!saved || saved === DEFAULT_LANGUAGE) return;
+
+    navigate(`${pathForLanguage(pathname, saved)}${hash}`, { replace: true });
+  }, [pathname, hash, navigate]);
+
+  return null;
+}
+
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
@@ -143,6 +181,7 @@ export default function App() {
   return (
     <SmoothScrollProvider>
       <PreloaderRelease />
+      <LanguageMemory />
       <RouteScrollManager />
 
       {/* Skip link: first thing in the tab order on every page. */}
@@ -157,14 +196,21 @@ export default function App() {
 
       <main id="main-content">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/free-play-book" element={<PlaybookPage />} />
-          {/* The live site's URL for the same page. A 301 in netlify.toml and
-              public/_redirects handles it at the edge; this covers local dev and
-              any host that ignores those files. */}
-          <Route path="/free-playbook" element={<Navigate to="/free-play-book" replace />} />
+          {/* Every page twice: once plain, once under /de. The German pages
+              render the same English copy for now — the switcher and the URLs
+              are real, so only the words change when translations land. */}
+          {['', '/de'].map((prefix) => (
+            <Route key={prefix || 'en'}>
+              <Route path={`${prefix}/`} element={<HomePage />} />
+              <Route path={`${prefix}/pricing`} element={<PricingPage />} />
+              <Route path={`${prefix}/faq`} element={<FaqPage />} />
+              <Route path={`${prefix}/free-play-book`} element={<PlaybookPage />} />
+              <Route
+                path={`${prefix}/free-playbook`}
+                element={<Navigate to={`${prefix}/free-play-book`} replace />}
+              />
+            </Route>
+          ))}
           {/* Internal comparison route; remove with the page once a direction is picked. */}
           <Route path="/design-lab" element={<DesignLabPage />} />
           <Route path="*" element={<NotFoundPage />} />

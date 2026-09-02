@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { languageFromPath, pathForLanguage } from '../../lib/language';
 
 const VARIANT_CLASS = {
   primary: 'btn-primary',
@@ -24,6 +25,7 @@ export default function CtaButton({
   className = '',
   ...rest
 }) {
+  const { pathname } = useLocation();
   const classes = `${VARIANT_CLASS[variant] ?? VARIANT_CLASS.primary} ${className}`.trim();
   const isExternal = /^https?:\/\//.test(href);
   const isHash = href?.startsWith('#') || href?.startsWith('/#');
@@ -31,7 +33,9 @@ export default function CtaButton({
   if (isExternal || isHash) {
     return (
       <a
-        href={href}
+        /* A hash still belongs to a language: "/#proof" from a German page has
+           to be "/de#proof", or the reader is quietly moved back to English. */
+        href={isExternal ? href : pathForLanguage(href, languageFromPath(pathname))}
         className={classes}
         data-cta-intent={intent}
         {...(isExternal ? { rel: 'noopener noreferrer' } : {})}
@@ -42,8 +46,15 @@ export default function CtaButton({
     );
   }
 
+  /* Internal links stay in the language the reader is already in — otherwise
+     "Pricing" from /de quietly drops them back into English. */
   return (
-    <Link to={href} className={classes} data-cta-intent={intent} {...rest}>
+    <Link
+      to={pathForLanguage(href, languageFromPath(pathname))}
+      className={classes}
+      data-cta-intent={intent}
+      {...rest}
+    >
       {children}
     </Link>
   );

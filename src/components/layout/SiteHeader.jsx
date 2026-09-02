@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
+import LanguageSwitcher from './LanguageSwitcher';
+import { languageFromPath, pathForLanguage } from '../../lib/language';
 import CtaButton from '../ui/CtaButton';
 import { NAV_LINKS, SITE } from '../../data/siteContent';
 
@@ -13,6 +15,9 @@ export default function SiteHeader() {
   const [isCondensed, setIsCondensed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  /* Every internal link keeps the language the reader is in. */
+  const language = languageFromPath(location.pathname);
+  const homeHref = pathForLanguage('/', language);
 
   // Condense the bar after roughly one viewport-third of scrolling.
   useEffect(() => {
@@ -60,7 +65,7 @@ export default function SiteHeader() {
               isCondensed ? 'opacity-70' : 'opacity-0'
             }`}
           />
-          <Link to="/" aria-label="EcomSniper home" className="min-w-0 shrink">
+          <Link to={homeHref} aria-label="EcomSniper home" className="min-w-0 shrink">
             <BrandLogo />
           </Link>
 
@@ -74,7 +79,7 @@ export default function SiteHeader() {
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
+                href={pathForLanguage(link.href, language)}
                 className="rounded-full px-2.5 py-2 text-sm font-medium text-muted transition-colors duration-200 hover:bg-ink/5 hover:text-ink xl:px-3.5"
               >
                 {link.label}
@@ -83,6 +88,13 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
+            {/* Between the nav and the account links, where the live site
+                puts it. Hidden below lg with the nav — the mobile panel
+                carries its own copy. */}
+            <div className="hidden lg:block">
+              <LanguageSwitcher />
+            </div>
+
             <a
               href={SITE.loginUrl}
               // whitespace-nowrap and shrink-0: from about 1090px down, the
@@ -139,7 +151,7 @@ export default function SiteHeader() {
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
+                href={pathForLanguage(link.href, language)}
                 className="rounded-2xl px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5"
               >
                 {link.label}
@@ -151,6 +163,11 @@ export default function SiteHeader() {
             >
               Log in
             </a>
+
+            {/* Ruled off: a language is a setting, not another destination. */}
+            <div className="mt-1 border-t border-hairline pt-1">
+              <LanguageSwitcher stacked />
+            </div>
           </nav>
         </div>
       </div>

@@ -4,6 +4,7 @@ import BrandLogo from '../ui/BrandLogo';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
 import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
+import { languageFromPath, pathForLanguage } from '../../lib/language';
 
 /**
  * The oversized wordmark that signs the page off. Outlined until a pointer
@@ -95,19 +96,20 @@ const SOCIAL_COLOUR = {
 const REVIEWS = PROOF_BAR.items.find((item) => item.href === SITE.trustpilotUrl);
 
 /** Renders an internal path as a router link and anything else as an anchor. */
-function FooterLink({ href, label }) {
+function FooterLink({ href, label, language }) {
   const isRouted = href.startsWith('/') && !href.startsWith('/#');
 
   const className =
     'text-sm text-muted-dark transition-colors duration-200 hover:text-paper';
 
   return isRouted ? (
-    <Link to={href} className={className}>
+    <Link to={pathForLanguage(href, language)} className={className}>
       {label}
     </Link>
   ) : (
     <a
-      href={href}
+      /* Hash links carry the language too. */
+      href={/^https?:/.test(href) ? href : pathForLanguage(href, language)}
       className={className}
       {...(/^https?:/.test(href) ? { rel: 'noopener noreferrer' } : {})}
     >
@@ -126,6 +128,7 @@ function FooterLink({ href, label }) {
 export default function SiteFooter() {
   const { contact, social, secondDoor } = FOOTER;
   const { pathname } = useLocation();
+  const language = languageFromPath(pathname);
 
   /* The free door is hidden on the page it opens. Offering somebody the
      playbook while they are looking at the form for it reads as the site not
@@ -172,7 +175,7 @@ export default function SiteFooter() {
           showSecondDoor ? 'mt-14' : ''
         }`}>
           <div>
-            <Link to="/" aria-label="EcomSniper home" className="inline-block text-paper">
+            <Link to={pathForLanguage('/', languageFromPath(pathname))} aria-label="EcomSniper home" className="inline-block text-paper">
               <BrandLogo tone="paper" />
             </Link>
 
@@ -220,7 +223,7 @@ export default function SiteFooter() {
                   <ul className="mt-4 flex flex-col gap-2.5">
                     {column.links.map((link) => (
                       <li key={link.label}>
-                        <FooterLink {...link} />
+                        <FooterLink {...link} language={language} />
                       </li>
                     ))}
                   </ul>

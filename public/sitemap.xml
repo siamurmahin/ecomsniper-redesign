@@ -1,17 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!--
+  Every page in both languages. The xhtml:link alternates tell a search engine
+  these are the same page in two languages rather than two pages competing for
+  the same terms; each URL has to list every alternate including itself.
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
   <url>
     <loc>https://ecomsniper.io/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://ecomsniper.io/de</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
     <loc>https://ecomsniper.io/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/pricing" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/pricing" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://ecomsniper.io/de/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/pricing" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/pricing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://ecomsniper.io/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/faq" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/faq" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/faq" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/faq" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://ecomsniper.io/free-play-book</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/free-play-book" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/free-play-book" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/free-play-book" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/free-play-book</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/free-play-book" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/free-play-book" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/free-play-book" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
