@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import { TRAINING, FOUNDERS } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
@@ -24,6 +24,7 @@ const STEP_TONES = ['blue', 'red', 'gold', 'green'];
  * instructors are read from FOUNDERS.people so the names cannot drift.
  */
 export default function TrainingSection() {
+  const { TRAINING, FOUNDERS } = useContent();
   const sectionRef = useRevealOnScroll();
   const stairsRef = useRef(null);
   const { course, closer } = TRAINING;

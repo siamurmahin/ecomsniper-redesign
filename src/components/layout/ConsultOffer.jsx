@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Icon from '../ui/Icon';
-import { CONSULT } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import { useModalLayer } from '../../hooks/useModalLayer';
 import { hasSeen, mark, setDialogOpen, OUTCOME } from '../../lib/interruptions';
 import { isPreviewing } from '../../lib/dialogPreview';
@@ -23,6 +23,7 @@ const FIELD_CLASS =
  * dialog, so nobody is stopped twice in a visit.
  */
 export default function ConsultOffer() {
+  const { CONSULT } = useContent();
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | submitting | done | error
   const [name, setName] = useState('');

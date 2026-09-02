@@ -2,7 +2,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import playbookCover from '../assets/brand/playbook-cover.webp';
-import { FOUNDERS, PLAYBOOK } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
@@ -22,6 +22,7 @@ const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
  * confirmed seven, so nothing here repeats the number.
  */
 export default function FoundersSection() {
+  const { FOUNDERS, PLAYBOOK } = useContent();
   const sectionRef = useRevealOnScroll();
   const tone = toneOf('blue');
 

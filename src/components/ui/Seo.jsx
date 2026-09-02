@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SITE } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import { LANGUAGES, languageFromPath, pathForLanguage } from '../../lib/language';
 
 /** Creates or updates a single <meta>/<link> tag, keyed by attribute. */
@@ -28,6 +28,7 @@ function upsertTag(tagName, keyAttr, keyValue, valueAttr, value) {
  * @param {boolean} [props.noindex] Keep the route out of search results.
  */
 export default function Seo({ title, description, path = '/', schema, noindex = false }) {
+  const { SITE } = useContent();
   const { pathname } = useLocation();
   const language = languageFromPath(pathname);
 

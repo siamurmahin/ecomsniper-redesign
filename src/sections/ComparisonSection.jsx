@@ -1,7 +1,7 @@
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import { COMPARISON, SITE } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
@@ -61,6 +61,7 @@ function State({ value, strong }) {
 
 /** One column, read top to bottom on its own. */
 function Column({ subtitle, title, side, strong }) {
+  const { COMPARISON } = useContent();
   return (
     <div
       className={`relative flex flex-col overflow-hidden rounded-3xl border p-6 sm:p-8 ${
@@ -121,7 +122,11 @@ function Column({ subtitle, title, side, strong }) {
  * A counted scoreboard sat above these and was cut: it answered the section
  * before the columns did, and the two lists are the section.
  */
-export default function ComparisonSection({ cta = COMPARISON.cta }) {
+export default function ComparisonSection({ cta }) {
+  const { COMPARISON, SITE } = useContent();
+  /* Defaulted here, not in the signature: the deck is only known once
+     the hook has run, and a parameter default runs before it. */
+  const resolvedCta = cta ?? COMPARISON.cta;
   const sectionRef = useRevealOnScroll();
   const gold = toneOf('gold');
 
@@ -187,8 +192,8 @@ export default function ComparisonSection({ cta = COMPARISON.cta }) {
                 Both sit beside the button rather than under the section, so
                 the objection and its answer are read together. */}
             <div className="lg:border-l lg:border-paper/12 lg:pl-12">
-              <CtaButton href={cta.href} variant="onInk" intent="comparison-pricing">
-                {cta.label}
+              <CtaButton href={resolvedCta.href} variant="onInk" intent="comparison-pricing">
+                {resolvedCta.label}
               </CtaButton>
 
               <ul className="mt-5 flex flex-col gap-2.5">

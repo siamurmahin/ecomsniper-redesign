@@ -2,7 +2,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import FaqAccordion from '../components/ui/FaqAccordion';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import { FAQ, SITE } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
@@ -25,6 +25,7 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
  *   headline as its own h1 a moment earlier.
  */
 export default function FaqSection({ showHeading = true }) {
+  const { FAQ, SITE } = useContent();
   const sectionRef = useRevealOnScroll();
 
   return (

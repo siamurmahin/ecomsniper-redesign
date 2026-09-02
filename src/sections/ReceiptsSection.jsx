@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import SectionHeading from '../components/ui/SectionHeading';
-import { PROOF } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useModalLayer } from '../hooks/useModalLayer';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
@@ -23,6 +23,7 @@ import { receiptUrl } from '../lib/proofMedia';
 const TONES = ['blue', 'gold', 'green'];
 
 export default function ReceiptsSection() {
+  const { PROOF } = useContent();
   const sectionRef = useRevealOnScroll();
   const { receiptsSection } = PROOF;
 

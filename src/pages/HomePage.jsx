@@ -15,7 +15,7 @@ import FoundersSection from '../sections/FoundersSection';
 import ComparisonSection from '../sections/ComparisonSection';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
-import { FAQ } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 
 /**
  * Homepage funnel, in the order a cold visitor needs it.
@@ -41,6 +41,7 @@ import { FAQ } from '../data/siteContent';
  * course that teaches them. Both now open 09, as the live site does.
  */
 export default function HomePage() {
+  const { FAQ } = useContent();
   // FAQPage + Product schema, built from the same copy the page renders.
   // No `offers` here: the plans moved to /pricing, and structured data must
   // not state prices the page does not show. /pricing carries them.

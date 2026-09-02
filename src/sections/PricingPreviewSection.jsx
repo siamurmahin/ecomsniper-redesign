@@ -1,7 +1,7 @@
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
-import { PRICING } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
 
@@ -30,6 +30,7 @@ const PLAN_TONES = ['blue', 'gold', 'green'];
  *   own h1 for the plans, so /pricing does not state the same headline twice.
  */
 export default function PricingPreviewSection({ showHeading = true }) {
+  const { PRICING } = useContent();
   const sectionRef = useRevealOnScroll();
 
   return (

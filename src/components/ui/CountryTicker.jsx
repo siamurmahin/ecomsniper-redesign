@@ -1,4 +1,4 @@
-import { ASSURANCE } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import { prefersReducedMotion } from '../../lib/motion';
 
 /* Flag artwork, resolved from each country's ISO code. Real artwork, not flag
@@ -17,6 +17,7 @@ const flagUrl = (code) => FLAGS[`../../assets/flags/flag-${code.toLowerCase()}.p
  * @param {boolean} [props.onInk] Sitting on a dark band rather than paper.
  */
 export default function CountryTicker({ onInk = false, className = '' }) {
+  const { ASSURANCE } = useContent();
   const countries = ASSURANCE.countries.list;
   // Read once at mount: a ticker is motion like any other, and a reader who has
   // asked for less of it gets the plain wrapped row instead.

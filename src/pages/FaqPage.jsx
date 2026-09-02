@@ -1,7 +1,7 @@
 import Seo from '../components/ui/Seo';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
-import { FAQ } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 
 /**
  * /faq — the same thirteen questions the homepage answers, never a second set
@@ -18,6 +18,7 @@ import { FAQ } from '../data/siteContent';
  * with the door beside it.
  */
 export default function FaqPage() {
+  const { FAQ } = useContent();
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

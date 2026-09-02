@@ -1,4 +1,4 @@
-import { ASSURANCE, PRICING, SITE } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import LogoLoop from '../components/reactbits/LogoLoop';
 import CtaButton from '../components/ui/CtaButton';
@@ -10,9 +10,6 @@ const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
 
 /** The ink surface, as a value: LogoLoop paints its fade mask, not a class. */
 const INK = '#1e1f23';
-
-/** The plan a reader actually starts on, so its price is stated once. */
-const entryPlan = PRICING.plans.find((plan) => plan.featured) ?? PRICING.plans[0];
 
 /**
  * The stamp. It was two thin rings around two words, which is a circle with
@@ -26,6 +23,7 @@ const RING_RADIUS = 76;
 const RING_LENGTH = Math.round(2 * Math.PI * RING_RADIUS);
 
 function Seal({ className }) {
+  const { ASSURANCE } = useContent();
   const { seal, marquee } = ASSURANCE.guarantee;
 
   return (
@@ -120,6 +118,9 @@ function Seal({ className }) {
  *   already carries the four promises and carries them above the plans.
  */
 export default function AssuranceSection({ showCloser = true }) {
+  const { ASSURANCE, PRICING, SITE } = useContent();
+  /* The plan a reader actually starts on, so its price is stated once. */
+  const entryPlan = PRICING.plans.find((plan) => plan.featured) ?? PRICING.plans[0];
   const sectionRef = useRevealOnScroll();
   const { guarantee } = ASSURANCE;
 

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
-import { PILLARS } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useParallax } from '../hooks/useParallax';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { prefersReducedMotion } from '../lib/motion';
@@ -150,6 +150,7 @@ function PillarCard({ item, index }) {
 }
 
 export default function PillarsSection() {
+  const { PILLARS } = useContent();
   const sectionRef = useRevealOnScroll();
 
   return (

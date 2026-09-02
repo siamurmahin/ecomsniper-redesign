@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ASSURANCE, PROOF_BAR } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import CountUp from '../components/reactbits/CountUp';
 import Icon from '../components/ui/Icon';
 import RatingStars from '../components/ui/RatingStars';
@@ -49,6 +49,7 @@ function ProofFigure({ item }) {
 }
 
 export default function ProofBarSection() {
+  const { ASSURANCE, PROOF_BAR } = useContent();
   const sectionRef = useRevealOnScroll({ start: 'top 92%' });
   // Read once at mount: a number ticking upward is motion like any other.
   const staticNumbers = prefersReducedMotion();

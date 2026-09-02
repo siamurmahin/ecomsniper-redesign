@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import RatingStars from '../components/ui/RatingStars';
-import { PROOF, SITE } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 /** Below this the wall becomes a swipe rail. Matches Tailwind's `sm`. */
@@ -23,11 +23,11 @@ const COLUMN_SETTINGS = [
   { direction: 'animate-rail-up', duration: '70s' },
 ];
 
-const COLUMNS = (() => {
+function dealColumns(PROOF) {
   const columns = [[], [], []];
   PROOF.reviews.forEach((review, index) => columns[index % 3].push(review));
   return columns;
-})();
+}
 
 function ReviewCard({ review }) {
   return (
@@ -149,6 +149,8 @@ function ReviewRail() {
 }
 
 export default function TestimonialsSection() {
+  const { PROOF, SITE } = useContent();
+  const COLUMNS = useMemo(() => dealColumns(PROOF), [PROOF]);
   const sectionRef = useRevealOnScroll();
   const { testimonials } = PROOF;
 

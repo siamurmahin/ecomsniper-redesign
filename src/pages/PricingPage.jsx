@@ -4,7 +4,7 @@ import PricingPreviewSection from '../sections/PricingPreviewSection';
 import ComparisonSection from '../sections/ComparisonSection';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
-import { PRICING, SITE } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 
 /** The four things a member gets, one tone each, in the order they reach them. */
@@ -16,6 +16,7 @@ const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
  * refund terms can never drift between the two pages.
  */
 export default function PricingPage() {
+  const { PRICING, SITE } = useContent();
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -116,7 +117,7 @@ export default function PricingPage() {
       <PricingPreviewSection showHeading={false} />
       {/* On this page the section's own door would point at the page it is
           already on, so it sends the reader to signup instead. */}
-      <ComparisonSection cta={{ label: 'Start for $97', href: SITE.signupUrl }} />
+      <ComparisonSection cta={SITE.startCta} />
       <FaqSection />
       {/* Its closer is the same four lines the header already carries. */}
       <AssuranceSection showCloser={false} />

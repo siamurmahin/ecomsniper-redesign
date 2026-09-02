@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import ReticleMark from '../components/ui/ReticleMark';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
-import { COMMUNITY } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { prefersReducedMotion } from '../lib/motion';
@@ -27,6 +27,7 @@ const TAIL_MS = 600;
  * say so is a claim.
  */
 export default function CommunitySection() {
+  const { COMMUNITY } = useContent();
   const sectionRef = useRevealOnScroll();
   const threadRef = useRef(null);
   const { drawn } = COMMUNITY;

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import SectionHeading from '../components/ui/SectionHeading';
-import { FEATURES } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
 
@@ -230,6 +230,7 @@ function StepVisual({ item, index }) {
 }
 
 export default function FeatureTourSection() {
+  const { FEATURES } = useContent();
   const sectionRef = useRevealOnScroll();
   const stepRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);

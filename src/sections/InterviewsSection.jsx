@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import FigureRail from '../components/ui/FigureRail';
 import Icon from '../components/ui/Icon';
 import VideoLightbox from '../components/ui/VideoLightbox';
-import { PROOF } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { gsap, prefersReducedMotion } from '../lib/motion';
 import { thumbUrl } from '../lib/proofMedia';
@@ -22,6 +22,7 @@ const DWELL = 5;
  * lightbox only, so nothing loads from YouTube until something is opened.
  */
 export default function InterviewsSection() {
+  const { PROOF } = useContent();
   const sectionRef = useRevealOnScroll();
   const { interviews } = PROOF;
 

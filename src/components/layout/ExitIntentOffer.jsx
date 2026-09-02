@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
-import { CONSULT, EXIT_INTENT, PLAYBOOK } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import playbookCover from '../../assets/brand/playbook-cover.webp';
 import { useModalLayer } from '../../hooks/useModalLayer';
 import {
@@ -23,6 +23,7 @@ import { isPreviewing } from '../../lib/dialogPreview';
  * consultation dialog — see lib/interruptions.
  */
 export default function ExitIntentOffer() {
+  const { CONSULT, EXIT_INTENT, PLAYBOOK } = useContent();
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef(null);
   const previouslyFocused = useRef(null);

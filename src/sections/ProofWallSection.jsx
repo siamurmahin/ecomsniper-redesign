@@ -1,7 +1,8 @@
 import Icon from '../components/ui/Icon';
 import CtaButton from '../components/ui/CtaButton';
 import RatingStars from '../components/ui/RatingStars';
-import { PROOF, SITE } from '../data/siteContent';
+import { useMemo } from 'react';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { receiptUrl, thumbUrl } from '../lib/proofMedia';
 import { toneOf } from '../lib/signalTones';
@@ -29,7 +30,7 @@ const COLUMN_SETTINGS = [
  * screenshots and another is all text, and the wall stops reading as one body
  * of evidence.
  */
-const COLUMNS = (() => {
+function dealColumns(PROOF) {
   const all = [
     ...PROOF.reviews.map((item) => ({ kind: 'review', id: item.name + item.title, item })),
     ...PROOF.receipts.map((item) => ({ kind: 'receipt', id: item.key, item })),
@@ -39,7 +40,7 @@ const COLUMNS = (() => {
   const columns = [[], [], []];
   all.forEach((entry, index) => columns[index % 3].push(entry));
   return columns;
-})();
+}
 
 function WallCard({ entry }) {
   if (entry.kind === 'receipt') {
@@ -124,6 +125,8 @@ function WallCard({ entry }) {
 }
 
 export default function ProofWallSection() {
+  const { PROOF, SITE } = useContent();
+  const COLUMNS = useMemo(() => dealColumns(PROOF), [PROOF]);
   const sectionRef = useRevealOnScroll();
 
   return (

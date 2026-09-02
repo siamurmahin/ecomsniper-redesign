@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
-import { AUDIENCE } from '../data/siteContent';
+import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { useLocation } from 'react-router-dom';
 import { languageFromPath, pathForLanguage } from '../lib/language';
@@ -32,6 +32,7 @@ const MIN_ROW_HEIGHT = 288;
 const DWELL = 5;
 
 export default function AudienceSection() {
+  const { AUDIENCE } = useContent();
   const sectionRef = useRevealOnScroll();
   const language = languageFromPath(useLocation().pathname);
   const rowRef = useRef(null);

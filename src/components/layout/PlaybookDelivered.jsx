@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
-import { PLAYBOOK, SITE } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import { useModalLayer } from '../../hooks/useModalLayer';
 import playbookCover from '../../assets/brand/playbook-cover.webp';
 
@@ -18,6 +18,7 @@ import playbookCover from '../../assets/brand/playbook-cover.webp';
  * @param {() => void} props.onClose Runs on Escape, the backdrop and both close controls.
  */
 export default function PlaybookDelivered({ onClose }) {
+  const { PLAYBOOK, SITE } = useContent();
   const dialogRef = useRef(null);
 
   useModalLayer(true, { onClose, dialogRef });

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
-import { HERO_PANEL } from '../../data/siteContent';
+import { useContent } from '../../hooks/useContent';
 import { prefersReducedMotion } from '../../lib/motion';
 import { toneOf } from '../../lib/signalTones';
 
@@ -21,6 +21,7 @@ const BEAT_MS = 3800;
  * every step at once, which is also the no-JS rendering.
  */
 export default function PipelinePanel() {
+  const { HERO_PANEL } = useContent();
   const { beats, finale } = HERO_PANEL;
   // The offer is the last step, not an afterword bolted to the side of one.
   const steps = [...beats, { ...finale, isFinale: true }];

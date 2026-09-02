@@ -196,9 +196,8 @@ export default function App() {
 
       <main id="main-content">
         <Routes>
-          {/* Every page twice: once plain, once under /de. The German pages
-              render the same English copy for now — the switcher and the URLs
-              are real, so only the words change when translations land. */}
+          {/* Every page twice: once plain, once under /de. Anything not yet
+              translated falls back to English, so a route is never blank. */}
           {['', '/de'].map((prefix) => (
             <Route key={prefix || 'en'}>
               <Route path={`${prefix}/`} element={<HomePage />} />
