@@ -18,10 +18,6 @@ export default defineConfig({
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-gsap': ['gsap', 'lenis'],
-          // Only the proof bar's CountUp pulls this in; keep it out of the
-          // main bundle so a copy change does not re-download it.
-          'vendor-motion': ['motion'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
         },
       },
     },

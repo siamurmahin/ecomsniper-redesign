@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
@@ -8,11 +8,6 @@ import ExitIntentOffer from './components/layout/ExitIntentOffer';
 import ConsultOffer from './components/layout/ConsultOffer';
 import BackToTop from './components/layout/BackToTop';
 import HomePage from './pages/HomePage';
-import PricingPage from './pages/PricingPage';
-import FaqPage from './pages/FaqPage';
-import PlaybookPage from './pages/PlaybookPage';
-import NotFoundPage from './pages/NotFoundPage';
-import DesignLabPage from './pages/DesignLabPage';
 import { useContent } from './hooks/useContent';
 import { ScrollTrigger } from './lib/motion';
 import { dismissPreloader } from './lib/preloader';
@@ -23,6 +18,17 @@ import {
   pathForLanguage,
   rememberedLanguage,
 } from './lib/language';
+
+/* Internal only, and it carries its own heavy furniture. Static, it put
+   the whole lab — and the animation library only it uses — in the bundle
+   every visitor downloads. */
+/* Only the homepage is part of the first paint. The other routes load when
+   someone asks for them, which keeps their code out of the bundle every
+   visitor downloads. */
+const PricingPage = lazy(() => import('./pages/PricingPage'));
+const FaqPage = lazy(() => import('./pages/FaqPage'));
+const PlaybookPage = lazy(() => import('./pages/PlaybookPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 /**
  * Restores scroll position on navigation and honours in-page hash targets.
@@ -230,25 +236,28 @@ export default function App() {
             SplitText replaces the headline with its own spans — so an update
             in place left the old language's headline on screen and the
             reveal triggers measuring a page that no longer existed. */}
-        <Routes key={language}>
-          {/* Every page twice: once plain, once under /de. Anything not yet
+        {/* One boundary for every lazy route. fallback is null on purpose:
+            the preloader is still up on a first load, and on a later
+            navigation a spinner for a chunk this small only flickers. */}
+        <Suspense fallback={null}>
+          <Routes key={language}>
+            {/* Every page twice: once plain, once under /de. Anything not yet
               translated falls back to English, so a route is never blank. */}
-          {['', '/de'].map((prefix) => (
-            <Route key={prefix || 'en'}>
-              <Route path={`${prefix}/`} element={<HomePage />} />
-              <Route path={`${prefix}/pricing`} element={<PricingPage />} />
-              <Route path={`${prefix}/faq`} element={<FaqPage />} />
-              <Route path={`${prefix}/free-play-book`} element={<PlaybookPage />} />
-              <Route
-                path={`${prefix}/free-playbook`}
-                element={<Navigate to={`${prefix}/free-play-book`} replace />}
-              />
-            </Route>
-          ))}
-          {/* Internal comparison route; remove with the page once a direction is picked. */}
-          <Route path="/design-lab" element={<DesignLabPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+            {['', '/de'].map((prefix) => (
+              <Route key={prefix || 'en'}>
+                <Route path={`${prefix}/`} element={<HomePage />} />
+                <Route path={`${prefix}/pricing`} element={<PricingPage />} />
+                <Route path={`${prefix}/faq`} element={<FaqPage />} />
+                <Route path={`${prefix}/free-play-book`} element={<PlaybookPage />} />
+                <Route
+                  path={`${prefix}/free-playbook`}
+                  element={<Navigate to={`${prefix}/free-play-book`} replace />}
+                />
+              </Route>
+            ))}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <SiteFooter />

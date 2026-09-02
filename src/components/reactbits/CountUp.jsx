@@ -1,106 +1,63 @@
 /*
- * React Bits — CountUp. https://reactbits.dev
- * MIT + Commons Clause. Vendored unchanged. Needs `motion`, the only
- * dependency any of the vendored components adds.
+ * Counts a figure up the first time it scrolls into view.
+ *
+ * Was a vendored React Bits component running on `motion` — 98KB of animation
+ * library downloaded and parsed before the page was interactive, to animate
+ * four numbers in the proof bar. GSAP is already loaded for everything else
+ * here and tweens a number just as well, so `motion` left the critical path.
+ *
+ * Trimmed to the three props the proof bar actually passes.
+ *
+ * textContent rather than state: this writes on every frame.
  */
-import { useInView, useMotionValue, useSpring } from 'motion/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { gsap, prefersReducedMotion } from '../../lib/motion';
 
-export default function CountUp({
-  to,
-  from = 0,
-  direction = 'up',
-  delay = 0,
-  duration = 2,
-  className = '',
-  startWhen = true,
-  separator = '',
-  onStart,
-  onEnd
-}) {
+export default function CountUp({ to, duration = 2, onEnd }) {
   const ref = useRef(null);
-  const motionValue = useMotionValue(direction === 'down' ? to : from);
 
-  const damping = 20 + 40 * (1 / duration);
-  const stiffness = 100 * (1 / duration);
-
-  const springValue = useSpring(motionValue, {
-    damping,
-    stiffness
-  });
-
-  const isInView = useInView(ref, { once: true, margin: '0px' });
-
-  const getDecimalPlaces = num => {
-    const str = num.toString();
-
-    if (str.includes('.')) {
-      const decimals = str.split('.')[1];
-
-      if (parseInt(decimals) !== 0) {
-        return decimals.length;
-      }
-    }
-
-    return 0;
-  };
-
-  const maxDecimals = Math.max(getDecimalPlaces(from), getDecimalPlaces(to));
-
-  const formatValue = useCallback(
-    latest => {
-      const hasDecimals = maxDecimals > 0;
-
-      const options = {
-        useGrouping: !!separator,
-        minimumFractionDigits: hasDecimals ? maxDecimals : 0,
-        maximumFractionDigits: hasDecimals ? maxDecimals : 0
-      };
-
-      const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
-
-      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
-    },
-    [maxDecimals, separator]
-  );
+  // In a ref so an inline arrow from the caller cannot restart the count.
+  const finished = useRef(onEnd);
+  finished.current = onEnd;
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.textContent = formatValue(direction === 'down' ? to : from);
+    const el = ref.current;
+    const places = (String(to).split('.')[1] || '').length;
+    const write = (value) => {
+      el.textContent = value.toFixed(places);
+    };
+
+    write(0);
+
+    // Reduced motion: state the figure, do not count up to it.
+    if (prefersReducedMotion()) {
+      write(to);
+      finished.current?.();
+      return undefined;
     }
-  }, [from, to, direction, formatValue]);
 
-  useEffect(() => {
-    if (isInView && startWhen) {
-      if (typeof onStart === 'function') onStart();
+    const counter = { value: 0 };
+    let tween;
 
-      const timeoutId = setTimeout(() => {
-        motionValue.set(direction === 'down' ? from : to);
-      }, delay * 1000);
-
-      const durationTimeoutId = setTimeout(
-        () => {
-          if (typeof onEnd === 'function') onEnd();
-        },
-        delay * 1000 + duration * 1000
-      );
-
-      return () => {
-        clearTimeout(timeoutId);
-        clearTimeout(durationTimeoutId);
-      };
-    }
-  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
-
-  useEffect(() => {
-    const unsubscribe = springValue.on('change', latest => {
-      if (ref.current) {
-        ref.current.textContent = formatValue(latest);
-      }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      tween = gsap.to(counter, {
+        value: to,
+        duration,
+        ease: 'power2.out',
+        onUpdate: () => write(counter.value),
+        onComplete: () => finished.current?.(),
+      });
     });
 
-    return () => unsubscribe();
-  }, [springValue, formatValue]);
+    observer.observe(el);
 
-  return <span className={className} ref={ref} />;
+    return () => {
+      observer.disconnect();
+      tween?.kill();
+    };
+  }, [to, duration]);
+
+  return <span ref={ref} />;
 }
