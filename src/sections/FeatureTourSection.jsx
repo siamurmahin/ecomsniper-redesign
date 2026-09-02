@@ -450,7 +450,7 @@ export default function FeatureTourSection() {
           </div>
 
           {/* "on the monthly plan" is not optional — see the note in
-              `siteContent`. The bundle and Enterprise plans are final sale. */}
+              `content/en/pricing`. The bundle and Enterprise plans are final sale. */}
           <p className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-muted">
             <Icon name="shield" className="size-4 shrink-0 text-signal-green-deep" />
             {FEATURES.closer.guarantee}

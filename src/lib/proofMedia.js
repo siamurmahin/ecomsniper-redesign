@@ -1,6 +1,6 @@
 /**
  * Media lookups for section 04. Eager globs so the JSX can reach a file by the
- * plain key stored in `siteContent` instead of importing each one by hand, and
+ * plain key stored in `content/en/home/proof` instead of importing each one
  * so a poster can never end up on the wrong clip.
  *
  * Shared: the wall in 04a, the interviews in 04b and the receipts in 04c all

@@ -170,7 +170,7 @@ export default function ReceiptsSection() {
           </CtaButton>
 
           {/* "on the monthly plan" is not optional — see the note in
-              `siteContent`. The bundle and Enterprise plans are final sale. */}
+              `content/en/pricing`. The bundle and Enterprise plans are final sale. */}
           {/* `flex-wrap` and a centred `text-center`, not a plain inline row.
               On a phone this line wraps, and without them the second line sat
               left-aligned under the shield while the first stayed centred. */}

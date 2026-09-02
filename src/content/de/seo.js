@@ -1,0 +1,35 @@
+/**
+ * German — Title and description per route.
+ *
+ * Only the keys that differ from English; anything absent falls through to
+ * the English deck. See `./index.js` for the rules this copy follows.
+ */
+export const overlay = {
+  SEO: {
+    home: {
+      title: 'EcomSniper — eBay-Dropshipping-Software, Schulung & Community',
+      description:
+        'Finde Produkte, die sich schon verkaufen, stelle sie mit einem Klick ein und lass EcomSniper deinen eBay-Shop rund um die Uhr überwachen. Software, Schritt-für-Schritt-Schulung und eine Community mit über 400 Mitgliedern. Ab 97 $, 30 Tage Geld-zurück-Garantie im Monatsplan.',
+    },
+    pricing: {
+      title: 'Preise — EcomSniper eBay-Dropshipping-Software',
+      description:
+        'Starte für 97 $ im ersten Monat, danach 199 $ im Monat, mit 30 Tagen Geld-zurück-Garantie im Monatsplan. In jedem Tarif enthalten: der komplette Kurs Dropship Mastery, die private Community und Support rund um die Uhr.',
+    },
+    faq: {
+      title: 'FAQ — EcomSniper eBay-Dropshipping-Software',
+      description:
+        'Die Fragen, die wirklich kommen: ob eBay-Dropshipping erlaubt ist, was der Start insgesamt kostet, wie Credits funktionieren, Rückerstattungen, unterstützte Länder und was mit deinen Angeboten passiert, wenn du kündigst.',
+    },
+    playbook: {
+      title: 'The Invisible Store — Kostenloses eBay-Dropshipping-Playbook | EcomSniper',
+      description:
+        'Ein kostenloses Playbook auf 83 Seiten darüber, wie eBay-Dropshipping wirklich funktioniert — ohne Ware, ohne Website, ohne Erfahrung. Inklusive der Frage, ob es überhaupt erlaubt ist, und für wen EcomSniper das Falsche ist.',
+    },
+    notFound: {
+      title: 'Seite nicht gefunden — EcomSniper',
+      description:
+        'Diese Seite gibt es nicht. Zurück zur Startseite oder nimm dir das kostenlose Playbook.',
+    },
+  },
+};
