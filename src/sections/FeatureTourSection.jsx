@@ -8,31 +8,16 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
 
 /**
- * 07 — The software, as a sticky stepper.
+ * 07 — The software, as a sticky stepper. Steps scroll on the left, a panel
+ * sticks on the right and swaps to whichever step you are level with.
  *
- * The steps scroll on the left against a spine that fills as each one is
- * passed; a panel on the right sticks and swaps to whichever step you are
- * level with. Chosen from five shapes compared at /software-lab.
- *
- * NO PIN, and that is most of why. The obvious version of this section is a
- * pinned deck that deals cards as you scroll — the device the live site uses
- * on its own system section, and it looks good. But a pin holds the viewport
- * still for its entire run, so it ADDS length: measured across the five
- * options, the pinned stack took 4,401px of page against this one's 2,517px to
- * show the same four steps. Sticky costs exactly its own height.
- *
- * This replaced a rotating card stack on a timer. A stack advancing on its own
- * clock decides for the reader how long each step gets; a stepper hands that
- * back — you are on step 3 because you scrolled to step 3.
+ * Sticky, not pinned. A pin holds the viewport still for its whole run, so it
+ * adds length: 4,401px against 2,517px here for the same four steps.
  */
 
 /**
- * The named tools, drawn as the live site draws them: dashed accent pills,
- * uppercase and tracked.
- *
- * They leave for the live site's feature pages, which THIS site does not have
- * yet — see the note on `FEATURES.items`. When those pages are rebuilt here,
- * the hrefs in the content file are the only thing to change.
+ * The named tools, as dashed accent pills like the live site draws them.
+ * They link out to feature pages this rebuild does not have yet.
  */
 function ToolPills({ links }) {
   if (!links?.length) return null;
@@ -63,12 +48,8 @@ function ToolPills({ links }) {
 }
 
 /**
- * The number, as a tone tile — the same glyph vocabulary as every other set.
- *
- * NEVER TRANSLUCENT. The spine runs through the centre of these tiles, so a
- * tile at reduced opacity lets the coloured line show straight through the
- * number sitting on it. A step that is not current is drawn in a different,
- * fully opaque style instead of a faded version of the same one.
+ * The step number as a tone tile. Never translucent — the spine runs through
+ * the middle of these, and a faded tile lets the line show through the number.
  */
 function StepNumber({ item, size = 'md', isActive = true }) {
   const tone = toneOf(item.tone);
@@ -87,16 +68,8 @@ function StepNumber({ item, size = 'md', isActive = true }) {
 }
 
 /**
- * A small mock interface per step, in that step's tone.
- *
- * Built from DOM and CSS, which is how the live site builds its own — there is
- * no Lottie and no canvas anywhere on that section; the only animations on it
- * are two rotations. A player plus a hosted JSON to draw four boxes and a line
- * would be a dependency bought for nothing.
- *
- * Each one shows the step actually happening rather than illustrating it: the
- * scan sweeps a list, the listing goes live, the monitor pings, the order
- * confirms.
+ * A small mock interface per step, built from DOM and CSS like the live site
+ * does. Each shows the step happening rather than illustrating it.
  */
 function StepVisual({ item, index }) {
   const tone = toneOf(item.tone);
@@ -267,23 +240,9 @@ export default function FeatureTourSection() {
     if (!section || !nodes.length) return undefined;
 
     /*
-     * The current step is the LAST one whose top has crossed a line about
-     * halfway down the screen. Derived from where things are, not from events
-     * about them arriving.
-     *
-     * This replaced an IntersectionObserver that listened for steps entering a
-     * band, which was wrong in two ways going upwards. It only ever reacted to
-     * an ENTRY, so scrolling back from 4 to 3 — where 3 is already intersecting
-     * and nothing new enters — left the panel stale. And when several entries
-     * did arrive in one callback the loop set the index once per entry, so
-     * whichever happened to be last in the array won: scrolling from 3 to 1 the
-     * panel would land on 2. Entry order is not scroll order and never was.
-     *
-     * Reading four rects settles it in one pass, in either direction, with no
-     * dependence on ordering. It is throttled to a frame and only runs while
-     * the section is on screen, so the cost is four `getBoundingClientRect`
-     * calls per frame during the seconds this section is actually being
-     * scrolled through.
+     * The current step is the last one whose top has crossed the middle of the
+     * screen. Read from positions, not from events: an IntersectionObserver
+     * only fires on entry, so scrolling back up left the panel stale.
      */
     let frame = 0;
     let live = false;
@@ -306,7 +265,7 @@ export default function FeatureTourSection() {
       frame = requestAnimationFrame(measure);
     };
 
-    // Nothing is measured while the section is nowhere near the viewport.
+    // Nothing is measured while the section is far from the viewport.
     const gate = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting === live) return;
@@ -370,13 +329,9 @@ export default function FeatureTourSection() {
                   ref={(node) => {
                     stepRefs.current[index] = node;
                   }}
-                  /* The spacing IS the pacing, and it has been wrong in both
-                     directions. At `pb-14` the steps were 234px apart in a
-                     935px viewport and a single screen ran through nearly all
-                     four; at `pb-64` they were 434px apart and the column was
-                     mostly empty between them. 36 lands at ~320px, about a
-                     third of a screen each — enough to read one before the
-                     next arrives, without a hole. */
+                  /* The spacing sets the pacing. 36 lands each step about a
+                     third of a screen apart — close enough to read one before
+                     the next, far enough to avoid a hole. */
                   className="relative flex gap-6 pb-16 last:pb-0 lg:pb-36"
                 >
                   {/* No opacity on this wrapper: it would take the number tile
@@ -413,15 +368,9 @@ export default function FeatureTourSection() {
 
                     <ToolPills links={item.links} />
 
-                    {/* Below lg the sticky panel is gone, and with it every
-                        visual on the section — the steps became four
-                        paragraphs. Each one carries its own here instead, so
-                        the phone gets the same four pictures the desktop
-                        does, just attached to the step rather than beside it.
-
-                        `lg:hidden` and not a second render: above lg this
-                        would be the same visual twice on screen at once, once
-                        here and once in the panel. */}
+                    {/* Below lg the sticky panel is gone, so each step
+                        carries its own visual and the phone gets the same
+                        four pictures. lg:hidden, or it shows twice. */}
                     <div className="mt-7 lg:hidden">
                       <StepVisual item={item} index={index} />
                     </div>
@@ -448,14 +397,9 @@ export default function FeatureTourSection() {
                     </span>
                   </div>
 
-                  {/* The step happening, rather than the step described
-                      again. This panel used to repeat the title and body that
-                      are already six inches to its left — the reader had just
-                      read them, and the most prominent thing on screen was a
-                      duplicate.
-
-                      Keyed on the step, so the visual restarts its animation
-                      on every change and a swap reads as a change. */}
+                  {/* The step happening, not described again — the title and
+                      body are already beside it. Keyed on the step so the
+                      animation restarts on every change. */}
                   <div
                     key={active.n}
                     className="mt-6 animate-[panel-in_0.5s_var(--ease-out-expo)_both]"
@@ -487,15 +431,9 @@ export default function FeatureTourSection() {
             'never alone' looks like", so the bridge is that section's own
             headline asked as a question. */}
         <div className="mt-16 flex flex-col items-center text-center">
-          {/* The icon flows WITH the text rather than sitting beside it as a
-              flex sibling. As a sibling under `items-center` it centred
-              against the whole block, so the moment the line wrapped on a
-              phone the tick landed in the gap between the two lines.
-              `inline-block` + `align-middle` keeps it on the first line and
-              lets the sentence wrap around it.
-
-              Sized down a step on small screens: at `text-2xl` this broke
-              across three lines on a narrow phone. */}
+          {/* Inline, not a flex sibling: as a sibling it centred against the
+              whole block and dropped into the gap when the line wrapped.
+              Sized down on small screens, where it broke to three lines. */}
           <p className="mx-auto max-w-md font-display text-xl font-extrabold leading-snug tracking-tight sm:max-w-lg sm:text-2xl lg:text-3xl">
             <Icon
               name="checkCircle"

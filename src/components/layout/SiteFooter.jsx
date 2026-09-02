@@ -6,22 +6,12 @@ import Icon from '../ui/Icon';
 import { FOOTER, PROOF_BAR, SITE } from '../../data/siteContent';
 
 /**
- * The oversized wordmark that signs the page off.
+ * The oversized wordmark that signs the page off. Outlined until a pointer
+ * comes near, then each letter fills with its own colour and rises — the one
+ * under the pointer most, its neighbours less, so the row bends.
  *
- * Outlined until a pointer comes near, then each letter fills with its own
- * colour and rises. The letter under the pointer moves most and its
- * neighbours less, falling off with distance, so the row bends rather than
- * one letter switching on alone — which is what the client's own footer does,
- * and it is the difference between a hover state and something that feels
- * like it is being touched.
- *
- * Written straight to the DOM on pointermove rather than through state.
- * Ten elements restyled on every pointer event is nothing; ten React renders
- * on every pointer event is a dropped frame, and this is the pattern the rest
- * of this site already uses for anything driven by a cursor or a clock.
- *
- * transform-origin sits at the bottom so the letters grow up off a shared
- * baseline instead of swelling around their middles.
+ * Written straight to the DOM on pointermove: ten restyles a frame is nothing,
+ * ten React renders a frame is a dropped frame.
  */
 const LETTER_COLOUR = [
   'text-signal-blue',
@@ -92,13 +82,8 @@ function Wordmark() {
 }
 
 /**
- * Each platform's own colour, on the mark only.
- *
- * Written as literal classes rather than built from the link's icon name:
- * Tailwind compiles what it can see in the source, and a template literal
- * produces no stylesheet output at all. These are the platforms' published
- * brand values, not the site's signal set, which is why they are hex here
- * rather than tokens — they belong to Discord, YouTube and Facebook.
+ * Each platform's own brand colour. Literal classes, not built from a name —
+ * Tailwind only compiles what it can see.
  */
 const SOCIAL_COLOUR = {
   discord: 'text-[#5865F2]',
@@ -132,16 +117,11 @@ function FooterLink({ href, label }) {
 }
 
 /**
- * Site footer.
+ * Site footer. It closes the page and carries the legal copy, and it is where
+ * someone checks whether these people are real — hence the contact block.
  *
- * It closes the page and carries the legal copy the claims elsewhere depend
- * on, and it is the one place a visitor looks to answer "are these people
- * real" — which is why the contact block is here and not buried.
- *
- * It is also the last thing on the page now that section 15 is gone, so it
- * opens with the offer that costs nothing rather than going straight to a wall
- * of links. Someone who read fifteen sections and did not buy is exactly who
- * the playbook is for.
+ * It is the last thing on the page now section 15 is gone, so it opens with
+ * the offer that costs nothing.
  */
 export default function SiteFooter() {
   const { contact, social, secondDoor } = FOOTER;
@@ -271,11 +251,9 @@ export default function SiteFooter() {
                 ))}
               </ul>
 
-              {/* Five filled stars sat here while the actual score is 4.7.
-                  Nobody wrote that as a claim — it was a decoration that
-                  happened to state a number — which is exactly how an
-                  overstated review score gets onto a page. The real figure and
-                  the real count now come from the proof bar's own row. */}
+              {/* Five filled stars sat here while the real score is 4.7 —
+                  a decoration that happened to state a number. Both figures
+                  now come from the proof bar's own row. */}
               <a
                 href={SITE.trustpilotUrl}
                 rel="noopener noreferrer"

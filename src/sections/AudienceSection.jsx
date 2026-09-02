@@ -7,37 +7,16 @@ import { gsap, prefersReducedMotion, MOTION, SplitText } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
 /**
- * 03 — Who this is for.
- *
- * Eight panels, all of them on screen at once, and the one under the pointer
- * opens and speaks. The question the headline asks — is this going to work for
- * *you* — is answered by recognising yourself in someone, so every life is
- * visible from the first glance and reading one costs a hover rather than a
- * click and a wait.
- *
- * Two earlier shapes were wrong. Three stacked viewports buried it. A quote
- * card above a grid of eight buttons was a menu: everything the same size, the
- * same colour, and nothing moving until you asked it to. Panels that hold their
- * place while one of them grows keep the whole cast present and still give one
- * member the floor — and it stays a single screen, which is the constraint that
- * collapsed those three viewports into one in the first place.
- *
- * Nothing here is new copy. The eight members, their roles, their words and the
- * closing line are the deck's, unchanged.
+ * 03 — Who this is for. Eight panels, all on screen; the one you point at opens.
+ * You answer "is this for me?" by recognising yourself, so keep everyone visible.
  */
 
 /** A colour per member, cycled so no two neighbours in the row share one. */
 const PERSON_TONES = ['blue', 'gold', 'green', 'red'];
 
 /**
- * Share of the row's width the open panel takes when the panels are across.
- *
- * They go across from md, where eight of them finally have the width: each shut
- * panel lands around 52px there, which holds the glyph once it steps down a
- * size. Below md they stack, and there height is measured from the copy rather
- * than shared out by ratio. The stacked list is also capped to a phone's
- * measure — run full width on a tablet it became 685px bars holding one glyph
- * and one name against a field of nothing.
+ * How much width the open panel takes when the panels sit side by side.
+ * Below md they stack instead, and height is measured from the copy.
  */
 const EXPAND_RATIO = { row: 0.44 };
 
@@ -62,9 +41,8 @@ export default function AudienceSection() {
   const isFirstLayout = useRef(true);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  // Three separate reasons to hold still, because they lift differently: a
-  // pointer or a focus ring leaving resumes the cycle, a click ends it, and
-  // scrolling the row out of view only parks it.
+  // Three ways to pause: leaving resumes, a click stops for good, scrolling
+  // out of view just parks it.
   const [isHeld, setIsHeld] = useState(false);
   const [hasTakenOver, setHasTakenOver] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -75,18 +53,13 @@ export default function AudienceSection() {
 
   const select = useCallback((index) => {
     setActiveIndex(index);
-    // A click is a decision: stop advancing rather than closing a panel on
-    // someone who chose to open it.
+    // A click means "I want this one" — stop the rotation, do not close it.
     setHasTakenOver(true);
   }, []);
 
   /**
-   * The height one panel's content needs, measured rather than assumed.
-   *
-   * The text layer is absolutely placed, so it never contributes to its panel's
-   * height and can be measured at any time — including while the panel is shut.
-   * Its width is the panel's, which stacked is the full row, so what comes back
-   * is what that story will actually occupy once it opens.
+   * Measure the height a story needs. The text layer is positioned, so it can
+   * be measured even while its panel is shut.
    */
   const measureOpenHeight = useCallback((index) => {
     const layer = openRefs.current[index];
@@ -104,19 +77,8 @@ export default function AudienceSection() {
   }, []);
 
   /*
-   * Lay the row out for whichever member is open. The two axes want different
-   * things, so they are handled separately rather than by one shared formula.
-   *
-   * Across, `flex-grow` moves and the row's fixed height rules: the panels stay
-   * in normal flow, so the shut ones give up exactly the width the open one
-   * takes and the row can never be pushed out of its own bounds. It also
-   * publishes the width an open panel settles at, which every text layer is
-   * pinned to — without that the story is laid out against whatever width its
-   * panel happens to have at that instant, 95px while it is still opening, so
-   * the lines get measured one word wide and stay that way once it has finished
-   * growing.
-   *
-   * Stacked, height is measured from the copy instead. See below for why.
+   * Lay out the row for whoever is open. Side by side, flex-grow does it and
+   * the row keeps a fixed height. Stacked, we measure the copy instead.
    */
   const applyLayout = useCallback(
     (animate) => {
@@ -132,22 +94,12 @@ export default function AudienceSection() {
       const timeline = gsap.timeline();
 
       if (isColumn) {
-        // Stacked, the panel is already full width, so the copy has nothing to
-        // reflow against and the pin is not wanted.
+        // Stacked panels are already full width, so no pin is needed.
         row.style.removeProperty('--panel-open-w');
 
         /*
-         * Measure what each story actually needs at this width and give the row
-         * exactly that, rather than betting a fixed height covers the worst
-         * case. The bet kept losing: adding one title line pushed the longest
-         * story from 323px to 425px on a 320px phone, and every guess that
-         * fixed one width clipped another.
-         *
-         * Every open panel is sized to the *tallest* member rather than to its
-         * own story, so the row is one height for all eight — sizing each to
-         * itself would move everything below by up to 90px each time the panel
-         * turned, which on a five second rotation is the page walking down the
-         * screen on its own.
+         * Measure what each story needs rather than guessing a height. Every
+         * open panel uses the tallest one, so the row never jumps as it turns.
          */
         const gap = parseFloat(style.rowGap) || 0;
         const needs = panels.map((_, index) => measureOpenHeight(index));
@@ -172,18 +124,12 @@ export default function AudienceSection() {
         const grow = (ratio * (count - 1)) / (1 - ratio);
         const gap = parseFloat(style.columnGap) || 0;
         const usable = row.clientWidth - gap * (count - 1);
-        // Pin first: the measurement below has to be taken against the width
-        // the copy will actually be set at.
+        // Pin the width first, or we measure the copy at the wrong size.
         row.style.setProperty('--panel-open-w', `${Math.round(usable * ratio)}px`);
 
         /*
-         * The row is as tall as the longest story needs at that pinned width,
-         * measured rather than picked. A fixed height looked fine at 1280 and
-         * clipped the glyph by 27px at 820, where the open panel is barely
-         * 300px wide and the same story runs to twice the lines: the text layer
-         * is anchored to the foot of the panel, so anything that does not fit
-         * goes out of the top rather than the bottom, which is why it took a
-         * screenshot to catch and never showed up as an overflow.
+         * Height comes from the longest story at this width. A fixed number
+         * looked fine wide and clipped the glyph on smaller screens.
          */
         const needs = panels.map((_, index) => measureOpenHeight(index));
         row.style.height = `${Math.max(...needs, MIN_ROW_HEIGHT)}px`;
@@ -204,18 +150,9 @@ export default function AudienceSection() {
       }
 
       /*
-       * The crossfade is eased apart from the geometry above.
-       *
-       * expo.out is right for a panel opening — nearly all of the movement
-       * happens up front, which is what makes it feel quick. It is wrong for
-       * opacity: the same curve takes the incoming content to most of its
-       * opacity in the first fraction of the tween, so it arrives as a pop
-       * rather than a fade. Opacity gets power2 instead.
-       *
-       * They are also offset rather than run together. Fading both layers from
-       * zero at the same instant leaves a beat where a name and a story are
-       * both half visible on top of each other; the outgoing one clears first,
-       * and the incoming one starts once the panel has begun to move.
+       * Fade and movement use different curves: expo suits the panel opening,
+       * but pops the text, so opacity uses power2. They are offset, not
+       * simultaneous, or two stories overlap for a beat.
        */
       panels.forEach((panel, index) => {
         const isOpen = index === activeIndex;
@@ -252,15 +189,9 @@ export default function AudienceSection() {
   );
 
   /*
-   * A resize can cross the breakpoint that turns the row into a column, which
-   * changes both the ratio and whether the width pin applies. Re-lay it out
-   * without animating: nothing was chosen, the container just changed shape.
-   *
-   * Width only. `applyLayout` sets the row's height itself, so an observer that
-   * reacted to every resize would hear its own write, re-enter with animation
-   * off, and snap the transition it had just started — a 620ms open finished in
-   * 77ms. Height changes here are this component's own doing; width is the only
-   * thing the outside world changes.
+   * A resize can flip the row into a column, so lay it out again — without
+   * animating, since nothing was chosen. Width only: we set the height
+   * ourselves, and reacting to that would cut our own transition short.
    */
   const lastWidth = useRef(0);
   useEffect(() => {
@@ -277,18 +208,8 @@ export default function AudienceSection() {
   }, [applyLayout]);
 
   /*
-   * Measure again once the webfont has swapped.
-   *
-   * Every story's height is measured in whatever font is rendering at the
-   * time, and the fallback's metrics are not the real ones. A swap is not a
-   * resize, so the observer above never hears it and the row keeps the height
-   * it was given for text that no longer exists.
-   *
-   * Measured, every panel came out 12px short — 309px of content in a 297px
-   * box, the same shortfall on all eight members, which is the signature of a
-   * uniform metrics change rather than anything to do with one story's
-   * wrapping. Those 12px came out of whichever edge the content was not
-   * anchored to, so the glyph or the name sat hard against it.
+   * Measure again after the webfont loads. The fallback has different metrics,
+   * and a font swap is not a resize, so nothing else notices it.
    */
   useEffect(() => {
     if (!document.fonts) return undefined;
@@ -303,9 +224,7 @@ export default function AudienceSection() {
     };
   }, [applyLayout]);
 
-  // Nothing animates while the row is off screen. A rotation running down the
-  // page is work nobody sees, and it would have moved on by the time a visitor
-  // arrives.
+  // Nothing animates off screen — it would be finished before anyone looked.
   useEffect(() => {
     const scope = sectionRef.current;
     if (!scope) return undefined;
@@ -318,36 +237,24 @@ export default function AudienceSection() {
   }, [sectionRef]);
 
   useLayoutEffect(() => {
-    // The first paint is placed, not animated: a panel growing from nothing on
-    // load reads as the layout settling late.
+    // First paint is placed, not animated, so it does not look like a late reflow.
     applyLayout(!isFirstLayout.current);
     isFirstLayout.current = false;
   }, [applyLayout]);
 
   useEffect(() => () => timelineRef.current?.kill(), []);
 
-  // Re-split on every change: the copy wraps differently at every width and for
-  // every member, so the lines have to be measured from what was actually
-  // rendered rather than assumed.
+  // Re-split every time: the copy wraps differently at each width and member.
   useLayoutEffect(() => {
     const el = quoteRef.current;
     if (!el || isStatic) return undefined;
 
     let split;
     const ctx = gsap.context(() => {
-      // Lines, not words. These are stories of twenty-odd words rather than the
-      // one-line quotes this replaced, and a per-word stagger across all of
-      // them would both take too long to finish and mean hundreds of spans.
+      // Lines, not words: these are whole stories, and per-word would be slow.
       /*
-       * `tag: 'span'` because this all lives inside a <button>, which takes
-       * phrasing content only. Left at its default the split wraps each line in
-       * a <div>, which put eight of them inside buttons — invalid nesting that
-       * browsers render anyway, so nothing complains until something does.
-       * The lines still need to stack, hence `block` on the class.
-       *
-       * `aria: 'hidden'` keeps the story one string for a screen reader. The
-       * split is a visual device; read out as separate fragments it becomes a
-       * list of line-length pieces rather than a sentence.
+       * Spans because this sits inside a <button>, which only allows phrasing
+       * content. Hidden from screen readers so the story stays one sentence.
        */
       split = SplitText.create(el, {
         type: 'lines',
@@ -356,9 +263,7 @@ export default function AudienceSection() {
         aria: 'hidden',
         linesClass: 'block overflow-hidden',
       });
-      // Lands with the panel rather than after it: the layer it sits in starts
-      // fading at 0.11s, so the lines follow a beat behind that and the last
-      // one settles as the panel finishes opening.
+      // Starts just after the panel does, so both finish together.
       gsap.from(split.lines, {
         yPercent: 105,
         opacity: 0,
@@ -370,15 +275,13 @@ export default function AudienceSection() {
     }, el);
 
     return () => {
-      // Revert the split explicitly: leaving the wrapper spans behind would
-      // hand the next split a DOM that is already carved up.
+      // Undo the split, or the next one runs on already-split markup.
       split?.revert();
       ctx.revert();
     };
   }, [activeIndex, isStatic]);
 
-  // The dwell timer doubles as the progress bar, so what the bar shows and when
-  // the panel turns can never drift apart.
+  // One timer drives both the bar and the turn, so they cannot drift apart.
   useEffect(() => {
     if (isStatic || hasTakenOver || isHeld || !isInView) return undefined;
     const bar = progressRef.current;
@@ -423,10 +326,7 @@ export default function AudienceSection() {
           ref={rowRef}
           data-reveal
           data-reveal-group="audience-row"
-          // Tall enough for the longest story at the open panel's width, and no
-          // taller: the row is a fixed height so the closed panels have
-          // something to give up, and any surplus shows as a hole between the
-          // glyph at the top and the words at the foot.
+          // Tall enough for the longest story and no taller, or a gap shows.
           className="mx-auto mt-12 flex w-full max-w-md flex-col gap-2 md:h-[23rem] md:max-w-none md:flex-row"
           onMouseEnter={() => setIsHeld(true)}
           onMouseLeave={() => setIsHeld(false)}
@@ -442,8 +342,7 @@ export default function AudienceSection() {
                 key={person.name}
                 ref={(el) => (panelRefs.current[index] = el)}
                 type="button"
-                // Hover and focus open a panel; the click is only there to stop
-                // the rotation for someone who has chosen where to stay.
+                // Hover and focus open it; click only stops the rotation.
                 onMouseEnter={() => setActiveIndex(index)}
                 onFocus={() => setActiveIndex(index)}
                 onClick={() => select(index)}
@@ -618,10 +517,7 @@ export default function AudienceSection() {
             href={AUDIENCE.closer.cta.href}
             aria-label={AUDIENCE.closer.cta.label}
             data-cta-intent="audience-to-pricing-mouse"
-            // Fills to ink on hover, so the whole cue becomes the target rather
-            // than the words inside it. Everything on top inverts to paper with
-            // it — leaving the glyph or the label in ink would drop them into
-            // the fill the moment it landed.
+            // Fills on hover so the whole cue is the target; contents invert with it.
             className="group flex flex-col items-center gap-2.5 rounded-2xl px-5 py-4 text-ink transition-colors duration-300 hover:bg-ink hover:text-paper"
           >
             {/* The shell is a plain icon; only the wheel inside it moves. Drawn

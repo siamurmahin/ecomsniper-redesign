@@ -6,8 +6,7 @@ import PipelinePanel from '../components/hero/PipelinePanel';
 import TextType from '../components/reactbits/TextType';
 import { HERO } from '../data/siteContent';
 import { announceHeroReady } from '../lib/heroReady';
-// No MOTION easing here any more: the hero's entrance is CSS, and its easing
-// comes from `--ease-out-expo` in the stylesheet.
+// The hero's entrance is CSS; its easing comes from the stylesheet.
 import { gsap, prefersReducedMotion, SplitText } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
@@ -19,13 +18,10 @@ const SUPPORT_META = [
 
 /**
  * 01 — Hero. What this is, who it is for and what it costs, above the fold,
- * with two doors out: buy today, or take the free playbook.
+ * with two ways out: buy today, or take the free playbook.
  *
- * The right half is `PipelinePanel` — the headline's argument shown rather
- * than claimed, and the slot a real product screenshot can take over later.
- *
- * The brand ramp appears twice here, on the marked phrase and the primary
- * button. It was on four things at once, which left it nothing to emphasise.
+ * The brand ramp appears twice, on the marked phrase and the main button. It
+ * was on four things at once, which left it nothing to emphasise.
  */
 /* Mirrors of the hero entrance timings in `index.css`. Only used to work out
    when the entrance is over, so the rest of the page knows it may mount.
@@ -40,36 +36,24 @@ export default function HeroSection() {
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
 
-  // Read on the first render: anything this flag adds later would mount
-  // after the entrance timeline resolved its targets, and stay where it left
-  // them.
+  // Read on the first render — anything added later would mount after the
+  // entrance resolved its targets and stay where it was left.
   const [isStatic] = useState(() => prefersReducedMotion());
 
-  // The eyebrow scrolls its copy instead of wrapping, but only on the widths
-  // where the line genuinely does not fit: a marquee that runs when there is
-  // nothing to reveal is just motion for its own sake. Measuring beats a
-  // breakpoint here because the copy is content and can change length.
+  // The eyebrow scrolls rather than wraps, but only where the line really
+  // does not fit. Measured, not a breakpoint: the copy can change length.
   const eyebrowTrackRef = useRef(null);
   const eyebrowTextRef = useRef(null);
   const [isEyebrowOverflowing, setIsEyebrowOverflowing] = useState(false);
 
-  /* Deliberately `useEffect` and not `useLayoutEffect`, and deliberately not
-     measured until after the first paint.
-
-     This reads `getComputedStyle` and `getBoundingClientRect`. Run during the
-     commit, that forces a full style-and-layout pass over the whole document
-     at the one moment the entire page has just mounted and every style is
-     invalidated — a production trace put 502ms of forced reflow here, the
-     single biggest block of our own code on the critical path.
-
-     Nothing about this decision has to be right before the first frame. The
-     eyebrow starts wrapped, which is the readable state anyway, and switches
-     to the marquee a frame later if it genuinely does not fit. */
+  /* useEffect, not useLayoutEffect, and measured after the first paint.
+     Reading layout during the commit forces a full reflow at the worst
+     moment — a trace put 502ms here. The eyebrow starts wrapped, which is
+     readable anyway, and switches to the marquee a frame later if it must. */
   useEffect(() => {
     const track = eyebrowTrackRef.current;
     const text = eyebrowTextRef.current;
-    // Reduced motion keeps the wrapping version, which costs a second line but
-    // never moves and never hides a word behind a clip.
+    // Reduced motion keeps the wrapping version: a line taller, but still.
     if (!track || !text || isStatic) return undefined;
 
     /* The copy's own width, cached. It only changes when the font swaps or the
@@ -149,20 +133,10 @@ export default function HeroSection() {
         },
       });
 
-      /* The entrance itself lives in the stylesheet now — every delay and
-         duration is there, keyed off the `data-hero-*` attributes. Nothing
-         about it runs on the main thread, which is the whole point.
-
-         The rest of the page waits for this before mounting, so something has
-         to say when it is over. Derived from the split rather than written
-         down: the headline is the longest chain and its length depends on the
-         copy and on where it wraps, so a hard-coded number goes stale the
-         first time either changes. Kept in step with the stylesheet by the
-         constants below.
-
-         A timer and not `animationend`, because which element finishes last
-         varies with the copy, and a missed event would strand sixteen
-         sections behind the fallback timeout. */
+      /* The entrance lives in the stylesheet, keyed off the data-hero-*
+         attributes, so none of it runs on the main thread. The page waits for
+         it, so the length is derived from the split rather than hardcoded —
+         a timer, because which element finishes last depends on the copy. */
       const wordsEndMs = WORD_DELAY_MS + (split.words.length - 1) * STAGGER_MS + WORD_DURATION_MS;
       const doneIn = gsap.delayedCall(Math.max(wordsEndMs, SUPPORT_END_MS) / 1000, announceHeroReady);
 
@@ -246,13 +220,9 @@ export default function HeroSection() {
                   }`}
                   style={isEyebrowOverflowing ? { '--marquee-duration': '14s' } : undefined}
                 >
-                  {/* While scrolling, the trailing space is padding that
-                      travels with the copy, so the seam between the two passes
-                      reads as a gap rather than as one run-on sentence. Both
-                      copies carry it, which is what keeps the -50% loop point
-                      landing exactly one copy along. Standing still there is
-                      nothing to separate, so the pill stays as tight as it
-                      was before any of this. */}
+                  {/* While scrolling, the trailing space keeps the seam
+                      between the two copies reading as a gap. Both carry it,
+                      which is what lands the -50% loop exactly one copy on. */}
                   <span
                     ref={eyebrowTextRef}
                     className={`${isStatic ? '' : 'whitespace-nowrap'} ${
@@ -274,13 +244,9 @@ export default function HeroSection() {
               id="hero-headline"
               className="mt-7 text-[length:var(--text-hero-split)] font-extrabold leading-[0.98] tracking-[-0.03em]"
             >
-              {/* Only the fixed copy is split — the ref is on this span,
-                  and the typed mark below is a sibling. SplitText rebuilds an
-                  element's contents and clones nodes, so a React component
-                  inside it keeps updating a node that is no longer on screen
-                  (its `ignore` option does not help; the element is still
-                  moved). The stop after "9 TO 5" shares the strike's nowrap
-                  span because SplitText treats it as its own word. */}
+              {/* Only the fixed copy is split. SplitText rebuilds and clones
+                  nodes, so a React component inside it would keep updating a
+                  node that is no longer on screen. */}
               <span ref={headlineRef} className="block">
                 ESCAPE THE{' '}
                 <span className="whitespace-nowrap">
@@ -352,13 +318,9 @@ export default function HeroSection() {
                   {HERO.secondaryCta.label}
                 </CtaButton>
 
-                {/*
-                  A drawn arrow and a note pointing back at the button. The
-                  arrow alone only says "look here"; the words say why — this
-                  door costs nothing, which is the whole reason the majority who
-                  will not buy today should take it. Decoration to assistive
-                  tech, and hidden below lg where the CTAs stack full width.
-                */}
+                {/* A drawn arrow and a note pointing back at the button: the
+                    arrow says "look here", the words say why. Hidden below lg,
+                    where the buttons stack full width. */}
                 <span
                   aria-hidden="true"
                   className="pointer-events-none absolute left-full top-1/2 hidden -translate-y-1/2 items-center gap-1 whitespace-nowrap pl-1 lg:flex"

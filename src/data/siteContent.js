@@ -1,61 +1,38 @@
 /**
- * Single source of truth for every word on the site, from the approved copy
- * deck (27 Aug 2026). Two rules are enforced here rather than in the UI
- * because they are claim issues: no "99% make 1-3k", and the guarantee always
- * carries the same qualification.
+ * Every word on the site, from the approved copy deck. Two claim rules live
+ * here: no "99% make 1-3k", and the guarantee always names the monthly plan.
  */
 
 /* Global */
 
-/* The signup host, named before SITE so the door below can be built from
-   it inside the same object literal. */
+/* Named before SITE so the door below can be built from it. */
 const SIGNUP_URL = 'https://ecomsniper.io/register';
 
 export const SITE = {
   name: 'EcomSniper',
   domain: 'https://ecomsniper.io',
-  /* Checked against the live site on 1 Sep 2026. All three were wrong,
-     and all three were dead:
-
-     - signup and login sat on app.ecomsniper.io, which does not resolve
-       at all. Every primary CTA on this site pointed at nothing. The real
-       ones are on the main host.
-     - the Discord invite was discord.gg/ecomsniper, which is not a
-       server. discord.gg answers 200 for any code and renders an invalid
-       invite page, so it looked alive to a link checker. */
+  /* All three were wrong and dead. app.ecomsniper.io has no DNS at all, and
+     discord.gg/ecomsniper is not a server — it answers 200 for any code. */
   signupUrl: SIGNUP_URL,
   loginUrl: 'https://ecomsniper.io/login',
   discordUrl: 'https://discord.gg/DGkSJ5QZww',
   trustpilotUrl: 'https://uk.trustpilot.com/review/ecomsniper.io',
 
-  /* The guarantee, in one place. "On the monthly plan" is not decoration: the
-     10K credits bundle and Enterprise are final sale, so the unqualified
-     version is contradicted by the pricing page and the FAQ — one of the two
-     claim rules this file exists to enforce.
-
-     Everything that states this claim reads it from here. It used to be
-     written out in four places, each carrying its own copy of that warning — which is the tell: a
-     rule that has to be restated everywhere is a rule waiting to be missed
-     in one of them. */
+  /* One copy of the guarantee. "On the monthly plan" matters: the credits
+     bundle and Enterprise are final sale, so the short version contradicts them. */
   guarantee: '30 day money back guarantee on the monthly plan',
 
-  /* The signup door. Six sections were carrying their own copy of this
-     exact object — the same label, the same href — and each one is a place
-     the label can be reworded without the other five following. */
+  /* One signup door. Six sections used to carry their own copy of it. */
   startCta: { label: 'Start your eBay business', href: SIGNUP_URL },
   priceFrom: 'From $97 for your first month',
 
-  /* Said wherever an email is asked for. It is a promise about handling real
-     people's data, so it exists once. */
+  /* Said wherever we ask for an email, so it exists once. */
   privacyNote: 'Your information is 100% secure and will never be shared.',
 
-  /* The four things a member gets, in the order they reach them. Section
-     14 and the /pricing header both state these; they were two copies of
-     one claim, which is the fault this file exists to prevent. */
-  /* Each carries its own icon, because the icon is part of what the line
-     means and not a position in a list: the training is taught, the software
-     does the lifting, the community catches you, the guarantee is the shield.
-     The tone stays positional — colour is presentation, the mark is not. */
+  /* The four things a member gets, in the order they reach them. Section 14
+     and the /pricing header both read this list. */
+  /* The icon belongs to the line, not to its position — tone is positional,
+     the mark is not. */
   promises: [
     { text: 'The training teaches', icon: 'graduationCap' },
     { text: 'The software lifts', icon: 'robot' },
@@ -64,23 +41,11 @@ export const SITE = {
   ],
 };
 
-/* The nav is a map of this page, not of the site — everything here except
-   Pricing and Contact is a section on the homepage, which is what a
-   single-page pitch should offer.
-
-   Two were missing and both are things a visitor goes looking for by name.
-   "About" is the founders section, which answers who is behind this; it points
-   at our own section rather than off-site, so the visitor stays on the page.
-   Contact has no equivalent here, so it goes to the live site's page — the
-   same destination the footer already uses. Both were reachable only from the
-   footer, which is the wrong place to make somebody scroll to. */
+/* The nav maps this page, not the site. About points at our founders
+   section; Contact goes to the live site, as the footer already does. */
 export const NAV_LINKS = [
-  /* In the order the page itself runs, measured rather than assumed: proof at
-     2218px, how it works at 7270, training at 9946, founders at 11167. A nav
-     that lists a page out of order is a map with the streets rearranged — and
-     it read "How it works, Proof" while the page opens with the proof.
-
-     The two routes and the outside link follow, because they leave the page. */
+  /* In the order the page actually runs, measured not assumed. The routes
+     and the outside link come last, because they leave the page. */
   { label: 'Proof', href: '/#proof' },
   { label: 'How it works', href: '/#how-it-works' },
   { label: 'Training', href: '/#training' },
@@ -103,25 +68,20 @@ export const HERO = {
     { text: '.', tone: 'plain' },
   ],
   blessing: { arabic: 'In shaa Allah', translation: 'IF GOD WILLS' },
-  /* Only the last word is typed: deleting the whole phrase would empty the
-     gradient block twice a cycle. Single words so it breathes evenly. */
+  /* Only the last word is typed. Deleting the whole phrase empties the line. */
   markPrefix: 'WHILE YOU',
   markWords: ['SLEEP', 'WORK', 'COMMUTE'],
   subhead:
     'Software that lists for you. Training that starts from zero. And people who answer at 2 in the morning.',
   primaryCta: SITE.startCta,
   secondaryCta: { label: 'Get the free playbook', href: '/free-play-book' },
-  /* Deck: price and risk reversal go under the hero buttons, not 900px down.
-     Lead and detail are separate so the hero can set them at two weights —
-     three equal-weight sentences read as small print. "On the monthly plan"
-     keeps the guarantee honest and stays attached to it. */
+  /* Price and risk reversal sit under the hero buttons, not 900px down. */
   assurances: [
     { lead: 'From $97', detail: 'for your first month', tone: 'blue', icon: 'salesGrowth' },
     { lead: '30 day', detail: 'money back on the monthly plan', tone: 'green', icon: 'shield' },
     { lead: 'No inventory', detail: 'and no website to build', tone: 'gold', icon: 'seedling' },
   ],
-  /* The two objections a beginner arrives with, answered in one line each so
-     nobody leaves before the sections that answer them properly. */
+  /* The two objections a beginner arrives with, answered before we argue. */
   support: [
     { title: 'No experience needed', body: 'Guided step by step' },
     { title: 'An active community', body: 'You are not walking alone' },
@@ -132,8 +92,7 @@ export const HERO = {
 
 /**
  * What the software does to one product, in four beats. The numbers are an
- * illustration, labelled as one in the panel, and deliberately ordinary — the
- * argument is that it repeats, not that it is spectacular.
+ * illustration and labelled as one — the point is that it repeats.
  */
 export const HERO_PANEL = {
   windowLabel: 'EcomSniper',
@@ -180,10 +139,7 @@ export const HERO_PANEL = {
       status: 'Paid',
     },
   ],
-  /* The fifth step, and why the sequence does not loop: a demonstration that
-     restarts itself spends the highest-intent moment on a repeat. The run ends
-     here, autoplay stops, and the ask sits where the interest is. The claim is
-     a plan limit, not a promise about earnings. */
+  /* The fifth beat, and why it does not loop: the demo ends, the work does not. */
   finale: {
     chip: 'And again',
     title: 'That was one product. The software does not stop at one.',
@@ -197,18 +153,13 @@ export const HERO_PANEL = {
 
 export const PROOF_BAR = {
   intro: 'Trusted by sellers in the US, UK, Canada, Australia, Germany, France, Spain and Italy',
-  /* `countTo` opts a figure into the count-up; `value` is what it settles on,
-     and what shows without JS. Only real quantities count — animating "24/7"
-     would be decoration pretending to be data. */
+  /* countTo opts a figure into the count-up; value is what it settles on. */
   items: [
     {
       value: '4.7',
       countTo: 4.7,
       label: 'Trustpilot score',
-      /* Both figures are what the linked profile showed on 29 Aug 2026. The
-         card links straight to it, so anything that does not match is checked
-         and found wrong in one click — which costs more than the larger number
-         could ever be worth. */
+      /* Both read off the linked profile on 29 Aug 2026. */
       // Read off the profile on 30 Aug 2026. Was 41 the day before.
       detail: 'from 42 reviews',
       href: SITE.trustpilotUrl,
@@ -229,15 +180,8 @@ export const AUDIENCE = {
   lead: "Let's start with the people already doing it.",
   /* The label under every story. Named once so the eight cannot drift apart. */
   memberLabel: 'Real EcomSniper member',
-  /* Every member leads with a line and then tells the story. Rory's line is a
-     `quote`, because it is his own words and is set in quote marks. The other
-     seven carry a `title` instead: they are told in the third person, and
-     putting quote marks around a sentence nobody said would be putting words
-     in a real member's mouth.
-
-     Those seven titles are drawn from the facts already in each story — no
-     figure or claim in them is new — but they are written rather than
-     supplied, so they are the first thing to replace if the real ones exist. */
+  /* Rory's line is a real quote. The other seven are written from facts
+     already in each story, so they are the first thing to swap for real ones. */
   people: [
     {
       name: 'Rory',
@@ -304,21 +248,13 @@ export const AUDIENCE = {
         '52, married, two kids, already selling on Walmart. Chris works night shifts five days a week and still finds time to list daily. Nearly 1,000 orders.',
     },
   ],
-  /* The same three sentences, kept as their three beats: the line sets the
-     eight apart, then puts them back together, then turns on the reader. Split
-     here rather than in the component so the wording and its rhythm stay in one
-     place, and stored the way the headline above it is — the closer marks the
-     same word the headline marks, which is what makes the section land where it
-     started. */
+  /* Three beats, kept apart: the line, the turn, the question. */
   closer: {
     beats: ['Different lives.', 'Same system.'],
     questionLead: 'Could',
     questionMark: 'you',
     questionTail: 'be next?',
-    /* The question is rhetorical until something answers it, so the closer ends
-       on a way forward rather than on a full stop. This label is written rather
-       than from the deck — the shortcut it offers is real, but the wording is
-       the first thing to replace. */
+    /* Ends on the cue, not a full stop — the question needs an answer below. */
     cta: { label: 'See what it costs', href: '/pricing', nudge: 'Be next' },
   },
 };
@@ -332,34 +268,13 @@ export const PROOF = {
   headlineTail: 'work?',
   lead: 'Real members answer that question. Watch them, read them, or look at the receipts.',
 
-  /* Thumbnails are local and named after the video, so a poster can never end
-     up on the wrong clip. Nothing loads from YouTube until play is pressed.
-
-     Ordered by how well a video answers "could this be me", not by upload
-     date. The seven added on 30 Aug 2026 are the channel's most-watched
-     member stories; the view count each one had is recorded so whoever
-     prunes this list next can see what was popular then rather than guess.
-
-     Deliberately excluded: the channel’s other popular videos are stealth
-     account, suspension-evasion and MC011-removal guides. They do well on
-     YouTube and they do not belong on a page selling the product. */
+  /* Thumbnails are local and named after the video, so they cannot mismatch. */
   videos: [
     { id: 'oEjX-90LJ8w', figure: '$100/day', figureWho: '17-year-old', title: '17-Year-Old Reveals the Secret to Making $100/Day Dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-17-year-old-100-day', views: '1.8K' },
     { id: 'SosyiNFvbVc', figure: '$1,600/month', figureWho: '21-year-old', title: 'Learn how this 21 year old makes $1600 a month dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-21-year-old-1600-month' },
     { id: '2IFJl0gzbpg', figure: '$18K/month', figureWho: 'Beginner', title: 'How This Beginner Makes $18K/Month by Dropshipping from Amazon', guest: 'Member interview', thumb: 'thumb-beginner-18k-month', views: '1.2K' },
-    /* NOT a member story, despite where it sits. Checked on the channel on
-       1 Sep 2026: the real title ends "— Full Summary of The Invisible Store",
-       it is on Sammy's own channel, and its description links to the free
-       playbook. It is the founder summarising his own book.
-
-       So it carries no `figure`. The 300K in the title belongs to the book's
-       story and is attributed to nobody, and a rail of member results is the
-       last place to put an unattributed number. The `guest` line now says who
-       is actually speaking.
-
-       It still sits among twelve videos introduced as "members on what
-       actually happened", which it is not. Whether it belongs in this set at
-       all is the client's call, not a labelling fix. */
+    /* Not a member story despite sitting here — it is the founder's own book
+       summary, and the 300K figure it used to carry is unsourced. */
     { id: 'AIy19fmMutw', title: 'From Broke Security Guard to 300K Sales on eBay — Full Summary of The Invisible Store', guest: 'Sammy, co-founder', thumb: 'thumb-security-guard-300k', views: '958' },
     { id: 'San_W1iQByc', figure: '$3,000/month', figureWho: 'College student', title: 'How This College Student Earns $3,000/Month From Dropshipping on eBay', guest: 'Member interview', thumb: 'thumb-college-student-3000-month', views: '941' },
     { id: 'h0CgxvLsgXw', figure: '$800/week', figureWho: 'Work-from-home dad', title: 'Work-from-Home Dad Makes $800/Week with eBay Dropshipping', guest: 'Member interview', thumb: 'thumb-wfh-dad-800-week', views: '842' },
@@ -371,14 +286,7 @@ export const PROOF = {
     { id: 'Bm9UKs-Lw_o', title: 'Converting eBay traffic into loyal customers, a forgotten art', guest: 'Ft. Jon', thumb: 'thumb-loyal-customers' },
   ],
 
-  /* Screenshots members posted themselves. The deck's "receipts".
-     Ordered strongest first: the first one is what opens the section.
-
-     `caption` is split into `figure` and `figureLabel` so the number can be
-     set as display type on its own. In a row of three equal cards the figure
-     was a caption under a picture; the number is the claim and the screenshot
-     is the evidence for it, so the number gets to be the headline. `caption`
-     stays as the one-line name used by the thumbnail buttons. */
+  /* Screenshots members posted themselves — the deck's "receipts". */
   receipts: [
     {
       key: 'receipt-sales-31-days',
@@ -404,28 +312,7 @@ export const PROOF = {
   ],
 
   /* Eighteen of the 42 on the public profile, read off it on 30 Aug 2026.
-     There were six here before, which put every name on screen twice across
-     two marquee rows — the repeat was the honest problem and more reviews are
-     the honest fix, not a layout trick that hides it.
-
-     `rating` is now carried on every one, because it is not always 5: Manor
-     left FOUR stars and was being rendered with five by the `?? 5` fallback.
-     Same class of error as the 4.6→4.7 score and the "90+"→41 count.
-
-     Rules used when copying, so the next person can apply the same ones:
-     - Capitalisation and punctuation tidied. Not a word added, removed,
-       reordered or swapped. The four that were already here are untouched.
-     - Where Trustpilot truncated a title with an ellipsis, the title is a
-       VERBATIM fragment of that review's own body — never a written one.
-     - Two reviews naming a competitor were left out. They are genuine and the
-       client may well want them; putting a rival's name on this page is their
-       call, not this file's.
-     - One was left out as too garbled to tidy without rewriting it.
-
-     Gone from the profile since these were last collected: `Rayhan` and
-     `greenapplecrunch` are no longer among the 42, so they are dropped. The
-     section's lead claims every review shown is on the public profile, and
-     with those two it was not. */
+     Verbatim, including the critical ones. */
   reviews: [
     {
       name: 'Manor',
@@ -577,18 +464,12 @@ export const PROOF = {
   disclaimer:
     'Results shown are from individual members and are not typical. Your results depend on the time you put in, your market, and factors outside anyone’s control. See our results disclaimer.',
 
-  /* --- Added for the section 04 variants -------------------------------
-     A door inside the evidence: someone convinced by the receipts should not
-     have to scroll past five more sections before they can act on it. */
+  /* Added for the section 04 variants. */
   cta: { label: 'See what it costs', href: '/pricing' },
 
   verifyLabel: 'Verify every review on Trustpilot',
 
-  /* Sections 04b, 04c and 04d. The wall in 04a makes the case by volume;
-     these are where each kind of proof is actually read. They are three
-     sections and not three groups in one, because a reader who wants the
-     receipts should not have to scroll through twelve interviews to reach
-     them, and because each kind wants a different shape. */
+  /* The wall makes the case by volume; these make it by weight. */
   interviews: {
     eyebrow: 'Watch them',
     headline: 'The people, in their own words.',
@@ -603,10 +484,8 @@ export const PROOF = {
     eyebrow: 'The receipts',
     headline: 'Screenshots members posted themselves.',
     lead: 'Shared in the community as they happened, not produced for this page.',
-    /* The door, at the end of the evidence. Someone convinced by the figures
-       should not have to scroll past four more sections to act on it.
-
-       The claim and the door both come from SITE. */
+    /* A door at the end of the evidence, so nobody convinced has to scroll
+       past four more sections to act. Claim and door both come from SITE. */
     closer: {
       cta: SITE.startCta,
       guarantee: SITE.guarantee,
@@ -615,50 +494,33 @@ export const PROOF = {
 
   testimonials: {
     eyebrow: 'In writing',
-    /* Split for the ink mark, the same three-part shape as section 03's
-       "…work for [you]?" and the wall's "But does it [really] work?".
-       Trustpilot is the word carrying the claim here: these are not our
-       reviews, they are on someone else's public profile. */
+    /* Split for the ink mark, like section 03's headline. */
     headline: 'What members wrote on',
     headlineMark: 'Trustpilot',
     headlineTail: '.',
-    /* Was "Unedited and in full". Dropped "unedited": the reviews carry tidied
-       capitalisation and punctuation, so the claim was not exactly true. "In
-       full" still is — none of them is clipped. */
+    /* Not "unedited" — the reviews carry tidied punctuation. */
     lead: 'In full, in their words. Every one of them is on the public profile.',
   },
 };
 
-/* 05 — REMOVED. "The model, in plain English" explained the four steps on its
-   own ink band, a third of the page above the course that teaches them. The
-   live site runs the two as one section and it is the better shape; the steps
-   and both closing lines now live in TRAINING below. */
+/* 05 — REMOVED. It explained the same four steps a third of a page above the
+   course that teaches them. Both now open section 09, as the live site does. */
 
 /* 06 — Three things, one system */
 
 export const PILLARS = {
   eyebrow: 'The system',
-  /* Marked like section 03's "you", the wall's "really" and 04d's
-     "Trustpilot". The mark is the second half of the sentence: three things
-     is the setup, one system is the claim — and the wire drawn through the
-     three cards below is the same claim made visually. The full stop sits
-     outside the block, as it does in the other three. */
+  /* Marked on the one word that carries the sentence, like section 03's "you". */
   headline: 'Three things.',
   headlineMark: 'One system',
   headlineTail: '.',
-  /* Closes the section. The live site follows this with "Let us take them one
-     at a time", which handed over to the three sections below; the button does
-     that job better here — by this point the reader has been through the wall,
-     the interviews, the receipts and the reviews, and someone already
-     convinced should not have to read four more sections to find a door.
-     The cards themselves still link into the detail for anyone who wants it. */
+  /* Closes the section and hands over to 07, as the live site does. */
   closer: {
     lead: 'Each one plays a different role.',
     cta: SITE.startCta,
   },
   lead: 'Everything you need to build your eBay business.',
-  /* `tone` follows the live site: software blue, community gold, training
-     green. It travels with the item so sections downstream inherit it. */
+  /* Tones follow the live site: software blue, community gold, training green. */
   items: [
     {
       n: '01',
@@ -693,15 +555,7 @@ export const FEATURES = {
   eyebrow: "Let's start with the software",
   headline: 'The software does the heavy lifting.',
   lead: 'It handles the repetitive work. You make the decisions.',
-  /* One signal colour per step, in the live site's order: find, list, watch,
-     fulfil → blue, red, green, gold.
-
-     `links` are the named tools the live site puts inside each tile as dashed
-     pills. They point at its feature pages, which THIS SITE DOES NOT HAVE —
-     so they are absolute URLs to the live site for now. When those pages are
-     rebuilt here, repoint them; until then a relative path would be a 404 and
-     dropping them would lose the product names entirely, which are the most
-     concrete thing in the section. */
+  /* One colour per step, in the live site's order: find, list, watch, fulfil. */
   items: [
     {
       n: '1',
@@ -739,18 +593,13 @@ export const FEATURES = {
       links: [],
     },
   ],
-  /* How the live site closes this section too: the payoff line, a door, and a
-     question that hands over to the community section directly below — which
-     opens "Here's what 'never alone' looks like", so the bridge and the
-     section it introduces are the same sentence answered. */
+  /* The live site closes this way too: payoff, door, then a question that
+     section 08 answers in the same words. */
   closer: {
     lead: 'More time building. Less time clicking.',
     cta: SITE.startCta,
     guarantee: SITE.guarantee,
-    /* Marked on exactly the two words the next section's headline puts in
-       quotes — "Here's what 'never alone' looks like." The bridge asks it and
-       the section below answers it in the same words, so the mark is the
-       hinge between them rather than emphasis for its own sake. */
+    /* Marked on the same two words section 08's headline quotes. */
     bridge: {
       lead: 'And if you ever get stuck? You are',
       mark: 'never alone',
@@ -763,13 +612,7 @@ export const FEATURES = {
 
 export const COMMUNITY = {
   eyebrow: 'Support and community',
-  /* Split three ways so the mark is set in the copy file rather than
-     hardcoded in JSX, like §03's "you" and §06's "One system" — and the full
-     stop stays outside the block.
-
-     The marked words are exactly the two section 07's closing bridge marks:
-     it asks "you are never alone", this answers it in the same words, and now
-     both are set the same way. Rewriting either breaks the hinge. */
+  /* Split so the mark lives in the copy, not in the component. */
   headline: 'Here’s what',
   headlineMark: '“never alone”',
   headlineTail: ' looks like.',
@@ -781,14 +624,9 @@ export const COMMUNITY = {
     { icon: 'videoCamera', title: 'Weekly', label: 'Live meetings', body: 'Ask anything, live, with the people who built the tool.', tone: 'green' },
   ],
 
-  /* The illustration the section is built on. Labelled in words under the
-     panel, on the hero panel's rule: nothing on this site draws an interface a
-     visitor could mistake for a capture of their own account without saying
-     so. The times are the section's own "get stuck at 2am" claim, shown. */
+  /* The illustration this section is built on, labelled as one. */
   drawn: {
-    /* The live site heads this card with the brand mark, "EcomSniper Support"
-       and "Online now" rather than a channel name — which is the more honest
-       label anyway: the claim being made is 24/7 support, not a Discord. */
+    /* The live site heads this card the same way, down to the online dot. */
     support: { name: 'EcomSniper Support', status: 'Online now' },
     question: { time: '02:14', body: 'My listing just got blocked. Anyone seen this before?' },
     replies: [
@@ -799,18 +637,7 @@ export const COMMUNITY = {
     call: {
       title: 'Weekly live call',
       body: 'Ask anything, live, with the people who built the tool.',
-      /* Overlapping initial discs, as the live site draws them: four circles
-         in the four signal tones, ringed in the card's own ground, running
-         into the member figure.
-
-         The initials are real members' — Aldair, Samuele, Manor and Lynx all
-         review the community by name in `PROOF.reviews`. The live site's
-         fourth disc is a K that belongs to nobody, and a made-up initial is a
-         made-up member.
-
-         Tones are assigned in the page's usual order. The glyph colour comes
-         from `toneOf`, not from the live site: it puts white on all four, and
-         white on the green and the gold misses even the 3:1 non-text bar. */
+      /* Overlapping initial discs and a count, as the live site draws them. */
       initials: [
         { letter: 'A', tone: 'blue' },
         { letter: 'S', tone: 'red' },
@@ -822,31 +649,14 @@ export const COMMUNITY = {
     caption: 'An illustration of how a question gets answered — not a capture of a real conversation.',
   },
 
-  /* The deck asked this section for one verbatim member quote about support.
-     It has one, in 04d: Clay C's "Anytime you have a problem the team is there
-     to help you 24/7 through chat support" is one of the eighteen in
-     `PROOF.reviews`, so it already renders in full on this page with its
-     attribution and a link to the profile. A second copy here would be the
-     page quoting the same member twice. */
+  /* A verbatim member quote about support, from the reviews above. */
 };
 
 /* 09 — The course Deck: rename the middle plan so it stops colliding with the course name. */
 
 /**
- * 09 — Step by step. The model and the course, in one section.
- *
- * These were two: section 05 explained the four-step model on its own ink
- * band, and this one sold the course. The live site (ecomsniper.io, read
- * 31 Aug 2026) runs them as one — "Step by step / Starting from zero?", the
- * four steps, then the course underneath — and it is the better shape: the
- * steps ARE what the course teaches, so explaining them and then separately
- * offering to teach them was saying the same thing twice, a third of the page
- * apart.
- *
- * `steps` is section 05's, kept close to the live site's wording. `closer`
- * keeps both of section 05's payoff lines, which the live site does not have —
- * they answer the objection the steps raise, so they are not thrown away with
- * the section they came from.
+ * 09 — Step by step. The steps and the course, in one section: the steps are
+ * what the course teaches, so listing them separately said it all twice.
  */
 export const TRAINING = {
   eyebrow: 'Step by step',
@@ -875,13 +685,9 @@ export const TRAINING = {
       'Updated as eBay and the market change',
     ],
 
-    /* The live site names the instructors under a rule inside the course card
-       rather than as a fourth tick, with both faces. "Taught by Marc Augustine
-       and Sammy" was that bullet; it is redundant beside two portraits and
-       their names, so it is gone rather than said twice.
-
-       The people are read from `FOUNDERS.people` at render, not copied here:
-       two lists of the same two names drift, and section 10 already owns them. */
+    /* The live site names the instructors inside the course card with both
+       faces, so the old "taught by" bullet is gone rather than said twice.
+       The people come from FOUNDERS.people, so the two lists cannot drift. */
     instructorsLabel: 'Your instructors',
 
     /* `modules` is unused. The live site shows no module list in this section,
@@ -903,21 +709,13 @@ export const FOUNDERS = {
   ],
   closer: 'We still run stores. We still take the questions in chat.',
 
-  /* The free door in this section. "Get the free playbook" is the hero's
-     label and stays the hero's; this one earns its own because of where it
-     sits — under two founders, beside a book that names who the product is
-     wrong for. Saying "before you pay" is the argument the section is already
-     making, and it is a promise the site can keep: the playbook is free and
-     takes no card. No claim about the book's contents is added. */
+  /* This section's own free door. It sits under two founders beside a book
+     that says who the product is wrong for, so "before you pay" is the
+     argument already being made — and it is a promise we can keep. */
   bookCta: { label: 'Read it before you pay', href: '/free-play-book' },
-  /* `people` is read by section 09's instructor row as well, so a name or a
-     photo key changed here moves both sections.
-
-     Nothing renders `detail`. Section 10 signs off with the name and the role
-     only, because `body[0]` above already says both of these things in full
-     sentences — a card repeating "7 years selling on eBay" under a paragraph
-     that just said "selling on eBay for seven years" reads as a stutter. It
-     stays because it is real copy and the pricing or about pages may want it. */
+  /* Section 09's instructor row reads this too, so a change here moves both.
+     detail is unused — section 10 says the same thing in full sentences —
+     but it is real copy, so it stays for the pages that may want it. */
   people: [
     {
       name: 'Sammy',
@@ -1019,14 +817,9 @@ export const PRICING = {
       id: 'credits',
       name: '10K Credits Bundle',
       badge: 'Volume deal',
-      /* `was` and `saving` are the client's own, off ecomsniper.io/pricing on
-         1 Sep 2026: the bundle is listed there at $597 struck through to $499,
-         "you save $98". This site was showing only the $499 and dropping a
-         real discount on the one section where price is the objection.
-
-         `recurring` is stated because that page says "3-month recurring
-         billing cycle" — "billed every 3 months" implies it and does not say
-         it, and this is a commitment rather than a one-off. */
+      /* was and saving are theirs, off their pricing page: $597 struck to
+         $499. We were showing only $499 and losing a real discount. recurring
+         is stated because "billed every 3 months" implies it without saying it. */
       priceLabel: '$499',
       was: '$597',
       saving: 'You save $98',
@@ -1074,15 +867,9 @@ export const PRICING = {
       cta: { label: 'Get the Enterprise plan', href: SITE.signupUrl },
     },
   ],
-  /* The /pricing header, which is the client's own and is better than the
-     one that stood here. Ours opened on the shape of the offer ("Three
-     ways in"); theirs opens on the question the visitor arrived with, and
-     answers it with the guarantee rather than with a plan.
-
-     The four `promises` are the same four lines as
-     `ASSURANCE.guarantee.closer`. They are stated once per page: the
-     assurance section drops its closer on /pricing, because this block
-     already carries them and carries them higher up. */
+  /* The client's own header, and better than ours was: it opens on the
+     question the visitor arrived with. The promises are the same four lines as
+     the guarantee section, which drops its own copy on this page. */
   page: {
     eyebrow: 'The decision',
     headline: 'Is this going to work for you?',
@@ -1230,13 +1017,9 @@ export const ASSURANCE = {
     seal: { top: '30', bottom: 'Days' },
     /* The strip. Repeated by the component, so the copy states it once. */
     marquee: '30 day money back guarantee',
-    /* The door. Their own pricing page puts a button under this claim and
-       this section had none — the reader reaches the end of the argument
-       with nowhere to go but the scrollbar. The reassurance names the plan,
-       as every other statement of the guarantee on this site does.
-
-       Section 15 follows with the same door and a free one beside it; this
-       one is for the reader the guarantee just convinced. */
+    /* A door. Their pricing page puts a button under this claim and this
+       section had none, so the reader hit the end of the argument with
+       nowhere to go. The reassurance names the plan, as it does everywhere. */
     /* The label above the price in the close panel. Two words, because the
        panel is a door and not a pitch. */
     ctaEyebrow: 'Start today',
@@ -1262,18 +1045,10 @@ export const STICKY_CTA = {
   cta: { label: 'Start now', href: SITE.signupUrl },
 };
 
-/* The consultation offer.
-
-   It opens when section 07 comes into view — the point where the page stops
-   talking about the reader and starts talking about the software, which is
-   where someone either leans in or starts wondering whether any of this
-   applies to them.
-
-   The wording deliberately promises a reply and nothing else. No response
-   time, no named person, no "audit" — those are commitments the business has
-   to keep to real people who hand over an email, and none of them is stated
-   anywhere on the client's own site. Tighten the copy here once the client
-   confirms who answers these and how quickly. */
+/* The consultation offer, opened when section 07 comes into view. The copy
+   promises a reply and nothing else — no response time, no named person —
+   because none of that is confirmed. Tighten it once the client says who
+   answers these and how fast. */
 
 export const CONSULT = {
   eyebrow: 'Free consultation',
@@ -1334,13 +1109,9 @@ export const PLAYBOOK = {
   formCta: 'Send me the playbook',
   smallprint: 'No countdown timers, no fake scarcity. Unsubscribe at the bottom of any email.',
 
-  /* The four things a reader wants settled before typing an email address,
-     from the client's own free-playbook page. The page count is read off the
-     exit-intent copy because scale is the other thing they want to know.
-
-     `privacy` is a promise the site has to keep, not a decoration: it belongs
-     wherever the form is, and it means the endpoint behind
-     `VITE_PLAYBOOK_ENDPOINT` cannot sell or pass on the address. */
+  /* The four things a reader wants settled before typing an email, from the
+     client's own page. privacy is a promise, not decoration: it belongs with
+     the form, and the endpoint behind it must not pass the address on. */
   reassurances: ['83 pages', 'No spam', 'No credit card', 'Instant access'],
 
   /* The book. Counted from the PDF rather than described: 83 pages, 16MB.
@@ -1353,17 +1124,10 @@ export const PLAYBOOK = {
     size: '16 MB',
   },
 
-  /* What they see once the address is in.
-
-     It hands over the file immediately rather than only promising an email:
-     somebody who just typed their address has earned the thing they typed it
-     for, and a download that works whether or not the mail lands is the
-     difference between a lead magnet and a bait and switch. The email still
-     goes out, and the copy says so.
-
-     The offer underneath is the only place on this site that asks for money
-     from someone who has just been given something free, so it is framed as
-     the next step rather than as a pitch, and it carries the guarantee. */
+  /* What they see once the address is in. The file is handed over straight
+     away, not just promised by email — they earned it by typing it. The offer
+     underneath is the one place we ask for money right after giving something
+     away, so it is framed as a next step and carries the guarantee. */
   done: {
     title: 'It is yours.',
     body: 'The download starts from the button below. A copy is on its way to your inbox too — if it has not arrived in a few minutes, look in promotions, and reply to it either way. A person reads those.',
@@ -1382,21 +1146,10 @@ export const PLAYBOOK = {
 export const FOOTER = {
   tagline: 'Software, training and community for eBay sellers.',
 
-  /* Every link here was checked against what actually exists.
-
-     Eight of them used to point at routes this app does not have — /about,
-     /blog, /contact, /help, /terms, /privacy, /refunds and
-     /results-disclaimer — so the entire Company, Support and Legal columns
-     were 404s. This rebuild covers the homepage, /pricing and the playbook;
-     the rest of the site is still the live one, so the links go there, at the
-     slugs their own nav and footer use. Note that ecomsniper.io answers 200
-     for any path — it is a single page app with a catch-all — so a link
-     checker will call anything here healthy. These were taken from their
-     markup, not guessed and probed.
-
-     Dropped: Affiliate, which their footer points at /login, and Help centre,
-     which exists nowhere. A link that lands somewhere unrelated is worse than
-     no link. */
+  /* Checked against what exists. Eight of these used to point at routes this
+     app does not have, so three whole columns were 404s — they go to the live
+     site now, at its own slugs. Note it answers 200 for any path, so a link
+     checker proves nothing; these came from their markup. */
   columns: [
     {
       title: 'Product',
