@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
@@ -145,6 +145,13 @@ function FooterLink({ href, label }) {
  */
 export default function SiteFooter() {
   const { contact, social, secondDoor } = FOOTER;
+  const { pathname } = useLocation();
+
+  /* The free door is hidden on the page it opens. Offering somebody the
+     playbook while they are looking at the form for it reads as the site not
+     knowing where they are, and on a phone it put two identical calls to
+     action within a screen of each other. */
+  const showSecondDoor = pathname !== secondDoor.cta.href;
 
   return (
     <footer className="relative overflow-hidden bg-ink pb-10 pt-16 text-paper sm:pt-20">
@@ -158,6 +165,7 @@ export default function SiteFooter() {
       <div className="site-shell">
         {/* The free door, first, because it is the only thing here anyone can
             act on. */}
+        {showSecondDoor && (
         <div className="flex flex-col gap-5 rounded-3xl border border-ink-line bg-paper/[0.04] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div>
             <p className="font-display text-xl font-extrabold tracking-tight">
@@ -178,8 +186,11 @@ export default function SiteFooter() {
             {secondDoor.cta.label}
           </CtaButton>
         </div>
+        )}
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16">
+        <div className={`grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 ${
+          showSecondDoor ? 'mt-14' : ''
+        }`}>
           <div>
             <Link to="/" aria-label="EcomSniper home" className="inline-block text-paper">
               <BrandLogo tone="paper" />

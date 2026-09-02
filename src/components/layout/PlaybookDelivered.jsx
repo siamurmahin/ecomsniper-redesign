@@ -61,14 +61,14 @@ export default function PlaybookDelivered({ onClose }) {
           <Icon name="close" className="size-3" aria-hidden="true" />
         </button>
 
-        <div className="relative grid gap-6 p-5 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-9">
+        <div className="relative grid gap-5 p-5 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-9">
           <img
             src={playbookCover}
             alt=""
             aria-hidden="true"
             width={855}
             height={1370}
-            className="mx-auto h-40 w-auto -rotate-3 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:mx-0"
+            className="h-28 w-auto -rotate-3 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:h-40"
           />
 
           <div>
@@ -86,7 +86,7 @@ export default function PlaybookDelivered({ onClose }) {
               {PLAYBOOK.done.title}
             </h2>
 
-            <p className="mt-3 text-[0.9rem] leading-relaxed text-muted-dark">
+            <p className="mt-2.5 text-[0.85rem] leading-relaxed text-muted-dark sm:mt-3 sm:text-[0.9rem]">
               {PLAYBOOK.done.body}
             </p>
 
@@ -100,7 +100,7 @@ export default function PlaybookDelivered({ onClose }) {
               {PLAYBOOK.done.downloadCta}
             </a>
 
-            <p className="mt-2.5 text-center text-xs text-muted-dark">
+            <p className="mt-2.5 text-xs text-muted-dark">
               PDF · {PLAYBOOK.file.pages} pages · {PLAYBOOK.file.size}
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function PlaybookDelivered({ onClose }) {
             {PLAYBOOK.done.upsell.title}
           </p>
 
-          <p className="mt-2 max-w-xl text-[0.9rem] leading-relaxed text-muted-dark">
+          <p className="mt-2 max-w-xl text-[0.85rem] leading-relaxed text-muted-dark sm:text-[0.9rem]">
             {PLAYBOOK.done.upsell.body}
           </p>
 
