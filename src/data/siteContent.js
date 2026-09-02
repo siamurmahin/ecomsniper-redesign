@@ -1292,6 +1292,9 @@ export const NOT_FOUND = {
  */
 export const A11Y = {
   close: 'Close',
+  openMenu: 'Open menu',
+  closeMenu: 'Close menu',
+  language: 'Language',
   backToTop: 'Back to top',
   home: 'EcomSniper home',
   navPrimary: 'Primary',

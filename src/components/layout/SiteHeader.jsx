@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import BrandLogo from '../ui/BrandLogo';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -15,6 +15,7 @@ export default function SiteHeader() {
   const { NAV_LINKS, SITE, A11Y } = useContent();
   const [isCondensed, setIsCondensed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef = useRef(null);
   const location = useLocation();
   /* Every internal link keeps the language the reader is in. */
   const language = languageFromPath(location.pathname);
@@ -31,20 +32,33 @@ export default function SiteHeader() {
   // Close the mobile panel whenever the route changes.
   useEffect(() => setIsMenuOpen(false), [location.pathname, location.hash]);
 
-  // Escape closes the panel; body scroll is locked while it is open.
+  /* Escape or a tap outside closes the panel; body scroll is locked while it
+     is open. Without the outside tap the only way out was the X, which is the
+     opposite of what a tap on the page behind a menu is asking for.
+
+     pointerdown, not click: with body scroll locked, a tap on the page behind
+     can end without ever producing a click. */
   useEffect(() => {
     if (!isMenuOpen) return undefined;
+
     const onKey = (event) => event.key === 'Escape' && setIsMenuOpen(false);
+    const onOutside = (event) => {
+      if (!headerRef.current?.contains(event.target)) setIsMenuOpen(false);
+    };
+
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onOutside);
+
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onOutside);
     };
   }, [isMenuOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4">
+    <header ref={headerRef} className="fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4">
       <div className="site-shell">
         <div
           // py-2 rather than py-2.5: the wordmark is now the tallest thing in
@@ -123,7 +137,7 @@ export default function SiteHeader() {
               onClick={() => setIsMenuOpen((open) => !open)}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-nav-panel"
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-label={isMenuOpen ? A11Y.closeMenu : A11Y.openMenu}
               className="grid size-9 shrink-0 place-items-center rounded-full border border-hairline bg-paper/60 sm:size-10 lg:hidden"
             >
               <span className="relative block h-3 w-4">

@@ -146,8 +146,34 @@ function RouteScrollManager() {
     return () => cancelAnimationFrame(frame);
   }, [pathname, hash]);
 
+  /*
+   * Re-measure once the new page has stopped growing, not one frame in.
+   *
+   * A single frame lands before DeferUntilPainted has mounted anything below
+   * the hero, so every trigger was measured against a page a fraction of its
+   * final height. On a language switch that is the whole route remounting, so
+   * the miss is the entire page rather than a section or two.
+   */
   useEffect(() => {
-    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    let frame = 0;
+    const startedAt = performance.now();
+    let lastHeight = -1;
+    let stable = 0;
+
+    const tick = () => {
+      const height = document.documentElement.scrollHeight;
+      stable = height === lastHeight ? stable + 1 : 0;
+      lastHeight = height;
+
+      if (stable >= 2 || performance.now() - startedAt > 1500) {
+        ScrollTrigger.refresh();
+        return;
+      }
+
+      frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [pathname]);
 
@@ -180,6 +206,8 @@ function PreloaderRelease() {
 
 export default function App() {
   const { SITE } = useContent();
+  const { pathname } = useLocation();
+  const language = languageFromPath(pathname);
   return (
     <SmoothScrollProvider>
       <PreloaderRelease />
@@ -197,7 +225,12 @@ export default function App() {
       <SiteHeader />
 
       <main id="main-content">
-        <Routes>
+        {/* Keyed on the language so a switch rebuilds the page instead of
+            re-rendering into it. GSAP owns DOM that React did not write —
+            SplitText replaces the headline with its own spans — so an update
+            in place left the old language's headline on screen and the
+            reveal triggers measuring a page that no longer existed. */}
+        <Routes key={language}>
           {/* Every page twice: once plain, once under /de. Anything not yet
               translated falls back to English, so a route is never blank. */}
           {['', '/de'].map((prefix) => (

@@ -927,6 +927,9 @@ export const de = {
 
   A11Y: {
     close: 'Schließen',
+    openMenu: 'Menü öffnen',
+    closeMenu: 'Menü schließen',
+    language: 'Sprache',
     backToTop: 'Nach oben',
     home: 'EcomSniper Startseite',
     navPrimary: 'Hauptmenü',
