@@ -211,6 +211,23 @@
     @apply relative py-16 sm:py-20 lg:py-24;
   }
 
+  /*
+   * Skip layout and paint for a section until it is near the viewport.
+   *
+   * For the two evidence walls only. Between them they are 2,849 elements —
+   * 58% of the homepage — and both run a marquee that never stops, far below
+   * the fold. Lighthouse measured the main thread busy for 14s on work almost
+   * none of which was JavaScript.
+   *
+   * 'auto' on contain-intrinsic-size so the browser remembers each section's
+   * real height once it has been rendered; the fallback only has to be close
+   * enough that the scrollbar does not jump on the way down.
+   */
+  .defer-render {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+
   /* Neutral by default: a rule carries the eye. An accent on all 15 sections
      reads as noise. */
   .section-eyebrow {
