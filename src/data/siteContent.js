@@ -80,6 +80,8 @@ export const HERO = {
     'Software that lists for you. Training that starts from zero. And people who answer at 2 in the morning.',
   primaryCta: SITE.startCta,
   secondaryCta: { label: 'Get the free playbook', href: '/free-play-book' },
+  /* The handwritten note pointing at the secondary button. */
+  secondaryNote: 'Grab it for free',
   /* Price and risk reversal sit under the hero buttons, not 900px down. */
   assurances: [
     { lead: 'From $97', detail: 'for your first month', tone: 'blue', icon: 'salesGrowth' },

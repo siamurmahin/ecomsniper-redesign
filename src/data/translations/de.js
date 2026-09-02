@@ -62,6 +62,7 @@ export const de = {
       'Software, die für dich einstellt. Eine Schulung, die bei null anfängt. Und Menschen, die um zwei Uhr nachts antworten.',
     primaryCta: { label: 'Starte dein eBay-Geschäft' },
     secondaryCta: { label: 'Hol dir das kostenlose Playbook' },
+    secondaryNote: 'Kostenlos mitnehmen',
     blessing: { translation: 'SO GOTT WILL' },
     assurances: [
       { lead: 'Ab 97 $', detail: 'für deinen ersten Monat' },

@@ -37,7 +37,7 @@ export default function LanguageSwitcher({ stacked = false }) {
   }, [isOpen]);
 
   return (
-    <div ref={wrapRef} className={`relative ${stacked ? '' : 'shrink-0'}`}>
+    <div ref={wrapRef} className={`relative ${stacked ? 'inline-block' : 'shrink-0'}`}>
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}
@@ -46,23 +46,20 @@ export default function LanguageSwitcher({ stacked = false }) {
         aria-label={`Language: ${current.label}`}
         /* Bordered, with the globe: as bare text beside "Log in" it read as
            another link and nobody found it. The box is what says "control". */
+        /* Sized to its own words in both places. Full width in the panel made
+           a two-item setting look like the most important thing on it. */
         className={
           stacked
-            ? 'flex w-full items-center justify-between rounded-2xl border border-hairline px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5'
+            ? 'flex items-center gap-2 rounded-full border border-hairline px-4 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/5'
             : 'flex items-center gap-1.5 rounded-full border border-hairline px-3 py-2 text-sm font-semibold text-ink transition-colors duration-200 hover:border-ink/25 hover:bg-ink/5'
         }
       >
-        {stacked ? (
-          <span className="flex items-center gap-2.5">
-            <Icon name="globe" className="size-4 shrink-0 text-muted" aria-hidden="true" />
-            {current.label}
-          </span>
-        ) : (
-          <>
-            <Icon name="globe" className="size-3.5 shrink-0 text-muted" aria-hidden="true" />
-            {current.short}
-          </>
-        )}
+        <Icon
+          name="globe"
+          className={`shrink-0 text-muted ${stacked ? 'size-4' : 'size-3.5'}`}
+          aria-hidden="true"
+        />
+        {stacked ? current.label : current.short}
         <Icon
           name="chevronDown"
           className={`size-3 shrink-0 transition-transform duration-300 ${
@@ -75,9 +72,11 @@ export default function LanguageSwitcher({ stacked = false }) {
       {isOpen && (
         <ul
           role="menu"
+          /* In flow when stacked, not absolute: the panel is overflow-hidden,
+             so a floating menu would be cut off at its rounded edge. */
           className={
             stacked
-              ? 'mt-1 flex flex-col gap-0.5 pb-1'
+              ? 'mt-2 w-44 overflow-hidden rounded-2xl border border-hairline bg-paper p-1'
               : 'absolute end-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-2xl border border-hairline bg-paper p-1 shadow-float'
           }
         >
@@ -93,8 +92,8 @@ export default function LanguageSwitcher({ stacked = false }) {
                 }}
                 /* Taller in the panel: at py-2.5 the rows came out 40px,
                    under the 44px a thumb needs. */
-                className={`flex w-full items-center justify-between rounded-xl text-left transition-colors duration-200 hover:bg-ink/5 ${
-                  stacked ? 'px-4 py-3.5 text-base' : 'px-3 py-2.5 text-sm'
+                className={`flex w-full items-center justify-between rounded-xl text-left text-sm transition-colors duration-200 hover:bg-ink/5 ${
+                  stacked ? 'px-3 py-3' : 'px-3 py-2.5'
                 } ${
                   language.code === code ? 'font-semibold' : 'text-muted'
                 }`}
