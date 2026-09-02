@@ -43,6 +43,14 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# The typefaces. Not content-hashed — they are referenced by name from the
+# stylesheet and preloaded by name from index.html — so the filename carries
+# the weight range instead, and a different file means a different name.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # index.html is the one file with a stable URL, so it must always be revalidated
 # — otherwise a visitor keeps loading a cached document pointing at assets from
 # a previous deploy.

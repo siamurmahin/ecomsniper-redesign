@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "fetch:fonts": "node scripts/fetch-fonts.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",

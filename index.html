@@ -41,12 +41,30 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Fonts: preconnect first, then a single stylesheet request for all three families. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Fonts, served from this origin. `scripts/fetch-fonts.mjs` fetches them
+      and writes the @font-face rules; the reasoning is in its header, and the
+      short version is that a stylesheet link fires before a consent banner can
+      exist, so a German visitor reached Google before being asked anything.
+
+      Preloaded rather than left to the stylesheet: these two carry the first
+      screen — the headline and every line of body copy under it — and without
+      this they are not requested until the CSS has been parsed. Latin only;
+      the latin-ext files are for characters no first screen has.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/bricolage-grotesque-400-800-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/montserrat-400-700-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     <!--

@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* The typefaces, served from this origin — see `scripts/fetch-fonts.mjs`. */
+@import './fonts.css';
 
 /* ==========================================================================
    EcomSniper design system
