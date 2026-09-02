@@ -98,6 +98,16 @@ function RouteScrollManager() {
     let lastHeight = -1;
     let stableFrames = 0;
 
+    /* The two evidence walls are skipped until they are near the viewport, so
+       until they have rendered once their height is a guess and the trip past
+       them is measured against it. See `.is-landing` in the stylesheet. */
+    const root = document.documentElement;
+    if (hash) root.classList.add('is-landing');
+    const stopLanding = () => root.classList.remove('is-landing');
+    /* After the eased scroll has had its longest run, not before: the walls
+       collapsing mid-flight would move the target again. */
+    const landingDone = hash ? window.setTimeout(stopLanding, 2500) : 0;
+
     /* Two frames at the same document height. One is not enough — a frame
        between two mounts reads as stable and is not. */
     const settled = () => {
@@ -149,7 +159,11 @@ function RouteScrollManager() {
 
     frame = requestAnimationFrame(land);
 
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(landingDone);
+      stopLanding();
+    };
   }, [pathname, hash]);
 
   /*

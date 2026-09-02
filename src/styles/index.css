@@ -228,6 +228,23 @@
     contain-intrinsic-size: auto 900px;
   }
 
+  /*
+   * A deep link has to land on its section, and 900px is a guess.
+   *
+   * `/#training` scrolls past both walls, so the trip is measured against two
+   * placeholders rather than two sections — and they resolve to their real
+   * height on the way down, moving the target after the page has stopped.
+   * Measured: the landing came up 246px short.
+   *
+   * `is-landing` is on the document only while a hash is being resolved, so
+   * the walls are measured, not estimated. It costs that one navigation the
+   * work this rule exists to skip; a visitor who asked for a section far down
+   * the page is going to scroll through both of them anyway.
+   */
+  .is-landing .defer-render {
+    content-visibility: visible;
+  }
+
   /* Neutral by default: a rule carries the eye. An accent on all 15 sections
      reads as noise. */
   .section-eyebrow {

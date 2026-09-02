@@ -57,8 +57,11 @@ export function scrollToTarget(target, { immediate = false } = {}) {
       Math.max(MIN_DURATION, distance * SECONDS_PER_PIXEL),
     );
 
+    /* No offset for an element: Lenis reads `scroll-margin-top` off the target
+       itself, and every anchored section carries the header's 6rem in the
+       stylesheet. Passing the offset as well counted the header twice and left
+       a deep link 96px above where it asked to be. */
     lenis.scrollTo(target, {
-      offset: typeof target === 'number' ? 0 : -HEADER_SCROLL_OFFSET,
       immediate,
       duration: immediate ? 0 : duration,
       easing: easeInOutCubic,
