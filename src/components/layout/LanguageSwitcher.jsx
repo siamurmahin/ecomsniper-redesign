@@ -44,13 +44,25 @@ export default function LanguageSwitcher({ stacked = false }) {
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label={`Language: ${current.label}`}
+        /* Bordered, with the globe: as bare text beside "Log in" it read as
+           another link and nobody found it. The box is what says "control". */
         className={
           stacked
-            ? 'flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5'
-            : 'flex items-center gap-1.5 rounded-full px-2.5 py-2 text-sm font-medium text-muted transition-colors duration-200 hover:bg-ink/5 hover:text-ink'
+            ? 'flex w-full items-center justify-between rounded-2xl border border-hairline px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5'
+            : 'flex items-center gap-1.5 rounded-full border border-hairline px-3 py-2 text-sm font-semibold text-ink transition-colors duration-200 hover:border-ink/25 hover:bg-ink/5'
         }
       >
-        {stacked ? current.label : current.short}
+        {stacked ? (
+          <span className="flex items-center gap-2.5">
+            <Icon name="globe" className="size-4 shrink-0 text-muted" aria-hidden="true" />
+            {current.label}
+          </span>
+        ) : (
+          <>
+            <Icon name="globe" className="size-3.5 shrink-0 text-muted" aria-hidden="true" />
+            {current.short}
+          </>
+        )}
         <Icon
           name="chevronDown"
           className={`size-3 shrink-0 transition-transform duration-300 ${
