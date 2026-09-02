@@ -65,3 +65,19 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
+
+    # A year of HTTPS-only, remembered by the browser, so a visitor who types
+    # the bare domain or follows an old http:// link never makes the plaintext
+    # request that a network in between could answer.
+    #
+    # No `includeSubDomains` and no `preload` on purpose. Both are one-way
+    # doors: includeSubDomains binds every subdomain of the apex, and the
+    # client runs at least one this repo does not deploy — sign that up only
+    # once someone has confirmed it is HTTPS-only and will stay that way.
+    Strict-Transport-Security = "max-age=31536000"
+
+    # This site asks for none of these, so the browser can refuse them outright
+    # — including on behalf of anything embedded later. When the chat widget
+    # returns it will want none of them either; if a future feature does, add
+    # it here deliberately rather than by leaving the door open.
+    Permissions-Policy = "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
