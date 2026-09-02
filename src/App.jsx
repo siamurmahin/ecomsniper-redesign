@@ -29,30 +29,90 @@ function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (hash) {
-      const target = document.querySelector(hash);
-      if (target) {
-        scrollToTarget(target);
-        return;
-      }
-    }
     /*
-     * New route: land at the top without an animation across the whole page.
+     * Where a new route lands.
      *
-     * Twice, and the second time after a frame. Every page mounts its content
-     * one frame late through DeferUntilPainted, so at this moment the new
-     * document is only as tall as its hero — Lenis measures that, clamps its
-     * position to it, and then the rest of the page appears underneath a
-     * scroll position that was never reset. Arriving from the foot of the
-     * homepage, that put the reader at the bottom of the page they had just
-     * opened.
+     * The hard part is that no page has its content yet when this runs. Every
+     * section below the hero is mounted a frame late by DeferUntilPainted, so
+     * at this moment the document is only as tall as its hero and the section
+     * a hash points at does not exist.
      *
-     * The second pass re-measures first, because a stale document height is
-     * what made the first one wrong.
+     * That broke both directions. Without a hash, Lenis measured the short
+     * document, clamped the position to it, and the rest of the page then
+     * appeared underneath a position that was never reset — arriving from the
+     * foot of the homepage put the reader at the bottom of the page they had
+     * just opened. With a hash, querySelector found nothing and the code fell
+     * through to "scroll to the top", which is why /#proof from /pricing
+     * landed on the homepage hero rather than the proof section.
+     *
+     * Both wait for the page to exist instead of assuming it does, and each
+     * attempt re-measures first, because a stale document height is what made
+     * the first one wrong.
      */
+    let frame = 0;
+
+    if (hash) {
+      /* Wait for the section, then go. The position is left alone while
+         waiting: jumping to the top first and then to the section would show
+         the hero for a frame on the way past. Capped so a hash naming nothing
+         settles at the top rather than spinning. */
+      const startedAt = performance.now();
+      let lastHeight = -1;
+      let stableFrames = 0;
+
+      const findTarget = () => {
+        const target = document.querySelector(hash);
+        const lenis = getLenis();
+        const height = document.documentElement.scrollHeight;
+
+        /* Existing is not enough: the sections ABOVE the target are mounting
+           too, so an element found on the first frame is sitting at an offset
+           that is about to change. Scrolling to it then lands somewhere that
+           promptly moves. Wait until the document stops growing as well. */
+        stableFrames = height === lastHeight ? stableFrames + 1 : 0;
+        lastHeight = height;
+
+        /* Lenis has to exist first. Scrolling before it starts moves the
+           page natively, and Lenis then begins from its own stored position —
+           zero — and snaps straight back. Same desync the shared helper's
+           comment warns about, arrived at from the other end. */
+        if (target && lenis && stableFrames >= 2) {
+          lenis.resize();
+          /* Eased, not immediate. A cross-page hash is the same gesture as an
+             in-page one — the reader asked for a section, not for a different
+             page — so it travels the way every other jump on this site does.
+             It reads as the page arriving at the right place rather than
+             flickering through the hero on the way. */
+          scrollToTarget(target);
+          return;
+        }
+
+        if (performance.now() - startedAt < 1500) {
+          frame = requestAnimationFrame(findTarget);
+          return;
+        }
+
+        /* Out of time. Go where we can rather than leaving them at the top of
+           a page they did not ask for. */
+        if (target) {
+          lenis?.resize();
+          scrollToTarget(target, { immediate: true });
+          return;
+        }
+
+        scrollToTarget(0, { immediate: true });
+      };
+
+      frame = requestAnimationFrame(findTarget);
+      return () => cancelAnimationFrame(frame);
+    }
+
+    /* No hash: top, immediately so the old position is never shown, and once
+       more after a frame when the real height is known. Exactly twice — any
+       longer and it would fight a reader who scrolls the moment they land. */
     scrollToTarget(0, { immediate: true });
 
-    const frame = requestAnimationFrame(() => {
+    frame = requestAnimationFrame(() => {
       getLenis()?.resize();
       scrollToTarget(0, { immediate: true });
     });
