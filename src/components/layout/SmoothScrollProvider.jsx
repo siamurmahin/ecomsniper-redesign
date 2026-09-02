@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import Lenis from 'lenis';
-import { gsap, ScrollTrigger, prefersReducedMotion } from '../../lib/motion';
+import { gsap, prefersReducedMotion } from '../../lib/motion';
+import { loadScrollTrigger } from '../../lib/scrollMotion';
 import { registerLenis, unregisterLenis, scrollToTarget } from '../../lib/smoothScroll';
 
 /**
@@ -10,31 +10,53 @@ import { registerLenis, unregisterLenis, scrollToTarget } from '../../lib/smooth
  * alongside Lenis and fight it for the position.
  */
 export default function SmoothScrollProvider({ children }) {
+  /*
+   * Lenis and ScrollTrigger are fetched rather than bundled with the first
+   * screen: 64KB of scrolling machinery that had to be parsed before the hero
+   * could be drawn, for a page nobody has scrolled yet. Until they arrive the
+   * browser scrolls the page itself, which is what a visitor gets on a phone
+   * or under reduced motion anyway.
+   */
   useEffect(() => {
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
     if (prefersReducedMotion() || isTouch) return undefined;
 
-    const lenis = new Lenis({
-      duration: 1.05,
-      // Gentle exponential ease-out: fast to respond, quiet to settle.
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 1.6,
+    let lenis = null;
+    let tick = null;
+    let cancelled = false;
+
+    Promise.all([import('lenis'), loadScrollTrigger()]).then(([{ default: Lenis }, ScrollTrigger]) => {
+      if (cancelled) return;
+
+      lenis = new Lenis({
+        duration: 1.05,
+        // Gentle exponential ease-out: fast to respond, quiet to settle.
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 1.6,
+      });
+
+      registerLenis(lenis);
+
+      // ScrollTrigger must read Lenis' virtual position, not window.scrollY.
+      lenis.on('scroll', ScrollTrigger.update);
+
+      tick = (time) => lenis.raf(time * 1000); // gsap ticker is in seconds
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+
+      /* It takes over a page the visitor may already have moved. Without this
+         Lenis starts from a virtual zero and the page jumps back to the top. */
+      lenis.scrollTo(window.scrollY, { immediate: true });
     });
 
-    registerLenis(lenis);
-
-    // ScrollTrigger must read Lenis' virtual position, not window.scrollY.
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const tick = (time) => lenis.raf(time * 1000); // gsap ticker is in seconds
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-
     return () => {
-      gsap.ticker.remove(tick);
-      unregisterLenis();
-      lenis.destroy();
+      cancelled = true;
+      if (tick) gsap.ticker.remove(tick);
+      if (lenis) {
+        unregisterLenis();
+        lenis.destroy();
+      }
     };
   }, []);
 

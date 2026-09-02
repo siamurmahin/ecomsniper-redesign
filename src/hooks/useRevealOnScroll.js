@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
-import { gsap, ScrollTrigger, prefersReducedMotion, MOTION } from '../lib/motion';
+import { gsap, prefersReducedMotion, MOTION } from '../lib/motion';
+import { getScrollTrigger, loadScrollTrigger } from '../lib/scrollMotion';
 
 /**
  * One `ScrollTrigger.refresh()` for the whole page, however many sections ask
@@ -21,7 +22,7 @@ const scheduleRefresh = () => {
   cancelAnimationFrame(pendingRefresh);
   pendingRefresh = requestAnimationFrame(() => {
     pendingRefresh = 0;
-    ScrollTrigger.refresh();
+    getScrollTrigger()?.refresh();
   });
 };
 
@@ -96,8 +97,10 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
     };
 
     let ctx = null;
+    let cancelled = false;
 
     const build = () => {
+      if (cancelled) return;
       ctx = gsap.context(setUp, scope);
 
       /* Layout settles after fonts load; refresh so triggers use final
@@ -111,12 +114,13 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
       }
     };
 
-    /* Built on approach rather than on mount — see `BUILD_MARGIN`. */
+    /* Built on approach rather than on mount — see `BUILD_MARGIN` — and the
+       plugin itself is fetched by whichever section approaches first. */
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         observer.disconnect();
-        build();
+        loadScrollTrigger().then(build);
       },
       { rootMargin: BUILD_MARGIN },
     );
@@ -124,6 +128,7 @@ export function useRevealOnScroll({ start = 'top 82%', y = MOTION.rise } = {}) {
     observer.observe(scope);
 
     return () => {
+      cancelled = true;
       observer.disconnect();
       ctx?.revert();
     };

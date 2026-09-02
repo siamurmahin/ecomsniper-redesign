@@ -4,9 +4,9 @@ import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
 import HomePage from './pages/HomePage';
 import { useContent } from './hooks/useContent';
-import { ScrollTrigger } from './lib/motion';
+import { getScrollTrigger } from './lib/scrollMotion';
 import { dismissPreloader } from './lib/preloader';
-import { getLenis, scrollToTarget } from './lib/smoothScroll';
+import { getLenis, holdLanding, scrollToTarget } from './lib/smoothScroll';
 import {
   DEFAULT_LANGUAGE,
   languageFromPath,
@@ -97,15 +97,27 @@ function RouteScrollManager() {
     let lastHeight = -1;
     let stableFrames = 0;
 
-    /* The two evidence walls are skipped until they are near the viewport, so
-       until they have rendered once their height is a guess and the trip past
-       them is measured against it. See `.is-landing` in the stylesheet. */
-    const root = document.documentElement;
-    if (hash) root.classList.add('is-landing');
-    const stopLanding = () => root.classList.remove('is-landing');
-    /* After the eased scroll has had its longest run, not before: the walls
-       collapsing mid-flight would move the target again. */
-    const landingDone = hash ? window.setTimeout(stopLanding, 2500) : 0;
+    /* Held from here rather than from the scroll itself: the settle loop below
+       measures the document while it waits, and it has to be measuring the
+       real thing. See `holdLanding`. */
+    if (hash) holdLanding();
+
+    /*
+     * The visitor wins.
+     *
+     * The reset below runs until the page stops growing, and on a slow
+     * connection that is up to a second and a half after the first screen is
+     * readable — during which someone who scrolled was put back at the top,
+     * once per frame. Measured on Slow 3G: a scroll to 404px was undone 36ms
+     * later. A gesture ends it; a programmatic scroll is not a gesture, so
+     * this listens for the input rather than for the movement.
+     */
+    let moved = false;
+    const yieldToVisitor = () => {
+      moved = true;
+    };
+    const gestures = ['wheel', 'touchstart', 'keydown'];
+    gestures.forEach((type) => window.addEventListener(type, yieldToVisitor, { passive: true }));
 
     /* Two frames at the same document height. One is not enough — a frame
        between two mounts reads as stable and is not. */
@@ -120,6 +132,9 @@ function RouteScrollManager() {
       const lenis = getLenis();
       const isSettled = settled();
       const timedOut = performance.now() - startedAt > 1500;
+
+      // Somewhere else is where they want to be, and they said so.
+      if (moved) return;
 
       if (hash) {
         const target = document.querySelector(hash);
@@ -160,8 +175,7 @@ function RouteScrollManager() {
 
     return () => {
       cancelAnimationFrame(frame);
-      clearTimeout(landingDone);
-      stopLanding();
+      gestures.forEach((type) => window.removeEventListener(type, yieldToVisitor));
     };
   }, [pathname, hash]);
 
@@ -185,7 +199,7 @@ function RouteScrollManager() {
       lastHeight = height;
 
       if (stable >= 2 || performance.now() - startedAt > 1500) {
-        ScrollTrigger.refresh();
+        getScrollTrigger()?.refresh();
         return;
       }
 

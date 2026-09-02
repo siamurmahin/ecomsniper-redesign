@@ -17,7 +17,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-gsap': ['gsap', 'lenis'],
+          'vendor-gsap': ['gsap', 'gsap/SplitText'],
+          'vendor-scroll': ['gsap/ScrollTrigger', 'lenis'],
         },
       },
     },

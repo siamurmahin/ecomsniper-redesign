@@ -9,6 +9,33 @@ let lenisInstance = null;
 /** Height of the fixed header, so anchored headings are not hidden under it. */
 export const HEADER_SCROLL_OFFSET = 96;
 
+/**
+ * Renders the sections that are normally skipped, for the length of a trip.
+ *
+ * The two evidence walls carry `content-visibility: auto`, so until each has
+ * been rendered once its height is a 900px guess — and a trip that passes them
+ * is measured against the guesses, which then resolve as the page goes by and
+ * move the target out from under the scroll. Measured: 246px short, both on a
+ * deep link and on a nav click.
+ *
+ * `.is-landing` in the stylesheet turns them back on. It comes off after the
+ * eased scroll's longest possible run, not before: collapsing them mid-flight
+ * would move the target again.
+ */
+const LANDING_HOLD_MS = 2500;
+let landingTimer = 0;
+
+export function holdLanding() {
+  const root = document.documentElement;
+  root.classList.add('is-landing');
+
+  clearTimeout(landingTimer);
+  landingTimer = window.setTimeout(() => {
+    landingTimer = 0;
+    root.classList.remove('is-landing');
+  }, LANDING_HOLD_MS);
+}
+
 export const registerLenis = (instance) => {
   lenisInstance = instance;
 };
@@ -40,6 +67,11 @@ const MAX_DURATION = 1.5;
  */
 export function scrollToTarget(target, { immediate = false } = {}) {
   const lenis = lenisInstance;
+
+  /* Measure the page as it will be, not as it is estimated — see
+     `holdLanding`. Before anything reads a position, so the read itself
+     resolves the two walls. */
+  if (typeof target !== 'number') holdLanding();
 
   if (lenis) {
     /*

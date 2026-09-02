@@ -4,14 +4,16 @@
  */
 
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
 // SplitText ships with GSAP from 3.13 — a registration, not a dependency.
-gsap.registerPlugin(ScrollTrigger, SplitText);
+// It is here rather than behind a fetch because the hero's entrance needs it
+// in the same breath as the hero itself.
+gsap.registerPlugin(SplitText);
 
-// Fewer, cheaper ScrollTrigger recalculations on mobile address-bar resize.
-ScrollTrigger.config({ ignoreMobileResize: true });
+/* ScrollTrigger is not here: nothing on the first screen scrolls, and it and
+   Lenis are 64KB. `scrollMotion.js` fetches it for the first caller that
+   needs it — the reveals, the smooth scrolling, a route re-measure. */
 
 gsap.defaults({ ease: 'expo.out', duration: 1 });
 
@@ -29,4 +31,4 @@ export const MOTION = {
   duration: 0.9,
 };
 
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, SplitText };
