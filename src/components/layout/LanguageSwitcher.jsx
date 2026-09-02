@@ -79,7 +79,11 @@ export default function LanguageSwitcher({ stacked = false }) {
                   switchTo(language.code);
                   setIsOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition-colors duration-200 hover:bg-ink/5 ${
+                /* Taller in the panel: at py-2.5 the rows came out 40px,
+                   under the 44px a thumb needs. */
+                className={`flex w-full items-center justify-between rounded-xl text-left transition-colors duration-200 hover:bg-ink/5 ${
+                  stacked ? 'px-4 py-3.5 text-base' : 'px-3 py-2.5 text-sm'
+                } ${
                   language.code === code ? 'font-semibold' : 'text-muted'
                 }`}
               >
