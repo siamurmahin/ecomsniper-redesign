@@ -4,16 +4,14 @@
  */
 
 import gsap from 'gsap';
-import { SplitText } from 'gsap/SplitText';
 
-// SplitText ships with GSAP from 3.13 — a registration, not a dependency.
-// It is here rather than behind a fetch because the hero's entrance needs it
-// in the same breath as the hero itself.
-gsap.registerPlugin(SplitText);
+/* Neither plugin is here any more, and both were on the first screen's
+   critical path because the hero imports this file.
 
-/* ScrollTrigger is not here: nothing on the first screen scrolls, and it and
-   Lenis are 64KB. `scrollMotion.js` fetches it for the first caller that
-   needs it — the reveals, the smooth scrolling, a route re-measure. */
+   ScrollTrigger and Lenis are 64KB and nothing on the first screen scrolls;
+   `scrollMotion.js` fetches them for the first caller that does. SplitText is
+   `textMotion.js`, which travels in the chunk of the one section that still
+   splits by line — the hero splits its own headline in the markup. */
 
 gsap.defaults({ ease: 'expo.out', duration: 1 });
 
@@ -31,4 +29,4 @@ export const MOTION = {
   duration: 0.9,
 };
 
-export { gsap, SplitText };
+export { gsap };

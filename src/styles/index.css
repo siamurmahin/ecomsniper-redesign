@@ -532,13 +532,37 @@
     --hero-delay: 500ms;
   }
 
-  /* Words carry their own step, set from the split. The eye reads left to
+  /* Words carry their own step, set in the markup. The eye reads left to
      right and the stagger should too, without feeling typed out — with eleven
      words the whole headline lands inside a second. */
   .js-motion [data-hero-word] {
     --hero-delay: 60ms;
     animation-duration: 550ms;
     animation-name: hero-rise;
+    /* A transform does nothing to an inline box. */
+    display: inline-block;
+  }
+
+  /*
+   * The edge each word rises from behind.
+   *
+   * This was GSAP's line mask, which had to measure where the lines fell —
+   * inside the commit that mounts the hero. A word's own box has the same top
+   * and bottom as the line it sits on, so it is the same edge, and it is known
+   * without asking the browser anything.
+   *
+   * The padding is the clip box only: the line height here is 0.98, tighter
+   * than the font's own box, so a cap or a comma would be shaved off by an
+   * edge drawn exactly on the text. The matching negative margin keeps the
+   * layout identical to the words being plain text, which is what they are
+   * with no JS.
+   */
+  .js-motion .hero-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-block: 0.14em;
+    margin-block: -0.14em;
   }
 
   /* The panel enters alongside the copy: it is the other half of the fold,

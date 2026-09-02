@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import HeroDots from '../components/hero/HeroDots';
@@ -7,7 +7,7 @@ import TextType from '../components/reactbits/TextType';
 import { useContent } from '../hooks/useContent';
 import { announceHeroReady } from '../lib/heroReady';
 // The hero's entrance is CSS; its easing comes from the stylesheet.
-import { gsap, prefersReducedMotion, SplitText } from '../lib/motion';
+import { prefersReducedMotion } from '../lib/motion';
 import { toneOf } from '../lib/signalTones';
 
 /** The two objections, and the colour each answer carries. */
@@ -32,10 +32,80 @@ const WORD_DURATION_MS = 550;
 /** Support cards: 500ms base + two steps + 450ms. The other chains are shorter. */
 const SUPPORT_END_MS = 500 + 2 * STAGGER_MS + 450;
 
+/**
+ * The fixed half of the headline, one word at a time.
+ *
+ * This was GSAP's SplitText, splitting the rendered text into lines and words
+ * and masking each line. Splitting by line means measuring where the lines
+ * fall, and that measurement ran inside the commit that mounts the hero:
+ * traced at 4x CPU, 158ms of forced layout in the page's first and longest
+ * task, plus the plugin in the bundle the first screen waits for.
+ *
+ * Words are known without measuring anything — they are in the deck. Each one
+ * carries its own edge to rise from behind instead of sharing its line's, and
+ * at this line height the two are the same edge. The stagger index and the
+ * animation are the stylesheet's, exactly as before.
+ *
+ * The struck phrase rises as one word: its rule is drawn across the whole
+ * phrase, so splitting it would leave the rule crossing three words that are
+ * still arriving.
+ *
+ * @param {Array<{text: string, tone?: string, breakBefore?: boolean}>} parts
+ * @returns {{nodes: Array, count: number}} the markup, and how many words it has
+ */
+function splitIntoWords(parts) {
+  const nodes = [];
+  let index = 0;
+
+  const word = (key, text, innerClass = '') => {
+    nodes.push(
+      <span key={key} className={`hero-word${innerClass ? ' whitespace-nowrap' : ''}`}>
+        <span data-hero-word style={{ '--hero-stagger': index }} className={innerClass}>
+          {text}
+        </span>
+      </span>,
+    );
+    index += 1;
+  };
+
+  parts.forEach((part, partIndex) => {
+    // The deck's own line break. Without it the full stop leads the next line.
+    if (part.breakBefore) nodes.push(<br key={`break-${partIndex}`} />);
+
+    if (part.tone === 'strike') {
+      word(`part-${partIndex}`, part.text, 'headline-strike');
+      return;
+    }
+
+    // Split on whitespace but keep it: the spacing between words is the copy's.
+    part.text.split(/(\s+)/).forEach((token, tokenIndex) => {
+      if (!token) return;
+      if (/^\s+$/.test(token)) {
+        nodes.push(' ');
+        return;
+      }
+      word(`part-${partIndex}-${tokenIndex}`, token);
+    });
+  });
+
+  return { nodes, count: index };
+}
+
 export default function HeroSection() {
   const { HERO } = useContent();
   const heroRef = useRef(null);
-  const headlineRef = useRef(null);
+
+  /* The half of the headline that does not change. The marked phrase after it
+     is typed, and a component inside a split would be fighting for the same
+     nodes. */
+  const { nodes: headlineNodes, count: wordCount, text: fixedHeadline } = useMemo(() => {
+    const fixed = HERO.headlineParts.slice(
+      0,
+      HERO.headlineParts.findIndex((part) => part.tone === 'mark'),
+    );
+
+    return { ...splitIntoWords(fixed), text: fixed.map((part) => part.text).join('') };
+  }, [HERO.headlineParts]);
 
   // Read on the first render — anything added later would mount after the
   // entrance resolved its targets and stay where it was left.
@@ -100,52 +170,25 @@ export default function HeroSection() {
     };
   }, [isStatic]);
 
-  useLayoutEffect(() => {
-    const scope = heroRef.current;
-    /* Reduced motion has no entrance to wait for, so the rest of the page is
-       told it can mount right away rather than sitting on the timeout. */
-    if (!scope || isStatic) {
+  /*
+   * When the rest of the page may mount.
+   *
+   * The entrance itself is CSS, so there is nothing here to drive — only a
+   * timer long enough to cover it, derived from the number of words rather
+   * than hardcoded, because which one finishes last depends on the copy.
+   */
+  useEffect(() => {
+    if (isStatic) {
+      /* Reduced motion has no entrance to wait for. */
       announceHeroReady();
       return undefined;
     }
 
-    const ctx = gsap.context(() => {
-      /* SplitText rather than hand-written line spans: the copy wraps
-         differently at every width, so the split has to be measured from the
-         rendered text. `mask` gives each line a hard edge to rise from behind;
-         `autoSplit` re-splits on a late font swap or a resize, which stops a
-         slow reload stranding half a headline mid-animation. */
-      const split = SplitText.create(headlineRef.current, {
-        type: 'lines,words',
-        mask: 'lines',
-        autoSplit: true,
-        linesClass: 'overflow-hidden',
-        /* Only the split has to be JavaScript — the copy wraps differently at
-           every width, so lines can only be found from rendered text. The
-           animation is handed to CSS and runs on the compositor. */
-        onSplit: (self) => {
-          self.words.forEach((word, index) => {
-            word.setAttribute('data-hero-word', '');
-            word.style.setProperty('--hero-stagger', String(index));
-          });
-        },
-      });
+    const wordsEndMs = WORD_DELAY_MS + (wordCount - 1) * STAGGER_MS + WORD_DURATION_MS;
+    const timer = setTimeout(announceHeroReady, Math.max(wordsEndMs, SUPPORT_END_MS));
 
-      /* The entrance lives in the stylesheet, keyed off the data-hero-*
-         attributes, so none of it runs on the main thread. The page waits for
-         it, so the length is derived from the split rather than hardcoded —
-         a timer, because which element finishes last depends on the copy. */
-      const wordsEndMs = WORD_DELAY_MS + (split.words.length - 1) * STAGGER_MS + WORD_DURATION_MS;
-      const doneIn = gsap.delayedCall(Math.max(wordsEndMs, SUPPORT_END_MS) / 1000, announceHeroReady);
-
-      return () => {
-        doneIn.kill();
-        split.revert();
-      };
-    }, scope);
-
-    return () => ctx.revert();
-  }, [isStatic]);
+    return () => clearTimeout(timer);
+  }, [isStatic, wordCount]);
 
   return (
     <section
@@ -242,24 +285,12 @@ export default function HeroSection() {
               id="hero-headline"
               className="mt-7 text-[length:var(--text-hero-split)] font-extrabold leading-[0.98] tracking-[-0.03em]"
             >
-              {/* Only the fixed copy is split. SplitText rebuilds and clones
-                  nodes, so a React component inside it would keep updating a
-                  node that is no longer on screen. */}
               {/* Read from the deck, not written here: this was hardcoded, so
                   the German page kept an English headline. Everything up to
-                  the marked phrase is the fixed half; the mark is typed below. */}
-              <span ref={headlineRef} className="block">
-                {HERO.headlineParts
-                  .slice(0, HERO.headlineParts.findIndex((part) => part.tone === 'mark'))
-                  .map((part, index) =>
-                    part.tone === 'strike' ? (
-                      <span key={index} className="whitespace-nowrap">
-                        <span className="headline-strike">{part.text}</span>
-                      </span>
-                    ) : (
-                      <span key={index}>{part.text}</span>
-                    )
-                  )}
+                  the marked phrase is the fixed half; the mark is typed below.
+                  Split into words in the markup — see `splitIntoWords`. */}
+              <span className="block" aria-label={fixedHeadline}>
+                <span aria-hidden="true">{headlineNodes}</span>
               </span>
 
               {/* nowrap: the block's width changes with every keystroke,

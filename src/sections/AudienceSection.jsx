@@ -5,7 +5,8 @@ import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { useLocation } from 'react-router-dom';
 import { languageFromPath, pathForLanguage } from '../lib/language';
-import { gsap, prefersReducedMotion, MOTION, SplitText } from '../lib/motion';
+import { gsap, prefersReducedMotion, MOTION } from '../lib/motion';
+import { SplitText } from '../lib/textMotion';
 import { toneOf } from '../lib/signalTones';
 
 /**
