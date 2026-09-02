@@ -6,8 +6,8 @@ import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
-const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, import: 'default' });
-const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
+const PORTRAITS = import.meta.glob('../assets/people/*.webp', { eager: true, import: 'default' });
+const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.webp`];
 
 /**
  * 10 — Founders. In this category trust rests on the operator, and neither

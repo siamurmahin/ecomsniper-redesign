@@ -6,8 +6,8 @@ import { useContent } from '../hooks/useContent';
 import { toneOf } from '../lib/signalTones';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
-const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, import: 'default' });
-const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.jpg`];
+const PORTRAITS = import.meta.glob('../assets/people/*.webp', { eager: true, import: 'default' });
+const portraitUrl = (key) => PORTRAITS[`../assets/people/${key}.webp`];
 
 /** One signal tone per step, as every enumerated set on this page is coloured. */
 const STEP_TONES = ['blue', 'red', 'gold', 'green'];

@@ -3,8 +3,8 @@ import { prefersReducedMotion } from '../../lib/motion';
 
 /* Flag artwork, resolved from each country's ISO code. Real artwork, not flag
    emoji: regional indicator pairs render as two bare letters on Windows. */
-const FLAGS = import.meta.glob('../../assets/flags/*.png', { eager: true, import: 'default' });
-const flagUrl = (code) => FLAGS[`../../assets/flags/flag-${code.toLowerCase()}.png`];
+const FLAGS = import.meta.glob('../../assets/flags/*.webp', { eager: true, import: 'default' });
+const flagUrl = (code) => FLAGS[`../../assets/flags/flag-${code.toLowerCase()}.webp`];
 
 /**
  * Supported countries as a slow ticker of flags. Eight names in a sentence get

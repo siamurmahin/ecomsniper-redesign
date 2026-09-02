@@ -7,8 +7,8 @@
  * reach the same two folders, and three copies of these globs would be three
  * places to fix when a file is renamed.
  */
-const VIDEO_THUMBS = import.meta.glob('../assets/video/*.jpg', { eager: true, import: 'default' });
-const RECEIPTS = import.meta.glob('../assets/proof/*.png', { eager: true, import: 'default' });
+const VIDEO_THUMBS = import.meta.glob('../assets/video/*.webp', { eager: true, import: 'default' });
+const RECEIPTS = import.meta.glob('../assets/proof/*.webp', { eager: true, import: 'default' });
 
-export const thumbUrl = (key) => VIDEO_THUMBS[`../assets/video/${key}.jpg`];
-export const receiptUrl = (key) => RECEIPTS[`../assets/proof/${key}.png`];
+export const thumbUrl = (key) => VIDEO_THUMBS[`../assets/video/${key}.webp`];
+export const receiptUrl = (key) => RECEIPTS[`../assets/proof/${key}.webp`];

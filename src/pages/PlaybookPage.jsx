@@ -7,7 +7,7 @@ import PlaybookDelivered from '../components/layout/PlaybookDelivered';
 import playbookCover from '../assets/brand/playbook-cover.webp';
 
 /** The author's portrait, resolved the way the founders section resolves it. */
-const PORTRAITS = import.meta.glob('../assets/people/*.jpg', { eager: true, import: 'default' });
+const PORTRAITS = import.meta.glob('../assets/people/*.webp', { eager: true, import: 'default' });
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 /**
@@ -24,7 +24,7 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 export default function PlaybookPage() {
   const { FOUNDERS, PLAYBOOK, SEO } = useContent();
   const author = FOUNDERS.people[0];
-  const authorPortrait = PORTRAITS[`../assets/people/${author.photo}.jpg`];
+  const authorPortrait = PORTRAITS[`../assets/people/${author.photo}.webp`];
   const sectionRef = useRevealOnScroll({ start: 'top 95%' });
   const [status, setStatus] = useState('idle'); // idle | submitting | done | error
   const [email, setEmail] = useState('');
