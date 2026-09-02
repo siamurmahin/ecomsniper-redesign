@@ -33,7 +33,16 @@ const DIST = 'dist';
  * with room in it is a budget nobody notices breaking.
  */
 const BUDGETS = {
-  eagerJs: 400,
+  /* 440, raised from 400 when React 18 became React 19: the vendor chunk went
+     158KB -> 213KB raw, 53KB -> 67KB gzip, for the same application code. That
+     is the toll on the road to React Router v8, which needs React 19, and it
+     is paid once.
+
+     It should come back down. Prerendering takes the first paint off the
+     critical path entirely, and routing the pages through the router's own
+     splitting should leave the homepage carrying less than it does today. If
+     it does not, this number is the thing that says so. */
+  eagerJs: 440,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake. */
