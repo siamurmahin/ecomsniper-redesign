@@ -33,6 +33,16 @@ export const ABOUT = {
   cost: {
     eyebrow: 'The cost',
     headline: 'We know what this costs.',
+    /* The first sentence of `body`, split so the hero can show it as a
+       comparison. Their words, rearranged — the hero and the section below it
+       therefore say the same thing twice on purpose: once as a figure, once
+       as prose. If the hero variant that uses these is not chosen, delete
+       `hours` and `unknown` with it. */
+    hours: [
+      { who: 'For some people', what: 'a few hours of work' },
+      { who: 'For others', what: 'a week of early mornings and long days' },
+    ],
+    unknown: 'We do not know which one you are.',
     body: [
       'For some people, $200 is a few hours of work. For others, it is a week of early mornings and long days. We do not know which one you are. So we treat everyone like the second.',
       'That means we are careful. We do not rush features that are not ready. We do not promise things we are not sure about. We would rather move slow and get it right.',
@@ -43,9 +53,23 @@ export const ABOUT = {
   giving: {
     eyebrow: 'The giving',
     headline: 'Where some of it goes.',
+    lead: 'Part of what you pay us goes to people who need it more.',
+    /* Their copy names three things in one sentence. Split into three so the
+       page can show them rather than bury them mid-paragraph. The bodies are
+       their sentence verbatim; the labels are headers over their own words,
+       not new claims. */
+    gifts: [
+      { label: 'Orphanages', body: 'We visit orphanages.' },
+      {
+        label: 'Medical care',
+        body: 'We help families who cannot afford medical care.',
+      },
+      {
+        label: 'Schools',
+        body: 'We support schools that are struggling to stay open.',
+      },
+    ],
     body: [
-      'Part of what you pay us goes to people who need it more.',
-      'We visit orphanages. We help families who cannot afford medical care. We support schools that are struggling to stay open.',
       'This is not marketing. It is just something we do. When you join, you become part of it too.',
     ],
     closer: 'We share this because you are part of it now. Not to impress.',

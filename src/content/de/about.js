@@ -23,6 +23,11 @@ export const overlay = {
     cost: {
       eyebrow: 'Die Kosten',
       headline: 'Wir wissen, was das kostet.',
+      hours: [
+        { who: 'Für manche', what: 'ein paar Stunden Arbeit' },
+        { who: 'Für andere', what: 'eine Woche mit frühen Morgen und langen Tagen' },
+      ],
+      unknown: 'Wir wissen nicht, wer von beiden du bist.',
       body: [
         'Für manche sind 200 $ ein paar Stunden Arbeit. Für andere eine Woche mit frühen Morgen und langen Tagen. Wir wissen nicht, wer von beiden du bist. Also behandeln wir jeden wie den Zweiten.',
         'Das heißt: wir sind vorsichtig. Wir überstürzen keine Funktionen, die nicht fertig sind. Wir versprechen nichts, bei dem wir uns nicht sicher sind. Lieber langsamer und richtig.',
@@ -33,9 +38,19 @@ export const overlay = {
     giving: {
       eyebrow: 'Das Weitergeben',
       headline: 'Wohin ein Teil davon geht.',
+      lead: 'Ein Teil von dem, was du uns zahlst, geht an Menschen, die es nötiger haben.',
+      gifts: [
+        { label: 'Waisenhäuser', body: 'Wir besuchen Waisenhäuser.' },
+        {
+          label: 'Medizinische Hilfe',
+          body: 'Wir helfen Familien, die sich medizinische Versorgung nicht leisten können.',
+        },
+        {
+          label: 'Schulen',
+          body: 'Wir unterstützen Schulen, die kaum offen bleiben können.',
+        },
+      ],
       body: [
-        'Ein Teil von dem, was du uns zahlst, geht an Menschen, die es nötiger haben.',
-        'Wir besuchen Waisenhäuser. Wir helfen Familien, die sich medizinische Versorgung nicht leisten können. Wir unterstützen Schulen, die kaum offen bleiben können.',
         'Das ist kein Marketing. Wir machen es einfach. Wenn du dabei bist, bist du Teil davon.',
       ],
       closer: 'Wir erzählen das, weil du jetzt dazugehörst. Nicht, um zu beeindrucken.',

@@ -5,30 +5,32 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
+import AboutHero from '../components/about/AboutHero';
 
 /**
  * About.
  *
- * Six bands of prose and one numbered list, which is why there is a local
- * `Prose` rather than six copies of the same paragraph markup. The page's
- * argument is carried by the words, so the layout gets out of their way: one
- * measure, one rhythm, no cards.
+ * The page's argument is restraint, so it borrows the homepage's vocabulary —
+ * ink panels, the bordered strip, the serif accent — in a quieter register. It
+ * should read as the same site making a smaller claim, not as a second landing
+ * page.
  *
- * The two sections their page renders empty — "How this started" and "What you
- * actually get" — are not here. Nothing was invented to fill them, and a
- * heading over silence reads worse than an absence. See `content/en/about.js`.
+ * Their two empty sections, "How this started" and "What you actually get",
+ * are still absent. See `content/en/about.js`.
  */
 
+/* Module scope so the hook memo has a stable dependency. */
+const OVERLAYS = { de: germanAbout.ABOUT };
+
 /**
- * One band, with its own reveal scope.
+ * Which hero shape is live.
  *
- * The scope is the point. `useRevealOnScroll` buckets `[data-reveal]` by group
- * name across everything under its ref and triggers each bucket off its FIRST
- * element — so one ref around all seven bands would put every `SectionHeading`
- * into a single `"heading"` group and reveal the last one when the first band
- * scrolled in. Every homepage section calls the hook on its own ref for
- * exactly this reason; a page of bands has to do the same.
+ * `/about-lab` renders all three. When one is chosen, inline it here and
+ * delete the component's other branches, the lab route, and whichever content
+ * keys the losing variants used.
  */
+const HERO_VARIANT = 'cost';
+
 function Band({ className = '', children }) {
   const ref = useRevealOnScroll();
   return (
@@ -53,78 +55,76 @@ function Prose({ body, tone = 'paper' }) {
   ));
 }
 
-/* Module scope so the hook memo has a stable dependency. The German file
-   keeps its `overlay = { ABOUT }` shape even though this page unwraps it,
-   because `de/` mirrors `en/` filename for filename and key for key — a
-   translator should not have to know which pages are route-scoped. */
-const OVERLAYS = { de: germanAbout.ABOUT };
+/**
+ * A closing line, set as a statement rather than another paragraph.
+ *
+ * The serif italic is the homepage's own accent — the treatment on "In shaa
+ * Allah" — reused here to break six bands of body copy. It marks the sentence
+ * the section wants remembered, so there is at most one per band.
+ */
+function Pullquote({ children, tone = 'paper' }) {
+  return (
+    <p
+      data-reveal
+      data-reveal-group="pullquote"
+      className={`mt-10 max-w-xl font-serif text-[1.45rem] italic leading-snug ${
+        tone === 'ink' ? 'text-paper' : 'text-ink'
+      }`}
+    >
+      {children}
+    </p>
+  );
+}
 
 export default function AboutPage() {
   const ABOUT = usePageContent(EN_ABOUT, OVERLAYS);
+  const { cost, giving, boundaries, responsibility, team, invitation } = ABOUT;
 
   return (
     <>
-      {/* The opening. Their page leads with the figure, and it earns the
-          position: the whole argument is what that number cost the reader. */}
       <Band>
-        <p className="section-eyebrow" data-reveal data-reveal-group="hero">
-          {ABOUT.eyebrow}
-        </p>
-
-        <h1
-          className="mt-4 max-w-3xl text-[length:var(--text-display)] leading-[0.98]"
-          data-reveal
-          data-reveal-group="hero"
-        >
-          {ABOUT.headline}
-        </h1>
-
-        <div
-          className="mt-10 inline-flex items-baseline gap-3 rounded-2xl border border-hairline bg-paper-sunk px-6 py-4"
-          data-reveal
-          data-reveal-group="hero"
-        >
-          <span className="text-4xl font-extrabold tracking-tight tabular-nums">
-            {ABOUT.figure.value}
-          </span>
-          <span className="micro-label text-muted">{ABOUT.figure.label}</span>
-        </div>
+        <AboutHero about={ABOUT} variant={HERO_VARIANT} />
       </Band>
 
       <Band className="defer-render bg-paper-sunk [--defer-h:820px] lg:[--defer-h:560px]">
-        <SectionHeading eyebrow={ABOUT.cost.eyebrow} headline={ABOUT.cost.headline} />
-        <Prose body={ABOUT.cost.body} />
+        <SectionHeading eyebrow={cost.eyebrow} headline={cost.headline} />
+        <Prose body={cost.body} />
       </Band>
 
-      <Band className="defer-render [--defer-h:760px] lg:[--defer-h:520px]">
-        <SectionHeading eyebrow={ABOUT.giving.eyebrow} headline={ABOUT.giving.headline} />
-        <Prose body={ABOUT.giving.body} />
+      {/* The giving. Their copy names three things in one sentence; showing
+          them as three makes the section scannable without adding a claim. */}
+      <Band className="defer-render [--defer-h:860px] lg:[--defer-h:600px]">
+        <SectionHeading eyebrow={giving.eyebrow} headline={giving.headline} />
+
         <p
+          className="mt-7 max-w-2xl text-[length:var(--text-lead)] leading-relaxed text-muted"
           data-reveal
-          data-reveal-group="closer"
-          className="mt-7 max-w-2xl border-l-2 border-hairline pl-5 text-sm text-muted"
+          data-reveal-group="giving-lead"
         >
-          {ABOUT.giving.closer}
+          {giving.lead}
         </p>
+
+        <ul className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-hairline bg-hairline sm:grid-cols-3">
+          {giving.gifts.map((gift) => (
+            <li key={gift.label} data-reveal data-reveal-group="gifts" className="bg-paper p-6">
+              <p className="micro-label text-muted">{gift.label}</p>
+              <p className="mt-3 leading-relaxed">{gift.body}</p>
+            </li>
+          ))}
+        </ul>
+
+        <Prose body={giving.body} />
+        <Pullquote>{giving.closer}</Pullquote>
       </Band>
 
       {/* The list that gives the page its spine. Numbered because each item is
           a separate promise, and a reader should be able to point at one. */}
       <Band className="defer-render bg-ink text-paper [--defer-h:1180px] lg:[--defer-h:720px]">
-        <SectionHeading
-          eyebrow={ABOUT.boundaries.eyebrow}
-          headline={ABOUT.boundaries.headline}
-          tone="ink"
-        />
+        <SectionHeading eyebrow={boundaries.eyebrow} headline={boundaries.headline} tone="ink" />
 
         <ol className="mt-10 grid gap-5 sm:grid-cols-2">
-          {ABOUT.boundaries.items.map((item, index) => (
-            <li
-              key={item.lead}
-              data-reveal
-              data-reveal-group="boundaries"
-              className="rounded-2xl border border-ink-line bg-paper/[0.04] p-6"
-            >
+          {boundaries.items.map((item, index) => (
+            <li key={item.lead} data-reveal data-reveal-group="boundaries" className="card-ink">
               <span className="micro-label tabular-nums text-muted-dark">
                 {String(index + 1).padStart(2, '0')}
               </span>
@@ -136,56 +136,46 @@ export default function AboutPage() {
           ))}
         </ol>
 
-        <p
-          data-reveal
-          data-reveal-group="closer"
-          className="mt-8 text-[length:var(--text-lead)] text-muted-dark"
-        >
-          {ABOUT.boundaries.closer}
-        </p>
+        <Pullquote tone="ink">{boundaries.closer}</Pullquote>
       </Band>
 
+      {/* The emotional core, and the only band given a rule. Five paragraphs in
+          the same column as everything else read as filler; set apart, they
+          read as the page meaning it. */}
       <Band className="defer-render [--defer-h:1080px] lg:[--defer-h:700px]">
-        <SectionHeading
-          eyebrow={ABOUT.responsibility.eyebrow}
-          headline={ABOUT.responsibility.headline}
-        />
-        <Prose body={ABOUT.responsibility.body} />
+        <div className="border-l-2 border-hairline pl-6 sm:pl-10">
+          <SectionHeading eyebrow={responsibility.eyebrow} headline={responsibility.headline} />
+          <Prose body={responsibility.body} />
+        </div>
       </Band>
 
       <Band className="defer-render bg-paper-sunk [--defer-h:640px] lg:[--defer-h:460px]">
-        <SectionHeading eyebrow={ABOUT.team.eyebrow} headline={ABOUT.team.headline} />
-        <Prose body={ABOUT.team.body} />
+        <SectionHeading eyebrow={team.eyebrow} headline={team.headline} />
+        <Prose body={team.body} />
       </Band>
 
       {/* The close. One door, no urgency — which is what the boundaries band
           three screens up just promised. */}
       <Band className="defer-render [--defer-h:900px] lg:[--defer-h:620px]">
-        <SectionHeading eyebrow={ABOUT.invitation.eyebrow} headline={ABOUT.invitation.headline} />
-        <Prose body={ABOUT.invitation.body} />
+        <SectionHeading eyebrow={invitation.eyebrow} headline={invitation.headline} />
+        <Prose body={invitation.body} />
 
         <div
           className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
           data-reveal
           data-reveal-group="close"
         >
-          <CtaButton href={ABOUT.invitation.cta.href} intent="about-to-pricing">
-            {ABOUT.invitation.cta.label}
+          <CtaButton href={invitation.cta.href} intent="about-to-pricing">
+            {invitation.cta.label}
           </CtaButton>
 
           <p className="inline-flex items-center gap-2 text-sm text-muted">
             <Icon name="shield" className="size-4 shrink-0" aria-hidden="true" />
-            {ABOUT.invitation.assurance}
+            {invitation.assurance}
           </p>
         </div>
 
-        <p
-          data-reveal
-          data-reveal-group="close"
-          className="mt-10 max-w-xl text-[length:var(--text-lead)] leading-relaxed text-muted"
-        >
-          {ABOUT.invitation.closer}
-        </p>
+        <Pullquote>{invitation.closer}</Pullquote>
       </Band>
     </>
   );
