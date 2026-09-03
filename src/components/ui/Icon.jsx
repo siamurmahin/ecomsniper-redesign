@@ -30,6 +30,7 @@ import ShieldIcon from '../../assets/icons/shield.svg?react';
 import DiscordIcon from '../../assets/icons/social-discord.svg?react';
 import YoutubeIcon from '../../assets/icons/social-youtube.svg?react';
 import FacebookIcon from '../../assets/icons/social-facebook.svg?react';
+import TelegramIcon from '../../assets/icons/social-telegram.svg?react';
 import PhoneIcon from '../../assets/icons/phone.svg?react';
 import MailIcon from '../../assets/icons/mail.svg?react';
 import MapPinIcon from '../../assets/icons/map-pin.svg?react';
@@ -72,6 +73,7 @@ const ICONS = {
   discord: DiscordIcon,
   youtube: YoutubeIcon,
   facebook: FacebookIcon,
+  telegram: TelegramIcon,
   phone: PhoneIcon,
   mail: MailIcon,
   mapPin: MapPinIcon,

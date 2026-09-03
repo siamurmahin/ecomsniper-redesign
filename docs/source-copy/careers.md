@@ -33,12 +33,12 @@ Internship) · free-text Search.
 Description: _"This is a one liner description"_
 Remote · full time · BDT 15,000 - BDT 25,000/mo
 
-## Two things to settle before building this
+## Decided 3 Sep
 
-1. **The listing text is placeholder.** "This is a one liner description" is
-   live on their site right now. Real copy is needed, or the role comes down.
-2. **It is a filtered job board, not a static page.** Filters over department,
-   location and type only earn their keep with more than one role. Either the
-   roles come from the CMS — in which case this waits for Storyblok — or it
-   ships as a plain list until there is a second job, which is the smaller and
-   faster thing to build.
+**Ships static.** No CMS, no filtering over a single role — a plain list until
+there is a second job. Whether roles later come from Storyblok or somewhere
+else is a conversation for when the site is complete.
+
+**The listing text is still placeholder.** "This is a one liner description"
+is live on their site now. Real copy is needed before this page ships, or the
+role comes down.

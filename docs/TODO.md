@@ -43,7 +43,7 @@ In the order the work wants to happen, not the order it was asked.
 | 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                                                   | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
 | 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                                                     |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
 | 9   | **Pick the feature-page slugs** — readable (`/product-hunter`) or `V6` (`/productHunterV6`). Both live now with different copy; nav points at `V6`, sitemap at readable. Whichever loses needs a 301 | The client. Blocks pages 5–8                                                             |
-| 10  | **Affiliate page** — `/affiliate/join` is in their bundle and "Affiliate" is in their live footer, but it is in no sitemap and was not in the page list                                              | Confirmation it is a real page and not a leftover                                        |
+| 10  | **Decide how Careers and Blog are edited** — static now by decision. Storyblok, markdown in the repo, or something else, once the whole site is up                                                   | The client, after the site is complete                                                   |
 | 11  | Login / registration / checkout                                                                                                                                                                      | Out of this phase entirely — payments and auth are not in scope                          |
 
 ---
@@ -73,21 +73,34 @@ All of the above exist in both languages.
 
 ### To build
 
-| #   | Page                    | Route on their site                                   | Notes                                                              |
-| --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
-| 1   | About                   | `/about`                                              | In the sitemap and the nav. Footer currently links out to it       |
-| 2   | Contact                 | `/contact`                                            | In the sitemap and the nav                                         |
-| 3   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                     |
-| 4   | Careers                 | `/careers`                                            | In the nav, **not** in the sitemap                                 |
-| 5   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                          |
-| 6   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                          |
-| 7   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                          |
-| 8   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug** |
-| 9   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`           |
-| 10  | Blog index              | `/blog`                                               |                                                                    |
-| 11  | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below             |
+| #   | Page                    | Route on their site                                   | Notes                                                                                      |
+| --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| 1   | About                   | `/about`                                              | In the sitemap and the nav. Footer currently links out to it                               |
+| 2   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                                 |
+| 3   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                                             |
+| 4   | Careers                 | `/careers`                                            | In the nav, **not** in the sitemap                                                         |
+| 5   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                                  |
+| 6   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                                  |
+| 7   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                                  |
+| 8   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**                         |
+| 9   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                                   |
+| 10  | Blog index              | `/blog`                                               |                                                                                            |
+| 11  | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                                     |
+| 12  | Affiliate               | `/affiliate/join`                                     | Their footer "Affiliate" link points at `/login`, not at a page. Confirmed as one to build |
 
 ### Decided 3 Sep
+
+- **Refund is monthly-plan only.** Not on the credits bundle, not on
+  Enterprise. Their About page says "30-day refund policy" unqualified; the
+  rebuild qualifies it, as the rest of the deck already does. Fix when About is
+  built.
+- **$199 is the monthly charge from month two.** $97 is the first month. No
+  mismatch — their About page framing "$200" is the monthly price.
+- **Telegram is real** — `https://t.me/ecomsniper`, from the client. Their own
+  footer link still points at `/pricing`. Now in ours.
+- **Careers and Blog ship static first.** No CMS for either. Whether they move
+  to Storyblok or something else is a conversation with the client once the
+  site is complete — in Future below.
 
 - **Careers stays**, and **all four feature pages stay.** They can come out
   later if they turn out not to earn their place.

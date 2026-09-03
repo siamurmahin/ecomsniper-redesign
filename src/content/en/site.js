@@ -16,6 +16,7 @@ export const SITE = {
   signupUrl: SIGNUP_URL,
   loginUrl: 'https://ecomsniper.io/login',
   discordUrl: 'https://discord.gg/DGkSJ5QZww',
+  telegramUrl: 'https://t.me/ecomsniper',
   trustpilotUrl: 'https://uk.trustpilot.com/review/ecomsniper.io',
 
   /* One copy of the guarantee. "On the monthly plan" matters: the credits

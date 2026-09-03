@@ -69,12 +69,13 @@ export const FOOTER = {
     location: 'Toronto, Ontario, Canada',
   },
 
-  /* Telegram is on their footer too and is deliberately not here: their own
-     link points back at the page it sits on, so there is no address to use. */
+  /* Telegram was left out while their own footer link pointed at /pricing —
+     it still does. The real group address came from the client. */
   social: {
     title: 'Join our community',
     links: [
       { label: 'Discord', href: SITE.discordUrl, icon: 'discord' },
+      { label: 'Telegram', href: SITE.telegramUrl, icon: 'telegram' },
       { label: 'YouTube', href: 'https://www.youtube.com/@sammyecomsniper', icon: 'youtube' },
       {
         label: 'Facebook',

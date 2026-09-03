@@ -90,6 +90,7 @@ const SOCIAL_COLOUR = {
   discord: 'text-[#5865F2]',
   youtube: 'text-[#FF0000]',
   facebook: 'text-[#1877F2]',
+  telegram: 'text-[#229ED9]',
 };
 
 /** Renders an internal path as a router link and anything else as an anchor. */
