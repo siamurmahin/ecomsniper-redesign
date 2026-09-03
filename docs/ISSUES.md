@@ -41,7 +41,30 @@ on 28 files while passing in CI on the same commit. A check that passes in one
 place and fails in another teaches people to ignore it. Fixed by `eol=lf` in
 `.gitattributes` — one line, no source file touched.
 
-### 2. Eight footer links are soft-404s — `high`
+### 2. Their Terms and Conditions page is empty — `high`
+
+`https://ecomsniper.io/terms-and-conditions` renders a heading, the line
+**"Last Updated: Invalid Date"**, and nothing else. Confirmed on a full page
+load with a screenshot: 423 characters in `<main>`, all of it navigation and
+footer.
+
+Two problems in one page.
+
+There is **no terms of service**, on a site taking $199 a month. The refund
+promise, the guarantee copy and the footer all point at a document that does
+not exist. Their affiliate programme has full terms at `/affiliate/join`, so
+the omission looks accidental rather than deliberate.
+
+And **"Invalid Date"** is a date-parsing bug rendered to visitors on a legal
+page — a literal `Invalid Date` string from an unparsed value.
+
+This also blocks us: `/terms-and-conditions` is on the build list, to be
+written from their live copy, and there is no live copy to write from.
+
+**Fix:** the client supplies the terms. Nothing to rebuild until they do.
+Owner: client.
+
+### 3. Eight footer links are soft-404s — `high`
 
 `/about`, `/blog`, `/careers`, `/contact`, `/terms-and-conditions` on
 `ecomsniper.io` all return **200 with the homepage shell**, not a 404. A link
@@ -52,7 +75,7 @@ does not exist.
 
 **Fix:** the client publishes the pages, or the links come out. Owner: client.
 
-### 3. The live site is invisible to anything that does not run JavaScript — `high`
+### 4. The live site is invisible to anything that does not run JavaScript — `high`
 
 `ecomsniper.io` serves the same 6KB shell — `<div id="root"></div>` — at every
 URL under a 200. The privacy policy only exists once React has run.
@@ -62,7 +85,7 @@ everywhere, and will until the rebuild replaces it.
 
 **Fix:** ship the rebuild. Owner: us + client.
 
-### 4. Legal text has not been reviewed by a lawyer — `high`
+### 5. Legal text has not been reviewed by a lawyer — `high`
 
 The privacy copy is the client's own with two changes: the implied-consent
 sentence removed, and Microsoft Clarity replaced by what actually loads. The
@@ -75,7 +98,7 @@ the banner that now asks.
 **Fix:** client's lawyer reads `src/content/en/legal.js` and `de/legal.js`.
 Owner: client.
 
-### 5. One expensive frame remains at startup — `medium`
+### 6. One expensive frame remains at startup — `medium`
 
 Worst frame in the first second is ~83ms. Total blocking work is down by half
 after the layout deferral, but this one frame did not move and is not yet
@@ -87,7 +110,7 @@ Ruled out by measurement: fonts (metric-matched, 0px delta), images (CLS
 
 **Fix:** unknown. Needs another profiling pass. Owner: us.
 
-### 6. 115KB of dead CSS ships on every deploy — `low`
+### 7. 115KB of dead CSS ships on every deploy — `low`
 
 `@react-router/dev` moves a stylesheet from the server build into
 `build/client`, where nothing links it. Confirmed orphaned: no HTML or JS in
@@ -98,7 +121,7 @@ is false and copies it when true. Costs deploy size, not visitor bandwidth.
 
 **Fix:** a post-build prune, if it ever matters. Owner: us.
 
-### 7. "Prerendered" is less literal than it sounds — `low`
+### 8. "Prerendered" is less literal than it sounds — `low`
 
 82% of the prerendered HTML — 425KB of 518KB — is delivered inside
 `<div hidden id="S:0">` and moved into place by inline script, because
@@ -112,7 +135,7 @@ container.
 **Fix:** none proposed. Recorded so nobody relies on the HTML being
 straightforwardly readable. Owner: us, if it ever matters.
 
-### 8. Metric-matched fallbacks are exact only where Arial and Georgia exist — `low`
+### 9. Metric-matched fallbacks are exact only where Arial and Georgia exist — `low`
 
 The fallback faces are measured against Arial and Georgia. Android substitutes
 its own fonts, so the match there is approximate rather than the 0px measured
