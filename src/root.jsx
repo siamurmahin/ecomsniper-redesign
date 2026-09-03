@@ -6,6 +6,7 @@ import { useContent } from './hooks/useContent';
 import { languageFromPath } from './lib/language';
 import { LanguageMemory, PreloaderRelease, RouteScrollManager } from './components/layout/routing';
 import { PRELOADER_MARKUP, PRELOADER_STYLES, PRELOADER_BACKSTOP } from './lib/preloaderShell';
+import { MOTION_ARM } from './lib/motionArm';
 import { CONSENT_MODE_BOOTSTRAP } from './consent/consentMode';
 import ConsentBanner from './consent/ConsentBanner';
 import './styles/index.css';
@@ -44,13 +45,12 @@ export function Layout({ children }) {
   return (
     /*
      * `suppressHydrationWarning` is for one attribute and one only: the
-     * `js-motion` class that `entry.client.jsx` puts on this element before
-     * hydration runs. It has to go on before, because the reveal animations
-     * are keyed off it, and it has to be added by script, because a visitor
-     * without JavaScript must never get the CSS that hides `[data-reveal]`
-     * elements. So the server cannot render it and the client always has it,
-     * which React reports as a mismatch on every page load. Intended
-     * behaviour, and the warning was drowning real ones.
+     * `js-motion` class set by the inline script below — see `lib/motionArm`.
+     * It is applied by script rather than rendered here because a visitor
+     * without JavaScript must never receive the CSS that hides
+     * `[data-reveal]` elements. So the server cannot render it and the client
+     * always has it, which React reports as a mismatch on every page load.
+     * Intended behaviour, and the warning was drowning real ones.
      *
      * Attributes on this element only. It does not reach head, body, or
      * anything below them.
@@ -68,6 +68,13 @@ export function Layout({ children }) {
         {/* Renders before the bundle's stylesheet exists, so every value in it
             is literal — see `preloaderShell`. */}
         <style dangerouslySetInnerHTML={{ __html: PRELOADER_STYLES }} />
+
+        {/* Arms the reveal and hero animations, and it has to be here rather
+            than in `entry.client` — an inline script in the head runs before
+            the body is parsed, so the class is set before any content is
+            drawn. Left until the bundle loaded, the prerendered page painted
+            in full and then every reveal on it snapped to invisible. */}
+        <script dangerouslySetInnerHTML={{ __html: MOTION_ARM }} />
       </head>
 
       <body>
