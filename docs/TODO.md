@@ -35,7 +35,7 @@ In the order the work wants to happen, not the order it was asked.
 | #   | Task                                                                                                                                                                     | Waiting on                                                                               |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
 | 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages**                                                                                                                                                            | The page list, which has not been given. Base first — the developer was explicit         |
+| 2   | **New pages** — eleven, listed in the Pages section below                                                                                                                | Slug decisions and copy, per that section                                                |
 | 3   | **Wire GTM for real** — loader, consent gate and cookie policy are built and inert                                                                                       | `VITE_GTM_ID`                                                                            |
 | 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                          | Deferred by decision until the move to the client's server                               |
 | 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                            |
@@ -43,6 +43,61 @@ In the order the work wants to happen, not the order it was asked.
 | 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                       | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
 | 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                         |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
 | 9   | Login / registration / checkout                                                                                                                                          | Out of this phase entirely — payments and auth are not in scope                          |
+
+---
+
+## Pages — the full set, from their live site
+
+Taken from `sitemap.xml` (23 URLs), cross-checked against the live nav and
+footer, and against the route table inside their JS bundle. The three disagree,
+which is itself a finding — see the note under the table.
+
+Auth and dashboard are excluded on purpose: `/login`, `/register`,
+`/dashboard/*`, `/activation/*`. Their own `robots.txt` disallows those, and
+payments and auth are out of this phase.
+
+### Built
+
+| Page           | Route                                                |
+| -------------- | ---------------------------------------------------- |
+| Home           | `/`                                                  |
+| Pricing        | `/pricing`                                           |
+| FAQ            | `/faq`                                               |
+| Free playbook  | `/free-play-book`                                    |
+| Privacy policy | `/privacy-policy`                                    |
+| Cookie policy  | `/cookie-policy` — ours, no equivalent on their site |
+
+All of the above exist in both languages.
+
+### To build
+
+| #   | Page                    | Route on their site                                   | Notes                                                              |
+| --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
+| 1   | About                   | `/about`                                              | In the sitemap and the nav. Footer currently links out to it       |
+| 2   | Contact                 | `/contact`                                            | In the sitemap and the nav                                         |
+| 3   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                     |
+| 4   | Careers                 | `/careers`                                            | In the nav, **not** in the sitemap                                 |
+| 5   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                          |
+| 6   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                          |
+| 7   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                          |
+| 8   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug** |
+| 9   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`           |
+| 10  | Blog index              | `/blog`                                               |                                                                    |
+| 11  | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below             |
+
+### Needs a decision before any of this is built
+
+- **Which feature-page slugs are canonical.** Four feature pages exist twice,
+  under a readable slug and a `V6` one, with different copy. The nav links to
+  `V6`; the sitemap lists the readable slugs and omits Price Monitor entirely.
+  Picking wrong means either building the stale copy or breaking the URLs
+  Google already has. The client decides, and the losing slug should 301.
+- **Whether the blog is nine static posts or a CMS collection.** Nine today,
+  and a blog only grows. If posts are going into Storyblok this waits for it
+  rather than being built twice.
+- **Copy for About, Contact, Terms and Careers.** These make factual claims
+  about the business. Their live pages are the source, but Terms in particular
+  should not be transcribed without the client confirming it is current.
 
 ---
 
