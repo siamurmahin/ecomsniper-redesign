@@ -36,18 +36,34 @@ conditions.
 - Applicants must be at least 18 years old or the legal age in their
   jurisdiction.
 
-_Remaining sections not yet captured — this file covers what was read while
-confirming the page's nature. Full capture when the page is built._
+## Captured in full, 4 Sep
 
-## Before building
+All 11 clauses read off the rendered page after `readyState === 'complete'` —
+6,720 characters. Now in `src/content/en/affiliate.js` verbatim, so this file
+does not duplicate them.
 
-Decide what this page is for. Three shapes, and they are different pages:
+The clause list, for reference:
 
-1. **Terms only**, as it is now — a legal document, linked from the footer
-   like the other legal pages.
-2. **A programme landing page** — what the affiliate earns, how it works, with
-   the terms linked from it. This is what "Affiliate" in a footer usually
-   promises.
-3. **Leave it to login**, as their footer does today, and build nothing.
+1. Enrollment · 2. Affiliate conduct and community standards ·
+2. Brand protection and reputation · 4. Referral ownership ·
+3. Promotion guidelines · 6. Accountability for referrals ·
+4. Commission structure · 8. Payment terms · 9. Compliance ·
+5. Termination · 11. Modifications, then a Final agreement.
 
-Their own site does 1 and 3 at once, which is why neither works.
+Facts worth knowing without reading the whole thing:
+
+- Affiliates must **hold an active paid subscription** to stay eligible.
+- Payouts are **quarterly**, **PayPal only**, **$100 USD minimum**, and the
+  affiliate pays all fees.
+- Clause 8 asks affiliates **not to raise payment delays publicly**.
+- The **commission percentage is never stated** — "communicated separately".
+
+## Decided 4 Sep
+
+**Built as the terms document it is** (shape 1 of the three below), at
+`/affiliate`, linked from the footer. Their own page has no form, so nothing
+was removed to get here.
+
+Shape 2 — a programme landing page in front of the terms — is still open and
+is in `docs/TODO.md` under Future. It is what a footer labelled "Affiliate"
+usually promises, and it is a different page rather than a change to this one.

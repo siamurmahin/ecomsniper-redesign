@@ -30,6 +30,13 @@ below are what it left behind.
 
 ## Future
 
+- **Win the 15KB back from the router runtime.** `errorBoundaries` is 107KB
+  eager and `vendor-react` 187KB; neither has been examined. This is where the
+  raised ceiling gets repaid.
+- **An affiliate programme landing page**, if the client wants one — what an
+  affiliate earns and how it works, with the terms linked from it. Their footer
+  label promises this; the terms alone do not deliver it.
+
 In the order the work wants to happen, not the order it was asked.
 
 | #   | Task                                                                                                                                                                                                 | Waiting on                                                                               |
@@ -70,23 +77,23 @@ payments and auth are out of this phase.
 | Cookie policy  | `/cookie-policy` — ours, no equivalent on their site           |
 | About          | `/about` — their copy, refund qualified to the monthly plan    |
 | Careers        | `/careers` — static list; role description awaited from client |
+| Affiliate      | `/affiliate` — their full terms, 11 clauses, both languages    |
 
 All of the above exist in both languages.
 
 ### To build
 
-| #   | Page                    | Route on their site                                   | Notes                                                                                      |
-| --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                                 |
-| 2   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                                             |
-| 3   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                                  |
-| 4   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                                  |
-| 5   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                                  |
-| 6   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**                         |
-| 7   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                                   |
-| 8   | Blog index              | `/blog`                                               |                                                                                            |
-| 9   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                                     |
-| 10  | Affiliate               | `/affiliate/join`                                     | Their footer "Affiliate" link points at `/login`, not at a page. Confirmed as one to build |
+| #   | Page                    | Route on their site                                   | Notes                                                              |
+| --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
+| 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                         |
+| 2   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                     |
+| 3   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                          |
+| 4   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                          |
+| 5   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                          |
+| 6   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug** |
+| 7   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`           |
+| 8   | Blog index              | `/blog`                                               |                                                                    |
+| 9   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below             |
 
 ### Decided 3 Sep
 
@@ -181,6 +188,8 @@ come from the index, and their sitemap is advertising URLs that may 404.
 | 3 Sep 2026 | **Prerendered routes.** Ten routes as real HTML, per-route title/description/canonical/hreflang, `lang` correct in both languages, real 404s. Deploy, Lighthouse, budget and lint pointed at the router's output; Node pinned to 22.22.0                                                                                    | `63f9be1` |
 | 3 Sep 2026 | **Consent environment.** `src/config/`, `src/third-party/`, `src/consent/`; Consent Mode v2 denied before anything can load; banner in both languages; `/privacy-policy` and `/cookie-policy` prerendered; `lib/trackingGate.js` deleted, Tawk moved to click-to-load                                                       | `098c559` |
 | 3 Sep 2026 | **Accessibility.** Six real markup defects — a `<dl>` of `<div>`s, `aria-label` on a bare `<span>`, `<h4>` under `<h2>`, focusable content inside `aria-hidden`, two accessible names not containing their visible text. Score 82 → 100                                                                                     | `88c081d` |
+| 4 Sep 2026 | **Affiliate terms, in both languages.** Their full 11-clause document; not a signup page, theirs has no form either. Footer gained the Affiliate row it was missing                                                                                                                                                         | `299ccac` |
+| 4 Sep 2026 | **Eager ceiling 560KB → 575KB.** Route-manifest growth, ~1KB per route, eager because hydration needs the route table. Agreed before building further; the 15KB comes back out of the router runtime later                                                                                                                  | `11a69f1` |
 | 3 Sep 2026 | **Careers, in both languages.** Static list, no filters over a single role. The listing description is left blank rather than invented — theirs is placeholder text in production                                                                                                                                           | `816ece3` |
 | 3 Sep 2026 | **Audit of their live site.** 16 URLs, both languages, sitemap, tracking, markup and social measured directly; evidence in `docs/AUDIT-THEIR-SITE.md`, client fact sheet published separately. Corrected one earlier wrong claim about their sitemap                                                                        | `816ece3` |
 | 3 Sep 2026 | **About, in both languages.** Their copy kept close to verbatim; the refund qualified to the monthly plan, and their two empty sections left out rather than invented. Nav and footer now point at the local route instead of their live site                                                                               | `edfc2a5` |
