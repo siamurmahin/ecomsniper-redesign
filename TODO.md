@@ -109,6 +109,23 @@ over it, and not yet attributed.
 
 ---
 
+## Temporary — reveal probe, delete when answered
+
+`src/lib/revealProbe.js` plus four lines in `root.jsx`. Loads only for
+`?probe=reveal`, as its own chunk, so a normal visit neither runs nor
+downloads it. It records, per `[data-reveal]` element, how far the page was
+scrolled while that element sat inside the viewport still invisible.
+
+There to answer one question that could not be reproduced here: text sections
+reported appearing late on a phone. A maximised desktop window cannot be shrunk
+to a phone viewport, and the browser that emulates one throttles
+requestAnimationFrame to a couple of frames a second — which distorts the exact
+animation timing in question. So it gets measured on the real device.
+
+**Delete both once the answer is in.**
+
+---
+
 ## Blocked — needs the client
 
 | Item                                  | Detail                                                                                                                                                                                                                                                                                         |

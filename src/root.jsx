@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, useLocation } from 'react-router';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
 import { useContent } from './hooks/useContent';
@@ -99,6 +99,14 @@ export function Layout({ children }) {
 export default function Root() {
   const { SITE } = useContent();
 
+  /* TEMPORARY — remove with `lib/revealProbe.js` once the late-reveal question
+     on mobile is answered. Only `?probe=reveal` loads it, and only then is the
+     chunk fetched, so a normal visit neither runs nor downloads any of it. */
+  useEffect(() => {
+    if (!new URLSearchParams(location.search).has('probe')) return;
+    import('./lib/revealProbe').then((m) => m.startRevealProbe());
+  }, []);
+
   return (
     <SmoothScrollProvider>
       <PreloaderRelease />
@@ -121,9 +129,9 @@ export default function Root() {
 
       {/* Eager, unlike everything in `SiteChrome`. It renders null until it
           has read the stored decision, so it costs the first screen a few
-          hundred bytes and no markup — and unlike a lazy chunk it is
-          guaranteed to be there when hydration runs. It was in SiteChrome
-          for one build and only worked on a warm cache. */}
+          hundred bytes and no markup, and being in the main bundle it is
+          certain to be there when hydration runs. Consent is the one piece
+          of this page that must not depend on a chunk arriving in time. */}
       <ConsentBanner />
 
       {/* Nothing here is on screen when the page paints, so none of it is in
