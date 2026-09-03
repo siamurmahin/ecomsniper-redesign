@@ -1,128 +1,49 @@
 # TODO
 
-What we are building, what is done, and what is waiting on someone else.
+Three lists: **Done**, **Now**, **Future**. Plus what is waiting on somebody
+else, and what was decided and should not be re-argued.
 
-Updated as work lands — a task moves the moment it is true, not at the end of a
-session. If something is planned, it is written here before it is built.
+See `ISSUES.md` for what is _wrong_. This file is what is _planned_.
 
-Status: **todo** · **wip** · **done** · **blocked** · **parked**
+## How this file is kept
 
----
+Every instruction lands here before it is built. When something is asked for,
+it is written into **Now** or **Future** first — say which, and if it is not
+said, it is asked. Nothing is built that is not on the list, and nothing is
+finished without moving to **Done** with the commit that did it.
 
-## Now — environment scaffolding
-
-The base the client's developer asked for: existing pages, content and
-environment solid before any new pages. Agreed 3 Sep 2026.
-
-| #   | Task                                                                                                                                             | Status   |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| 1   | `TODO.md` — this file                                                                                                                            | **done** |
-| 2   | `src/config/` — `site.js`, `vendors.js`, `consent.js`. Data only, no logic. Every ID and toggle lives here and nowhere else                      | **done** |
-| 3   | `src/consent/` — decision store, Consent Mode v2 mapping, banner + customise panel, EN/DE copy                                                   | **done** |
-| 4   | `src/third-party/` — `gtm.js`, `tawk.js`, loader registry. Nothing outside this directory may inject a script tag. Deleted `lib/trackingGate.js` | **done** |
-| 5   | `/privacy-policy` and `/cookie-policy` — both languages, prerendered, footer links pointed at the local routes                                   | **done** |
-| 6   | Verify — CI gates green, banner behaviour checked in both languages                                                                              | **done** |
-
-Verified on a cold load with storage cleared: the banner appears, the customise
-panel opens with every optional box unticked, saving analytics alone stores
-`granted: ["analytics"]` and sends a Consent Mode update that flips
-`analytics_storage` and nothing else, the decision survives a reload without
-asking again, and the reopen button on the cookie policy clears it and brings
-the banner back. Zero external scripts in the built HTML, fourteen routes
-prerendered, format/lint/build/budget green.
-
-### Decisions behind it
-
-- **Consent UX is accept / reject / customise.** Two one-click paths plus a
-  panel with per-category toggles. Reject is as prominent as accept, which is
-  what German law wants and the site is bilingual DE.
-- **Categories:** essential (locked on), analytics, marketing.
-- **GTM only.** One container carries GA4, Meta and TikTok. Microsoft Clarity
-  is dropped from the code — see the contradiction under Blockers.
-- **Consent Mode v2 defaults are denied** for `ad_storage`,
-  `analytics_storage`, `ad_user_data` and `ad_personalization`, granted for
-  `security_storage`, written before GTM loads. An `update` follows the choice.
-- **`VITE_GTM_ID` is empty for now.** Empty means GTM never loads, so this
-  merges safely before the client provides a container.
-- **Tawk.to moves to click-to-load**, behind consent. It loads on page load
-  today.
-- **Storyblok is not started** and should not start until the pricing question
-  under Blockers is answered.
+Dates are absolute. A task moves the moment it is true, not at the end of a
+session.
 
 ---
 
-## Note — the footer hydration "bug" was a dev-server artifact
+## Now
 
-Recorded because it cost a day and the mistake is easy to repeat.
+Nothing in flight. The environment work is finished and verified; the items
+below are what it left behind.
 
-While testing the consent banner, a footer button did nothing. Measuring on the
-**dev server** showed the whole footer unhydrated — 0 of 131 elements with a
-React fiber, on several routes. The diagnosis was that `SiteChrome`, a
-`lazy()` import inside `<Suspense fallback={null}>`, suspends on the client
-while the server rendered the subtree, so React abandons the markup. `SiteChrome`
-was split up to fix it: the footer imported eagerly, the furniture made
-client-only behind a new `ClientOnly`.
-
-**It was never true in production.** Measured after the fact, on production
-builds served from `build/client`:
-
-| Build                         | Page collapses during hydration? | Footer hydrated |
-| ----------------------------- | -------------------------------- | --------------- |
-| `63f9be1` prerender migration | no — 3483 to 3539 nodes          | yes             |
-| `098c559` consent             | no — min 3475 nodes              | 129 of 129      |
-| `b171f93` the "fix"           | **yes — 3488 to 806 to 3530**    | yes             |
-
-Vite serves modules unbundled in dev, so the lazy chunk is a separate request
-that has not arrived when hydration runs. The production build does not have
-that gap. The fix addressed a condition that only exists on localhost.
-
-Worse, it caused what it was meant to prevent. Making the furniture client-only
-changed when the shared `hasHydrated` module flags in `DeferUntilPainted` and
-`MountInSlices` get set, and the page began tearing itself down during
-hydration — 3,488 nodes to 806, 16,968px to 3,130px, then rebuilt over ~320ms.
-That is the thing `DeferUntilPainted`'s own comment exists to warn about.
-
-Measured cost of the change, all production:
-
-|                                | `098c559` before | `b171f93` after | reverted        |
-| ------------------------------ | ---------------- | --------------- | --------------- |
-| Long tasks scrolling from load | —                | 281ms over 4    | **51ms over 1** |
-| Worst frame                    | —                | 122ms           | **64ms**        |
-| Lighthouse a11y                | 100              | 82              | **100**         |
-| TBT                            | —                | 23ms            | **0ms**         |
-
-Reverted in the commit that carries this note. The seven accessibility failures
-it appeared to expose were the same artifact: with the page in flux during the
-audit, axe sampled elements mid-animation. Six were still genuine markup
-defects and their fixes are kept (`88c081d`); the seventh, colour contrast, was
-entirely the artifact — every `-deep` token already clears 4.5:1 (blue 6.82,
-red 5.30, green 4.97, gold 4.91 on the sunk band), and what Lighthouse measured
-were blends of the PipelinePanel's crossfading beats at partial opacity.
-
-**The lesson: measure the production build.** Dev-only hydration behaviour is
-not a bug, and a Lighthouse run against a page that is still settling is not a
-measurement. Both traps were hit in one day.
-
-Still open, and genuinely pre-existing: scrolling immediately after load costs
-one ~51ms long task and a 64ms worst frame. Mild, at the threshold rather than
-over it, and not yet attributed.
+| #   | Task                                                                            | Why it matters                                                                                                                                                                                                                                                                        |
+| --- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Remove the reveal probe — `src/lib/revealProbe.js` and four lines in `root.jsx` | It answered its question. Gated behind `?probe=reveal` so a normal visit neither runs nor downloads it, but it is diagnostic code sitting in a public repo                                                                                                                            |
+| 2   | Normalise line endings and get CI green                                         | `prettier --check` fails on ~171 files from CRLF committed long before this work — 146 already failed at `e94f8e2`. It is the **first** step in the Quality workflow, so every check after it is being skipped. A whitespace-only commit, but a large one, so it wants a quiet moment |
+| 3   | The last expensive frame                                                        | Worst frame in the first second is still ~83ms after everything in Done. Total blocking work halved; this one frame did not move. Not yet attributed                                                                                                                                  |
 
 ---
 
-## Temporary — reveal probe, delete when answered
+## Future
 
-`src/lib/revealProbe.js` plus four lines in `root.jsx`. Loads only for
-`?probe=reveal`, as its own chunk, so a normal visit neither runs nor
-downloads it. It records, per `[data-reveal]` element, how far the page was
-scrolled while that element sat inside the viewport still invisible.
+In the order the work wants to happen, not the order it was asked.
 
-There to answer one question that could not be reproduced here: text sections
-reported appearing late on a phone. A maximised desktop window cannot be shrunk
-to a phone viewport, and the browser that emulates one throttles
-requestAnimationFrame to a couple of frames a second — which distorts the exact
-animation timing in question. So it gets measured on the real device.
-
-**Delete both once the answer is in.**
+| #   | Task                                                                                                                                                                     | Waiting on                                                                               |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                         |
+| 2   | **New pages**                                                                                                                                                            | The page list, which has not been given. Base first — the developer was explicit         |
+| 3   | **Wire GTM for real** — loader, consent gate and cookie policy are built and inert                                                                                       | `VITE_GTM_ID`                                                                            |
+| 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                          | Deferred by decision until the move to the client's server                               |
+| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                            |
+| 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                             | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
+| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                       | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
+| 8   | Login / registration / checkout                                                                                                                                          | Out of this phase entirely — payments and auth are not in scope                          |
 
 ---
 
@@ -130,42 +51,62 @@ animation timing in question. So it gets measured on the real device.
 
 | Item                                  | Detail                                                                                                                                                                                                                                                                                         |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Storyblok pricing                     | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — the schemas are built against whatever plan they buy                                                                                                       |
-| GTM container ID                      | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but inert                                                                                                                                                                                                                                |
-| Privacy policy contradicts the banner | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission. The sentence has to change when the banner ships                                                                             |
-| Clarity vs GTM                        | The live privacy policy names Microsoft Clarity and Microsoft Advertising. The 3 Sep plan named GTM/GA4/Meta/TikTok. We are building GTM-only; the client needs to confirm Clarity is genuinely going away, and the policy text updated to match                                               |
-| Legal text needs sign-off             | The privacy copy is the client's own, with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy and the whole German translation are new. **No lawyer has read any of it.** See the header of `src/content/en/legal.js` |
-| Legal pages are invisible to crawlers | `/privacy-policy` renders client-side only — the served HTML is an empty `#root`, and every legal URL returns the same 6KB homepage shell under a 200. The rebuild fixes this for the pages it owns; the live site still has it everywhere                                                     |
-| No cookie policy exists               | `/cookie-policy` renders blank on the live site. Ours is written fresh, generated from `config/vendors.js` so it cannot drift from what actually loads                                                                                                                                         |
-| Footer links                          | Eight point at `https://ecomsniper.io/*` pages that are soft-404s: `/about`, `/blog`, `/careers`, `/contact`, `/terms-and-conditions`. Legal ones matter most — the guarantee copy leans on a refund policy that is not there                                                                  |
+| Storyblok pricing                     | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — schemas get built against whatever plan they buy                                                                                                           |
+| GTM container ID                      | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but never loads                                                                                                                                                                                                                          |
+| Legal text needs sign-off             | The privacy copy is the client's own with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy and the entire German translation are new. **No lawyer has read any of it.** See the header of `src/content/en/legal.js` |
+| Clarity vs GTM                        | The live privacy policy names Microsoft Clarity and Microsoft Advertising; the 3 Sep plan named GTM/GA4/Meta/TikTok. Built GTM-only. The client needs to confirm Clarity is genuinely going, and update the live policy text to match                                                          |
+| Privacy policy contradicts the banner | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission                                                                                                                               |
+| Footer links                          | Eight point at `https://ecomsniper.io/*` pages that are soft-404s: `/about`, `/blog`, `/careers`, `/contact`, `/terms-and-conditions`. The legal ones matter most — the guarantee copy leans on a refund policy that is not there                                                              |
 
 ---
 
-## Parked — deliberately not doing now
+## Decided — do not re-argue
 
-| Item                            | Why                                                                                                                                                                                                         |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Playbook form endpoint          | `VITE_PLAYBOOK_ENDPOINT` is unset, so every form fakes success. Deferred until the move to the client's server                                                                                              |
-| Dashboard screenshots           | Still mocks in `FeatureTourSection`. Fine for now                                                                                                                                                           |
-| New pages                       | The developer was explicit: base first. Page list comes later                                                                                                                                               |
-| Login / registration / checkout | Out of scope — payments and auth are not in this phase                                                                                                                                                      |
-| Orphan CSS in the build         | `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it. Costs deploy size, not visitor bandwidth. No config removes it; a post-build prune if it ever matters |
-
----
-
-## Next up — after the environment
-
-Not started, listed so the order is not re-argued later.
-
-1. **Storyblok** — once pricing is confirmed. Content fetched at build time,
-   webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file
-   for file, so the CMS adds no runtime weight.
-2. **New pages** — page list still to come from the client.
+- **Stack stays React**, extended into the full production site: everything except login, registration and checkout.
+- **SEO is fixed by prerendering, not meta tags.** Done.
+- **CMS is Storyblok**, build-time fetch, webhook rebuild.
+- **Consent is accept / reject / customise.** Categories: essential (locked), analytics, marketing. Consent Mode v2 denied by default.
+- **GTM only.** One container carries GA4, Meta and TikTok. Clarity is not in the code.
+- **Tawk.to loads on click**, never on page load, and behind consent.
+- **Config is centralised**: `src/config/` for ids and toggles, `src/third-party/` for every external script, nothing external imported from anywhere else.
+- **Base before new pages** — the developer's own instruction.
 
 ---
 
 ## Done
 
-| Date       | What                                                                                                                                                                                                                                                 |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 3 Sep 2026 | Prerendered routes (`63f9be1`). Ten routes as real HTML, per-route title/description/canonical/hreflang, `lang` correct in both languages, real 404s. Deploy, Lighthouse, budget and lint all pointed at the router's output; Node pinned to 22.22.0 |
+| Date       | What                                                                                                                                                                                                                                                                  | Commit    |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 3 Sep 2026 | **Prerendered routes.** Ten routes as real HTML, per-route title/description/canonical/hreflang, `lang` correct in both languages, real 404s. Deploy, Lighthouse, budget and lint pointed at the router's output; Node pinned to 22.22.0                              | `63f9be1` |
+| 3 Sep 2026 | **Consent environment.** `src/config/`, `src/third-party/`, `src/consent/`; Consent Mode v2 denied before anything can load; banner in both languages; `/privacy-policy` and `/cookie-policy` prerendered; `lib/trackingGate.js` deleted, Tawk moved to click-to-load | `098c559` |
+| 3 Sep 2026 | **Accessibility.** Six real markup defects — a `<dl>` of `<div>`s, `aria-label` on a bare `<span>`, `<h4>` under `<h2>`, focusable content inside `aria-hidden`, two accessible names not containing their visible text. Score 82 → 100                               | `88c081d` |
+| 3 Sep 2026 | **Reverted a bad fix of mine.** See the note below                                                                                                                                                                                                                    | `7aa1cf0` |
+| 3 Sep 2026 | **The page stopped painting itself and then hiding.** `js-motion` moved to an inline head script; it had been arriving after the bundle, so the prerendered page painted in full and every reveal then snapped to invisible                                           | `b9ba189` |
+| 3 Sep 2026 | **Colour washes stop re-blurring through every fade.** Promoted to their own layer; the 52ms long task on the two sections nearest the top disappeared                                                                                                                | `4436e81` |
+| 3 Sep 2026 | **Metric-matched font fallbacks.** Measured rather than copied: Arial rendered a body paragraph 24px shorter than Montserrat; now 0px                                                                                                                                 | `1cd66b2` |
+| 3 Sep 2026 | **The marquee's CSS ships with the page that renders it.** It sat in a lazy chunk while its markup was prerendered, so the loop rendered unstyled at 417px then snapped to 51px — a 366px reflow                                                                      | `8513d61` |
+| 3 Sep 2026 | **Four heaviest below-fold sections skip first layout.** Style and layout 520ms → 169ms, long frames 1208ms → 591ms, document settling 684px → 248px, deep links still exact                                                                                          | `a504959` |
+
+### The mistake, kept on purpose
+
+`b171f93` was diagnosed on the **dev server** and never checked against a
+production build. In dev, Vite serves modules unbundled, so a lazy chunk is
+still in flight during hydration and the footer genuinely does not hydrate. In
+production it always did — measured afterwards at 129 of 129 elements, on both
+earlier commits. The "fix" then caused the fault it was meant to prevent: the
+page began discarding its own prerendered markup, 3,488 nodes down to 806.
+
+Cost, all production: long tasks scrolling from load 281ms against 51ms; worst
+frame 122ms against 64ms; accessibility 82 against 100.
+
+**Measure the production build.** Dev-only hydration behaviour is not a bug,
+and a Lighthouse run against a page still settling is not a measurement.
+
+### Also worth knowing
+
+**82% of the prerendered HTML — 425KB of 518KB — is delivered inside
+`<div hidden id="S:0">`** and moved into place by inline script, because
+`HomeBelowFold` is `lazy()` inside `<Suspense>`. `<main>` as served holds 2
+sections; the document has 15. It costs no layout time, and Google runs
+JavaScript so indexing is unaffected — but "prerendered" is less literal than
+it sounds, and a naive scraper reads that content out of a hidden container.
