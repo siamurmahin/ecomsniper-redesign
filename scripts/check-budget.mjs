@@ -53,10 +53,30 @@ const BUDGETS = {
      protecting LCP and now protects hydration and TBT, and it is worth having
      for that. Read it that way before raising it again.
 
-     Still 27KB of headroom, and the way to spend less is unchanged: make it
-     lazy. Deferring a route's own module is the router's job now, so the
-     application code left in here is small — the ceiling is mostly runtime. */
-  eagerJs: 560,
+     The way to spend less is unchanged: make it lazy. Deferring a route's own
+     module is the router's job now, so the application code left in here is
+     small — the ceiling is mostly runtime.
+
+     575, raised from 560 on 4 Sep while building the remaining pages out.
+     What grew is the route manifest, not application code: roughly 1KB per
+     route, and eager because hydration cannot begin without the route table.
+     Ten pages left at 557KB meant the budget would fire on the next one, and
+     "make it lazy" has no purchase on a manifest the router needs in order to
+     start.
+
+     Two reasons this is the right 15KB to spend. Prerendering already took
+     paint off the critical path — the document draws from HTML with no
+     JavaScript — so none of this touches LCP. And what it does affect,
+     hydration and TBT, has measured room: Lighthouse desktop puts total
+     blocking time at 0ms against 120ms on the live site.
+
+     This is a ceiling for pages, not for weight. If it fires again on
+     something that is not the manifest, that is a real regression — go and
+     look rather than raising it. The runtime itself is the place to win the
+     15KB back: errorBoundaries is 107KB eager and vendor-react 187KB, and
+     neither has been examined. That is tuning work, deliberately deferred
+     until the site is complete. */
+  eagerJs: 575,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake. */
