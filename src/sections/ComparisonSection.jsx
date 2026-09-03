@@ -136,7 +136,7 @@ export default function ComparisonSection({ cta }) {
       ref={sectionRef}
       id="comparison"
       aria-labelledby="comparison-headline"
-      className="section-band bg-paper-sunk"
+      className="section-band defer-render bg-paper-sunk [--defer-h:1870px] lg:[--defer-h:1350px]"
     >
       <div className="site-shell">
         <SectionHeading

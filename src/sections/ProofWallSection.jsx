@@ -139,7 +139,7 @@ export default function ProofWallSection() {
       ref={sectionRef}
       id="proof"
       aria-labelledby="proof-headline"
-      className="section-band defer-render relative overflow-hidden bg-paper-sunk"
+      className="section-band defer-render relative overflow-hidden bg-paper-sunk [--defer-h:670px] lg:[--defer-h:830px]"
     >
       {/* The wall. Held behind the card and masked at both ends so it has no
           visible first or last row — the point is that it does not end. */}

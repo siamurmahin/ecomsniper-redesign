@@ -296,9 +296,18 @@
    * real height once it has been rendered; the fallback only has to be close
    * enough that the scrollbar does not jump on the way down.
    */
+  /* The placeholder height is per section now, because the set grew past the
+     two walls it was written for and 900px is only right for those.
+
+     `auto` means the browser keeps the real height once it has rendered the
+     section once, so the number below only decides the very first pass — but
+     that pass is the one a visitor scrolls through, and a section guessed
+     950px short moves the ground under them. The values are each section's
+     measured desktop height; a phone is taller and still underestimates,
+     which the `auto` keyword corrects after the first sighting. */
   .defer-render {
     content-visibility: auto;
-    contain-intrinsic-size: auto 900px;
+    contain-intrinsic-size: auto var(--defer-h, 900px);
   }
 
   /*

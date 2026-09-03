@@ -295,7 +295,11 @@ export default function FeatureTourSection() {
   const activeTone = toneOf(active.tone);
 
   return (
-    <section ref={sectionRef} id="how-it-works" className="section-band bg-paper-sunk">
+    <section
+      ref={sectionRef}
+      id="how-it-works"
+      className="section-band defer-render bg-paper-sunk [--defer-h:2660px] lg:[--defer-h:1850px]"
+    >
       <div className="site-shell">
         <SectionHeading
           align="center"

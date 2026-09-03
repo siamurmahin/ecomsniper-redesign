@@ -183,7 +183,7 @@ export default function TestimonialsSection() {
       /* Ink. On paper it had no edges — the bands either side are paper too,
          so the padding read as dead space. Written reviews are the quietest
          evidence here, and turning the lights down is what makes them land. */
-      className="section-band defer-render relative overflow-hidden bg-ink text-paper"
+      className="section-band defer-render relative overflow-hidden bg-ink text-paper [--defer-h:850px] lg:[--defer-h:1290px]"
     >
       <div className="site-shell">
         <SectionHeading

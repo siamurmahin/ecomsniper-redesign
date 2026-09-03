@@ -29,7 +29,12 @@ export default function FaqSection({ showHeading = true }) {
   const sectionRef = useRevealOnScroll();
 
   return (
-    <section ref={sectionRef} id="faq" aria-labelledby="faq-headline" className="section-band">
+    <section
+      ref={sectionRef}
+      id="faq"
+      aria-labelledby="faq-headline"
+      className="section-band defer-render [--defer-h:2150px] lg:[--defer-h:1630px]"
+    >
       <div className="site-shell">
         <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           <div className="lg:sticky lg:top-28 lg:self-start">

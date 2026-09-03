@@ -131,7 +131,7 @@ export default function AssuranceSection({ showCloser = true }) {
       ref={sectionRef}
       id="guarantee"
       aria-labelledby="guarantee-headline"
-      className="section-band bg-paper-sunk"
+      className="section-band defer-render bg-paper-sunk [--defer-h:1110px] lg:[--defer-h:610px]"
     >
       <div className="site-shell">
         <div
