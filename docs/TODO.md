@@ -60,14 +60,15 @@ payments and auth are out of this phase.
 
 ### Built
 
-| Page           | Route                                                |
-| -------------- | ---------------------------------------------------- |
-| Home           | `/`                                                  |
-| Pricing        | `/pricing`                                           |
-| FAQ            | `/faq`                                               |
-| Free playbook  | `/free-play-book`                                    |
-| Privacy policy | `/privacy-policy`                                    |
-| Cookie policy  | `/cookie-policy` — ours, no equivalent on their site |
+| Page           | Route                                                       |
+| -------------- | ----------------------------------------------------------- |
+| Home           | `/`                                                         |
+| Pricing        | `/pricing`                                                  |
+| FAQ            | `/faq`                                                      |
+| Free playbook  | `/free-play-book`                                           |
+| Privacy policy | `/privacy-policy`                                           |
+| Cookie policy  | `/cookie-policy` — ours, no equivalent on their site        |
+| About          | `/about` — their copy, refund qualified to the monthly plan |
 
 All of the above exist in both languages.
 
@@ -75,25 +76,24 @@ All of the above exist in both languages.
 
 | #   | Page                    | Route on their site                                   | Notes                                                                                      |
 | --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| 1   | About                   | `/about`                                              | In the sitemap and the nav. Footer currently links out to it                               |
-| 2   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                                 |
-| 3   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                                             |
-| 4   | Careers                 | `/careers`                                            | In the nav, **not** in the sitemap                                                         |
-| 5   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                                  |
-| 6   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                                  |
-| 7   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                                  |
-| 8   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**                         |
-| 9   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                                   |
-| 10  | Blog index              | `/blog`                                               |                                                                                            |
-| 11  | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                                     |
-| 12  | Affiliate               | `/affiliate/join`                                     | Their footer "Affiliate" link points at `/login`, not at a page. Confirmed as one to build |
+| 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                                 |
+| 2   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                                             |
+| 3   | Careers                 | `/careers`                                            | In the nav, **not** in the sitemap                                                         |
+| 4   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                                  |
+| 5   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                                  |
+| 6   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                                  |
+| 7   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**                         |
+| 8   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                                   |
+| 9   | Blog index              | `/blog`                                               |                                                                                            |
+| 10  | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                                     |
+| 11  | Affiliate               | `/affiliate/join`                                     | Their footer "Affiliate" link points at `/login`, not at a page. Confirmed as one to build |
 
 ### Decided 3 Sep
 
 - **Refund is monthly-plan only.** Not on the credits bundle, not on
   Enterprise. Their About page says "30-day refund policy" unqualified; the
-  rebuild qualifies it, as the rest of the deck already does. Fix when About is
-  built.
+  rebuild qualifies it, as the rest of the deck already does. Done — About
+  states it in both languages.
 - **$199 is the monthly charge from month two.** $97 is the first month. No
   mismatch — their About page framing "$200" is the monthly price.
 - **Telegram is real** — `https://t.me/ecomsniper`, from the client. Their own
@@ -176,18 +176,20 @@ come from the index, and their sitemap is advertising URLs that may 404.
 
 ## Done
 
-| Date       | What                                                                                                                                                                                                                                                                  | Commit    |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| 3 Sep 2026 | **Prerendered routes.** Ten routes as real HTML, per-route title/description/canonical/hreflang, `lang` correct in both languages, real 404s. Deploy, Lighthouse, budget and lint pointed at the router's output; Node pinned to 22.22.0                              | `63f9be1` |
-| 3 Sep 2026 | **Consent environment.** `src/config/`, `src/third-party/`, `src/consent/`; Consent Mode v2 denied before anything can load; banner in both languages; `/privacy-policy` and `/cookie-policy` prerendered; `lib/trackingGate.js` deleted, Tawk moved to click-to-load | `098c559` |
-| 3 Sep 2026 | **Accessibility.** Six real markup defects — a `<dl>` of `<div>`s, `aria-label` on a bare `<span>`, `<h4>` under `<h2>`, focusable content inside `aria-hidden`, two accessible names not containing their visible text. Score 82 → 100                               | `88c081d` |
-| 3 Sep 2026 | **Reverted a bad fix of mine.** See the note below                                                                                                                                                                                                                    | `7aa1cf0` |
-| 3 Sep 2026 | **The page stopped painting itself and then hiding.** `js-motion` moved to an inline head script; it had been arriving after the bundle, so the prerendered page painted in full and every reveal then snapped to invisible                                           | `b9ba189` |
-| 3 Sep 2026 | **Colour washes stop re-blurring through every fade.** Promoted to their own layer; the 52ms long task on the two sections nearest the top disappeared                                                                                                                | `4436e81` |
-| 3 Sep 2026 | **Metric-matched font fallbacks.** Measured rather than copied: Arial rendered a body paragraph 24px shorter than Montserrat; now 0px                                                                                                                                 | `1cd66b2` |
-| 3 Sep 2026 | **The marquee's CSS ships with the page that renders it.** It sat in a lazy chunk while its markup was prerendered, so the loop rendered unstyled at 417px then snapped to 51px — a 366px reflow                                                                      | `8513d61` |
-| 3 Sep 2026 | **Four heaviest below-fold sections skip first layout.** Style and layout 520ms → 169ms, long frames 1208ms → 591ms, document settling 684px → 248px, deep links still exact                                                                                          | `a504959` |
-| 3 Sep 2026 | **Removed the reveal probe.** Diagnostic code added to measure late reveals on a real device; the question was answered, so it is gone — file, the `useEffect` in `root.jsx`, and the now-unused import                                                               | `7917e4b` |
+| Date       | What                                                                                                                                                                                                                                                                                                                        | Commit     |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| 3 Sep 2026 | **Prerendered routes.** Ten routes as real HTML, per-route title/description/canonical/hreflang, `lang` correct in both languages, real 404s. Deploy, Lighthouse, budget and lint pointed at the router's output; Node pinned to 22.22.0                                                                                    | `63f9be1`  |
+| 3 Sep 2026 | **Consent environment.** `src/config/`, `src/third-party/`, `src/consent/`; Consent Mode v2 denied before anything can load; banner in both languages; `/privacy-policy` and `/cookie-policy` prerendered; `lib/trackingGate.js` deleted, Tawk moved to click-to-load                                                       | `098c559`  |
+| 3 Sep 2026 | **Accessibility.** Six real markup defects — a `<dl>` of `<div>`s, `aria-label` on a bare `<span>`, `<h4>` under `<h2>`, focusable content inside `aria-hidden`, two accessible names not containing their visible text. Score 82 → 100                                                                                     | `88c081d`  |
+| 3 Sep 2026 | **About, in both languages.** Their copy kept close to verbatim; the refund qualified to the monthly plan, and their two empty sections left out rather than invented. Nav and footer now point at the local route instead of their live site                                                                               | `edfc2a5` |
+| 3 Sep 2026 | **Page copy stopped being eager.** Adding About to the global deck put its words in the chunk every route downloads — 7KB paid on the homepage by someone who never opens About, and ~80KB once the remaining twelve pages landed. Page decks now load with their route via `usePageContent`; eager JS 562KB (over) → 555KB | `c6c8271` |
+| 3 Sep 2026 | **Reverted a bad fix of mine.** See the note below                                                                                                                                                                                                                                                                          | `7aa1cf0`  |
+| 3 Sep 2026 | **The page stopped painting itself and then hiding.** `js-motion` moved to an inline head script; it had been arriving after the bundle, so the prerendered page painted in full and every reveal then snapped to invisible                                                                                                 | `b9ba189`  |
+| 3 Sep 2026 | **Colour washes stop re-blurring through every fade.** Promoted to their own layer; the 52ms long task on the two sections nearest the top disappeared                                                                                                                                                                      | `4436e81`  |
+| 3 Sep 2026 | **Metric-matched font fallbacks.** Measured rather than copied: Arial rendered a body paragraph 24px shorter than Montserrat; now 0px                                                                                                                                                                                       | `1cd66b2`  |
+| 3 Sep 2026 | **The marquee's CSS ships with the page that renders it.** It sat in a lazy chunk while its markup was prerendered, so the loop rendered unstyled at 417px then snapped to 51px — a 366px reflow                                                                                                                            | `8513d61`  |
+| 3 Sep 2026 | **Four heaviest below-fold sections skip first layout.** Style and layout 520ms → 169ms, long frames 1208ms → 591ms, document settling 684px → 248px, deep links still exact                                                                                                                                                | `a504959`  |
+| 3 Sep 2026 | **Removed the reveal probe.** Diagnostic code added to measure late reveals on a real device; the question was answered, so it is gone — file, the `useEffect` in `root.jsx`, and the now-unused import                                                                                                                     | `7917e4b`  |
 
 ### The mistake, kept on purpose
 
