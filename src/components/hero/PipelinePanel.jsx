@@ -186,7 +186,7 @@ export default function PipelinePanel() {
                     <button
                       type="button"
                       onClick={() => goTo(index)}
-                      aria-label={`${step.chip}: ${step.title}`}
+                      aria-label={`${index + 1}. ${step.chip}: ${step.title}`}
                       aria-current={isActive}
                       className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
                     >
@@ -269,6 +269,14 @@ export default function PipelinePanel() {
                   <div
                     key={step.chip}
                     aria-hidden={!isActive}
+                    /* `inert` as well as `aria-hidden`, because the beat that
+                       is fading out still holds a button — the finale's replay
+                       — and an aria-hidden subtree with something tabbable in
+                       it is a keyboard trap that a screen reader cannot
+                       announce. `inert` takes the whole subtree out of the tab
+                       order and the a11y tree together; `pointer-events-none`
+                       above only ever stopped the mouse. */
+                    inert={!isActive || undefined}
                     /*
                      * A staggered crossfade: the old step leaves over 500ms,
                      * the new one waits 420ms. They overlap for ~80ms, short

@@ -504,7 +504,11 @@ export default function AudienceSection() {
           {/* Keeps the language, like every other internal link. */}
           <a
             href={pathForLanguage(AUDIENCE.closer.cta.href, language)}
-            aria-label={AUDIENCE.closer.cta.label}
+            /* The visible word comes first, then the destination. It was the
+               destination alone — "See what it costs" over a link that reads
+               "Be next" — so the accessible name did not contain the visible
+               one, and voice control had nothing to match. */
+            aria-label={`${AUDIENCE.closer.cta.nudge} — ${AUDIENCE.closer.cta.label}`}
             data-cta-intent="audience-to-pricing-mouse"
             // Fills on hover so the whole cue is the target; contents invert with it.
             className="group flex flex-col items-center gap-2.5 rounded-2xl px-5 py-4 text-ink transition-colors duration-300 hover:bg-ink hover:text-paper"

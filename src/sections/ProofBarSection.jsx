@@ -96,7 +96,16 @@ export default function ProofBarSection() {
           <CountryTicker onInk className="min-w-0 flex-1" />
         </div>
 
-        <dl className="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+        {/* A div, not a `<dl>`, and the pairs are paragraphs.
+            These are label-and-figure pairs and the markup said so, but a
+            `<dl>` may only hold `<dt>`/`<dd>` groups or divs that directly
+            hold them, and each card puts three wrappers in between — the
+            vendored SpotlightCard, the reveal target and the optional link.
+            Neither the card nor the grid can lose a level, and SpotlightCard
+            is marked re-fetch-not-edit, so the list was malformed: axe read
+            every figure as a `<dd>` with no list around it. A plain group
+            that is honest beats a description list that no reader can use. */}
+        <div className="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
           {PROOF_BAR.items.map((item, index) => {
             const meta = ITEM_META[index];
             const tone = toneOf(meta.tone);
@@ -132,7 +141,7 @@ export default function ProofBarSection() {
                       <Icon name={meta.icon} className="size-[1.05rem]" />
                     </span>
 
-                    <dd className="mt-3.5 font-display text-2xl font-extrabold tracking-tight tabular-nums sm:text-3xl">
+                    <p className="mt-3.5 font-display text-2xl font-extrabold tracking-tight tabular-nums sm:text-3xl">
                       {meta.kind === 'marketplaces' ? (
                         // The marks rather than their names in type: a logo a
                         // visitor already recognises is the evidence here, and it
@@ -164,7 +173,7 @@ export default function ProofBarSection() {
                           )}
                         </>
                       )}
-                    </dd>
+                    </p>
 
                     {meta.kind === 'rating' && (
                       // Gold rather than the card's own tone: review stars are
@@ -179,14 +188,14 @@ export default function ProofBarSection() {
                       />
                     )}
 
-                    <dt className="mt-1.5 text-sm font-semibold">{item.label}</dt>
+                    <p className="mt-1.5 text-sm font-semibold">{item.label}</p>
                     <p className="mt-0.5 text-xs text-muted-dark">{item.detail}</p>
                   </Wrapper>
                 </div>
               </SpotlightCard>
             );
           })}
-        </dl>
+        </div>
 
         {/* A link, not a button. The hero one screen up already asks twice; a
             third button here would compete with it, and the job of this band is

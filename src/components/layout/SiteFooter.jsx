@@ -265,7 +265,12 @@ export default function SiteFooter() {
               <a
                 href={SITE.trustpilotUrl}
                 rel="noopener noreferrer"
-                aria-label={FOOTER.reviewsCta}
+                /* No aria-label. It said "Read the reviews on Trustpilot"
+                   while the link reads "4.7 on Trustpilot · 42 reviews", and
+                   an accessible name that does not contain the visible one
+                   means anybody driving this by voice says what they can see
+                   and nothing happens. The visible text is the better name
+                   anyway — it carries the score. */
                 className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2 text-xs text-muted-dark transition-colors duration-300 hover:border-paper/40 hover:text-paper"
               >
                 <Icon name="star" className="size-3.5 shrink-0 text-signal-gold" />

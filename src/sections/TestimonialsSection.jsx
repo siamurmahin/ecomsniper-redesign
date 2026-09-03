@@ -58,7 +58,7 @@ function ReviewCard({ review }) {
         <span className="sr-only">{A11Y.rating.replace('{n}', review.rating ?? 5)}</span>
       </p>
 
-      <h4 className="mt-2 text-sm font-semibold text-paper">{review.title}</h4>
+      <h3 className="mt-2 text-sm font-semibold text-paper">{review.title}</h3>
 
       {/* Full, never clipped. A review cut mid-sentence to fit a card is the
           one thing already rejected here. */}

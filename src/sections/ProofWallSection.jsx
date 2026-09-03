@@ -120,7 +120,7 @@ function WallCard({ entry }) {
         <span className="sr-only">{A11Y.rating.replace('{n}', item.rating ?? 5)}</span>
       </p>
 
-      <h4 className="mt-2 text-sm font-semibold">{item.title}</h4>
+      <h3 className="mt-2 text-sm font-semibold">{item.title}</h3>
       <p className="mt-1.5 text-[0.8rem] leading-relaxed text-muted">{item.body}</p>
     </article>
   );

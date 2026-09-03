@@ -288,8 +288,16 @@ export default function HeroSection() {
                   the German page kept an English headline. Everything up to
                   the marked phrase is the fixed half; the mark is typed below.
                   Split into words in the markup — see `splitIntoWords`. */}
-              <span className="block" aria-label={fixedHeadline}>
+              {/* The words are split into per-letter spans to animate, which
+                  reads as gibberish, so the visual half is hidden and the
+                  sentence is supplied beside it. As an `aria-label` on this
+                  span it was ignored anyway: ARIA forbids a label on a span
+                  with no role, so the headline had no accessible text at all.
+                  A visually-hidden sibling needs no role and cannot be
+                  dropped. */}
+              <span className="block">
                 <span aria-hidden="true">{headlineNodes}</span>
+                <span className="sr-only">{fixedHeadline}</span>
               </span>
 
               {/* nowrap: the block's width changes with every keystroke,
