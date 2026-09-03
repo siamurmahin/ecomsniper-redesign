@@ -64,7 +64,31 @@ written from their live copy, and there is no live copy to write from.
 **Fix:** the client supplies the terms. Nothing to rebuild until they do.
 Owner: client.
 
-### 3. Eight footer links are soft-404s — `high`
+### 3. Two of their four feature pages never finish loading — `high`
+
+`/ai-powered-lister` and `/competitor-research` hang. `readyState` stops at
+`interactive` and never reaches `complete`, `<main>` renders **0 characters**,
+and the tab keeps the generic homepage title instead of its own. Repeated
+attempts froze the renderer outright.
+
+Not the browser and not the site at large: `/product-hunter` was loaded in the
+same tab moments later and came back `complete`, 1354 characters, with its own
+title. Reproduced across two fresh tabs and four attempts.
+
+`/aiListerV6` fails identically, so it is the feature rather than the slug. Two
+of the four product pages on a site selling that product are blank to every
+visitor, and being a client-rendered SPA there is no server-rendered fallback
+behind them.
+
+Untested when this was written: `/competitorResearchV6`, `/priceMonitorV6`.
+
+**This blocks us too.** Both pages are on the build list and were to be written
+from their live copy. There is no copy to read while they do not render.
+
+**Fix:** their developers. The browser console on those two routes will say
+more in ten seconds than any amount of probing from outside. Owner: client.
+
+### 4. Eight footer links are soft-404s — `high`
 
 `/about`, `/blog`, `/careers`, `/contact`, `/terms-and-conditions` on
 `ecomsniper.io` all return **200 with the homepage shell**, not a 404. A link
@@ -75,7 +99,7 @@ does not exist.
 
 **Fix:** the client publishes the pages, or the links come out. Owner: client.
 
-### 4. The live site is invisible to anything that does not run JavaScript — `high`
+### 5. The live site is invisible to anything that does not run JavaScript — `high`
 
 `ecomsniper.io` serves the same 6KB shell — `<div id="root"></div>` — at every
 URL under a 200. The privacy policy only exists once React has run.
@@ -85,7 +109,7 @@ everywhere, and will until the rebuild replaces it.
 
 **Fix:** ship the rebuild. Owner: us + client.
 
-### 5. Legal text has not been reviewed by a lawyer — `high`
+### 6. Legal text has not been reviewed by a lawyer — `high`
 
 The privacy copy is the client's own with two changes: the implied-consent
 sentence removed, and Microsoft Clarity replaced by what actually loads. The
@@ -98,7 +122,7 @@ the banner that now asks.
 **Fix:** client's lawyer reads `src/content/en/legal.js` and `de/legal.js`.
 Owner: client.
 
-### 6. One expensive frame remains at startup — `medium`
+### 7. One expensive frame remains at startup — `medium`
 
 Worst frame in the first second is ~83ms. Total blocking work is down by half
 after the layout deferral, but this one frame did not move and is not yet
@@ -110,7 +134,7 @@ Ruled out by measurement: fonts (metric-matched, 0px delta), images (CLS
 
 **Fix:** unknown. Needs another profiling pass. Owner: us.
 
-### 7. 115KB of dead CSS ships on every deploy — `low`
+### 8. 115KB of dead CSS ships on every deploy — `low`
 
 `@react-router/dev` moves a stylesheet from the server build into
 `build/client`, where nothing links it. Confirmed orphaned: no HTML or JS in
@@ -121,7 +145,7 @@ is false and copies it when true. Costs deploy size, not visitor bandwidth.
 
 **Fix:** a post-build prune, if it ever matters. Owner: us.
 
-### 8. "Prerendered" is less literal than it sounds — `low`
+### 9. "Prerendered" is less literal than it sounds — `low`
 
 82% of the prerendered HTML — 425KB of 518KB — is delivered inside
 `<div hidden id="S:0">` and moved into place by inline script, because
@@ -135,7 +159,7 @@ container.
 **Fix:** none proposed. Recorded so nobody relies on the HTML being
 straightforwardly readable. Owner: us, if it ever matters.
 
-### 9. Metric-matched fallbacks are exact only where Arial and Georgia exist — `low`
+### 10. Metric-matched fallbacks are exact only where Arial and Georgia exist — `low`
 
 The fallback faces are measured against Arial and Georgia. Android substitutes
 its own fonts, so the match there is approximate rather than the 0px measured
