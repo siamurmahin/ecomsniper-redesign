@@ -107,6 +107,17 @@ key by key, so a missing German key falls through to English rather than
 blanking. Arrays merge **by position** — inserting an item shifts every label
 after it.
 
+- **The global deck is eager.** The header and footer read it on every route,
+  so anything re-exported from `content/en/index.js` is downloaded by every
+  visitor on every page. That is right for site-wide copy and wrong for a
+  page: About cost 7KB of eager JS this way, paid for on the homepage by
+  someone who never opens it, and twelve more pages would have made it ~80KB.
+- **A page owns its copy.** Import `content/en/<page>` and `content/de/<page>`
+  from the page component and merge with `usePageContent` — the copy lands in
+  that route’s lazy chunk. Do not add a page file to `content/*/index.js`.
+  `content/merge.js` is separate from `content/index.js` for exactly this
+  reason: importing the merge function must not drag the deck back in.
+
 **Motion.** `.js-motion [data-reveal] { opacity: 0 }` is what hides a section
 until it scrolls in. It is applied by script so a no-JS visitor never receives
 CSS that hides the page.
