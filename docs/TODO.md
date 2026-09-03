@@ -32,17 +32,19 @@ below are what it left behind.
 
 In the order the work wants to happen, not the order it was asked.
 
-| #   | Task                                                                                                                                                                     | Waiting on                                                                               |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages** — eleven, listed in the Pages section below                                                                                                                | Slug decisions and copy, per that section                                                |
-| 3   | **Wire GTM for real** — loader, consent gate and cookie policy are built and inert                                                                                       | `VITE_GTM_ID`                                                                            |
-| 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                          | Deferred by decision until the move to the client's server                               |
-| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                            |
-| 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                             | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
-| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                       | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
-| 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                         |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
-| 9   | Login / registration / checkout                                                                                                                                          | Out of this phase entirely — payments and auth are not in scope                          |
+| #   | Task                                                                                                                                                                                                 | Waiting on                                                                               |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight                             | **Pricing confirmation.** Do not start before it                                         |
+| 2   | **New pages** — eleven, listed in the Pages section below                                                                                                                                            | Slug decisions and copy, per that section                                                |
+| 3   | **Wire GTM for real** — loader, consent gate and cookie policy are built and inert                                                                                                                   | `VITE_GTM_ID`                                                                            |
+| 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                                                      | Deferred by decision until the move to the client's server                               |
+| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                                                      | Real captures from the client                                                            |
+| 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                                                         | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
+| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                                                   | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
+| 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                                                     |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
+| 9   | **Pick the feature-page slugs** — readable (`/product-hunter`) or `V6` (`/productHunterV6`). Both live now with different copy; nav points at `V6`, sitemap at readable. Whichever loses needs a 301 | The client. Blocks pages 5–8                                                             |
+| 10  | **Affiliate page** — `/affiliate/join` is in their bundle and "Affiliate" is in their live footer, but it is in no sitemap and was not in the page list                                              | Confirmation it is a real page and not a leftover                                        |
+| 11  | Login / registration / checkout                                                                                                                                                                      | Out of this phase entirely — payments and auth are not in scope                          |
 
 ---
 
@@ -85,7 +87,15 @@ All of the above exist in both languages.
 | 10  | Blog index              | `/blog`                                               |                                                                    |
 | 11  | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below             |
 
-### Needs a decision before any of this is built
+### Decided 3 Sep
+
+- **Careers stays**, and **all four feature pages stay.** They can come out
+  later if they turn out not to earn their place.
+- **Slug choice is deferred** — readable vs `V6` — and sits in Future below.
+  It has to be settled before those four are built, because the loser needs a
+  301 rather than a deletion.
+
+### Still needs a decision
 
 - **Which feature-page slugs are canonical.** Four feature pages exist twice,
   under a readable slug and a `V6` one, with different copy. The nav links to
