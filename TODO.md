@@ -51,39 +51,44 @@ prerendered, format/lint/build/budget green.
 
 ---
 
-## Next — the footer does not hydrate
+## Next — accessibility, and what was hiding it
 
-**Found 3 Sep while testing the consent banner. Pre-existing, from `63f9be1`.
-Nothing to do with consent — the banner was just the first thing put in there
-that needed JavaScript.**
+**The footer hydration bug is fixed.** `SiteChrome` is gone, split in two:
+`SiteFooter` is imported eagerly by `root.jsx` because it is content that
+has to be in the prerendered HTML and therefore has to hydrate, and
+`ConversionFurniture` (sticky bar, back-to-top, both dialogs) is client-only
+behind `ClientOnly`, because none of it is content and none of it works
+without JavaScript. Neither side can now disagree with the server: one is
+rendered on both, the other on neither. Footer went from 0 of 131 elements
+hydrated to 129 of 129, on every route, in both languages, with the console
+clean. The furniture also left all fourteen prerendered documents, which it
+had been bloating for nobody.
 
-`SiteChrome` is a `lazy()` import inside `<Suspense fallback={null}>`. Under
-the SPA there was nothing to hydrate and it worked. Under prerendering the
-server renders the whole subtree, and on a cold load the chunk has not arrived
-when hydration runs — so React renders `null` where the server rendered all of
-it, reports a mismatch, and abandons the markup. The HTML stays on screen,
-owned by nobody, wired to nothing.
+**Fixing it uncovered seven accessibility defects, and why nobody had seen
+them.** While hydration was failing, most of `<main>` below the hero never
+mounted — so Lighthouse was auditing a fraction of the page and scoring it 100. The whole page renders now, and the whole page fails:
 
-Measured on `/pricing` and `/privacy-policy` with a cold cache: **131 footer
-elements, 0 with a React fiber.** The header hydrates normally (46 of 46). It
-is a race, so it looks fine once the chunk is cached — which is why it went
-unnoticed, and why it fails for exactly the first-time visitor who matters.
+| Audit                         | Where                                                                      |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `definition-list` + `dlitem`  | `ProofBarSection` — a `<dl>` whose direct children are `<div>`s            |
+| `aria-prohibited-attr`        | `HeroSection` — `aria-label` on a bare `<span>` with no role               |
+| `heading-order`               | `ProofWallSection`, `TestimonialsSection` — `<h4>` with no `<h3>` above it |
+| `aria-hidden-focus`           | focusable descendants inside an `aria-hidden="true"` wrapper               |
+| `label-content-name-mismatch` | the dashboard panel tabs — `aria-label` does not contain the visible text  |
+| `color-contrast`              | micro-labels on ink; 1.02 against a 4.5 requirement                        |
 
-Dead on a cold load: the footer wordmark hover, `StickyConversionBar`,
-`BackToTop`, `ConsultOffer`, `ExitIntentOffer`. Every footer _link_ still
-works, being plain HTML — which is the whole reason nobody caught it.
+None of these are in code this work touched. All of them are real, stable
+across three Lighthouse runs, and were true before today — they were simply
+never measured.
 
-The consent banner was moved out to `root.jsx` and the reopen control to the
-cookie policy page, so consent does not depend on this being fixed. The rest
-still does.
+**This turns the CI accessibility gate red.** `lighthouserc.json` asserts
+`categories:accessibility` at `error` with `minScore: 0.9`; the page scores
+0.82. Six of the seven are small markup corrections. `color-contrast` is a
+design call, not a markup one.
 
-Three ways out, none free — **this is a call to make, not a task to pick up**:
-
-| Option                                                     | Cost                                                                                                                           |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Drop the `lazy()` and import `SiteChrome` directly         | Undoes `49cff9c`. Adds its weight back to the first-screen bundle, which has 8KB of headroom left                              |
-| Render it client-only (skip it during prerender)           | Keeps the perf win and fixes hydration, but the footer leaves the prerendered HTML — losing the internal links a crawler reads |
-| Await the chunk in `entry.client.jsx` before `hydrateRoot` | Keeps footer HTML and the split, but delays hydration by one chunk fetch — the exact cost the split was buying                 |
+Worth knowing: every Lighthouse number reported before this fix was measured
+against a page that was not fully rendering, so the morning's "a11y 100, perf
+98" on `63f9be1` described less of the site than it appeared to.
 
 ---
 
