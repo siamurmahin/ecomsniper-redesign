@@ -2,6 +2,57 @@
 /* The typefaces, served from this origin — see `scripts/fetch-fonts.mjs`. */
 @import './fonts.css';
 
+/* --------------------------------------------------------------------------
+   Metric-matched fallbacks
+
+   Every face is `font-display: swap`, so the first paint uses a system font
+   and the webfont replaces it a moment later. The two do not occupy the same
+   space, so that swap re-wraps every paragraph on the page and the document
+   re-lays-out end to end. Measured on a cold load: the height moved 366px
+   after the fonts settled, on a document already past 20,000px.
+
+   These faces are the system font with its metrics bent to match the webfont
+   — width via `size-adjust`, height via the ascent and descent overrides — so
+   the fallback takes the same room and the swap changes glyphs without moving
+   a line. They sit immediately after each webfont in the stacks below.
+
+   The numbers are measured, not copied: each font was rendered to a canvas at
+   1000px and its average advance width and bounding box read back, then
+   `size-adjust = webfont width / fallback width` and the overrides divided by
+   that adjustment. Re-measure with the same method if a family changes; do
+   not hand-tune them.
+
+   `local()` only, so nothing is downloaded. On a device without Arial or
+   Georgia — Android substitutes its own — the match is approximate rather
+   than exact, which is still far closer than an unadjusted fallback.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Montserrat Fallback';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 110.73%;
+  ascent-override: 87.42%;
+  descent-override: 22.67%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Bricolage Fallback';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 91.71%;
+  ascent-override: 101.41%;
+  descent-override: 29.44%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Playfair Fallback';
+  src: local('Georgia'), local('Times New Roman');
+  size-adjust: 92.99%;
+  ascent-override: 95.81%;
+  descent-override: 23.23%;
+  line-gap-override: 0%;
+}
+
 /* ==========================================================================
    EcomSniper design system
    ========================================================================== */
@@ -63,12 +114,14 @@
   --color-brand-violet: #8e2a86;
 
   /* --- Type ------------------------------------------------------------- */
-  --font-display: 'Bricolage Grotesque', 'Montserrat', system-ui, sans-serif;
-  --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
+  /* The metric-matched fallback goes immediately after each webfont — it is
+     what renders during the swap, and it is shaped to take the same space. */
+  --font-display: 'Bricolage Grotesque', 'Bricolage Fallback', 'Montserrat', system-ui, sans-serif;
+  --font-sans: 'Montserrat', 'Montserrat Fallback', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', 'Playfair Fallback', Georgia, serif;
   /* Eyebrows and small caps. Reuses the display family so the page keeps two
      voices rather than three. */
-  --font-label: 'Bricolage Grotesque', 'Montserrat', system-ui, sans-serif;
+  --font-label: 'Bricolage Grotesque', 'Bricolage Fallback', 'Montserrat', system-ui, sans-serif;
 
   /* Fluid display scale — readable from 360px to 1920px */
   --text-hero: clamp(2.35rem, 5vw, 4.6rem);
