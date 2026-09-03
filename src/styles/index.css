@@ -2,6 +2,19 @@
 /* The typefaces, served from this origin — see `scripts/fetch-fonts.mjs`. */
 @import './fonts.css';
 
+/* The marquee's styles, here rather than only beside its component.
+   `AssuranceSection` is lazy, so Vite put these rules in that chunk's
+   stylesheet — but the section is prerendered, so its markup is in the HTML
+   from the first byte while the rules were not. Until the chunk arrived the
+   loop was an unstyled list: it wrapped down the page at 417px and then
+   snapped to 51px when the CSS landed, moving everything below it by 366px
+   and re-laying-out a 20,000px document. Measured on a cold load; it was the
+   whole of the reflow.
+
+   Any CSS that styles prerendered markup belongs in the initial stylesheet,
+   however lazy the component behind it. 2.9KB, and it buys the reflow. */
+@import '../components/reactbits/LogoLoop.css';
+
 /* --------------------------------------------------------------------------
    Metric-matched fallbacks
 
