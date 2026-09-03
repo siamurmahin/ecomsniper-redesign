@@ -60,6 +60,10 @@ In the order the work wants to happen, not the order it was asked.
 
 ## Decided — do not re-argue
 
+- **Phase: build out, tune later.** Deep performance work waits until the site
+  is complete. Until then nothing may cost speed without a decision taken in
+  advance — see the speed gate in `CLAUDE.md`.
+
 - **Stack stays React**, extended into the full production site: everything except login, registration and checkout.
 - **SEO is fixed by prerendering, not meta tags.** Done.
 - **CMS is Storyblok**, build-time fetch, webhook rebuild.

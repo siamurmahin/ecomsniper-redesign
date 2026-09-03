@@ -19,6 +19,33 @@ built in.
 
 When two conflict, say which and pick. Do not silently take the easy one.
 
+## The speed gate
+
+The phase is **building the site out**, not tuning it. Deep performance work is
+deliberately deferred until the site is complete. Until then, every piece of
+work has to hold the speed already won.
+
+**If something you are about to build would cost speed, say so and get a
+decision first — not afterwards, not in the commit message.** Name the cost,
+name the cheaper alternative, let the choice be made with the number in front
+of it.
+
+What trips the gate:
+
+- A new dependency, or anything that grows the first-screen bundle —
+  `npm run budget` currently has ~8KB of headroom on eager JS
+- A third-party script, embed, font or icon set
+- An unoptimised image or video, or one without dimensions
+- Anything running on scroll, resize, or every frame
+- Anything that lengthens the document, adds nodes to the first screen, or
+  forces layout during load
+- A blocking request in the critical path — a fetch before first paint, a
+  render-blocking stylesheet, a synchronous script
+- Making an existing lazy thing eager
+
+Not every cost is a refusal; some are worth paying. The rule is that it is
+decided in advance rather than discovered later.
+
 ## Where work is recorded
 
 - `TODO.md` — what is **planned**: Done / Now / Future, plus Blocked and
