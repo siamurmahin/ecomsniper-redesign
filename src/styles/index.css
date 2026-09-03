@@ -460,6 +460,28 @@
     opacity: 0;
   }
 
+  /* The soft colour wash behind a card is a blurred gradient, and a blurred
+     layer is re-rasterised whenever anything about it changes — including the
+     opacity of an ancestor. So fading a section in re-blurred every wash
+     inside it, once a frame, for the whole 900ms.
+
+     It cost most where it is felt most: the proof bar and the audience
+     section sit at 901px and 1305px, which is where a visitor starts
+     scrolling. Measured on the built site, scrolling through both: a 52ms
+     long task and a 55ms worst frame. Giving each wash its own layer means it
+     is blurred once and then only composited — the long task disappears and
+     the worst frame drops to 36ms.
+
+     This is the same `will-change` that the note above warns about, and the
+     warning still holds. What made it harmful there was volume: every reveal
+     target on the page, ~97 layers, promoted for the whole session. This is
+     thirteen decorative elements, fixed at build time. `aria-hidden` is what
+     separates them from the `backdrop-blur` on real content, which is not
+     promoted and must not be. Count them before adding more. */
+  [aria-hidden='true'][class*='blur-'] {
+    will-change: transform;
+  }
+
   /* --- The hero entrance ------------------------------------------------
 
      CSS and not GSAP, and the reason is the moment it runs in.
