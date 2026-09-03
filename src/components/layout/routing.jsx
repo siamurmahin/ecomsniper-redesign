@@ -1,33 +1,23 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
-import SiteHeader from './components/layout/SiteHeader';
-import HomePage from './pages/HomePage';
-import { useContent } from './hooks/useContent';
-import { getScrollTrigger } from './lib/scrollMotion';
-import { dismissPreloader } from './lib/preloader';
-import { getLenis, holdLanding, scrollToTarget } from './lib/smoothScroll';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import { getScrollTrigger } from '../../lib/scrollMotion';
+import { dismissPreloader } from '../../lib/preloader';
+import { getLenis, holdLanding, scrollToTarget } from '../../lib/smoothScroll';
 import {
   DEFAULT_LANGUAGE,
   languageFromPath,
   pathForLanguage,
   rememberedLanguage,
-} from './lib/language';
+} from '../../lib/language';
 
-/* Internal only, and it carries its own heavy furniture. Static, it put
-   the whole lab — and the animation library only it uses — in the bundle
-   every visitor downloads. */
-/* Only the homepage is part of the first paint. The other routes load when
-   someone asks for them, which keeps their code out of the bundle every
-   visitor downloads. */
-/* The footer and the conversion furniture. None of it is on the first screen
-   and all of it used to mount in the commit that drew one. */
-const SiteChrome = lazy(() => import('./components/layout/SiteChrome'));
-
-const PricingPage = lazy(() => import('./pages/PricingPage'));
-const FaqPage = lazy(() => import('./pages/FaqPage'));
-const PlaybookPage = lazy(() => import('./pages/PlaybookPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+/**
+ * The three pieces of behaviour every route shares: where a new route lands,
+ * which language a returning visitor gets, and when the preloader comes off.
+ *
+ * They were in `App.jsx`, which the router's framework mode replaced with
+ * `root.jsx`. Nothing about them changed in the move except the router import
+ * — v8 exports from `react-router` rather than `react-router-dom`.
+ */
 
 /**
  * Restores scroll position on navigation and honours in-page hash targets.
@@ -48,7 +38,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
  * replace, not push, so the back button still leaves the site rather than
  * bouncing between the two languages.
  */
-function LanguageMemory() {
+export function LanguageMemory() {
   const { pathname, hash } = useLocation();
   const navigate = useNavigate();
   const handled = useRef(false);
@@ -69,7 +59,7 @@ function LanguageMemory() {
   return null;
 }
 
-function RouteScrollManager() {
+export function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
   /* The browser puts the old position back after a navigation, asynchronously.
@@ -221,7 +211,7 @@ function RouteScrollManager() {
  * a frame early and show the blank moment it exists to hide. The second frame
  * runs after pixels are on screen.
  */
-function PreloaderRelease() {
+export function PreloaderRelease() {
   useEffect(() => {
     let second = 0;
     const first = requestAnimationFrame(() => {
@@ -235,64 +225,4 @@ function PreloaderRelease() {
   }, []);
 
   return null;
-}
-
-export default function App() {
-  const { SITE } = useContent();
-  const { pathname } = useLocation();
-  const language = languageFromPath(pathname);
-  return (
-    <SmoothScrollProvider>
-      <PreloaderRelease />
-      <LanguageMemory />
-      <RouteScrollManager />
-
-      {/* Skip link: first thing in the tab order on every page. */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:text-paper"
-      >
-        {SITE.skipLabel}
-      </a>
-
-      <SiteHeader />
-
-      <main id="main-content">
-        {/* Keyed on the language so a switch rebuilds the page instead of
-            re-rendering into it. GSAP owns DOM that React did not write —
-            SplitText replaces the headline with its own spans — so an update
-            in place left the old language's headline on screen and the
-            reveal triggers measuring a page that no longer existed. */}
-        {/* One boundary for every lazy route. fallback is null on purpose:
-            the preloader is still up on a first load, and on a later
-            navigation a spinner for a chunk this small only flickers. */}
-        <Suspense fallback={null}>
-          <Routes key={language}>
-            {/* Every page twice: once plain, once under /de. Anything not yet
-              translated falls back to English, so a route is never blank. */}
-            {['', '/de'].map((prefix) => (
-              <Route key={prefix || 'en'}>
-                <Route path={`${prefix}/`} element={<HomePage />} />
-                <Route path={`${prefix}/pricing`} element={<PricingPage />} />
-                <Route path={`${prefix}/faq`} element={<FaqPage />} />
-                <Route path={`${prefix}/free-play-book`} element={<PlaybookPage />} />
-                <Route
-                  path={`${prefix}/free-playbook`}
-                  element={<Navigate to={`${prefix}/free-play-book`} replace />}
-                />
-              </Route>
-            ))}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </main>
-
-      {/* The footer and the conversion furniture, shared across every route.
-          Nothing here is on screen when the page paints, so none of it is in
-          the bundle the first screen waits for — see `SiteChrome`. */}
-      <Suspense fallback={null}>
-        <SiteChrome />
-      </Suspense>
-    </SmoothScrollProvider>
-  );
 }

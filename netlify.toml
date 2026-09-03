@@ -3,14 +3,22 @@
 # The repo root is this directory, so no `base` is needed. Everything here is
 # what Netlify cannot infer on its own or would infer differently from local.
 
+# `build/client`, not `dist`. Under the router's framework mode the build runs
+# twice — once for the browser, once in Node to render the HTML — and writes
+# `build/client` (what is served) beside `build/server` (the renderer, which is
+# not deployed). Left at `dist` this published the last Vite SPA build: one
+# empty `<div id="root">` for every URL, none of the prerendered pages.
 [build]
   command = "npm run build"
-  publish = "dist"
+  publish = "build/client"
 
 [build.environment]
-  # Pinned to the version the site is built and tested against locally. Left
-  # unset, Netlify picks its own default, which drifts between deploys.
-  NODE_VERSION = "22"
+  # Pinned so Netlify does not pick its own default, which drifts between
+  # deploys. "22" was a floating major and satisfied nothing in particular;
+  # react-router and @react-router/dev both declare `node >=22.22.0`, and
+  # below it the build prints a version warning on every run. Same number in
+  # `.nvmrc`, which is what CI reads.
+  NODE_VERSION = "22.22.0"
 
 # The playbook keeps the URL the live site already publishes,
 # /free-play-book. /free-playbook was this rebuild's own spelling for a while,
@@ -28,13 +36,34 @@
   status = 301
   force = true
 
-# SPA fallback. `public/_redirects` says the same thing and ships in the build,
-# but that file is easy to lose in a public/ clear-out and the failure it
-# causes is a 404 on every route except "/" — worth stating twice.
+# Anything else is a 404, and says so.
+#
+# This was `/* -> /index.html 200`, which an SPA needs: with one document for
+# the whole site, every URL had to resolve to it. Every route is prerendered
+# now, so Netlify serves the real file for each of them and this rule only ever
+# sees a URL that does not exist — and answered it with the homepage under a
+# 200, which is a soft 404: the visitor gets the wrong page and a crawler is
+# told a typo'd link is a valid duplicate of the homepage.
+#
+# German first, so /de/anything gets the German 404 rather than the English one.
+#
+# A static file always beats a non-forced redirect, so this cannot shadow a
+# prerendered page. The corollary is that a new route missing from `prerender`
+# in `react-router.config.js` now 404s instead of quietly client-rendering.
+# That is the intended trade: a missing page should fail loudly at the first
+# request, not silently ship without HTML.
+#
+# `public/_redirects` says the same thing and ships in the build, but that file
+# is easy to lose in a public/ clear-out — worth stating twice.
+[[redirects]]
+  from = "/de/*"
+  to = "/de/404/index.html"
+  status = 404
+
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404/index.html"
+  status = 404
 
 # Hashed assets are immutable: Vite writes the content hash into the filename,
 # so a changed file is a new URL and this can never serve a stale one.
@@ -54,6 +83,11 @@
 # index.html is the one file with a stable URL, so it must always be revalidated
 # — otherwise a visitor keeps loading a cached document pointing at assets from
 # a previous deploy.
+#
+# Prerendering made this ten documents rather than one, and only the homepage's
+# is named here. The rest are covered by Netlify's own default for HTML, which
+# is this same header; the rule is kept because the requirement is ours, not
+# the host's, and should not silently depend on that default staying put.
 [[headers]]
   for = "/index.html"
   [headers.values]

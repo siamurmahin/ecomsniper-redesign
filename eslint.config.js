@@ -21,7 +21,19 @@ import reactRefresh from 'eslint-plugin-react-refresh';
  * and reports every import in the file.
  */
 export default [
-  { ignores: ['dist/**', 'node_modules/**', '_backup/**', 'public/**'] },
+  /* `build/**` and `.react-router/**` alongside `dist/**`: the router writes
+     the first two, and linting a minified bundle reports the minifier's work
+     as 151 errors in the application's own name. */
+  {
+    ignores: [
+      'dist/**',
+      'build/**',
+      '.react-router/**',
+      'node_modules/**',
+      '_backup/**',
+      'public/**',
+    ],
+  },
 
   js.configs.recommended,
 

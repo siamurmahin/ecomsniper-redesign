@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { contentFor } from '../content';
 import { languageFromPath } from '../lib/language';
 

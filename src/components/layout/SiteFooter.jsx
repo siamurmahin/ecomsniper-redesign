@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import BrandLogo from '../ui/BrandLogo';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';

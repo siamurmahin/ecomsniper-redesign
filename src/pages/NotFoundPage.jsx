@@ -1,4 +1,3 @@
-import Seo from '../components/ui/Seo';
 import CtaButton from '../components/ui/CtaButton';
 import { useContent } from '../hooks/useContent';
 
@@ -10,8 +9,6 @@ export default function NotFoundPage() {
   const { SEO, NOT_FOUND } = useContent();
   return (
     <>
-      <Seo title={SEO.notFound.title} description={SEO.notFound.description} path="/404" noindex />
-
       <section className="grid min-h-[70vh] place-items-center py-32">
         <div className="site-shell text-center">
           <p className="section-eyebrow">{NOT_FOUND.eyebrow}</p>

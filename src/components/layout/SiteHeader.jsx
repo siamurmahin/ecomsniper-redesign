@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import BrandLogo from '../ui/BrandLogo';
 import LanguageSwitcher from './LanguageSwitcher';
 import { languageFromPath, pathForLanguage } from '../../lib/language';

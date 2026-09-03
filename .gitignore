@@ -1,5 +1,12 @@
 node_modules
+
+# Build output. `dist` was Vite's; `build` is the router's, and holds both the
+# client bundle and the renderer that writes the HTML. `.react-router` is the
+# route types it generates. All three are made by `npm run build`.
 dist
+build
+.react-router
+
 .env
 .env.local
 *.log

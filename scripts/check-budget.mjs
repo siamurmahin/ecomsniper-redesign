@@ -23,7 +23,9 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-const DIST = 'dist';
+/* What the browser is served. `build/server` beside it is the renderer that
+   writes the HTML at build time and is never deployed, so it is not measured. */
+const DIST = 'build/client';
 
 /**
  * Ceilings in KB, raw bytes rather than gzip — parse and execute time tracks
@@ -33,16 +35,28 @@ const DIST = 'dist';
  * with room in it is a budget nobody notices breaking.
  */
 const BUDGETS = {
-  /* 440, raised from 400 when React 18 became React 19: the vendor chunk went
-     158KB -> 213KB raw, 53KB -> 67KB gzip, for the same application code. That
-     is the toll on the road to React Router v8, which needs React 19, and it
-     is paid once.
+  /* 560, raised from 440 by the move to the router's framework mode. It did
+     not come back down, and the note here said it should, so this is what
+     happened instead.
 
-     It should come back down. Prerendering takes the first paint off the
-     critical path entirely, and routing the pages through the router's own
-     splitting should leave the homepage carrying less than it does today. If
-     it does not, this number is the thing that says so. */
-  eagerJs: 440,
+     Framework mode replaced a `<BrowserRouter>` with the full data router:
+     the route manifest, the hydration entry and the error boundaries are all
+     on the first screen because hydration cannot start without them. Measured
+     on the homepage, 423KB across 3 files became 533KB across 15, and the
+     whole 110KB is the router runtime — `errorBoundaries` (107KB) and the
+     `react-router/dom` chunk (77KB) are the two new names in the list.
+
+     What the earlier note got wrong is that prerendering does not take that
+     off the critical path — it takes the *paint* off it. The document now
+     draws from HTML with no JavaScript at all, so none of this delays LCP;
+     it delays the moment the page becomes interactive. So this number stopped
+     protecting LCP and now protects hydration and TBT, and it is worth having
+     for that. Read it that way before raising it again.
+
+     Still 27KB of headroom, and the way to spend less is unchanged: make it
+     lazy. Deferring a route's own module is the router's job now, so the
+     application code left in here is small — the ceiling is mostly runtime. */
+  eagerJs: 560,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake. */
@@ -62,13 +76,21 @@ const html = await readFile(path.join(DIST, 'index.html'), 'utf8');
 
 /* What the document itself asks for before anything runs: the entry module and
    every chunk preloaded beside it. Anything imported dynamically is fetched
-   later by the code, so it is not in here — which is the point. */
+   later by the code, so it is not in here — which is the point.
+
+   The modulepreloads carry this on their own now. The router's `<Scripts />`
+   emits an inline module that imports the entry rather than a `<script src>`,
+   so the first pattern finds nothing in a prerendered document; it is kept
+   because a build that ever goes back to a plain src tag should still be
+   counted rather than silently measured as weightless. */
 const eager = new Set();
 for (const match of html.matchAll(/<script[^>]+src="\/([^"]+\.js)"/g)) eager.add(match[1]);
 for (const match of html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="\/([^"]+\.js)"/g)) {
   eager.add(match[1]);
 }
-if (!eager.size) throw new Error('No eager scripts found in dist/index.html — did the build run?');
+if (!eager.size) {
+  throw new Error(`No eager scripts found in ${DIST}/index.html — did the build run?`);
+}
 
 const sizeOf = async (file) => (await stat(path.join(DIST, file))).size;
 
@@ -80,11 +102,21 @@ for (const file of eager) {
   eagerFiles.push(`${kb(bytes)}KB  ${file}`);
 }
 
-const assets = await readdir(path.join(DIST, 'assets'));
+/*
+ * The stylesheets this document links, not every .css in the directory.
+ *
+ * Counting the directory was near enough when one document was built from one
+ * CSS graph. Prerendering made it wrong twice over: the other routes' sheets
+ * are in there, and so is a copy of the whole stylesheet emitted by the render
+ * pass and moved into the client build by the router — 115KB that no document
+ * links and no browser fetches. The budget is about what a visitor downloads,
+ * so read that off the document like the scripts above.
+ */
 let cssBytes = 0;
-for (const file of assets.filter((f) => f.endsWith('.css'))) {
-  cssBytes += await sizeOf(path.join('assets', file));
+for (const match of html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="\/([^"]+\.css)"/g)) {
+  cssBytes += await sizeOf(match[1]);
 }
+if (!cssBytes) throw new Error(`No stylesheet found in ${DIST}/index.html — did the build run?`);
 
 const fontDir = path.join(DIST, 'fonts');
 let fontBytes = 0;

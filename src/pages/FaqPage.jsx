@@ -1,4 +1,3 @@
-import Seo from '../components/ui/Seo';
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
 import { useContent } from '../hooks/useContent';
@@ -19,20 +18,8 @@ import { useContent } from '../hooks/useContent';
  */
 export default function FaqPage() {
   const { FAQ, SEO } = useContent();
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: FAQ.items.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  };
-
   return (
     <>
-      <Seo title={SEO.faq.title} description={SEO.faq.description} path="/faq" schema={schema} />
-
       {/* The page needs its own h1; the section carries an h2. */}
       <div className="site-shell pb-4 pt-36 sm:pt-44">
         <p className="section-eyebrow">{FAQ.eyebrow}</p>

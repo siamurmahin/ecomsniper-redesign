@@ -28,11 +28,20 @@ const cancelSlice = ({ id, isIdle }) => {
   else clearTimeout(id);
 };
 
+/** See `DeferUntilPainted` — the prerendered document already holds all of
+    these, so the render that attaches to it has to hold them too. */
+let hasHydrated = false;
+
 export default function MountInSlices({ children, immediate = false }) {
   const slices = Children.toArray(children);
   const total = slices.length;
 
-  const [mounted, setMounted] = useState(() => (immediate ? total : 0));
+  const [isHydrating] = useState(() => !hasHydrated);
+  const [mounted, setMounted] = useState(() => (immediate || isHydrating ? total : 0));
+
+  useEffect(() => {
+    hasHydrated = true;
+  }, []);
 
   useEffect(() => {
     if (mounted >= total) return undefined;

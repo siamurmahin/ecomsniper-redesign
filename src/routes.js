@@ -1,0 +1,30 @@
+import { index, route } from '@react-router/dev/routes';
+
+/**
+ * Every page, twice: once plain, once under /de.
+ *
+ * Written out rather than generated from a language list, because each one
+ * needs an id the router can tell apart — two routes rendering the same module
+ * are still two routes — and because this file is the list of what gets
+ * prerendered. Seeing the URLs is the point.
+ *
+ * Anything the German deck has not translated falls through to English, so a
+ * /de route is never blank. See `src/content/index.js`.
+ *
+ * `/free-playbook` is not here: it is a 301 in `netlify.toml`, which is where
+ * a permanent redirect belongs — the browser learns it once instead of
+ * loading an app to be told.
+ */
+export default [
+  index('routes/home.jsx'),
+  route('pricing', 'routes/pricing.jsx'),
+  route('faq', 'routes/faq.jsx'),
+  route('free-play-book', 'routes/playbook.jsx'),
+
+  route('de', 'routes/home.jsx', { id: 'de-home' }),
+  route('de/pricing', 'routes/pricing.jsx', { id: 'de-pricing' }),
+  route('de/faq', 'routes/faq.jsx', { id: 'de-faq' }),
+  route('de/free-play-book', 'routes/playbook.jsx', { id: 'de-playbook' }),
+
+  route('*', 'routes/not-found.jsx'),
+];

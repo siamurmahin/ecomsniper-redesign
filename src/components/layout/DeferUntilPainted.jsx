@@ -33,8 +33,31 @@ const needsEverythingNow = () =>
  */
 const FALLBACK_DELAY = 1400;
 
+/**
+ * Whether React has finished attaching to the prerendered document.
+ *
+ * The page is built to HTML ahead of time, so the document a visitor receives
+ * already contains all fifteen sections. Deferring during hydration would
+ * render nothing where the browser can see something, and React would take the
+ * page apart and build it again — the opposite of what this component is for.
+ *
+ * So the first render on a page load mounts everything, matching the HTML.
+ * The deferral is for what it was always for: a page React has to build
+ * itself, which now means a client-side navigation to a route the visitor did
+ * not land on.
+ *
+ * Module-level rather than a hook because hydration happens once per document,
+ * not once per component.
+ */
+let hasHydrated = false;
+
 export default function DeferUntilPainted({ children }) {
-  const [isReady, setIsReady] = useState(needsEverythingNow);
+  const [isHydrating] = useState(() => !hasHydrated);
+  const [isReady, setIsReady] = useState(() => isHydrating || needsEverythingNow());
+
+  useEffect(() => {
+    hasHydrated = true;
+  }, []);
 
   useEffect(() => {
     if (isReady) return undefined;

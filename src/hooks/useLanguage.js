@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { LANGUAGES, languageFromPath, pathForLanguage, rememberLanguage } from '../lib/language';
 
 /**

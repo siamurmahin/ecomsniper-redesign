@@ -3,7 +3,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import Icon from '../components/ui/Icon';
 import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { languageFromPath, pathForLanguage } from '../lib/language';
 import { gsap, prefersReducedMotion, MOTION } from '../lib/motion';
 import { SplitText } from '../lib/textMotion';

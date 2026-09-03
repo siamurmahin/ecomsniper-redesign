@@ -1,5 +1,4 @@
 import { lazy, Suspense } from 'react';
-import Seo from '../components/ui/Seo';
 import DeferUntilPainted from '../components/layout/DeferUntilPainted';
 import HeroSection from '../sections/HeroSection';
 import ProofBarSection from '../sections/ProofBarSection';
@@ -36,33 +35,8 @@ const HomeBelowFold = lazy(() => import('./HomeBelowFold'));
  */
 export default function HomePage() {
   const { FAQ, SEO } = useContent();
-  // FAQPage + Product schema, built from the same copy the page renders.
-  // No `offers` here: the plans moved to /pricing, and structured data must
-  // not state prices the page does not show. /pricing carries them.
-  const schema = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: FAQ.items.map((item) => ({
-        '@type': 'Question',
-        name: item.q,
-        acceptedAnswer: { '@type': 'Answer', text: item.a },
-      })),
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: 'EcomSniper',
-      description:
-        'eBay dropshipping automation software with training and a private community. Finds products, bulk lists them, and monitors price and stock 24/7.',
-      brand: { '@type': 'Brand', name: 'EcomSniper' },
-    },
-  ];
-
   return (
     <>
-      <Seo title={SEO.home.title} description={SEO.home.description} path="/" schema={schema} />
-
       {/* The first screen, mounted synchronously. The hero holds a full
           viewport, so the proof bar is already below the fold — it is eager
           anyway because it is small and it is the first thing a scroll

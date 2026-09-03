@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { languageFromPath, pathForLanguage } from '../../lib/language';
 
 const VARIANT_CLASS = {

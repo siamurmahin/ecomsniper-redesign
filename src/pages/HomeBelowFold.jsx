@@ -27,9 +27,13 @@ import AssuranceSection from '../sections/AssuranceSection';
  * The order is the funnel's; see `HomePage` for what each section is for.
  */
 export default function HomeBelowFold() {
-  // A deep link needs its target now, not thirteen idle slots from now.
+  /* A deep link needs its target now, not thirteen idle slots from now. The
+     window check is for the build: this renders in Node when the page is
+     prerendered, where there is no location to read a hash from. */
+  const isDeepLink = typeof window !== 'undefined' && window.location.hash.length > 1;
+
   return (
-    <MountInSlices immediate={window.location.hash.length > 1}>
+    <MountInSlices immediate={isDeepLink}>
       <AudienceSection />
       <ProofWallSection />
       <InterviewsSection />

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Seo from '../components/ui/Seo';
+import { useNavigate } from 'react-router';
 import { useContent } from '../hooks/useContent';
 import Icon from '../components/ui/Icon';
 import PlaybookDelivered from '../components/layout/PlaybookDelivered';
@@ -66,12 +65,6 @@ export default function PlaybookPage() {
 
   return (
     <>
-      <Seo
-        title={SEO.playbook.title}
-        description={SEO.playbook.description}
-        path="/free-play-book"
-      />
-
       <section ref={sectionRef} className="pb-20 pt-36 sm:pt-44">
         <div className="site-shell">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-16">

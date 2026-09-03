@@ -1,4 +1,3 @@
-import Seo from '../components/ui/Seo';
 import Icon from '../components/ui/Icon';
 import PricingPreviewSection from '../sections/PricingPreviewSection';
 import ComparisonSection from '../sections/ComparisonSection';
@@ -17,30 +16,8 @@ const PROMISE_TONES = ['blue', 'red', 'green', 'gold'];
  */
 export default function PricingPage() {
   const { PRICING, SITE, SEO, ASSURANCE } = useContent();
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: 'EcomSniper',
-    description: 'eBay dropshipping software, training and community.',
-    brand: { '@type': 'Brand', name: 'EcomSniper' },
-    offers: PRICING.plans.map((plan) => ({
-      '@type': 'Offer',
-      name: plan.name,
-      price: plan.priceLabel.replace(/[$,]/g, ''),
-      priceCurrency: 'USD',
-      availability: 'https://schema.org/InStock',
-    })),
-  };
-
   return (
     <>
-      <Seo
-        title={SEO.pricing.title}
-        description={SEO.pricing.description}
-        path="/pricing"
-        schema={schema}
-      />
-
       {/* Page title lives above the reused section so /pricing still has an h1. */}
       <div className="site-shell pb-12 pt-36 sm:pt-44">
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
