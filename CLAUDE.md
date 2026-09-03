@@ -53,8 +53,14 @@ decided in advance rather than discovered later.
   not said whether something is for now or later, ask.
 - `docs/ISSUES.md` — what is **wrong**. An issue goes in when found, whether or not
   anyone intends to fix it.
+- `docs/SESSION-NOTES-DD-MMM.md` — what **happened**. One note per day,
+  created at the start of the day's work and updated as it goes, not written
+  up at the end. It carries what shipped, what was decided, what was measured,
+  and every trap worth not falling into twice.
 
-Move items to Done the moment they are true, with the commit hash.
+Move items to Done the moment they are true, with the commit hash. A Done row
+is added **after** the work it records — writing the hash first and then
+amending orphans it.
 
 ## Measuring — read this before quoting any number
 
