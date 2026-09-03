@@ -11,15 +11,16 @@
  * in there would not survive bundling. The deck names an image; this resolves
  * it.
  *
- * Their sixth gallery image was an Unsplash stock photograph sitting among
- * five real charity images. It is deliberately absent — see
- * `docs/source-copy/about.md`.
+ * Five of these are the client's own charity photographs. `moments` is not: it
+ * is the Unsplash stock image their page carries, kept for now so the sixth
+ * tile is not empty, and flagged as a launch blocker in `docs/ISSUES.md`.
  */
 import education from './giving-education.webp';
 import orphanage from './giving-orphanage.webp';
 import supplies from './giving-supplies.webp';
 import medical from './giving-medical.webp';
 import visit from './giving-visit.webp';
+import moments from './giving-moments.webp';
 import portrait from './sammy-portrait.webp';
 
 /** Intrinsic sizes, so tiles reserve their space before the file arrives. */
@@ -29,6 +30,10 @@ export const GIVING_IMAGES = {
   supplies: { src: supplies, width: 720, height: 540 },
   medical: { src: medical, width: 720, height: 540 },
   visit: { src: visit, width: 720, height: 540 },
+  /* PLACEHOLDER. An Unsplash stock photograph, not the client's charity work.
+     It restores the sixth tile their page has while the real image is found.
+     Replace or remove before launch — see `docs/ISSUES.md`. */
+  moments: { src: moments, width: 720, height: 540 },
 };
 
 export const SAMMY_PORTRAIT = { src: portrait, width: 260, height: 260 };

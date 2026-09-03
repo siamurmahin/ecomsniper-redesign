@@ -15,6 +15,16 @@ export const overlay = {
   ABOUT: {
     eyebrow: 'Über uns',
     headline: 'Wir wissen, was es gekostet hat, dieses Geld zu verdienen.',
+    headlineParts: [
+      { text: 'Wir wissen, was es ' },
+      { text: 'gekostet hat', mark: true },
+      { text: ', dieses Geld zu verdienen.' },
+    ],
+    statementParts: [
+      { text: 'Wenn du für etwas bezahlst, gibst du uns ' },
+      { text: 'Stunden deines Lebens', mark: true },
+      { text: '. Daran denken wir.' },
+    ],
 
     hours: ['Die Spätschichten.', 'Die Überstunden.', 'Die müden Morgen.'],
     statement: 'Wenn du für etwas bezahlst, gibst du uns Stunden deines Lebens. Daran denken wir.',
@@ -82,6 +92,7 @@ export const overlay = {
         { caption: 'Ausgabe von Schulmaterial' },
         { caption: 'Medizinische Unterstützung' },
         { caption: 'Besuch im Waisenhaus' },
+        { caption: 'Momente, die zählen' },
       ],
       closer: 'Wir erzählen das, weil du jetzt dazugehörst. Nicht, um zu beeindrucken.',
     },

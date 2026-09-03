@@ -17,8 +17,11 @@ export default function GivingGallery({ items }) {
     <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:gap-4">
       {items.map((item, index) => {
         const image = GIVING_IMAGES[item.image];
-        /* The first tile spans two columns, so the grid reads as a gallery
-           rather than as five equal boxes. */
+        /* The first tile takes a 2x2 block from `sm` up, so the grid reads as a
+           gallery rather than six equal boxes. Six items then fill three
+           columns exactly: the block, one tile beside it, one below that, and
+           a full row of three. On mobile it is a plain two-column stack —
+           a spanning tile there would leave the last one orphaned. */
         const isLead = index === 0;
 
         return (
@@ -27,7 +30,7 @@ export default function GivingGallery({ items }) {
             data-reveal
             data-reveal-group="gallery"
             className={`group relative isolate overflow-hidden rounded-2xl border border-hairline bg-paper-sunk ${
-              isLead ? 'col-span-2 aspect-[16/10]' : 'aspect-[4/3]'
+              isLead ? 'aspect-[4/3] sm:col-span-2 sm:row-span-2 sm:aspect-auto' : 'aspect-[4/3]'
             }`}
           >
             {image && (

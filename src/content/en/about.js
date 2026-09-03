@@ -22,6 +22,20 @@
 export const ABOUT = {
   eyebrow: 'About us',
   headline: 'We know what it took to earn this money.',
+  /* Their page sets one word of the headline in an inverted block, and the
+     same device on the statement below it. Split so the mark is content
+     rather than markup guesswork — the concatenation still reads as the
+     sentence above, which is what a screen reader and the meta tag get. */
+  headlineParts: [
+    { text: 'We know what it ' },
+    { text: 'took', mark: true },
+    { text: ' to earn this money.' },
+  ],
+  statementParts: [
+    { text: 'When you pay for something, you are giving us ' },
+    { text: 'hours of your life', mark: true },
+    { text: '. We think about that.' },
+  ],
 
   /* The figure their page opens on. $200 is the monthly charge as the client
      frames it — $97 the first month, $199 after. */
@@ -107,6 +121,14 @@ export const ABOUT = {
       { caption: 'School supplies distribution', alt: 'Community support', image: 'supplies' },
       { caption: 'Medical support program', alt: 'Medical assistance', image: 'medical' },
       { caption: 'Orphanage visit', alt: 'Education program', image: 'visit' },
+      /* The stock photograph. Their caption, their slot — but not their
+         photograph, and it must not launch this way. */
+      {
+        caption: 'Moments that matter',
+        alt: 'Children smiling',
+        image: 'moments',
+        placeholder: true,
+      },
     ],
     closer: 'We share this because you are part of it now. Not to impress.',
   },
@@ -116,18 +138,26 @@ export const ABOUT = {
     headline: 'Things we will not do.',
     items: [
       {
+        icon: 'salesGrowth',
+        tone: 'blue',
         lead: 'We will not show you screenshots of big earnings.',
         body: 'Those create false hope. They make people spend money expecting the same results. That is not fair to you.',
       },
       {
+        icon: 'close',
+        tone: 'red',
         lead: 'We will not rush you with countdown timers',
         body: 'or "limited spots." If you need a week to decide, take a week. We will still be here.',
       },
       {
+        icon: 'people',
+        tone: 'gold',
         lead: 'We will not try to get as many signups as possible.',
         body: 'We would rather have 100 users who get real value than 1,000 who feel like they wasted their money.',
       },
       {
+        icon: 'shield',
+        tone: 'green',
         lead: 'We will not disappear',
         body: 'when things go wrong. If something breaks or does not work for you, that is our problem to fix. Not yours to figure out alone.',
       },

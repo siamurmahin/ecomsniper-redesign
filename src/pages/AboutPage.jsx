@@ -7,6 +7,7 @@ import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import AboutHero from '../components/about/AboutHero';
 import GivingGallery from '../components/about/GivingGallery';
+import BoundaryStack from '../components/about/BoundaryStack';
 import { SAMMY_PORTRAIT } from '../assets/giving';
 import ProofBarSection from '../sections/ProofBarSection';
 import { toneOf } from '../lib/signalTones';
@@ -135,26 +136,13 @@ export default function AboutPage() {
         <Pullquote>{giving.closer}</Pullquote>
       </Band>
 
-      {/* The list that gives the page its spine. Numbered because each item is
-          a separate promise, and a reader should be able to point at one. */}
-      <Band className="defer-render bg-ink text-paper [--defer-h:1180px] lg:[--defer-h:720px]">
-        <SectionHeading eyebrow={boundaries.eyebrow} headline={boundaries.headline} tone="ink" />
-
-        <ol className="mt-10 grid gap-5 sm:grid-cols-2">
-          {boundaries.items.map((item, index) => (
-            <li key={item.lead} data-reveal data-reveal-group="boundaries" className="card-ink">
-              <span className="micro-label tabular-nums text-muted-dark">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <p className="mt-3 text-[length:var(--text-lead)] leading-relaxed">
-                <strong className="font-semibold">{item.lead}</strong>{' '}
-                <span className="text-muted-dark">{item.body}</span>
-              </p>
-            </li>
-          ))}
-        </ol>
-
-        <Pullquote tone="ink">{boundaries.closer}</Pullquote>
+      {/* Their pinned card stack. Four separate promises read as four
+          objects; a bulleted list lets the eye slide off all of them at
+          once. Paper, as on their page — the ink band was ours. */}
+      <Band className="[--defer-h:1600px] lg:[--defer-h:1200px]">
+        <SectionHeading eyebrow={boundaries.eyebrow} headline={boundaries.headline} />
+        <BoundaryStack items={boundaries.items} />
+        <Pullquote>{boundaries.closer}</Pullquote>
       </Band>
 
       {/* The emotional core, and the only band given a rule. Five paragraphs in

@@ -491,6 +491,16 @@
     -webkit-box-decoration-break: clone;
   }
 
+  /* The inverse of `headline-mark-on-ink`: an ink block on paper. About uses
+     it on one word of its headline and one phrase of the line under it, the
+     way the homepage marks "WHILE YOU SLEEP". `box-decoration-break` keeps
+     the block whole when the phrase wraps. */
+  .headline-mark-ink {
+    @apply inline-block bg-ink px-2.5 pb-1 text-paper;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
   .headline-strike {
     @apply relative text-muted;
   }
