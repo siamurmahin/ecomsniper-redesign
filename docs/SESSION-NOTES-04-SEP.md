@@ -110,6 +110,26 @@ Both came out of the audit and both are still with the user:
 
 ---
 
+## 5b. The client deck
+
+`docs/CLIENT-DECK.md`. Twenty slides, written as **build instructions** rather
+than a document to interpret — Canva runs from the other end of the connector,
+on the user's claude.ai account, not from this session.
+
+Constraints the user set: white background, black text, presentation shape,
+persuasive. So the design rules are explicit and restrictive — one red accent
+for a broken number, green only on the three "already fixed" slides, 35 words
+of body maximum, no icons or stock imagery. The file ends with an instruction
+not to invent any statistic that is not in it, because the deck's whole force
+is that every figure is checkable.
+
+Two corrections caught before it shipped: a stray character in the German
+table, and "Pages as real HTML: 16", which was true when the audit ran and is
+now 20. The build grew between the measurement and the deck — worth watching
+for on every future re-run of these numbers.
+
+---
+
 ## 6. Housekeeping
 
 Per the rule set on 3 Sep, this file was created when the date rolled rather
