@@ -2,8 +2,6 @@ import { Links, Meta, Outlet, Scripts, useLocation } from 'react-router';
 import { Suspense, lazy } from 'react';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
-import SiteFooter from './components/layout/SiteFooter';
-import ClientOnly from './components/layout/ClientOnly';
 import { useContent } from './hooks/useContent';
 import { languageFromPath } from './lib/language';
 import { LanguageMemory, PreloaderRelease, RouteScrollManager } from './components/layout/routing';
@@ -12,12 +10,9 @@ import { CONSENT_MODE_BOOTSTRAP } from './consent/consentMode';
 import ConsentBanner from './consent/ConsentBanner';
 import './styles/index.css';
 
-/* The conversion furniture — the sticky bar, the back-to-top button and the
-   two dialogs. None of it is on the first screen, none of it means anything
-   without JavaScript, and it is client-only for both reasons: see
-   `ConversionFurniture`. Lazy is safe here precisely because the server
-   renders nothing for it to disagree with. */
-const ConversionFurniture = lazy(() => import('./components/layout/ConversionFurniture'));
+/* The footer and the conversion furniture. None of it is on the first screen
+   and all of it used to mount in the commit that drew one. */
+const SiteChrome = lazy(() => import('./components/layout/SiteChrome'));
 
 /**
  * The document.
@@ -51,17 +46,14 @@ export function Layout({ children }) {
      * `suppressHydrationWarning` is for one attribute and one only: the
      * `js-motion` class that `entry.client.jsx` puts on this element before
      * hydration runs. It has to go on before, because the reveal animations
-     * are keyed off it and adding it later would let a frame paint with
-     * everything in place before it all hid itself again — and it has to be
-     * added by script, because a visitor without JavaScript must never get the
-     * CSS that hides `[data-reveal]` elements.
+     * are keyed off it, and it has to be added by script, because a visitor
+     * without JavaScript must never get the CSS that hides `[data-reveal]`
+     * elements. So the server cannot render it and the client always has it,
+     * which React reports as a mismatch on every page load. Intended
+     * behaviour, and the warning was drowning real ones.
      *
-     * So the server cannot render it and the client always has it, which React
-     * reports as a mismatch on every single page load. It is the intended
-     * behaviour, not a defect, and the warning was drowning real ones.
-     *
-     * This suppresses attribute warnings on this element alone. It does not
-     * reach the head, the body or anything below them.
+     * Attributes on this element only. It does not reach head, body, or
+     * anything below them.
      */
     <html lang={languageFromPath(pathname)} suppressHydrationWarning>
       <head>
@@ -127,29 +119,18 @@ export default function Root() {
         <Outlet />
       </main>
 
-      {/* Eager. It renders null until it has read the stored decision, so it
-          costs the first screen a few hundred bytes and no markup — and being
-          in the main bundle it is certain to be there when hydration runs. It
-          spent one build behind the lazy boundary below and only worked on a
-          warm cache, which for a consent banner is not working. */}
+      {/* Eager, unlike everything in `SiteChrome`. It renders null until it
+          has read the stored decision, so it costs the first screen a few
+          hundred bytes and no markup — and unlike a lazy chunk it is
+          guaranteed to be there when hydration runs. It was in SiteChrome
+          for one build and only worked on a warm cache. */}
       <ConsentBanner />
 
-      {/* Eagerly imported, and it has to be. The footer is the one part of
-          the page furniture that is content: its links are how a crawler
-          walks the rest of the site, so the server renders it, so the client
-          must hydrate it. Behind a lazy import it did neither — the boundary
-          suspended on both sides and settled on neither, leaving 131 elements
-          on screen that no React tree owned. */}
-      <SiteFooter />
-
-      {/* Nothing here is content and nothing here works without JavaScript,
-          so the server renders none of it and the prerendered documents are
-          smaller for it. */}
-      <ClientOnly>
-        <Suspense fallback={null}>
-          <ConversionFurniture />
-        </Suspense>
-      </ClientOnly>
+      {/* Nothing here is on screen when the page paints, so none of it is in
+          the bundle the first screen waits for — see `SiteChrome`. */}
+      <Suspense fallback={null}>
+        <SiteChrome />
+      </Suspense>
     </SmoothScrollProvider>
   );
 }

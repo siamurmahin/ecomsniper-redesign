@@ -10,12 +10,10 @@ import { acceptAll, decide, readDecision, rejectAll, subscribe } from './store';
 /**
  * The cookie banner, and the panel behind "Customise".
  *
- * Rendered eagerly from `root.jsx`, not behind a lazy import. It renders null
- * until it has read the stored decision, so it costs the first screen a few
- * hundred bytes and no markup — and unlike a lazy chunk it is certain to be
- * there when hydration runs. Nothing it governs can load in the meantime:
- * `gtag('consent', 'default', ...)` has already denied every signal from the
- * inline block in the document.
+ * Rendered by `SiteChrome`, which is lazy — so none of this is in the bundle
+ * the first screen waits for. The tags it governs cannot load before it
+ * mounts either way: `gtag('consent', 'default', ...)` has already denied
+ * everything from the inline block in `root.jsx`.
  *
  * Nothing renders until the component knows whether a decision exists, and it
  * cannot know that during prerender — `localStorage` and `document.cookie`

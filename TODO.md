@@ -51,44 +51,61 @@ prerendered, format/lint/build/budget green.
 
 ---
 
-## Next — accessibility, and what was hiding it
+## Note — the footer hydration "bug" was a dev-server artifact
 
-**The footer hydration bug is fixed.** `SiteChrome` is gone, split in two:
-`SiteFooter` is imported eagerly by `root.jsx` because it is content that
-has to be in the prerendered HTML and therefore has to hydrate, and
-`ConversionFurniture` (sticky bar, back-to-top, both dialogs) is client-only
-behind `ClientOnly`, because none of it is content and none of it works
-without JavaScript. Neither side can now disagree with the server: one is
-rendered on both, the other on neither. Footer went from 0 of 131 elements
-hydrated to 129 of 129, on every route, in both languages, with the console
-clean. The furniture also left all fourteen prerendered documents, which it
-had been bloating for nobody.
+Recorded because it cost a day and the mistake is easy to repeat.
 
-**Fixing it uncovered seven accessibility defects, and why nobody had seen
-them.** While hydration was failing, most of `<main>` below the hero never
-mounted — so Lighthouse was auditing a fraction of the page and scoring it 100. The whole page renders now, and the whole page fails:
+While testing the consent banner, a footer button did nothing. Measuring on the
+**dev server** showed the whole footer unhydrated — 0 of 131 elements with a
+React fiber, on several routes. The diagnosis was that `SiteChrome`, a
+`lazy()` import inside `<Suspense fallback={null}>`, suspends on the client
+while the server rendered the subtree, so React abandons the markup. `SiteChrome`
+was split up to fix it: the footer imported eagerly, the furniture made
+client-only behind a new `ClientOnly`.
 
-| Audit                         | Where                                                                      |
-| ----------------------------- | -------------------------------------------------------------------------- |
-| `definition-list` + `dlitem`  | `ProofBarSection` — a `<dl>` whose direct children are `<div>`s            |
-| `aria-prohibited-attr`        | `HeroSection` — `aria-label` on a bare `<span>` with no role               |
-| `heading-order`               | `ProofWallSection`, `TestimonialsSection` — `<h4>` with no `<h3>` above it |
-| `aria-hidden-focus`           | focusable descendants inside an `aria-hidden="true"` wrapper               |
-| `label-content-name-mismatch` | the dashboard panel tabs — `aria-label` does not contain the visible text  |
-| `color-contrast`              | micro-labels on ink; 1.02 against a 4.5 requirement                        |
+**It was never true in production.** Measured after the fact, on production
+builds served from `build/client`:
 
-None of these are in code this work touched. All of them are real, stable
-across three Lighthouse runs, and were true before today — they were simply
-never measured.
+| Build                         | Page collapses during hydration? | Footer hydrated |
+| ----------------------------- | -------------------------------- | --------------- |
+| `63f9be1` prerender migration | no — 3483 to 3539 nodes          | yes             |
+| `098c559` consent             | no — min 3475 nodes              | 129 of 129      |
+| `b171f93` the "fix"           | **yes — 3488 to 806 to 3530**    | yes             |
 
-**This turns the CI accessibility gate red.** `lighthouserc.json` asserts
-`categories:accessibility` at `error` with `minScore: 0.9`; the page scores
-0.82. Six of the seven are small markup corrections. `color-contrast` is a
-design call, not a markup one.
+Vite serves modules unbundled in dev, so the lazy chunk is a separate request
+that has not arrived when hydration runs. The production build does not have
+that gap. The fix addressed a condition that only exists on localhost.
 
-Worth knowing: every Lighthouse number reported before this fix was measured
-against a page that was not fully rendering, so the morning's "a11y 100, perf
-98" on `63f9be1` described less of the site than it appeared to.
+Worse, it caused what it was meant to prevent. Making the furniture client-only
+changed when the shared `hasHydrated` module flags in `DeferUntilPainted` and
+`MountInSlices` get set, and the page began tearing itself down during
+hydration — 3,488 nodes to 806, 16,968px to 3,130px, then rebuilt over ~320ms.
+That is the thing `DeferUntilPainted`'s own comment exists to warn about.
+
+Measured cost of the change, all production:
+
+|                                | `098c559` before | `b171f93` after | reverted        |
+| ------------------------------ | ---------------- | --------------- | --------------- |
+| Long tasks scrolling from load | —                | 281ms over 4    | **51ms over 1** |
+| Worst frame                    | —                | 122ms           | **64ms**        |
+| Lighthouse a11y                | 100              | 82              | **100**         |
+| TBT                            | —                | 23ms            | **0ms**         |
+
+Reverted in the commit that carries this note. The seven accessibility failures
+it appeared to expose were the same artifact: with the page in flux during the
+audit, axe sampled elements mid-animation. Six were still genuine markup
+defects and their fixes are kept (`88c081d`); the seventh, colour contrast, was
+entirely the artifact — every `-deep` token already clears 4.5:1 (blue 6.82,
+red 5.30, green 4.97, gold 4.91 on the sunk band), and what Lighthouse measured
+were blends of the PipelinePanel's crossfading beats at partial opacity.
+
+**The lesson: measure the production build.** Dev-only hydration behaviour is
+not a bug, and a Lighthouse run against a page that is still settling is not a
+measurement. Both traps were hit in one day.
+
+Still open, and genuinely pre-existing: scrolling immediately after load costs
+one ~51ms long task and a 64ms worst frame. Mild, at the threshold rather than
+over it, and not yet attributed.
 
 ---
 
