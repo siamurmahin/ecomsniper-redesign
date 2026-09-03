@@ -84,7 +84,7 @@ In the order the work wants to happen, not the order it was asked.
 | 3 Sep 2026 | **Metric-matched font fallbacks.** Measured rather than copied: Arial rendered a body paragraph 24px shorter than Montserrat; now 0px                                                                                                                                 | `1cd66b2` |
 | 3 Sep 2026 | **The marquee's CSS ships with the page that renders it.** It sat in a lazy chunk while its markup was prerendered, so the loop rendered unstyled at 417px then snapped to 51px — a 366px reflow                                                                      | `8513d61` |
 | 3 Sep 2026 | **Four heaviest below-fold sections skip first layout.** Style and layout 520ms → 169ms, long frames 1208ms → 591ms, document settling 684px → 248px, deep links still exact                                                                                          | `a504959` |
-| 3 Sep 2026 | **Removed the reveal probe.** Diagnostic code added to measure late reveals on a real device; the question was answered, so it is gone — file, the `useEffect` in `root.jsx`, and the now-unused import                                                               | `6423349` |
+| 3 Sep 2026 | **Removed the reveal probe.** Diagnostic code added to measure late reveals on a real device; the question was answered, so it is gone — file, the `useEffect` in `root.jsx`, and the now-unused import                                                               | `7917e4b` |
 
 ### The mistake, kept on purpose
 
