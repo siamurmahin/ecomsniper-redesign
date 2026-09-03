@@ -108,6 +108,26 @@ All of the above exist in both languages.
   It has to be settled before those four are built, because the loser needs a
   301 rather than a deletion.
 
+### Source copy — captured 3 Sep
+
+All twelve pages read from their live site and written to `source-copy/`,
+each after `readyState === 'complete'`. Nothing left to extract.
+
+Three of them cannot be rebuilt as-is:
+
+- **Terms** has no copy at all — see issue 2.
+- **Dropship Mastery** is the most claim-heavy page on their site: a
+  "Six-Figure" income claim in an H2, a personal "$1,000,000 on eBay" figure,
+  "over 2 billion transactions daily" for eBay stated as fact, and a
+  "Limited Time Bonus" of three $97 items struck to $0 — which their own About
+  page promises they do not do.
+- **Price Monitor** has two bullets that repeat its own headline with one word
+  swapped. It reads as placeholder.
+
+Their **sitemap is stale for the blog**: nine posts listed, none of them in the
+live index, which now carries twelve 2026-dated guides. The post list has to
+come from the index, and their sitemap is advertising URLs that may 404.
+
 ### Still needs a decision
 
 - **Which feature-page slugs are canonical.** Four feature pages exist twice,

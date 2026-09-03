@@ -129,6 +129,15 @@ document asks for before anything runs; when it fails the answer is usually
 "make it lazy", not "raise the ceiling" — and if you do raise it, say why in
 the commit.
 
+## Branches
+
+Push to **`prerender`**. Never push `main`, and never merge `prerender` into
+`main` unless asked for that merge in that message.
+
+`main` is what Netlify builds for `https://ecomsniper.netlify.app`, so a merge
+is a deploy. The user reviews locally and merges when satisfied — their call to
+time, not something to offer as a convenience.
+
 ## Commits
 
 Conventional Commits, lowercase after the colon, declarative rather than
