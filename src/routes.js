@@ -23,8 +23,6 @@ export default [
   route('about', 'routes/about.jsx'),
   route('careers', 'routes/careers.jsx'),
   route('affiliate', 'routes/affiliate.jsx'),
-  /* Throwaway, deleted once the About hero is chosen. Not prerendered. */
-  route('about-lab', 'routes/about-lab.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
   route('cookie-policy', 'routes/cookies.jsx'),
 

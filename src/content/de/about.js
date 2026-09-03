@@ -16,8 +16,16 @@ export const overlay = {
     eyebrow: 'Über uns',
     headline: 'Wir wissen, was es gekostet hat, dieses Geld zu verdienen.',
 
+    hours: ['Die Spätschichten.', 'Die Überstunden.', 'Die müden Morgen.'],
+    statement: 'Wenn du für etwas bezahlst, gibst du uns Stunden deines Lebens. Daran denken wir.',
+
     figure: {
       label: 'Was ein Monat kostet',
+    },
+
+    ctas: {
+      primary: { label: 'Preise ansehen' },
+      secondary: { label: 'Playbook kostenlos holen' },
     },
 
     cost: {
@@ -32,6 +40,16 @@ export const overlay = {
         'Für manche sind 200 $ ein paar Stunden Arbeit. Für andere eine Woche mit frühen Morgen und langen Tagen. Wir wissen nicht, wer von beiden du bist. Also behandeln wir jeden wie den Zweiten.',
         'Das heißt: wir sind vorsichtig. Wir überstürzen keine Funktionen, die nicht fertig sind. Wir versprechen nichts, bei dem wir uns nicht sicher sind. Lieber langsamer und richtig.',
         'Es heißt auch, dass wir Support-Nachrichten so beantworten, als hätte die Person am anderen Ende hart dafür gearbeitet. Weil sie das hat.',
+      ],
+    },
+
+    origin: {
+      eyebrow: 'Wie das angefangen hat',
+      headline: 'Wie das angefangen hat.',
+      body: [
+        'Vor Jahren haben wir das alles von Hand gemacht. Produkte finden. Angebote erstellen. Jeden Tag Preise prüfen. Das hat Stunden gekostet. Die Ergebnisse waren in Ordnung, aber die Arbeit hörte nie auf.',
+        'Also haben wir uns Werkzeuge gebaut, um es uns leichter zu machen. Dann fragten andere, ob sie die auch nutzen dürfen. So wurde daraus eine Firma.',
+        'Wir sind keine Genies. Wir hatten einfach keine Lust mehr, immer dasselbe zu tun. Und jetzt fühlen wir uns verantwortlich für die Menschen, die uns dafür bezahlen, ihnen die Arbeit leichter zu machen.',
       ],
     },
 
@@ -52,6 +70,18 @@ export const overlay = {
       ],
       body: [
         'Das ist kein Marketing. Wir machen es einfach. Wenn du dabei bist, bist du Teil davon.',
+      ],
+      everySubscription:
+        'Jedes Abo hilft uns, ein bisschen mehr für Menschen zu tun, die es brauchen.',
+      /* Mirrors the English gallery position for position — the deck merges
+         arrays by index, so a caption added on one side without the other
+         shifts every caption after it. */
+      gallery: [
+        { caption: 'Schulmaterial für Kinder' },
+        { caption: 'Zeit im Waisenhaus' },
+        { caption: 'Ausgabe von Schulmaterial' },
+        { caption: 'Medizinische Unterstützung' },
+        { caption: 'Besuch im Waisenhaus' },
       ],
       closer: 'Wir erzählen das, weil du jetzt dazugehörst. Nicht, um zu beeindrucken.',
     },
@@ -92,6 +122,27 @@ export const overlay = {
       ],
     },
 
+    offer: {
+      eyebrow: 'Das Angebot',
+      headline: 'Was du wirklich bekommst.',
+      items: [
+        {
+          lead: 'Werkzeuge, die das Langweilige übernehmen.',
+          body: 'Produkte einstellen. Preise beobachten. Bestände verfolgen. Die Dinge, die von Hand Stunden fressen.',
+        },
+        {
+          lead: 'Support von Menschen, die diese Arbeit selbst gemacht haben.',
+          body: 'Wenn du fragst, bekommst du eine echte Antwort. Kein Skript.',
+        },
+        {
+          lead: 'Eine Community, die es gemeinsam herausfindet.',
+          body: 'Manche Tage laufen gut. Manche sind zäh. Beides wird geteilt.',
+        },
+      ],
+      closer:
+        'Das ist alles. Wir sparen dir Zeit bei dem, was sich wiederholt, damit du sie für das ausgeben kannst, wofür man einen Kopf braucht.',
+    },
+
     team: {
       eyebrow: 'Das Team',
       headline: 'Wer wir sind.',
@@ -99,6 +150,10 @@ export const overlay = {
         'Ein kleines Team. Und das mögen wir so. Es heißt, dass wir wirklich wissen, was bei unseren Nutzern los ist. Wir lesen die Support-Nachrichten selbst.',
         'Wir wollen keine große Firma werden. Wir wollen für die Leute nützlich sein, die uns vertrauen.',
       ],
+      quote: {
+        text: 'Ich erinnere mich an ganze Wochenenden voll Arbeit, die zu nichts geführt hat. Dieses Gefühl ist geblieben. Deshalb ist es mir wichtig, die Zeit anderer nicht zu verschwenden. Zeit ist das Einzige, was du nicht zurückbekommst.',
+        role: 'Gründer',
+      },
     },
 
     invitation: {
@@ -110,6 +165,7 @@ export const overlay = {
         'Und wenn du dabei bist, geben wir unser Bestes, die Stunden wert zu sein, die du dafür gearbeitet hast.',
       ],
       cta: { label: 'Preise ansehen' },
+      secondaryCta: { label: 'Playbook kostenlos holen' },
       assurance: '30 Tage Geld zurück im Monatsplan',
       closer:
         'Die Schulung, die Software und die Menschen, die dich begleiten. Alles an einem Ort.',

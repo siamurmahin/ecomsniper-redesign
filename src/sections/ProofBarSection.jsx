@@ -48,7 +48,13 @@ function ProofFigure({ item }) {
   );
 }
 
-export default function ProofBarSection() {
+/**
+ * @param {object} props
+ * @param {boolean} [props.showAnchorLink] The "see the proof" jump link. Only
+ *   meaningful on the homepage, where its target is further down the same
+ *   page. Off elsewhere — About reuses this section and has no such target.
+ */
+export default function ProofBarSection({ showAnchorLink = true }) {
   const { ASSURANCE, PROOF_BAR, A11Y } = useContent();
   const sectionRef = useRevealOnScroll({ start: 'top 92%' });
   // Read once at mount: a number ticking upward is motion like any other.
@@ -201,22 +207,24 @@ export default function ProofBarSection() {
             third button here would compete with it, and the job of this band is
             to be checkable rather than to sell again. It points at the section
             that shows the working. */}
-        <p
-          className="mt-7 text-center text-sm text-muted-dark"
-          data-reveal
-          data-reveal-group="proof-bar"
-        >
-          <a
-            href="#proof"
-            className="group inline-flex items-center gap-1.5 font-semibold text-paper underline decoration-paper/30 underline-offset-4 transition-colors hover:text-signal-green-soft hover:decoration-signal-green-soft/60"
+        {showAnchorLink && (
+          <p
+            className="mt-7 text-center text-sm text-muted-dark"
+            data-reveal
+            data-reveal-group="proof-bar"
           >
-            See the proof — video, reviews and receipts
-            <Icon
-              name="arrowRight"
-              className="size-3.5 transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5"
-            />
-          </a>
-        </p>
+            <a
+              href="#proof"
+              className="group inline-flex items-center gap-1.5 font-semibold text-paper underline decoration-paper/30 underline-offset-4 transition-colors hover:text-signal-green-soft hover:decoration-signal-green-soft/60"
+            >
+              See the proof — video, reviews and receipts
+              <Icon
+                name="arrowRight"
+                className="size-3.5 transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5"
+              />
+            </a>
+          </p>
+        )}
       </div>
     </section>
   );

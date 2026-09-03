@@ -6,30 +6,28 @@ import SectionHeading from '../components/ui/SectionHeading';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import AboutHero from '../components/about/AboutHero';
+import GivingGallery from '../components/about/GivingGallery';
+import ProofBarSection from '../sections/ProofBarSection';
+import { toneOf } from '../lib/signalTones';
 
 /**
  * About.
  *
- * The page's argument is restraint, so it borrows the homepage's vocabulary —
- * ink panels, the bordered strip, the serif accent — in a quieter register. It
- * should read as the same site making a smaller claim, not as a second landing
- * page.
+ * All nine of their sections, in their order. The 3 Sep build was missing two
+ * of them — "How this started" and "What you actually get" — because the page
+ * was read before it had hydrated and both looked empty. Re-captured 4 Sep;
+ * see `docs/source-copy/about.md`.
  *
- * Their two empty sections, "How this started" and "What you actually get",
- * are still absent. See `content/en/about.js`.
+ * The page borrows the homepage's vocabulary — ink panels, the bordered strip,
+ * signal tones, the serif accent — in a quieter register. It should read as the
+ * same site making a smaller claim, not as a second landing page.
  */
 
 /* Module scope so the hook memo has a stable dependency. */
 const OVERLAYS = { de: germanAbout.ABOUT };
 
-/**
- * Which hero shape is live.
- *
- * `/about-lab` renders all three. When one is chosen, inline it here and
- * delete the component's other branches, the lab route, and whichever content
- * keys the losing variants used.
- */
-const HERO_VARIANT = 'cost';
+/** Tone per offer card, matched by index — the homepage's pillar idiom. */
+const OFFER_TONES = ['blue', 'green', 'gold'];
 
 function Band({ className = '', children }) {
   const ref = useRevealOnScroll();
@@ -59,8 +57,7 @@ function Prose({ body, tone = 'paper' }) {
  * A closing line, set as a statement rather than another paragraph.
  *
  * The serif italic is the homepage's own accent — the treatment on "In shaa
- * Allah" — reused here to break six bands of body copy. It marks the sentence
- * the section wants remembered, so there is at most one per band.
+ * Allah" — reused to break the body copy. At most one per band.
  */
 function Pullquote({ children, tone = 'paper' }) {
   return (
@@ -78,22 +75,35 @@ function Pullquote({ children, tone = 'paper' }) {
 
 export default function AboutPage() {
   const ABOUT = usePageContent(EN_ABOUT, OVERLAYS);
-  const { cost, giving, boundaries, responsibility, team, invitation } = ABOUT;
+  const { cost, origin, giving, boundaries, responsibility, offer, team, invitation } = ABOUT;
 
   return (
     <>
       <Band>
-        <AboutHero about={ABOUT} variant={HERO_VARIANT} />
+        <AboutHero about={ABOUT} />
       </Band>
+
+      {/* The homepage's proof bar, in the same position it holds there. Six
+          sections of this page claim the company treats people carefully; this
+          is the only thing on it a reader can check. Its jump link is off —
+          the target lives on the homepage, not here. */}
+      <ProofBarSection showAnchorLink={false} />
 
       <Band className="defer-render bg-paper-sunk [--defer-h:820px] lg:[--defer-h:560px]">
         <SectionHeading eyebrow={cost.eyebrow} headline={cost.headline} />
         <Prose body={cost.body} />
       </Band>
 
-      {/* The giving. Their copy names three things in one sentence; showing
-          them as three makes the section scannable without adding a claim. */}
-      <Band className="defer-render [--defer-h:860px] lg:[--defer-h:600px]">
+      {/* How this started. Missing from the first build entirely. */}
+      <Band className="defer-render [--defer-h:820px] lg:[--defer-h:560px]">
+        <SectionHeading eyebrow={origin.eyebrow} headline={origin.headline} />
+        <Prose body={origin.body} />
+      </Band>
+
+      {/* The giving. Their three-part sentence as three cells, then their
+          gallery — the page's only photography and the reason it does not read
+          as an essay. */}
+      <Band className="defer-render bg-paper-sunk [--defer-h:1500px] lg:[--defer-h:1100px]">
         <SectionHeading eyebrow={giving.eyebrow} headline={giving.headline} />
 
         <p
@@ -114,6 +124,13 @@ export default function AboutPage() {
         </ul>
 
         <Prose body={giving.body} />
+
+        <p data-reveal data-reveal-group="giving-lead" className="mt-6 max-w-2xl font-semibold">
+          {giving.everySubscription}
+        </p>
+
+        <GivingGallery items={giving.gallery} />
+
         <Pullquote>{giving.closer}</Pullquote>
       </Band>
 
@@ -140,8 +157,7 @@ export default function AboutPage() {
       </Band>
 
       {/* The emotional core, and the only band given a rule. Five paragraphs in
-          the same column as everything else read as filler; set apart, they
-          read as the page meaning it. */}
+          the same column as everything else read as filler. */}
       <Band className="defer-render [--defer-h:1080px] lg:[--defer-h:700px]">
         <div className="border-l-2 border-hairline pl-6 sm:pl-10">
           <SectionHeading eyebrow={responsibility.eyebrow} headline={responsibility.headline} />
@@ -149,13 +165,66 @@ export default function AboutPage() {
         </div>
       </Band>
 
-      <Band className="defer-render bg-paper-sunk [--defer-h:640px] lg:[--defer-h:460px]">
-        <SectionHeading eyebrow={team.eyebrow} headline={team.headline} />
-        <Prose body={team.body} />
+      {/* What you actually get. Also missing from the first build. Three cards
+          rather than three paragraphs, because it is the one section on the
+          page that is a list of things. */}
+      <Band className="defer-render bg-paper-sunk [--defer-h:900px] lg:[--defer-h:620px]">
+        <SectionHeading eyebrow={offer.eyebrow} headline={offer.headline} />
+
+        <ul className="mt-10 grid gap-4 lg:grid-cols-3">
+          {offer.items.map((item, index) => {
+            const tone = toneOf(OFFER_TONES[index]);
+            return (
+              <li
+                key={item.lead}
+                data-reveal
+                data-reveal-group="offer"
+                className="group relative isolate overflow-hidden rounded-2xl border border-hairline bg-paper p-6 transition-[transform,box-shadow] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:shadow-lift"
+              >
+                {/* The corner wash the hero tiles and pillar cards use. */}
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute -right-10 -top-10 size-24 rounded-full bg-gradient-to-br to-transparent blur-2xl ${tone.wash}`}
+                />
+                <p className="relative font-semibold leading-snug">{item.lead}</p>
+                <p className="relative mt-3 leading-relaxed text-muted">{item.body}</p>
+              </li>
+            );
+          })}
+        </ul>
+
+        <Pullquote>{offer.closer}</Pullquote>
       </Band>
 
-      {/* The close. One door, no urgency — which is what the boundaries band
-          three screens up just promised. */}
+      {/* The team, and the founder quote that was missed the first time. */}
+      <Band className="defer-render [--defer-h:900px] lg:[--defer-h:640px]">
+        <SectionHeading eyebrow={team.eyebrow} headline={team.headline} />
+        <Prose body={team.body} />
+
+        <figure
+          className="mt-12 grid max-w-3xl gap-6 rounded-2xl border border-hairline bg-paper-sunk p-6 sm:grid-cols-[7rem_1fr] sm:items-center sm:p-8"
+          data-reveal
+          data-reveal-group="founder"
+        >
+          {/* Portrait to come from the client — see the gallery component. */}
+          <div className="grid size-24 place-items-center overflow-hidden rounded-full border border-hairline bg-paper text-[0.55rem] uppercase tracking-[0.16em] text-muted/70 sm:size-28">
+            Portrait
+          </div>
+
+          <div>
+            <blockquote className="font-serif text-[1.35rem] italic leading-snug">
+              {team.quote.text}
+            </blockquote>
+            <figcaption className="mt-4">
+              <span className="font-semibold">{team.quote.name}</span>
+              <span className="micro-label ml-3 text-muted">{team.quote.role}</span>
+            </figcaption>
+          </div>
+        </figure>
+      </Band>
+
+      {/* The close. Two doors and no urgency, which is what the boundaries band
+          promised: one costs money, one does not, and neither is a countdown. */}
       <Band className="defer-render [--defer-h:900px] lg:[--defer-h:620px]">
         <SectionHeading eyebrow={invitation.eyebrow} headline={invitation.headline} />
         <Prose body={invitation.body} />
@@ -167,6 +236,14 @@ export default function AboutPage() {
         >
           <CtaButton href={invitation.cta.href} intent="about-to-pricing">
             {invitation.cta.label}
+          </CtaButton>
+
+          <CtaButton
+            href={invitation.secondaryCta.href}
+            variant="secondary"
+            intent="about-to-playbook"
+          >
+            {invitation.secondaryCta.label}
           </CtaButton>
 
           <p className="inline-flex items-center gap-2 text-sm text-muted">

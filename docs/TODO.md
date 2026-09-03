@@ -19,6 +19,15 @@ session.
 
 ## Now
 
+- **The About photographs.** Their giving gallery is five images plus a
+  founder portrait, and we have none of them. Either we pull them from their
+  site and optimise, or the client sends originals. The page renders labelled
+  placeholders until then. Weight is a speed-gate item — decide before adding.
+- **Their charity gallery contains a stock photo.** "Children smiling" is an
+  Unsplash image sitting among real charity work, three screens under a promise
+  not to create false impressions. Not carried into the rebuild. Raise with the
+  client.
+
 - **Choose the About hero.** `/about-lab` on a local preview renders all
   three. Variant A is live meanwhile. The choice deletes the lab route, the
   two losing branches in `AboutHero`, and any content keys they used.

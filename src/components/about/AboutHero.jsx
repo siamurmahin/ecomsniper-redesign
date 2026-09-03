@@ -1,17 +1,15 @@
+import CtaButton from '../ui/CtaButton';
+
 /**
- * The About hero, in three shapes.
+ * The About hero.
  *
- * Built as one component with a `variant` prop rather than three files,
- * because they share the eyebrow, the headline and the figure — only the
- * arrangement differs, and three copies would drift apart the first time the
- * copy changed.
+ * Chosen from three shapes tried on a throwaway `/about-lab`; the photograph
+ * and centred variants lost and left with it. This one follows the homepage:
+ * two columns, with the dark panel on the right in the same family as the
+ * hero's product panel, so About reads as the same site.
  *
- * `/about-lab` renders all three for comparison. Once one is chosen the other
- * two and the lab route are deleted, which is how the homepage sections were
- * decided — see `docs/SESSION-NOTES-01-SEP.md`.
- *
- * None of the variants adds a byte to the first screen: no images, no new
- * dependencies, and every class is already in the stylesheet.
+ * No images and no new dependencies — every class is already in the
+ * stylesheet.
  */
 
 /** Shared: eyebrow + headline, used by all three. */
@@ -77,64 +75,54 @@ function CostPanel({ figure, cost }) {
   );
 }
 
-export default function AboutHero({ about, variant = 'cost' }) {
-  const { eyebrow, headline, figure, cost } = about;
+export default function AboutHero({ about }) {
+  const { eyebrow, headline, hours, statement, figure, cost, ctas } = about;
 
-  /* C — text only, centred, so the empty half reads as intent not omission. */
-  if (variant === 'centred') {
-    return (
-      <div className="text-center">
-        <Title eyebrow={eyebrow} headline={headline} align="center" />
-
-        <div className="mt-12" data-reveal data-reveal-group="hero">
-          <p className="font-display text-[4rem] font-extrabold leading-none tracking-[-0.04em] tabular-nums">
-            {figure.value}
-          </p>
-          <p className="micro-label mt-3 justify-center text-muted">{figure.label}</p>
-        </div>
-      </div>
-    );
-  }
-
-  /* B — the layout a photograph would take, so the composition can be judged
-     before the client supplies one. The placeholder is deliberately plain and
-     labelled; it is not a design element and must not survive the choice. */
-  if (variant === 'portrait') {
-    return (
-      <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.85fr]">
-        <div>
-          <Title eyebrow={eyebrow} headline={headline} />
-          <div
-            className="mt-10 inline-flex items-baseline gap-3 rounded-2xl border border-hairline bg-paper-sunk px-6 py-4"
-            data-reveal
-            data-reveal-group="hero"
-          >
-            <span className="text-4xl font-extrabold tracking-tight tabular-nums">
-              {figure.value}
-            </span>
-            <span className="micro-label text-muted">{figure.label}</span>
-          </div>
-        </div>
-
-        <div
-          className="grid aspect-[4/5] place-items-center rounded-2xl border border-dashed border-hairline bg-paper-sunk"
-          data-reveal
-          data-reveal-group="hero-panel"
-        >
-          <p className="micro-label max-w-[16ch] text-center leading-relaxed text-muted">
-            Photograph from the client goes here
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  /* A — the default. */
   return (
     <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.8fr]">
       <div>
         <Title eyebrow={eyebrow} headline={headline} />
+
+        {/* Their three short lines, run as separate lines on their page and
+            missed on the first capture. Rules between them rather than commas:
+            they are a tally, not a sentence. */}
+        <ul className="mt-8 max-w-xs" data-reveal data-reveal-group="hero">
+          {hours.map((line) => (
+            <li
+              key={line}
+              className="border-t border-hairline py-2.5 text-[length:var(--text-lead)] font-semibold last:border-b"
+            >
+              {line}
+            </li>
+          ))}
+        </ul>
+
+        <p
+          className="mt-7 max-w-md text-[length:var(--text-lead)] leading-relaxed text-muted"
+          data-reveal
+          data-reveal-group="hero"
+        >
+          {statement}
+        </p>
+
+        {/* The page had no door until its last screen. Someone arriving here
+            from search could read the whole argument and find nothing to do
+            with it. Same pair as the homepage hero, in About's order: the
+            quiet door first, because this page tells people not to rush. */}
+        <div
+          className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
+          data-reveal
+          data-reveal-group="hero"
+        >
+          <CtaButton href={ctas.primary.href} intent="about-hero-pricing">
+            {ctas.primary.label}
+          </CtaButton>
+          <CtaButton href={ctas.secondary.href} variant="secondary" intent="about-hero-playbook">
+            {ctas.secondary.label}
+          </CtaButton>
+        </div>
       </div>
+
       <CostPanel figure={figure} cost={cost} />
     </div>
   );

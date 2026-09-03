@@ -25,9 +25,23 @@ export const ABOUT = {
 
   /* The figure their page opens on. $200 is the monthly charge as the client
      frames it — $97 the first month, $199 after. */
+  /* Their hero runs these three as short separate lines before the
+     statement. Missed on the first capture. */
+  hours: ['The late shifts.', 'The overtime.', 'The tired mornings.'],
+  statement:
+    'When you pay for something, you are giving us hours of your life. We think about that.',
+
   figure: {
     value: '$200',
     label: 'What a month costs',
+  },
+
+  /* The page had no door until its last screen. Pricing first, then the
+     playbook — the free one matters here, because this page is written for
+     the person who is not ready and is told not to rush. */
+  ctas: {
+    primary: { label: 'View pricing', href: '/pricing' },
+    secondary: { label: 'Get the free playbook', href: '/free-play-book' },
   },
 
   cost: {
@@ -47,6 +61,17 @@ export const ABOUT = {
       'For some people, $200 is a few hours of work. For others, it is a week of early mornings and long days. We do not know which one you are. So we treat everyone like the second.',
       'That means we are careful. We do not rush features that are not ready. We do not promise things we are not sure about. We would rather move slow and get it right.',
       'It also means we answer support messages like the person on the other end worked hard for this. Because they did.',
+    ],
+  },
+
+  /* Missed on the first capture: their page renders this in full. */
+  origin: {
+    eyebrow: 'How this started',
+    headline: 'How this started.',
+    body: [
+      'Years ago, we were doing all of this by hand. Finding products. Making listings. Checking prices every day. It took hours. The results were okay, but the work never stopped.',
+      'So we built some tools to make it easier for ourselves. Then other people asked if they could use them too. That is how this became a company.',
+      'We are not geniuses. We just got tired of doing the same thing over and over. And now we feel responsible for the people who pay us to make their work easier.',
     ],
   },
 
@@ -71,6 +96,17 @@ export const ABOUT = {
     ],
     body: [
       'This is not marketing. It is just something we do. When you join, you become part of it too.',
+    ],
+    everySubscription: 'Every subscription helps us do a little more for people who need it.',
+    /* Their gallery. Six captions on their page; the sixth image is a stock
+       photograph and is deliberately not carried over — see
+       `docs/source-copy/about.md`. Photographs still to be supplied. */
+    gallery: [
+      { caption: 'School supplies for children', alt: 'Supporting education' },
+      { caption: 'Time spent at the orphanage', alt: 'Orphanage visit' },
+      { caption: 'School supplies distribution', alt: 'Community support' },
+      { caption: 'Medical support program', alt: 'Medical assistance' },
+      { caption: 'Orphanage visit', alt: 'Education program' },
     ],
     closer: 'We share this because you are part of it now. Not to impress.',
   },
@@ -111,6 +147,28 @@ export const ABOUT = {
     ],
   },
 
+  /* Missed on the first capture. Their eyebrow for it is "The offer". */
+  offer: {
+    eyebrow: 'The offer',
+    headline: 'What you actually get.',
+    items: [
+      {
+        lead: 'Tools that do the boring stuff.',
+        body: 'Listing products. Watching prices. Tracking stock. The things that eat up hours when you do them by hand.',
+      },
+      {
+        lead: 'Support from people who have actually done this work.',
+        body: 'When you ask a question, you get a real answer. Not a script.',
+      },
+      {
+        lead: 'A community of people figuring it out together.',
+        body: 'Some days are good. Some are frustrating. People share both.',
+      },
+    ],
+    closer:
+      'That is it. We save you time on the repetitive stuff so you can spend it on the parts that need a human brain.',
+  },
+
   team: {
     eyebrow: 'The team',
     headline: 'Who we are.',
@@ -118,6 +176,12 @@ export const ABOUT = {
       'A small team. We like it that way. It means we actually know what is going on with our users. We read the support messages ourselves.',
       'We are not trying to become a huge company. We are trying to be useful to the people who trust us.',
     ],
+    /* Missed on the first capture. Their page runs it beside a portrait. */
+    quote: {
+      text: 'I remember spending full weekends on work that went nowhere. That feeling stuck with me. It is why I care about not wasting other people’s time. Time is the one thing you cannot get back.',
+      name: 'Sammy',
+      role: 'Founder',
+    },
   },
 
   invitation: {
@@ -129,6 +193,9 @@ export const ABOUT = {
       'And if you do join, we will do our best to be worth the hours you worked to pay for this.',
     ],
     cta: { label: 'View pricing', href: '/pricing' },
+    /* "Take your time. There is no rush." is this section's own copy, and
+       until now the only thing to do after reading it cost $97. */
+    secondaryCta: { label: 'Get the free playbook', href: '/free-play-book' },
     /* Qualified. Their page says "30-day refund policy" flat; the credits
        bundle and Enterprise are final sale. */
     assurance: '30 day money back guarantee on the monthly plan',

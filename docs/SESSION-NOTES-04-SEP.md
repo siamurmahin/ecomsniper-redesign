@@ -168,6 +168,54 @@ had settled, and the reading believed.**
 
 ---
 
+## 5d. About — the capture was wrong, and the rebuild with what was missing
+
+**I built About on an incomplete capture.** The 3 Sep pass recorded two of
+their sections — "How this started" and "What you actually get" — as rendering
+a heading with no body, and the page shipped without them on that basis. The
+file even argued the point: "a heading over silence reads worse than an
+absence."
+
+Both sections have full copy. The page was read before it had hydrated. That is
+the **fourth** time this session's family of mistakes has bitten — see the
+3 Sep notes §6 — and the first time it removed real client content from a
+shipped page rather than just producing a wrong note.
+
+What else the first pass missed:
+
+- The hero's three lines — "The late shifts. The overtime. The tired mornings."
+  — and its statement
+- The giving section's "Every subscription helps us do a little more…"
+- Their **six-image gallery**, with captions
+- The **founder quote from Sammy**
+- Seven photographs
+
+Re-captured after `readyState === 'complete'`, then scrolling the whole page to
+force lazy content, then waiting again. 5,179 characters against the
+~2,600 first taken.
+
+### What that changed
+
+About went from six sections to nine, and from an essay to a page with
+structure: hero lines as a tally, the giving gallery, the offer as three toned
+cards, the founder quote as a figure. The design complaint and the capture
+error had the same root — there was less content on the page than their page
+has.
+
+### Their gallery contains a stock photograph
+
+"Children smiling" is served from Unsplash, among five real charity images,
+captioned "Moments that matter". Not carried into the rebuild. It is a
+credibility risk on the one page whose argument is honesty, and it sits three
+screens under a promise not to create false impressions.
+
+### Still open
+
+The six real photographs are the client's own and we hold none of them. Tiles
+render a labelled placeholder and take a `src` the moment there is one.
+
+---
+
 ## 6. Housekeeping
 
 Per the rule set on 3 Sep, this file was created when the date rolled rather
