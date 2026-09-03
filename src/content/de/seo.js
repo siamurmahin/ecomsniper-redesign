@@ -31,6 +31,11 @@ export const overlay = {
       description:
         'Warum wir vorsichtig mit Geld umgehen, das hart verdient war: was wir nicht tun, was passiert, wenn es nicht klappt, und wohin ein Teil von dem geht, was du zahlst.',
     },
+    careers: {
+      title: 'Karriere — EcomSniper',
+      description:
+        'Aktuell eine offene Stelle: Videoeditor in Vollzeit, remote. Wenn nichts passt, erzähl uns trotzdem, was du machst.',
+    },
     privacy: {
       title: 'Datenschutzerklärung — EcomSniper',
       description:

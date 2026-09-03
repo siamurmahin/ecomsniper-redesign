@@ -37,6 +37,11 @@ export const SEO = {
     description:
       'Why we are careful with money that was hard to earn: what we will not do, what happens when it does not work out, and where part of what you pay goes.',
   },
+  careers: {
+    title: 'Careers — EcomSniper',
+    description:
+      'One open role right now: a full time video editor, remote. If nothing fits, tell us what you do anyway — we would rather hear from someone good than miss them.',
+  },
   privacy: {
     title: 'Privacy Policy — EcomSniper',
     description:

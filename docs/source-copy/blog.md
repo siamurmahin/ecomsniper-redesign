@@ -45,18 +45,25 @@ One card is marked **Featured** and carries no date, only "6m Read".
 
 Plus two more not read off before the capture was cut.
 
-### The sitemap is stale
+### The sitemap and the index share nothing — corrected 3 Sep
 
-Their `sitemap.xml` lists nine blog posts, and **not one of them is in the live
-index**. The sitemap has things like
-`ecomsniper-v333-update-condition-issue-resolved` and
-`how-we-avoid-vero-ebay-dropshipping`; the live blog is all 2026-dated
-long-form guides.
+An earlier version of this file said the sitemap listed posts that no longer
+exist. **That was wrong.** Checked directly:
+`/blog/how-we-avoid-vero-ebay-dropshipping` renders in full — 9,419
+characters, dated Wed Apr 08 2026.
 
-So the sitemap describes a blog that no longer exists. Two consequences: the
-post list has to come from the live index rather than the sitemap, and their
-sitemap is advertising URLs to search engines that may now 404 — worth telling
-the client regardless of what we build.
+The real shape of it:
+
+```
+live on /blog   12 posts
+in sitemap.xml   9 posts
+in both          0
+```
+
+So the nine sitemap posts are live but no longer linked from the index —
+orphans — and the twelve current posts are in no sitemap. Both directions are
+broken, and neither is the "dead URLs" first recorded. See
+`docs/AUDIT-THEIR-SITE.md` §2.
 
 ---
 

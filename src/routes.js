@@ -21,6 +21,7 @@ export default [
   route('faq', 'routes/faq.jsx'),
   route('free-play-book', 'routes/playbook.jsx'),
   route('about', 'routes/about.jsx'),
+  route('careers', 'routes/careers.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
   route('cookie-policy', 'routes/cookies.jsx'),
 
@@ -29,6 +30,7 @@ export default [
   route('de/faq', 'routes/faq.jsx', { id: 'de-faq' }),
   route('de/free-play-book', 'routes/playbook.jsx', { id: 'de-playbook' }),
   route('de/about', 'routes/about.jsx', { id: 'de-about' }),
+  route('de/careers', 'routes/careers.jsx', { id: 'de-careers' }),
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),
   route('de/cookie-policy', 'routes/cookies.jsx', { id: 'de-cookies' }),
 
