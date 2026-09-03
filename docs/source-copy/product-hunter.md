@@ -40,24 +40,40 @@ EcomSniper's AI Lister.
 
 ---
 
-## The same page at `/productHunterV6`
+## The same page at `/productHunterV6` — 1063 characters
 
-Also live, different content, **316 characters** against 992:
+Also live, and **not** the stripped-down version this file first claimed.
 
 > THE SOFTWARE · PRODUCT HUNTER
 > Find profitable items to hunt.
-> THE HUNT — The hunt takes three steps.
-> Just follow these quick steps and you're done!
-> Ready to boost your dropshipping business? · Start Your eBay Business
-> 30 day money back guarantee
+>
+> Uncover top eBay sellers, extract their best listings, and source them from
+> Amazon. All in one tool.
+>
+> **The hunt takes three steps.** Just follow these quick steps and you're done!
+>
+> 01 **Identify dropshippers and extract listings** — Search eBay for items
+> priced higher than on Amazon, which indicates a likely dropshipper. Once
+> you've found one, open their profile and use EcomSniper's "Extract All
+> Titles" button to gather a list of everything they've sold recently.
+>
+> 02 **Open Product Hunter** — Open the EcomSniper extension, select "Open
+> Product Hunter," and paste the extracted product titles into the designated
+> text box.
+>
+> 03 **Click Search Titles** — With a single click, Product Hunter scans Amazon
+> for every title on your list. In seconds, you'll have a curated list of
+> profitable items, ready to list with EcomSniper's AI Lister.
 
-The three steps are **named but not explained** — the explanatory copy has been
-moved into images. That is a third of the text and none of the substance, and
-a search engine reads none of what is left.
+**Correction.** An earlier version of this file recorded V6 at 316 characters
+and concluded the redesign had moved its copy into images. That reading was
+taken while the page was still loading. Read after `readyState === 'complete'`
+it is 1063 characters against the readable slug's 992 — the same three steps,
+the same substance, reworded slightly tighter.
 
-**This is the evidence for the slug decision.** The readable slugs carry the
-copy; the `V6` slugs are a visual refresh that dropped it. If `V6` wins, the
-copy above has to be written back in rather than inherited.
+So the slug choice is **not** a content question. Both carry the copy. It is a
+question of which URL to keep, which the client decides, with a 301 from the
+loser.
 
-Also note the V6 page says "30 day money back guarantee" unqualified — the
-same claim the rebuild qualifies to the monthly plan.
+V6 says "30 day money back guarantee" unqualified, which the rebuild qualifies
+to the monthly plan.

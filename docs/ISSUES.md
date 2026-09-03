@@ -64,29 +64,35 @@ written from their live copy, and there is no live copy to write from.
 **Fix:** the client supplies the terms. Nothing to rebuild until they do.
 Owner: client.
 
-### 3. Two of their four feature pages never finish loading — `high`
+### 3. ~~Two of their four feature pages never finish loading~~ — withdrawn, wrong again
 
-`/ai-powered-lister` and `/competitor-research` hang. `readyState` stops at
-`interactive` and never reaches `complete`, `<main>` renders **0 characters**,
-and the tab keeps the generic homepage title instead of its own. Repeated
-attempts froze the renderer outright.
+**Also wrong, and kept for the same reason as issue 1.** It claimed
+`/ai-powered-lister` and `/competitor-research` never render. Both load
+perfectly well when given time:
 
-Not the browser and not the site at large: `/product-hunter` was loaded in the
-same tab moments later and came back `complete`, 1354 characters, with its own
-title. Reproduced across two fresh tabs and four attempts.
+| Page                   | Result                                             |
+| ---------------------- | -------------------------------------------------- |
+| `/ai-powered-lister`   | `complete`, 1700 chars, title "Ai Powered Lister"  |
+| `/competitor-research` | `complete`, 864 chars, title "Competitor Research" |
+| `/aiListerV6`          | `complete`, 1822 chars                             |
+| `/productHunterV6`     | `complete`, 1230 chars                             |
 
-`/aiListerV6` fails identically, so it is the feature rather than the slug. Two
-of the four product pages on a site selling that product are blank to every
-visitor, and being a client-rendered SPA there is no server-rendered fallback
-behind them.
+Their site is slow to hydrate, and every reading was taken while
+`readyState` was still `interactive`. A partially loaded SPA looks exactly
+like a broken one from outside: zero text, generic title, wedged renderer. The
+conclusion followed the symptom instead of waiting for the page.
 
-Untested when this was written: `/competitorResearchV6`, `/priceMonitorV6`.
+It also corrupted a second finding. `/productHunterV6` was recorded at 316
+characters against 992 for the readable slug, and that gap was written up as
+evidence that the V6 redesign had dropped its copy into images. Read after
+completion it is **1063 characters with all three steps explained** — the same
+substance, reworded. There was no gap. The slug comparison in
+`source-copy/product-hunter.md` has been corrected.
 
-**This blocks us too.** Both pages are on the build list and were to be written
-from their live copy. There is no copy to read while they do not render.
-
-**Fix:** their developers. The browser console on those two routes will say
-more in ten seconds than any amount of probing from outside. Owner: client.
+**The guard, now in `CLAUDE.md`:** assert `readyState === 'complete'` before
+reading anything out of a page, and never conclude "broken" from a single
+timeout. This is the third measurement mistake of the day with the same shape
+— reading a thing before it had settled, then trusting the reading.
 
 ### 4. Eight footer links are soft-404s — `high`
 

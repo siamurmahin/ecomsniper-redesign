@@ -71,6 +71,11 @@ Other traps this codebase has already fallen into:
   Use the untuned browser for anything time-based.
 - **Lighthouse will happily measure a page that is still settling.** A score
   of 100 once meant "most of the page had not rendered yet", not "good".
+- **A page is not readable until `readyState === 'complete'`.** Assert it
+  before reading anything out of a browser, and never conclude "broken" from a
+  timeout. Their site is slow to hydrate, and a half-loaded SPA is
+  indistinguishable from a dead one: no text, generic title, wedged renderer.
+  Two findings were filed wrong this way.
 - **`git archive` on Windows applies `core.autocrlf`.** It is not a faithful
   export of what CI checks out. Use `git ls-files --eol` to see the truth.
 - Verify a claim against the thing itself before reporting it. Two wrong
