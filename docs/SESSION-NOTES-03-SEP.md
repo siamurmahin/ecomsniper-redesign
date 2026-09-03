@@ -11,11 +11,11 @@ settled, then trusting the reading.** All three guards are now in `CLAUDE.md`.
 
 ## 1. Where this stopped, and what is next
 
-About is built and pushed. **11 pages left.**
+About and Careers are built and pushed. **10 pages left**, and the eager-JS
+budget is now the constraint — see §7c.
 
 | Next up            | State                                                     |
 | ------------------ | --------------------------------------------------------- |
-| Careers            | Unblocked — static, plain list, copy captured             |
 | Affiliate          | Unblocked — copy captured                                 |
 | Contact            | Needs a form-endpoint decision                            |
 | Terms              | **Blocked** — their page is empty                         |
@@ -23,7 +23,7 @@ About is built and pushed. **11 pages left.**
 | Course             | Needs client sign-off on income claims — see `docs/source-copy/course-dropship-mastery.md` |
 | Blog index + 1 post | Ships static; CMS decision deferred                       |
 
-Branch state: everything is on **`prerender`** through `e1b6f42`. `main` is at
+Branch state: everything is on **`prerender`** through `d86b51c`. `main` is at
 `797017a` and is not to be touched — a merge is a deploy, and that is the
 user's call to time.
 
@@ -90,8 +90,10 @@ the hook on its own ref for exactly this reason.
 
 Three things the client needs to know:
 
-- **Their sitemap is stale.** It lists nine blog posts and **not one** is in
-  the live index. It is advertising URLs to search engines that may now 404.
+- **Their sitemap and their blog share nothing.** 12 posts live, 9 in the
+  sitemap, **0 in both**. Corrected later in the session — see §7b. The nine
+  sitemap posts still render; they are orphans, not dead links. The first
+  version of this line said they may 404, and that was wrong.
 - **Their terms page is empty**, and the guarantee copy leans on it.
   `ISSUES.md` #2, `high`.
 - **The course page is the most claim-heavy page they have** — "Six-Figure",
