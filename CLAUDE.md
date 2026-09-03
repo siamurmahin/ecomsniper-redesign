@@ -72,6 +72,13 @@ regression. Build, `vite preview --outDir build/client`, then measure.
 
 Other traps this codebase has already fallen into:
 
+- **A backgrounded tab throttles requestAnimationFrame**, and GSAP runs on
+  rAF. A screenshot of a tab that is not the selected one catches every
+  reveal mid-animation — headings at `opacity: 0.08`, ink panels rendering
+  grey — and it looks exactly like a styling bug. To read a page's design,
+  drop `js-motion` from `<html>` and strip the inline styles GSAP wrote:
+  `document.querySelectorAll('[data-reveal]').forEach(e => e.removeAttribute('style'))`.
+  Setting `style.opacity` yourself does not work; GSAP overwrites it.
 - **`chrome-devtools-mcp` throttles requestAnimationFrame** to a couple of
   frames a second. Fine for geometry and DOM state, useless for frame timing.
   Use the untuned browser for anything time-based.

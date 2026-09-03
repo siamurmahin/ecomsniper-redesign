@@ -130,6 +130,44 @@ for on every future re-run of these numbers.
 
 ---
 
+## 5c. About — the design pass
+
+`ff66467`. The page was typeset, not designed: seven left-aligned prose bands,
+the right 45% of each empty, a figure that read like a form field, and none of
+the homepage's visual vocabulary — so it did not look like the same site.
+
+Five changes, all from existing tokens and components. No images, no
+dependencies, nothing new on the first screen.
+
+The hero ships as one component with three variants behind a prop, and
+**`/about-lab`** renders all three for the choice. Not prerendered, not
+linked, marked noindex, and asserted at commit time to emit no document. It
+gets deleted with the two losing branches and their content keys.
+
+Two content restructures, both their words rearranged rather than new claims,
+and both noted in `content/en/about.js`:
+
+- `cost.hours` / `cost.unknown` — the first sentence of the cost section split
+  so the hero can show it as a comparison. Delete with variant A if it loses.
+- `giving.gifts` — the three things one sentence names, split into three
+  cells. Bodies verbatim; labels are headers over their own words.
+
+### The trap this pass found
+
+A screenshot showed the ink panel rendering **grey** and the headings missing
+entirely. It looked like a styling bug. It was not: the localhost tab was not
+the *selected* tab, background tabs throttle `requestAnimationFrame`, and GSAP
+runs on rAF — so every reveal was frozen mid-animation at `opacity: 0.088`.
+
+Setting `style.opacity = '1'` does not fix it, because GSAP owns those inline
+styles and overwrites them. What works is dropping `js-motion` from `<html>`
+and removing the inline styles outright. Now in `CLAUDE.md`.
+
+Same family as the three traps in the 3 Sep notes: **a thing read before it
+had settled, and the reading believed.**
+
+---
+
 ## 6. Housekeeping
 
 Per the rule set on 3 Sep, this file was created when the date rolled rather

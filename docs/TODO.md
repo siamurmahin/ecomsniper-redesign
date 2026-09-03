@@ -19,6 +19,10 @@ session.
 
 ## Now
 
+- **Choose the About hero.** `/about-lab` on a local preview renders all
+  three. Variant A is live meanwhile. The choice deletes the lab route, the
+  two losing branches in `AboutHero`, and any content keys they used.
+
 Nothing in flight. The environment work is finished and verified; the items
 below are what it left behind.
 
