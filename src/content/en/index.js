@@ -10,6 +10,8 @@ export * from './a11y';
 export * from './seo';
 export * from './footer';
 export * from './furniture';
+export * from './consent';
+export * from './legal';
 export * from './home/hero';
 export * from './home/proof';
 export * from './home/audience';

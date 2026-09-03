@@ -47,9 +47,13 @@ export const FOOTER = {
     },
     {
       title: 'Legal',
+      /* Privacy and cookies are this app's own routes now, prerendered in
+         both languages. Terms still points at the live site, which answers
+         200 for any path — it is on the list, not fixed. */
       links: [
         { label: 'Terms and conditions', href: 'https://ecomsniper.io/terms-and-conditions' },
-        { label: 'Privacy policy', href: 'https://ecomsniper.io/privacy-policy' },
+        { label: 'Privacy policy', href: '/privacy-policy' },
+        { label: 'Cookie policy', href: '/cookie-policy' },
         { label: 'Reviews', href: SITE.trustpilotUrl },
       ],
     },

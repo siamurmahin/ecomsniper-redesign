@@ -16,6 +16,14 @@ import ExitIntentOffer from './ExitIntentOffer';
  *
  * They go up one per idle slot, so the five of them cannot combine into one
  * task — see `MountInSlices`.
+ *
+ * The consent banner was briefly in this list and had to come out: everything
+ * below is behind a lazy import, and on a cold load the chunk is not there
+ * when hydration runs, so React renders nothing where the server rendered all
+ * of this and abandons the markup — visible, but owned by nobody and wired to
+ * nothing. A banner that works only for a visitor with a warm cache is not a
+ * consent mechanism. It lives in `root.jsx` now. See TODO.md: the same fault
+ * is why nothing else in here responds either.
  */
 export default function SiteChrome() {
   return (

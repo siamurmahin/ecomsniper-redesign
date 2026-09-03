@@ -45,7 +45,15 @@ export const overlay = {
       },
       {
         title: 'Rechtliches',
-        links: [{ label: 'AGB' }, { label: 'Datenschutz' }, { label: 'Bewertungen' }],
+        /* Four entries, and the order matters: the overlay merges by position,
+           so a missing one here does not fall through — it relabels whatever
+           sits at that index in the English deck. */
+        links: [
+          { label: 'AGB' },
+          { label: 'Datenschutz' },
+          { label: 'Cookie-Richtlinie' },
+          { label: 'Bewertungen' },
+        ],
       },
     ],
     disclaimer:

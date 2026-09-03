@@ -6,7 +6,8 @@ import { useContent } from './hooks/useContent';
 import { languageFromPath } from './lib/language';
 import { LanguageMemory, PreloaderRelease, RouteScrollManager } from './components/layout/routing';
 import { PRELOADER_MARKUP, PRELOADER_STYLES, PRELOADER_BACKSTOP } from './lib/preloaderShell';
-import { TRACKING_GATE } from './lib/trackingGate';
+import { CONSENT_MODE_BOOTSTRAP } from './consent/consentMode';
+import ConsentBanner from './consent/ConsentBanner';
 import './styles/index.css';
 
 /* The footer and the conversion furniture. None of it is on the first screen
@@ -67,7 +68,11 @@ export function Layout({ children }) {
 
         {children}
 
-        <script dangerouslySetInnerHTML={{ __html: TRACKING_GATE }} />
+        {/* Consent Mode v2 defaults — every signal denied before anything
+            can read them. Inline and before <Scripts /> because a tag that
+            fires ahead of this fired without consent, and no later update
+            takes that back. See `consent/consentMode`. */}
+        <script dangerouslySetInnerHTML={{ __html: CONSENT_MODE_BOOTSTRAP }} />
         <Scripts />
       </body>
     </html>
@@ -100,6 +105,13 @@ export default function Root() {
       <main id="main-content">
         <Outlet />
       </main>
+
+      {/* Eager, unlike everything in `SiteChrome`. It renders null until it
+          has read the stored decision, so it costs the first screen a few
+          hundred bytes and no markup — and unlike a lazy chunk it is
+          guaranteed to be there when hydration runs. It was in SiteChrome
+          for one build and only worked on a warm cache. */}
+      <ConsentBanner />
 
       {/* Nothing here is on screen when the page paints, so none of it is in
           the bundle the first screen waits for — see `SiteChrome`. */}

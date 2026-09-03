@@ -20,11 +20,15 @@ export default [
   route('pricing', 'routes/pricing.jsx'),
   route('faq', 'routes/faq.jsx'),
   route('free-play-book', 'routes/playbook.jsx'),
+  route('privacy-policy', 'routes/privacy.jsx'),
+  route('cookie-policy', 'routes/cookies.jsx'),
 
   route('de', 'routes/home.jsx', { id: 'de-home' }),
   route('de/pricing', 'routes/pricing.jsx', { id: 'de-pricing' }),
   route('de/faq', 'routes/faq.jsx', { id: 'de-faq' }),
   route('de/free-play-book', 'routes/playbook.jsx', { id: 'de-playbook' }),
+  route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),
+  route('de/cookie-policy', 'routes/cookies.jsx', { id: 'de-cookies' }),
 
   route('*', 'routes/not-found.jsx'),
 ];

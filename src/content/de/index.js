@@ -25,6 +25,8 @@ import { overlay as a11y } from './a11y';
 import { overlay as seo } from './seo';
 import { overlay as footer } from './footer';
 import { overlay as furniture } from './furniture';
+import { overlay as consent } from './consent';
+import { overlay as legal } from './legal';
 import { overlay as homeHero } from './home/hero';
 import { overlay as homeProof } from './home/proof';
 import { overlay as homeAudience } from './home/audience';
@@ -48,6 +50,8 @@ export const de = {
   ...seo,
   ...footer,
   ...furniture,
+  ...consent,
+  ...legal,
   ...homeHero,
   ...homeProof,
   ...homeAudience,
