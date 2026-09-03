@@ -7,7 +7,7 @@
  *
  * THIS NEEDS THE SAME LEGAL SIGN-OFF AS THE ENGLISH. A translated legal term
  * is a legal claim in another jurisdiction, and no lawyer has read this.
- * Tracked in TODO.md under Blocked. See `../en/legal.js` for what was changed
+ * Tracked in docs/TODO.md under Blocked. See `../en/legal.js` for what was changed
  * from the client's live copy and why.
  */
 export const overlay = {

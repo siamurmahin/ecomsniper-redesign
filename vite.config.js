@@ -5,9 +5,9 @@ import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   plugins: [
-    /* Replaces @vitejs/plugin-react: the router's plugin owns the React
-       transform as well as the routing, and running both would apply it
-       twice. It is also what writes the prerendered HTML — see
+    /* This owns the React transform as well as the routing, which is why
+       there is no separate React plugin — running both would apply the
+       transform twice. It is also what writes the prerendered HTML; see
        `react-router.config.js`. */
     reactRouter(),
     tailwindcss(),

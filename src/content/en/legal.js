@@ -15,7 +15,7 @@
  *
  * BOTH CHANGES NEED A HUMAN TO SIGN THEM OFF. This is legal text, not
  * marketing copy, and the client's lawyer has not seen this version. It is
- * tracked in TODO.md under Blocked.
+ * tracked in docs/TODO.md under Blocked.
  *
  * The cookie policy is new — the live site has no such page — and its table
  * of cookies is not written here. It is generated from `config/vendors.js`,

@@ -48,10 +48,10 @@ decided in advance rather than discovered later.
 
 ## Where work is recorded
 
-- `TODO.md` — what is **planned**: Done / Now / Future, plus Blocked and
+- `docs/TODO.md` — what is **planned**: Done / Now / Future, plus Blocked and
   Decided. Every instruction lands on a list _before_ it is built. If it is
   not said whether something is for now or later, ask.
-- `ISSUES.md` — what is **wrong**. An issue goes in when found, whether or not
+- `docs/ISSUES.md` — what is **wrong**. An issue goes in when found, whether or not
   anyone intends to fix it.
 
 Move items to Done the moment they are true, with the commit hash.

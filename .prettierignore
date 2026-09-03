@@ -11,4 +11,4 @@ package-lock.json
 src/styles/fonts.css
 
 # Session notes are prose, wrapped by hand where the meaning wants a break.
-SESSION-NOTES*.md
+docs/SESSION-NOTES*.md

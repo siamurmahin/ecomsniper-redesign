@@ -98,7 +98,7 @@ export default function LegalPage({ which }) {
               back to the banner is on the page the footer's cookie link
               already points at. It lives here rather than in the footer
               because the footer is inside a lazy boundary that does not
-              hydrate on a cold load — see TODO.md. Route content does. */}
+              hydrate on a cold load — see docs/TODO.md. Route content does. */}
           <button
             type="button"
             onClick={reset}

@@ -22,7 +22,7 @@ import ExitIntentOffer from './ExitIntentOffer';
  * when hydration runs, so React renders nothing where the server rendered all
  * of this and abandons the markup — visible, but owned by nobody and wired to
  * nothing. A banner that works only for a visitor with a warm cache is not a
- * consent mechanism. It lives in `root.jsx` now. See TODO.md: the same fault
+ * consent mechanism. It lives in `root.jsx` now. See docs/TODO.md: the same fault
  * is why nothing else in here responds either.
  */
 export default function SiteChrome() {
