@@ -1,4 +1,19 @@
-* text=auto
+# `eol=lf`, not just `text=auto`.
+#
+# The repository content is already LF and always was — `text=auto` sees to
+# that on the way in. What it does not control is the way out: the working
+# tree is left to each machine's git config, and `core.autocrlf=true`, the
+# Windows default, writes CRLF back. Prettier is configured `endOfLine: lf`
+# and reads the working tree, so `npm run format:check` fails on a Windows
+# clone for any file git has re-checked-out, while CI on Linux passes on
+# exactly the same commit.
+#
+# A check that passes in one place and fails in another is worse than one that
+# fails everywhere: it teaches people to ignore it. `eol=lf` makes the working
+# tree LF on every platform whatever the local config, so the two agree.
+#
+# Every binary type below is exempted — `eol` would corrupt them.
+* text=auto eol=lf
 
 *.png binary
 *.jpg binary

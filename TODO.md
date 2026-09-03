@@ -22,11 +22,10 @@ session.
 Nothing in flight. The environment work is finished and verified; the items
 below are what it left behind.
 
-| #   | Task                                                                            | Why it matters                                                                                                                                                                                                                                                                        |
-| --- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Remove the reveal probe — `src/lib/revealProbe.js` and four lines in `root.jsx` | It answered its question. Gated behind `?probe=reveal` so a normal visit neither runs nor downloads it, but it is diagnostic code sitting in a public repo                                                                                                                            |
-| 2   | Normalise line endings and get CI green                                         | `prettier --check` fails on ~171 files from CRLF committed long before this work — 146 already failed at `e94f8e2`. It is the **first** step in the Quality workflow, so every check after it is being skipped. A whitespace-only commit, but a large one, so it wants a quiet moment |
-| 3   | The last expensive frame                                                        | Worst frame in the first second is still ~83ms after everything in Done. Total blocking work halved; this one frame did not move. Not yet attributed                                                                                                                                  |
+| #   | Task                                                                            | Why it matters                                                                                                                                             |
+| --- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Remove the reveal probe — `src/lib/revealProbe.js` and four lines in `root.jsx` | It answered its question. Gated behind `?probe=reveal` so a normal visit neither runs nor downloads it, but it is diagnostic code sitting in a public repo |
+| 3   | The last expensive frame                                                        | Worst frame in the first second is still ~83ms after everything in Done. Total blocking work halved; this one frame did not move. Not yet attributed       |
 
 ---
 

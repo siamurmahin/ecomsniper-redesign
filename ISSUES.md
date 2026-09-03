@@ -20,21 +20,26 @@ who can fix it. When one is fixed it moves to **Closed** with the commit.
 
 ## Open
 
-### 1. CI never gets past its first step — `high`
+### 1. ~~CI never gets past its first step~~ — withdrawn, was a bad measurement
 
-`prettier --check` fails on ~171 files. The cause is CRLF committed to the
-repo while `.prettierrc.mjs` sets `endOfLine: 'lf'`.
+**This issue was wrong and is kept for the record.** It claimed CI was blocked
+by CRLF committed to the repository. Neither half was true.
 
-**Pre-existing, and not from this work** — a clean export of `e94f8e2`, before
-any of it, already fails on 146 files. It passes locally only because a
-working tree that has been touched recently has LF.
+The repository content is LF and always was: `git ls-files --eol` reports 191
+text files at `i/lf` and none at `i/crlf`. CI checks out on Linux, gets LF,
+and prettier passes.
 
-Formatting is the **first** step in `.github/workflows/quality.yml`, so lint,
-build, budget and Lighthouse never run at all. Every quality gate on the
-project is effectively off.
+What produced the false reading was the test itself. `git archive` on Windows
+applies `core.autocrlf`, so the "clean export" I measured had CRLF that no CI
+runner would ever see — 48 CRLF pairs in the archive against 0 in the blob. An
+earlier `grep -c` compounded it by counting every line rather than the CRLF
+ones.
 
-**Fix:** a `prettier --write .` pass and a whitespace-only commit. Large diff,
-no behaviour change. Owner: us, whenever a quiet moment allows.
+There was a real problem underneath, a smaller one: `core.autocrlf=true` writes
+CRLF into a **Windows working tree**, so `npm run format:check` failed locally
+on 28 files while passing in CI on the same commit. A check that passes in one
+place and fails in another teaches people to ignore it. Fixed by `eol=lf` in
+`.gitattributes` — one line, no source file touched.
 
 ### 2. Eight footer links are soft-404s — `high`
 
