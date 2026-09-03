@@ -36,6 +36,11 @@ export const overlay = {
       description:
         'Aktuell eine offene Stelle: Videoeditor in Vollzeit, remote. Wenn nichts passt, erzähl uns trotzdem, was du machst.',
     },
+    affiliate: {
+      title: 'Partnerprogramm — Bedingungen | EcomSniper',
+      description:
+        'Die vollständigen Bedingungen des EcomSniper-Partnerprogramms: Aufnahme, Zuordnung von Empfehlungen, Provisionen, Auszahlung und Beendigung.',
+    },
     privacy: {
       title: 'Datenschutzerklärung — EcomSniper',
       description:

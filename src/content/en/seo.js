@@ -42,6 +42,11 @@ export const SEO = {
     description:
       'One open role right now: a full time video editor, remote. If nothing fits, tell us what you do anyway — we would rather hear from someone good than miss them.',
   },
+  affiliate: {
+    title: 'Affiliate programme terms — EcomSniper',
+    description:
+      'The full terms of the EcomSniper affiliate programme: who can join, how referrals are credited, how commissions are paid, and what ends a partnership.',
+  },
   privacy: {
     title: 'Privacy Policy — EcomSniper',
     description:

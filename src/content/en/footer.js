@@ -33,6 +33,7 @@ export const FOOTER = {
         { label: 'About', href: '/about' },
         { label: 'Blog', href: 'https://ecomsniper.io/blog' },
         { label: 'Careers', href: '/careers' },
+        { label: 'Affiliate', href: '/affiliate' },
         { label: 'Contact', href: 'https://ecomsniper.io/contact' },
       ],
     },
