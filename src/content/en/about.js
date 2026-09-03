@@ -102,11 +102,11 @@ export const ABOUT = {
        photograph and is deliberately not carried over — see
        `docs/source-copy/about.md`. Photographs still to be supplied. */
     gallery: [
-      { caption: 'School supplies for children', alt: 'Supporting education' },
-      { caption: 'Time spent at the orphanage', alt: 'Orphanage visit' },
-      { caption: 'School supplies distribution', alt: 'Community support' },
-      { caption: 'Medical support program', alt: 'Medical assistance' },
-      { caption: 'Orphanage visit', alt: 'Education program' },
+      { caption: 'School supplies for children', alt: 'Supporting education', image: 'education' },
+      { caption: 'Time spent at the orphanage', alt: 'Orphanage visit', image: 'orphanage' },
+      { caption: 'School supplies distribution', alt: 'Community support', image: 'supplies' },
+      { caption: 'Medical support program', alt: 'Medical assistance', image: 'medical' },
+      { caption: 'Orphanage visit', alt: 'Education program', image: 'visit' },
     ],
     closer: 'We share this because you are part of it now. Not to impress.',
   },
@@ -181,6 +181,7 @@ export const ABOUT = {
       text: 'I remember spending full weekends on work that went nowhere. That feeling stuck with me. It is why I care about not wasting other people’s time. Time is the one thing you cannot get back.',
       name: 'Sammy',
       role: 'Founder',
+      portraitAlt: 'Sammy, founder of EcomSniper',
     },
   },
 

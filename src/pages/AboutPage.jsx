@@ -7,6 +7,7 @@ import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import AboutHero from '../components/about/AboutHero';
 import GivingGallery from '../components/about/GivingGallery';
+import { SAMMY_PORTRAIT } from '../assets/giving';
 import ProofBarSection from '../sections/ProofBarSection';
 import { toneOf } from '../lib/signalTones';
 
@@ -206,10 +207,15 @@ export default function AboutPage() {
           data-reveal
           data-reveal-group="founder"
         >
-          {/* Portrait to come from the client — see the gallery component. */}
-          <div className="grid size-24 place-items-center overflow-hidden rounded-full border border-hairline bg-paper text-[0.55rem] uppercase tracking-[0.16em] text-muted/70 sm:size-28">
-            Portrait
-          </div>
+          <img
+            src={SAMMY_PORTRAIT.src}
+            alt={team.quote.portraitAlt}
+            width={SAMMY_PORTRAIT.width}
+            height={SAMMY_PORTRAIT.height}
+            loading="lazy"
+            decoding="async"
+            className="size-24 rounded-full border border-hairline object-cover sm:size-28"
+          />
 
           <div>
             <blockquote className="font-serif text-[1.35rem] italic leading-snug">
