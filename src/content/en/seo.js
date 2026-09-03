@@ -32,6 +32,11 @@ export const SEO = {
     description:
       'A free 83 page playbook on how eBay dropshipping actually works with no stock, no website and no experience. Includes whether it is even allowed, and who EcomSniper is wrong for.',
   },
+  about: {
+    title: 'About us — EcomSniper',
+    description:
+      'Why we are careful with money that was hard to earn: what we will not do, what happens when it does not work out, and where part of what you pay goes.',
+  },
   privacy: {
     title: 'Privacy Policy — EcomSniper',
     description:

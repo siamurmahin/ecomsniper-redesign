@@ -26,6 +26,11 @@ export const overlay = {
       description:
         'Ein kostenloses Playbook auf 83 Seiten darüber, wie eBay-Dropshipping wirklich funktioniert — ohne Ware, ohne Website, ohne Erfahrung. Inklusive der Frage, ob es überhaupt erlaubt ist, und für wen EcomSniper das Falsche ist.',
     },
+    about: {
+      title: 'Über uns — EcomSniper',
+      description:
+        'Warum wir vorsichtig mit Geld umgehen, das hart verdient war: was wir nicht tun, was passiert, wenn es nicht klappt, und wohin ein Teil von dem geht, was du zahlst.',
+    },
     privacy: {
       title: 'Datenschutzerklärung — EcomSniper',
       description:
