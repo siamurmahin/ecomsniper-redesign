@@ -47,15 +47,15 @@ export const SITE = {
   ],
 };
 
-/* The nav maps this page plus the routes that exist. About is a real page
-   now; Contact still goes to the live site, as the footer already does. */
+/* The nav maps this page, not the site. About points at our founders
+   section until that page is rebuilt; Contact goes to the live site. */
 export const NAV_LINKS = [
   /* In the order the page actually runs, measured not assumed. The routes
      and the outside link come last, because they leave the page. */
   { label: 'Proof', href: '/#proof' },
   { label: 'How it works', href: '/#how-it-works' },
   { label: 'Training', href: '/#training' },
-  { label: 'About', href: '/about' },
+  { label: 'About', href: '/#founders' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: 'https://ecomsniper.io/contact' },

@@ -19,6 +19,12 @@ session.
 
 ## Now
 
+- **Rebuild the About page.** Design withdrawn on request 4 Sep. Everything
+  expensive is kept: the corrected full capture in `docs/source-copy/about.md`,
+  the copy in `content/en|de/about.js`, and six optimised photographs in
+  `src/assets/giving/`. The last built version is commit `db6a56f` — start
+  from their layout, not from ours.
+
 - **The About photographs.** Their giving gallery is five images plus a
   founder portrait, and we have none of them. Either we pull them from their
   site and optimise, or the client sends originals. The page renders labelled
@@ -96,17 +102,18 @@ All of the above exist in both languages.
 
 ### To build
 
-| #   | Page                    | Route on their site                                   | Notes                                                              |
-| --- | ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
-| 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                         |
-| 2   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                     |
-| 3   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                          |
-| 4   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                          |
-| 5   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                          |
-| 6   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug** |
-| 7   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`           |
-| 8   | Blog index              | `/blog`                                               |                                                                    |
-| 9   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below             |
+| #   | Page                    | Route on their site                                   | Notes                                                                       |
+| --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
+| 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                  |
+| 2   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                              |
+| 3   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                   |
+| 4   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
+| 5   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
+| 6   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**          |
+| 7   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
+| 8   | Blog index              | `/blog`                                               |                                                                             |
+| 9   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                      |
+| 10  | About                   | `/about`                                              | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
 
 ### Decided 3 Sep
 
