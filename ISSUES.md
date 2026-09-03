@@ -87,15 +87,7 @@ Ruled out by measurement: fonts (metric-matched, 0px delta), images (CLS
 
 **Fix:** unknown. Needs another profiling pass. Owner: us.
 
-### 6. Diagnostic code is in the repo — `low`
-
-`src/lib/revealProbe.js` and four lines in `root.jsx`. Behind `?probe=reveal`
-and dynamically imported, so a normal visit neither runs nor downloads it —
-but it is temporary code in a public repo and its question is answered.
-
-**Fix:** delete both. Owner: us.
-
-### 7. 115KB of dead CSS ships on every deploy — `low`
+### 6. 115KB of dead CSS ships on every deploy — `low`
 
 `@react-router/dev` moves a stylesheet from the server build into
 `build/client`, where nothing links it. Confirmed orphaned: no HTML or JS in
@@ -106,7 +98,7 @@ is false and copies it when true. Costs deploy size, not visitor bandwidth.
 
 **Fix:** a post-build prune, if it ever matters. Owner: us.
 
-### 8. "Prerendered" is less literal than it sounds — `low`
+### 7. "Prerendered" is less literal than it sounds — `low`
 
 82% of the prerendered HTML — 425KB of 518KB — is delivered inside
 `<div hidden id="S:0">` and moved into place by inline script, because
@@ -120,7 +112,7 @@ container.
 **Fix:** none proposed. Recorded so nobody relies on the HTML being
 straightforwardly readable. Owner: us, if it ever matters.
 
-### 9. Metric-matched fallbacks are exact only where Arial and Georgia exist — `low`
+### 8. Metric-matched fallbacks are exact only where Arial and Georgia exist — `low`
 
 The fallback faces are measured against Arial and Georgia. Android substitutes
 its own fonts, so the match there is approximate rather than the 0px measured
@@ -147,3 +139,4 @@ on desktop — still far closer than an unadjusted fallback.
 | `font-display: swap` with no metric overrides: Arial rendered a body paragraph 24px shorter than Montserrat                                                                                            | `1cd66b2`          |
 | The marquee's CSS sat in a lazy chunk while its markup was prerendered — a 366px reflow                                                                                                                | `8513d61`          |
 | First layout of the whole 15,700px document cost 494ms with no JavaScript involved                                                                                                                     | `a504959`          |
+| Diagnostic reveal probe left in the repo after its question was answered                                                                                                                               | `6423349`          |

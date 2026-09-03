@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, useLocation } from 'react-router';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
 import SmoothScrollProvider from './components/layout/SmoothScrollProvider';
 import SiteHeader from './components/layout/SiteHeader';
 import { useContent } from './hooks/useContent';
@@ -105,14 +105,6 @@ export function Layout({ children }) {
  */
 export default function Root() {
   const { SITE } = useContent();
-
-  /* TEMPORARY — remove with `lib/revealProbe.js` once the late-reveal question
-     on mobile is answered. Only `?probe=reveal` loads it, and only then is the
-     chunk fetched, so a normal visit neither runs nor downloads any of it. */
-  useEffect(() => {
-    if (!new URLSearchParams(location.search).has('probe')) return;
-    import('./lib/revealProbe').then((m) => m.startRevealProbe());
-  }, []);
 
   return (
     <SmoothScrollProvider>
