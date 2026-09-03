@@ -201,6 +201,51 @@ and so will the next 11 pages. Raised, not yet decided.
 
 ---
 
+## 7b. The audit of their live site
+
+Run after the About page, for a client deliverable. Everything measured
+directly; evidence in `docs/AUDIT-THEIR-SITE.md`, presentation published
+as a separate artifact.
+
+The finding that carries it: **16 URLs return a byte-identical 6,024-byte
+file**, every one canonicalising to the homepage. Their whole site tells Google
+to index the homepage instead of it. Alongside that — no analytics of any kind
+while a Reddit pixel runs, no consent tooling while Clarity records EU
+sessions, a German page with no footer and `lang="en"`, and zero overlap
+between the 12 live blog posts and the 9 in the sitemap.
+
+Two traps worth keeping:
+
+- **Their Lighthouse SEO score is 100.** It renders JavaScript and grades one
+  page in isolation, so it cannot see sixteen pages claiming to be one. Say it
+  before the client runs Lighthouse themselves.
+- **HTTP 200 does not prove a social profile exists.** Instagram, TikTok, X and
+  LinkedIn all return 200 for profiles that do not. Two were verified by
+  content, the rest marked unverified rather than guessed.
+
+And one correction: an earlier note claimed their sitemap listed dead blog
+URLs. It does not — those posts render fine. The real problem is the reverse,
+and `source-copy/blog.md` has been fixed.
+
+Two findings that touch our own build: `t.me/ecomsniper` is a personal
+account rather than the community, and it is in our footer; and `@EcomSniper`
+on X belongs to an unrelated dormant account. Both are with the user.
+
+---
+
+## 7c. Careers
+
+`816ece3`. Static list, no filters over a single role. The role description is
+left blank on purpose — theirs reads "This is a one liner description" in
+production, and a job advert is a promise about work and pay.
+
+**The budget is now the constraint.** 557KB of 560KB. The growth is the
+router's route manifest at roughly 1KB per route, eager because hydration
+cannot start without the route table. Ten pages left, three kilobytes of room.
+Raised with the user before building further.
+
+---
+
 ## 8. Housekeeping
 
 Session notes are now a standing rule: **one dated note per day**, updated as
