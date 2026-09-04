@@ -98,9 +98,10 @@ export const PRODUCT_HUNTER = {
       handoff: 'Send to AI Lister',
     },
 
-    /* Eight rows rather than five. At five the panel finished well short of
-       the column beside it and left a hole; the table is also more convincing
-       long, because the point of the tool is that it does this in bulk. */
+    /* Five rows, and five is the ceiling for every list on this page. Eight
+       was tried and read as a data table rather than a glance — the panel is
+       an illustration of the mechanic, not the whole run, and the count in the
+       footer is what carries the scale. */
     rows: [
       {
         name: 'Garden kneeler and seat',
@@ -113,9 +114,6 @@ export const PRODUCT_HUNTER = {
       { name: 'Cordless glue gun kit', ebay: '£42.00', amazon: '£19.75', gap: '£22.25', hit: true },
       { name: 'Reusable produce bags', ebay: '£9.99', amazon: '£8.80', hit: false },
       { name: 'Car boot organiser', ebay: '£31.95', amazon: '£14.20', gap: '£17.75', hit: true },
-      { name: 'Draught excluder, 90cm', ebay: '£16.75', amazon: '£7.60', gap: '£9.15', hit: true },
-      { name: 'Laundry sorter, 3 bag', ebay: '£27.40', amazon: '£24.95', hit: false },
-      { name: 'Loft ladder hook set', ebay: '£22.50', amazon: '£9.99', gap: '£12.51', hit: true },
     ],
 
     /* What the seller's profile shows before anything is extracted. */
@@ -125,8 +123,6 @@ export const PRODUCT_HUNTER = {
       'Cordless glue gun kit with 30 sticks',
       'Reusable produce bags, mesh, 12 pack',
       'Car boot organiser, collapsible',
-      'Draught excluder, 90cm, grey',
-      'Laundry sorter, 3 bag, on wheels',
     ],
 
     titles: [
@@ -135,21 +131,17 @@ export const PRODUCT_HUNTER = {
       'CORDLESS GLUE GUN KIT WITH 30 STICKS',
       'REUSABLE PRODUCE BAGS MESH 12 PACK',
       'CAR BOOT ORGANISER COLLAPSIBLE',
-      'DRAUGHT EXCLUDER 90CM GREY',
-      'LAUNDRY SORTER 3 BAG ON WHEELS',
-      'LOFT LADDER HOOK SET HEAVY DUTY',
     ],
 
     /* Step three is the answer, not the search again: what came back, and
-       what it is now ready for. */
+       what it is now ready for. Four matched and one not, so the panel is
+       honest that a scan does not resolve everything. */
     matches: [
       { name: 'Garden kneeler and seat', price: '£11.40', ready: true },
       { name: 'Cordless glue gun kit', price: '£19.75', ready: true },
       { name: 'Car boot organiser', price: '£14.20', ready: true },
       { name: 'Draught excluder, 90cm', price: '£7.60', ready: true },
-      { name: 'Loft ladder hook set', price: '£9.99', ready: true },
       { name: 'Stainless steel mixing bowls', ready: false },
-      { name: 'Laundry sorter, 3 bag', ready: false },
     ],
   },
 

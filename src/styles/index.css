@@ -455,9 +455,19 @@
     animation-delay: var(--hunt-delay, 0s);
   }
 
-  /* The margin found on a row worth listing. Fires as the beam reaches it. */
+  /* A row worth listing both resolves and flashes, and it has to declare BOTH
+     animations in one list.
+
+     It did not, and the bug was invisible rows: `.is-running .hunt-hit` and
+     `.is-running .hunt-row` have the same specificity, so the later rule won
+     the `animation` shorthand outright and replaced `hunt-resolve` with
+     `hunt-flag`. `hunt-flag` only touches background-color, so every flagged
+     row kept the `opacity: 0` it starts at — three of the five rows in the
+     hero table never appeared at all. */
   .is-running .hunt-hit {
-    animation: hunt-flag 1.1s ease-out var(--hunt-delay, 0s) 2;
+    animation:
+      hunt-resolve 0.5s var(--ease-out-expo) var(--hunt-delay, 0s) 1 normal forwards,
+      hunt-flag 1.1s ease-out var(--hunt-delay, 0s) 2;
   }
 
   /* The sweep. One pass per cycle, the length of the whole stagger. */
