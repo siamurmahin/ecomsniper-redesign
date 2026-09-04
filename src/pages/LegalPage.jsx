@@ -142,6 +142,25 @@ export default function LegalPage({ which, doc: ownCopy }) {
               {paragraph}
             </p>
           ))}
+
+          {/* A section that cites an outside document links to it. Its own
+              line rather than an anchor inside the prose, because the copy
+              deck holds strings and the alternative is either splitting a
+              sentence across three keys or putting markup in the deck and
+              trusting it — and content is untrusted by rule. `noreferrer`
+              with `noopener` so a policy page cannot leak a referrer. */}
+          {section.link ? (
+            <p className="mt-3 text-base leading-relaxed">
+              <a
+                href={section.link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink underline underline-offset-2"
+              >
+                {section.link.label}
+              </a>
+            </p>
+          ) : null}
         </section>
       ))}
 

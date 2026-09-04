@@ -23,8 +23,22 @@ export const overlay = {
         {
           heading: 'Hinweis zur Website',
           body: [
-            'Wir nutzen Google Analytics, ausgeliefert über den Google Tag Manager, um zu verstehen, wie die Seite genutzt wird, und sie zu verbessern. Nichts davon läuft, bevor du zustimmst — Analyse- und Marketing-Cookies sind standardmäßig aus, und im Cookie-Banner triffst du die Wahl.',
+            'Wir nutzen Microsoft Clarity sowie Google Analytics, ausgeliefert über den Google Tag Manager, um zu verstehen, wie die Seite genutzt wird, und um Produkt und Werbung zu verbessern. Nichts davon läuft, bevor du zustimmst — Analyse- und Marketing-Cookies sind standardmäßig aus, und im Cookie-Banner triffst du die Wahl.',
           ],
+        },
+        {
+          /* Ihr Abschnitt, am 4. Sep auf Wunsch wieder aufgenommen. Diese
+             Position muss mit der englischen Fassung übereinstimmen: der Merge
+             arbeitet über den Index, und ein Abschnitt, der nur auf einer Seite
+             eingefügt wird, verschiebt alle folgenden. */
+          heading: 'Angaben zum Datenschutz',
+          body: [
+            'Bei EcomSniper arbeiten wir mit Microsoft Clarity und Microsoft Advertising zusammen, um auszuwerten, wie Besucherinnen und Besucher unsere Website nutzen. Wir verwenden Verhaltensdaten wie Heatmaps, Sitzungsaufzeichnungen und Klick-Tracking, um unsere Dienste zu verbessern. Die Erhebung erfolgt über Erst- und Drittanbieter-Cookies; die Daten können für Werbung, Betrugsprävention und die Optimierung der Website genutzt werden. Weitere Angaben stehen in der Microsoft-Datenschutzerklärung.',
+          ],
+          link: {
+            label: 'Microsoft-Datenschutzerklärung',
+            href: 'https://privacy.microsoft.com/de-DE/privacystatement',
+          },
         },
         {
           heading: 'Welche Daten wir erheben',

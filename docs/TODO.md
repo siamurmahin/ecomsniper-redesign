@@ -19,6 +19,23 @@ session.
 
 ## Now
 
+- **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
+  live privacy copy. Clarity is not gone: it comes back beside the GTM
+  container rather than replacing it. Built the way GTM is — declared in
+  `config/vendors.js`, loaded only from `src/third-party/`, consent-gated, and
+  **inert until `VITE_CLARITY_ID` is set**, so it costs a visitor nothing until
+  the client hands over an id. Behind **marketing**, not analytics: Clarity
+  syncs with Microsoft Advertising and sets `MUID`, and their own policy says
+  the data may be used for advertising. Same rule already written against GTM —
+  the consent has to cover the worst thing a vendor might do.
+
+- **Their Privacy Policy Disclosures section, restored verbatim.** Decided
+  4 Sep. The Clarity and Microsoft Advertising paragraph, and the Microsoft
+  Privacy Statement link, go back in as they wrote them. The **implied-consent
+  sentence does not** — "By using our site, you consent to this data being
+  collected" is not valid consent under GDPR and contradicts a banner that
+  asks. That single change stands until someone says otherwise.
+
 - **Clause 6.1 of the terms contradicts the rest of the site.** Their terms
   promise a flat 30-day refund from the date of purchase; the client told us it
   is monthly-plan only, and every marketing page here says so. It ships as they
@@ -69,7 +86,7 @@ In the order the work wants to happen, not the order it was asked.
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight                             | **Pricing confirmation.** Do not start before it                                         |
 | 2   | **New pages** — nine, listed in the Pages section below                                                                                                                                              | Slug decisions and copy, per that section                                                |
-| 3   | **Wire GTM for real** — loader, consent gate and cookie policy are built and inert                                                                                                                   | `VITE_GTM_ID`                                                                            |
+| 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                                               | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                         |
 | 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                                                      | Deferred by decision until the move to the client's server                               |
 | 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                                                      | Real captures from the client                                                            |
 | 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                                                         | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
@@ -195,7 +212,7 @@ come from the index, and their sitemap is advertising URLs that may 404.
 | Storyblok pricing                     | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — schemas get built against whatever plan they buy                                                                                                                                                     |
 | GTM container ID                      | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but never loads                                                                                                                                                                                                                                                                    |
 | Legal text needs sign-off             | The privacy copy is the client's own with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy, the terms' German translation and the whole German deck are new. **No lawyer has read any of it.** See the headers of `src/content/en/legal.js` and `en/terms.js` |
-| Clarity vs GTM                        | The live privacy policy names Microsoft Clarity and Microsoft Advertising; the 3 Sep plan named GTM/GA4/Meta/TikTok. Built GTM-only. The client needs to confirm Clarity is genuinely going, and update the live policy text to match                                                                                                    |
+| Microsoft Clarity project id          | **Answered 4 Sep: Clarity stays, alongside GTM.** Declared in vendors.js, consent-gated behind marketing, inert until VITE_CLARITY_ID is set. Until it is, the privacy policy names a vendor the build does not load — ISSUES.md 11                                                                                                      |
 | Privacy policy contradicts the banner | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission                                                                                                                                                                         |
 | Footer links                          | Those still pointing at `https://ecomsniper.io/*` are soft-404s on their site: `/about`, `/blog`, `/contact`. Careers, affiliate and terms now point at our own routes                                                                                                                                                                   |
 

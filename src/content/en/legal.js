@@ -8,10 +8,13 @@
  *
  * 1. "By using our site, you consent to this data being collected" is
  *    implied consent. It is not valid under GDPR and it contradicts the
- *    banner, which asks. Replaced with what the banner actually does.
- * 2. Microsoft Clarity and Microsoft Advertising are named throughout the
- *    live copy. This build loads neither — one GTM container carries GA4,
- *    Meta and TikTok. The disclosure names what actually loads.
+ *    banner, which asks. Replaced with what the banner actually does. This is
+ *    now the ONLY thing that differs from their document.
+ * 2. ~~Microsoft Clarity and Microsoft Advertising dropped.~~ Reversed on
+ *    4 Sep: the client confirmed Clarity comes back alongside GTM, so their
+ *    "Privacy policy disclosures" section is restored verbatim and Clarity is
+ *    declared in `config/vendors.js` and loaded from `third-party/clarity.js`,
+ *    behind the marketing category. Like GTM it is inert until its id is set.
  *
  * BOTH CHANGES NEED A HUMAN TO SIGN THEM OFF. This is legal text, not
  * marketing copy, and the client's lawyer has not seen this version. It is
@@ -43,8 +46,24 @@ export const LEGAL = {
       {
         heading: 'Site disclosure',
         body: [
-          'We use Google Analytics, delivered through Google Tag Manager, to understand how visitors use this site so we can improve it. None of it runs until you allow it — analytics and marketing cookies are off by default, and the cookie banner is where you choose.',
+          'We use Microsoft Clarity, and Google Analytics delivered through Google Tag Manager, to understand how visitors use this site so we can improve our product experience and advertising. None of it runs until you allow it — analytics and marketing cookies are off by default, and the cookie banner is where you choose.',
         ],
+      },
+      {
+        /* Their section, restored verbatim on request 4 Sep, including the
+           Microsoft Privacy Statement link. The one sentence of theirs that is
+           still not here is the implied-consent line from the disclosure above
+           — "By using our site, you consent to this data being collected and
+           used" — which is not valid consent under GDPR and contradicts a
+           banner that asks. */
+        heading: 'Privacy policy disclosures',
+        body: [
+          'At EcomSniper, we partner with Microsoft Clarity and Microsoft Advertising to analyze how visitors interact with our website. We use behavioral data such as heatmaps, session recordings, and click tracking to improve our services. Data is collected via first- and third-party cookies and may be used for advertising, fraud prevention, and site optimization. For more, see the Microsoft Privacy Statement.',
+        ],
+        link: {
+          label: 'Microsoft Privacy Statement',
+          href: 'https://privacy.microsoft.com/en-US/privacystatement',
+        },
       },
       {
         heading: 'What we collect',

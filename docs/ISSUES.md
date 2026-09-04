@@ -189,6 +189,30 @@ on desktop — still far closer than an unadjusted fallback.
 
 **Fix:** none sensible without per-platform measurement. Owner: us.
 
+### 11. The privacy policy names three vendors the cookie policy does not list — `medium`
+
+The privacy page names Microsoft Clarity, Microsoft Advertising and Google Tag
+Manager. The cookie policy's table, three clicks away, is **empty**.
+
+Both are correct on their own terms, which is what makes this worth writing
+down. The table is generated from `config/vendors.js` and deliberately excludes
+any vendor with no id — "the policy describes what this build actually loads,
+not what it could load if someone filled in an env var". None of
+`VITE_GTM_ID`, `VITE_CLARITY_ID` or `VITE_TAWK_ID` is set, so nothing loads and
+nothing is listed. The privacy copy is the client's own document and describes
+the service they run.
+
+A reader cannot see that distinction. They see a policy admitting to session
+recordings and an advertising identifier, and a cookie table saying this site
+sets nothing.
+
+It resolves itself the moment the ids arrive — the table fills in from the
+declarations already written. It becomes a real defect only if the site ships
+to production with the copy naming vendors and the ids still empty.
+
+**Fix:** the ids, which are already on the Blocked list. Check this before
+launch rather than after. Owner: client for the ids, us for the check.
+
 ---
 
 ## Closed

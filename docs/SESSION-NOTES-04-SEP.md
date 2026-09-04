@@ -327,3 +327,75 @@ header broke the build with a parse error 15 lines below where the comment
 actually ended. Also: backticks in a bash `node -e` string are command
 substitution, and they silently ate spans of prose from three different files
 before it was noticed. **Write prose with the file tools, not through a shell.**
+
+---
+
+## 8. Clarity comes back, and the privacy policy goes back to theirs
+
+The client pasted their live privacy copy. Checked against the live page before
+acting on it — 3,349 characters, eleven sections, and it matches the paste.
+Their page carries **no "Last Updated" line at all**, while its own Policy
+Updates section promises "we will revise the Date".
+
+Eight of their eleven sections were already carried across essentially verbatim.
+The gap was the two that name Microsoft.
+
+### The 3 Sep decision was reversed, and the site moved instead of the copy
+
+On 3 Sep the rebuild dropped Microsoft Clarity and Microsoft Advertising from
+the policy, reasoning that a policy must not name a vendor the site does not
+load. Sound reasoning, wrong direction: **Clarity was never going away.** Asked
+rather than assumed, and the client confirmed it comes back alongside GTM.
+
+So their "Privacy Policy Disclosures" section is restored **verbatim** —
+heatmaps, session recordings, click tracking, first- and third-party cookies,
+the Microsoft Privacy Statement linked — and the site was changed to match the
+document rather than the document cut to match the site.
+
+**One sentence of theirs is still not here**, and it is now the only divergence
+in the whole policy: _"By using our site, you consent to this data being
+collected and used."_ That is implied consent. It is not valid under GDPR and it
+contradicts a banner that asks. Kept out, and said so rather than done quietly.
+
+### Clarity sits behind marketing, not analytics
+
+A heatmap tool instinctively reads as analytics. It is not, here: Clarity
+integrates with Microsoft Advertising and sets `MUID`, an advertising identifier
+shared across Microsoft properties, and their own copy says the data "may be
+used for advertising". The rule was already written in this repo against the GTM
+container — _the consent has to cover the worst thing the vendor might do, not
+the mildest_ — and a session recorder is the most invasive thing this site can
+load. Marketing.
+
+### What it cost
+
+Built the way GTM already is: declared in `config/vendors.js` with its six
+cookies, loaded only from `src/third-party/clarity.js`, consent-gated, and
+**inert until `VITE_CLARITY_ID` is set** — with no id it creates no script at
+all, which was asserted on the built page (`0` scripts from `clarity.ms`,
+`window.clarity` undefined).
+
+**559KB → 561KB eager, 14KB spare.** That is the loader and the declaration;
+the runtime cost today is zero, and lands only when the client supplies an id.
+
+`.env.example` documented none of the three vendor ids it needs. All three are
+in it now.
+
+### A link in a legal page, without putting markup in the deck
+
+Their section ends by linking the Microsoft Privacy Statement inline. The copy
+deck holds strings, and the alternatives were splitting one sentence across
+three keys or putting HTML in content and trusting it — and content is untrusted
+by rule. A section now takes an optional `link: { label, href }`, rendered on
+its own line with `rel="noopener noreferrer"` so a policy page cannot leak a
+referrer. German links the German statement.
+
+### What this leaves open
+
+**The privacy policy now names three vendors and the cookie table lists none.**
+Both are right on their own terms: the table is generated and excludes any
+vendor without an id, and no id is set. A reader cannot see that distinction —
+they see a policy admitting to session recordings above a table saying this site
+sets no cookies. It fixes itself when the ids arrive, and becomes a real defect
+only if the site ships without them. `ISSUES.md` 11, to be checked before
+launch.

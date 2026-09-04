@@ -42,6 +42,31 @@ export const VENDORS = [
     ],
   },
   {
+    name: 'clarity',
+    label: 'Microsoft Clarity',
+    /* Behind marketing rather than analytics, which is not where a heatmap
+       tool instinctively belongs. Clarity integrates with Microsoft
+       Advertising and sets `MUID`, an advertising identifier shared across
+       Microsoft properties, and the client's own policy says the data may be
+       used for advertising. Same rule as the GTM container above: the consent
+       has to cover the worst thing the vendor might do, not the mildest.
+
+       It records sessions — heatmaps, clicks, scrolls and replay. That is the
+       most invasive thing this site loads, which is the other reason it sits
+       behind the strictest optional category. */
+    category: 'marketing',
+    id: env('VITE_CLARITY_ID'),
+    privacyUrl: 'https://privacy.microsoft.com/en-US/privacystatement',
+    cookies: [
+      { name: '_clck', purpose: 'analytics', retention: '1 year' },
+      { name: '_clsk', purpose: 'analytics', retention: '1 day' },
+      { name: 'CLID', purpose: 'analytics', retention: '1 year' },
+      { name: 'MUID', purpose: 'marketing', retention: '390 days' },
+      { name: 'ANONCHK', purpose: 'marketing', retention: '10 minutes' },
+      { name: 'SRM_B', purpose: 'marketing', retention: '390 days' },
+    ],
+  },
+  {
     name: 'tawk',
     label: 'Tawk.to live chat',
     /* Essential, but not loaded until it is opened — see `third-party/tawk`.

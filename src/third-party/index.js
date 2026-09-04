@@ -14,6 +14,7 @@
 import { OPTIONAL_CATEGORIES } from '../config/consent';
 import { vendorsInCategory } from '../config/vendors';
 import { updateConsent } from '../consent/consentMode';
+import { loadClarity } from './clarity';
 import { loadGtm } from './gtm';
 
 /**
@@ -22,7 +23,7 @@ import { loadGtm } from './gtm';
  * Tawk is deliberately absent: it is essential, and it loads on click from
  * the launcher rather than from a consent decision. See `tawk.js`.
  */
-const LOADERS = { gtm: loadGtm };
+const LOADERS = { gtm: loadGtm, clarity: loadClarity };
 
 /**
  * Act on a decision.
