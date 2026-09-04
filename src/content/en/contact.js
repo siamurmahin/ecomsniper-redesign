@@ -51,6 +51,11 @@ export const CONTACT = {
 
   hours: 'Support is 24/7. Any hour.',
 
+  /* The same promise as `hours`, set to run round a ring. Padded with a
+     separator so it fills the circle evenly; the seal reads it aloud as one
+     sentence rather than as loose characters. */
+  seal: '24/7 SUPPORT • ANY HOUR • ',
+
   form: {
     /* Real labels, because their page has them and losing them would be a
        regression in a rebuild that fixed six accessibility defects. */

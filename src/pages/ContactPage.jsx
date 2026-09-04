@@ -7,6 +7,7 @@ import { toneOf } from '../lib/signalTones';
 import Icon from '../components/ui/Icon';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
+import CircularSeal from '../components/ui/CircularSeal';
 
 /**
  * Contact.
@@ -206,7 +207,7 @@ export default function ContactPage() {
             <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
             <span className="size-2 rounded-full bg-signal-green-soft" />
           </span>
-          {CONTACT.hours}
+          {CONTACT.eyebrow}
         </p>
 
         <h1
@@ -264,6 +265,15 @@ export default function ContactPage() {
                 />
               ))}
             </ul>
+
+            {/* The seal fills the space `mt-auto` opens between the methods
+                and the second door, and restates the page's promise as a
+                continuous thing rather than a line of text. The eyebrow pill
+                above said the same words; a ring that never stops turning
+                says them better, so the pill went back to being an eyebrow. */}
+            <div className="mt-8 flex justify-end">
+              <CircularSeal text={CONTACT.seal} className="text-signal-green-soft" />
+            </div>
 
             {/* The second door, at the foot of the panel: the way out for
                 someone who came to ask whether this is worth it and would

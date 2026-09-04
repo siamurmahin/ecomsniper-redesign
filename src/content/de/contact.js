@@ -27,6 +27,7 @@ export const overlay = {
     ],
 
     hours: 'Support rund um die Uhr. Zu jeder Stunde.',
+    seal: 'SUPPORT RUND UM DIE UHR • ',
 
     form: {
       name: { label: 'Dein Name', placeholder: 'John Carter' },

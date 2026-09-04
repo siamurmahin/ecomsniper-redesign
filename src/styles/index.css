@@ -428,6 +428,41 @@
     animation: brand-drift 12s ease-in-out infinite;
   }
 
+  /* --- The seal ----------------------------------------------------------
+     Text around a ring with a glyph in the middle. Each letter is rotated to
+     its place on the circle and pushed out by its own padding, so the ring
+     scales with the font size rather than needing measured coordinates.
+
+     In the initial stylesheet, not a component CSS import: the markup is
+     prerendered, and a rule that arrives with a lazy chunk would let the
+     letters land in a stack before it applies. */
+  .circular-seal {
+    @apply relative grid size-[7.5rem] shrink-0 place-items-center;
+  }
+
+  .circular-seal-ring {
+    @apply absolute inset-0;
+    animation: seal-spin var(--seal-spin, 26s) linear infinite;
+  }
+
+  .circular-seal-ring span {
+    @apply absolute inset-0 font-label text-[0.6rem] font-semibold tracking-[0.08em] uppercase;
+    /* The rotation puts the letter on the ring; the padding sets the radius. */
+    padding-top: 0.55rem;
+    text-align: center;
+    transform-origin: center;
+  }
+
+  .circular-seal-glyph {
+    @apply grid size-9 place-items-center rounded-full;
+  }
+
+  @keyframes seal-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   /* The hero's colour floor, lifted out of `HeroSection` so a second page can
      stand on it: two soft radials, red on the copy side and blue on the panel
      side. The dot texture over it is the canvas `HeroDots`, the same component
