@@ -19,14 +19,12 @@ session.
 
 ## Now
 
-- **Terms and conditions — `/terms-and-conditions`.** In flight 4 Sep. Their
-  page is **not** empty: fifteen numbered sections, headed "Last Updated:
-  Tue Mar 18 2025". The 3 Sep note recording it as blank was a page read before
-  it had hydrated — the fifth time that mistake has been made here. The capture
-  was re-verified clause by clause against the live page before a line was
-  built: 37 clauses, 44 of 45 strings byte-identical. Reproduced verbatim,
-  defects included; the defects are client questions in `ISSUES.md` rather
-  than quiet corrections. A contract is not ours to edit.
+- **Clause 6.1 of the terms contradicts the rest of the site.** Their terms
+  promise a flat 30-day refund from the date of purchase; the client told us it
+  is monthly-plan only, and every marketing page here says so. It ships as they
+  wrote it, because a contract is not ours to edit — but the terms are the
+  document that governs, so the client has to decide which is true.
+  **Before launch.** `ISSUES.md` 2b carries this and two smaller defects.
 
 - **Rebuild the About page.** Design withdrawn on request 4 Sep. Everything
   expensive is kept: the corrected full capture in `docs/source-copy/about.md`,
@@ -106,6 +104,7 @@ payments and auth are out of this phase.
 | About          | `/about` — their copy, refund qualified to the monthly plan    |
 | Careers        | `/careers` — static list; role description awaited from client |
 | Affiliate      | `/affiliate` — their full terms, 11 clauses, both languages    |
+| Terms          | `/terms-and-conditions` — their 15 sections, verbatim          |
 
 All of the above exist in both languages.
 
@@ -114,7 +113,6 @@ All of the above exist in both languages.
 | #   | Page                    | Route on their site                                   | Notes                                                                       |
 | --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
 | 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                  |
-| 2   | Terms and conditions    | `/terms-and-conditions`                               | In the sitemap. The guarantee copy leans on it                              |
 | 3   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                   |
 | 4   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
 | 5   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
@@ -149,9 +147,11 @@ All of the above exist in both languages.
 All twelve pages read from their live site and written to `source-copy/`,
 each after `readyState === 'complete'`. Nothing left to extract.
 
-Three of them cannot be rebuilt as-is:
+Two of them cannot be rebuilt as-is. **Terms was listed here as a third and
+should not have been** — the capture was taken before their page had hydrated,
+and the page has fifteen full sections. Built in `42e0361`; the finding is
+withdrawn as `ISSUES.md` 2.
 
-- **Terms** has no copy at all — see issue 2.
 - **Dropship Mastery** is the most claim-heavy page on their site: a
   "Six-Figure" income claim in an H2, a personal "$1,000,000 on eBay" figure,
   "over 2 billion transactions daily" for eBay stated as fact, and a
@@ -174,22 +174,25 @@ come from the index, and their sitemap is advertising URLs that may 404.
 - **Whether the blog is nine static posts or a CMS collection.** Nine today,
   and a blog only grows. If posts are going into Storyblok this waits for it
   rather than being built twice.
-- **Copy for About, Contact, Terms and Careers.** These make factual claims
-  about the business. Their live pages are the source, but Terms in particular
-  should not be transcribed without the client confirming it is current.
+- **Copy for About, Contact and Careers.** These make factual claims about the
+  business, and their live pages are the source.
+- **Confirmation that the terms are current.** Now transcribed verbatim from
+  their page, dated 18 March 2025 — but a transcription is not a confirmation,
+  and clause 6.1 already disagrees with what the client told us about refunds.
+  See Now, and `ISSUES.md` 2b.
 
 ---
 
 ## Blocked — needs the client
 
-| Item                                  | Detail                                                                                                                                                                                                                                                                                         |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Storyblok pricing                     | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — schemas get built against whatever plan they buy                                                                                                           |
-| GTM container ID                      | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but never loads                                                                                                                                                                                                                          |
-| Legal text needs sign-off             | The privacy copy is the client's own with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy and the entire German translation are new. **No lawyer has read any of it.** See the header of `src/content/en/legal.js` |
-| Clarity vs GTM                        | The live privacy policy names Microsoft Clarity and Microsoft Advertising; the 3 Sep plan named GTM/GA4/Meta/TikTok. Built GTM-only. The client needs to confirm Clarity is genuinely going, and update the live policy text to match                                                          |
-| Privacy policy contradicts the banner | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission                                                                                                                               |
-| Footer links                          | Eight point at `https://ecomsniper.io/*` pages that are soft-404s: `/about`, `/blog`, `/careers`, `/contact`, `/terms-and-conditions`. The legal ones matter most — the guarantee copy leans on a refund policy that is not there                                                              |
+| Item                                  | Detail                                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Storyblok pricing                     | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — schemas get built against whatever plan they buy                                                                                                                                                     |
+| GTM container ID                      | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but never loads                                                                                                                                                                                                                                                                    |
+| Legal text needs sign-off             | The privacy copy is the client's own with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy, the terms' German translation and the whole German deck are new. **No lawyer has read any of it.** See the headers of `src/content/en/legal.js` and `en/terms.js` |
+| Clarity vs GTM                        | The live privacy policy names Microsoft Clarity and Microsoft Advertising; the 3 Sep plan named GTM/GA4/Meta/TikTok. Built GTM-only. The client needs to confirm Clarity is genuinely going, and update the live policy text to match                                                                                                    |
+| Privacy policy contradicts the banner | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission                                                                                                                                                                         |
+| Footer links                          | Those still pointing at `https://ecomsniper.io/*` are soft-404s on their site: `/about`, `/blog`, `/contact`. Careers, affiliate and terms now point at our own routes                                                                                                                                                                   |
 
 ---
 
@@ -219,6 +222,9 @@ come from the index, and their sitemap is advertising URLs that may 404.
 | 3 Sep 2026 | **Accessibility.** Six real markup defects — a `<dl>` of `<div>`s, `aria-label` on a bare `<span>`, `<h4>` under `<h2>`, focusable content inside `aria-hidden`, two accessible names not containing their visible text. Score 82 → 100                                                                                     | `88c081d` |
 | 4 Sep 2026 | **Client deck spec.** `docs/CLIENT-DECK.md` — 20 slides, white ground and black text, one red accent, written as build instructions for Canva. Every figure measured; the file says so and forbids inventing any                                                                                                            | `44b47bc` |
 | 4 Sep 2026 | **Affiliate terms, in both languages.** Their full 11-clause document; not a signup page, theirs has no form either. Footer gained the Affiliate row it was missing                                                                                                                                                         | `299ccac` |
+| 4 Sep 2026 | **Terms and conditions, in both languages.** Never blocked — their page has 15 sections; the "empty page" note was a read before hydration, now withdrawn as `ISSUES.md` 2. Capture verified both ways before building: 37 of 37 clauses, 44 of 45 strings verbatim. Three defects reproduced, not fixed, and raised as 2b  | `42e0361` |
+| 4 Sep 2026 | **Terms copy kept out of the eager deck.** In `content/*/legal.js` it cost 20KB eager on every route and fired the budget at 578KB. Moved to page-owned `content/en\|de/terms.js` behind `usePageContent`; 559KB with 16KB spare, +2KB all manifest                                                                         | `42e0361` |
+| 4 Sep 2026 | **Sitemap listed 8 URLs against 16 prerendered pages.** Careers, affiliate, privacy and cookies had all shipped without being added. Now 18, matching `react-router.config.js`                                                                                                                                              | `42e0361` |
 | 4 Sep 2026 | **Eager ceiling 560KB → 575KB.** Route-manifest growth, ~1KB per route, eager because hydration needs the route table. Agreed before building further; the 15KB comes back out of the router runtime later                                                                                                                  | `11a69f1` |
 | 3 Sep 2026 | **Careers, in both languages.** Static list, no filters over a single role. The listing description is left blank rather than invented — theirs is placeholder text in production                                                                                                                                           | `816ece3` |
 | 3 Sep 2026 | **Audit of their live site.** 16 URLs, both languages, sitemap, tracking, markup and social measured directly; evidence in `docs/AUDIT-THEIR-SITE.md`, client fact sheet published separately. Corrected one earlier wrong claim about their sitemap                                                                        | `816ece3` |
