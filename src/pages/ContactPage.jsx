@@ -207,7 +207,7 @@ export default function ContactPage() {
             <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
             <span className="size-2 rounded-full bg-signal-green-soft" />
           </span>
-          {CONTACT.eyebrow}
+          {CONTACT.hours}
         </p>
 
         <h1
@@ -260,26 +260,18 @@ export default function ContactPage() {
               className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-white/[0.07] to-transparent"
             />
 
-            {/* The seal, stamped into the corner the wash already lights, which
-                was the one part of this panel with nothing in it. In the flow
-                it floated in the middle of the block with air on both sides;
-                a seal belongs at an edge, the way one does on a document.
-
-                Hidden below `sm`: on a phone the panel is narrow enough that a
-                120px ring would sit on the heading, and the promise is still
-                in the copy either way. */}
-            <CircularSeal
-              text={CONTACT.seal}
-              className="absolute top-5 right-5 hidden text-signal-green-soft sm:grid"
-            />
-
             {/* Same shape as the form panel opposite: a title, a note, a rule.
                 A heading on one side of a two-column layout and not the other
                 reads as something half-finished. */}
-            {/* Right padding from sm up keeps the note clear of the seal
-                stamped into that corner; below sm the seal is hidden and the
-                copy takes the full width. */}
-            <div className="border-b border-ink-line pb-5 sm:pr-36">
+            {/* The seal sits above the title, in the flow. Absolutely placed
+               in the corner it overlapped the note, and a stamp that lands on
+               the words it is meant to sit beside is worse than one with less
+               drama. */}
+            <div className="mb-7 flex justify-end">
+              <CircularSeal text={CONTACT.seal} className="text-signal-green-soft" />
+            </div>
+
+            <div className="border-b border-ink-line pb-5">
               <p className="font-display text-xl font-extrabold tracking-tight text-paper">
                 {CONTACT.methodsTitle}
               </p>

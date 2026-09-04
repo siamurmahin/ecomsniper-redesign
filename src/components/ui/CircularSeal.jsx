@@ -1,5 +1,3 @@
-import ReticleMark from './ReticleMark';
-
 /**
  * Text set around a ring, turning slowly, with the brand mark in the middle.
  *
@@ -55,7 +53,11 @@ export default function CircularSeal({ text, spinSeconds = 26, className = '' })
           screen reader, so they are hidden and the phrase is given once. */}
       <span className="sr-only">{text.replace(/\s*[•·]\s*/g, '. ').trim()}</span>
 
-      <ReticleMark className="circular-seal-mark" />
+      {/* The favicon itself, not a redrawn copy of it. `public/favicon.svg` is
+          667 bytes, scales to any size, and is the one file that cannot fall
+          out of step with the mark in the browser tab. Decorative here — the
+          words around it already name the company. */}
+      <img src="/favicon.svg" alt="" width="32" height="32" className="circular-seal-mark" />
     </div>
   );
 }

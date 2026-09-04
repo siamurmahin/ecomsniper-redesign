@@ -51,10 +51,14 @@ export const CONTACT = {
 
   hours: 'Support is 24/7. Any hour.',
 
-  /* The same promise as `hours`, set to run round a ring. Padded with a
-     separator so it fills the circle evenly; the seal reads it aloud as one
-     sentence rather than as loose characters. */
-  seal: '24/7 SUPPORT • ANY HOUR • ',
+  /* The words around the seal. Deliberately NOT the 24/7 promise: that is the
+     pill's line and it reads better up there, and a page that says the same
+     thing twice in two shapes is saying it once badly.
+
+     A seal says who and where — that is what a stamp on a document has always
+     said — and both facts are already on their own footer, so nothing here is
+     invented. Padded with a separator so it fills the ring evenly. */
+  seal: 'ECOMSNIPER • TORONTO, CANADA • ',
 
   form: {
     /* Real labels, because their page has them and losing them would be a
