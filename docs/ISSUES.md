@@ -41,28 +41,44 @@ on 28 files while passing in CI on the same commit. A check that passes in one
 place and fails in another teaches people to ignore it. Fixed by `eol=lf` in
 `.gitattributes` — one line, no source file touched.
 
-### 2. Their Terms and Conditions page is empty — `high`
+### 2. ~~Their Terms and Conditions page is empty~~ — withdrawn, wrong
 
+**Wrong, and kept for the same reason as issues 1 and 3.** It claimed
 `https://ecomsniper.io/terms-and-conditions` renders a heading, the line
-**"Last Updated: Invalid Date"**, and nothing else. Confirmed on a full page
-load with a screenshot: 423 characters in `<main>`, all of it navigation and
-footer.
+**"Last Updated: Invalid Date"** and nothing else, and concluded there was
+**no terms of service on a site taking $199 a month**. That was the strongest
+finding in this file about the client, and it was not true.
 
-Two problems in one page.
+Their page carries fifteen numbered sections — 9,730 characters, headed
+"Last Updated: Tue Mar 18 2025". Re-read on 4 Sep after
+`readyState === 'complete'` and a full scroll, then checked clause by clause:
+37 clauses. The full text is in `source-copy/terms-and-conditions.md`.
 
-There is **no terms of service**, on a site taking $199 a month. The refund
-promise, the guarantee copy and the footer all point at a document that does
-not exist. Their affiliate programme has full terms at `/affiliate/join`, so
-the omission looks accidental rather than deliberate.
+The original reading was taken before the page had hydrated. Fifth in that
+family this week, and the second time it produced a finding against the client
+rather than only a wrong note. **A screenshot of a half-loaded SPA is evidence
+of nothing.** The "Invalid Date" line was real at the time of reading and is
+not on the page now.
 
-And **"Invalid Date"** is a date-parsing bug rendered to visitors on a legal
-page — a literal `Invalid Date` string from an unparsed value.
+Rebuilt as `/terms-and-conditions` in both languages.
 
-This also blocks us: `/terms-and-conditions` is on the build list, to be
-written from their live copy, and there is no live copy to write from.
+### 2b. Three defects inside their terms — `medium`, owner: client
 
-**Fix:** the client supplies the terms. Nothing to rebuild until they do.
-Owner: client.
+Found while reproducing the document. All three are carried into the rebuild
+**verbatim**: a contract is not ours to silently edit, and a rebuild that
+quietly improves a binding document creates a second version of an agreement
+someone has already accepted.
+
+1. **Clause 6.1 promises a flat 30-day refund from the date of purchase.**
+   The client told us the refund is monthly-plan only — not the credits bundle,
+   not Enterprise — and every marketing page on the rebuild qualifies it that
+   way. Their terms do not, and the terms are the document that governs.
+   Either the qualification goes into clause 6.1 or the site is promising less
+   than the contract does. **This one needs answering before launch.**
+2. **Clause 9.3 contains the literal string `[USD$100]`** — square brackets
+   and all. An unfilled template placeholder sitting inside the liability cap.
+3. **Refunds are directed to `sammy@ecomsniper.io`**, a personal address,
+   while the published contact address is `management@ecomsniper.io`.
 
 ### 3. ~~Two of their four feature pages never finish loading~~ — withdrawn, wrong again
 

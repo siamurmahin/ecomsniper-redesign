@@ -12,6 +12,9 @@
  */
 export const overlay = {
   LEGAL: {
+    /** AGB: nur der Titel. Das Dokument liegt in `../de/terms.js` — siehe dort
+     *  und in `../en/legal.js`, warum es nicht in diesem Deck steht. */
+    terms: { title: 'Allgemeine Geschäftsbedingungen' },
     privacy: {
       title: 'Datenschutzerklärung',
       updated: 'Zuletzt aktualisiert am 3. September 2026',

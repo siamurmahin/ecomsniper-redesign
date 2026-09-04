@@ -40,6 +40,7 @@ export const CONTACT = {
 
 /** The routes that carry the site's legal text, unprefixed. */
 export const LEGAL_ROUTES = {
+  terms: '/terms-and-conditions',
   privacy: '/privacy-policy',
   cookies: '/cookie-policy',
 };

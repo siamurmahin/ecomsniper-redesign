@@ -7,24 +7,28 @@ import { declaredCookies } from '../config/vendors';
 import { reset } from '../consent/store';
 
 /**
- * One component for both legal pages.
+ * One component for all three legal pages.
  *
  * They are the same document with different words — a heading, a date, and a
- * list of sections that are prose, a list, or both. Two components would be
- * two places to fix a typo in the type scale.
+ * list of sections that are prose, a list, or both. Three components would be
+ * three places to fix a typo in the type scale.
  *
  * The cookie page adds one thing the privacy page does not: a table built
  * from `config/vendors.js` rather than from the copy deck. A policy listing
  * cookies by hand is a policy that describes whatever was true when someone
  * last remembered to edit it.
  *
- * @param {'privacy' | 'cookies'} which Which of the two documents to render.
+ * @param {'terms' | 'privacy' | 'cookies'} which Which document to render.
+ * @param {object} [doc] The document's own copy, already merged. The terms
+ *   pass this because their body is page-owned rather than in the global deck
+ *   — see `routes/terms.jsx`. Privacy and cookies are small and site-wide, so
+ *   they read the deck as before.
  */
-export default function LegalPage({ which }) {
+export default function LegalPage({ which, doc: ownCopy }) {
   const { LEGAL, CONSENT } = useContent();
   const { pathname } = useLocation();
   const language = languageFromPath(pathname);
-  const doc = LEGAL[which];
+  const doc = ownCopy ?? LEGAL[which];
   const cookies = which === 'cookies' ? declaredCookies() : [];
 
   return (
@@ -129,22 +133,35 @@ export default function LegalPage({ which }) {
               ))}
             </ul>
           ) : null}
+
+          {/* Clauses that come after the list rather than before it. The terms
+              need this — 3.2 and 3.3 follow the prohibited-acts list — and
+              without it they were being dropped silently. */}
+          {section.after?.map((paragraph) => (
+            <p key={paragraph} className="mt-3 text-base leading-relaxed text-muted">
+              {paragraph}
+            </p>
+          ))}
         </section>
       ))}
 
-      {/* Each policy points at the other. Someone who lands on one from a
-          search result should not have to go via the footer. */}
-      <p className="mt-12 border-t border-hairline pt-6 text-sm">
-        <Link
-          to={pathForLanguage(
-            which === 'cookies' ? LEGAL_ROUTES.privacy : LEGAL_ROUTES.cookies,
-            language,
-          )}
-          className="text-ink underline underline-offset-2"
-        >
-          {which === 'cookies' ? LEGAL.privacy.title : LEGAL.cookies.title}
-        </Link>
-      </p>
+      {/* Each document points at the other two. Someone who lands on one from
+          a search result should not have to go via the footer. This was a
+          binary swap between privacy and cookies until the terms arrived; it
+          reads the route table now, so a fourth document needs no edit here. */}
+      <nav className="mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t border-hairline pt-6 text-sm">
+        {Object.entries(LEGAL_ROUTES)
+          .filter(([key]) => key !== which)
+          .map(([key, route]) => (
+            <Link
+              key={key}
+              to={pathForLanguage(route, language)}
+              className="text-ink underline underline-offset-2"
+            >
+              {LEGAL[key].title}
+            </Link>
+          ))}
+      </nav>
     </article>
   );
 }

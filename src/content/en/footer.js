@@ -48,11 +48,12 @@ export const FOOTER = {
     },
     {
       title: 'Legal',
-      /* Privacy and cookies are this app's own routes now, prerendered in
-         both languages. Terms still points at the live site, which answers
-         200 for any path — it is on the list, not fixed. */
+      /* All three legal documents are this app's own routes now, prerendered
+         in both languages. Terms was the last one out: it pointed at the live
+         site while a note in this repo claimed their page was empty. It never
+         was — that was a page read before it had hydrated. */
       links: [
-        { label: 'Terms and conditions', href: 'https://ecomsniper.io/terms-and-conditions' },
+        { label: 'Terms and conditions', href: '/terms-and-conditions' },
         { label: 'Privacy policy', href: '/privacy-policy' },
         { label: 'Cookie policy', href: '/cookie-policy' },
         { label: 'Reviews', href: SITE.trustpilotUrl },

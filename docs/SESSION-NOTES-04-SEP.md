@@ -7,19 +7,19 @@ mid-session. Read that file's §6 for the measuring traps; they still apply.
 
 ## 1. Where this stopped, and what is next
 
-**9 pages left.** Affiliate is built and pushed.
+**8 pages left.** Affiliate and terms are built and pushed.
 
-| Next up             | State                                                        |
-| ------------------- | ------------------------------------------------------------ |
-| Contact             | Needs a form-endpoint decision — the only thing blocking it  |
-| Blog index + 1 post | Ships static; template shape captured                        |
-| Terms               | **Blocked** — their page is empty                            |
-| 4 feature pages     | Need the slug call (`/product-hunter` vs `/productHunterV6`)  |
-| Course              | Needs client sign-off on the income claims                   |
-| Affiliate landing   | New, optional — see §3                                       |
+| Next up             | State                                                             |
+| ------------------- | ----------------------------------------------------------------- |
+| Contact             | Needs a form-endpoint decision — the only thing blocking it       |
+| Blog index + 1 post | Ships static; template shape captured                             |
+| ~~Terms~~           | **Built.** It was never blocked — see §7                          |
+| 4 feature pages     | Need the slug call (`/product-hunter` vs `/productHunterV6`)       |
+| Course              | Needs client sign-off on the income claims                        |
+| About               | Rebuild from their layout; copy, research and photographs kept    |
+| Affiliate landing   | New, optional — see §3                                            |
 
-Branch state: everything on **`prerender`** through `299ccac`. `main`
-untouched.
+Branch state: everything on **`prerender`**. `main` untouched.
 
 ---
 
@@ -225,3 +225,105 @@ The 3 Sep note's §4 carried a claim that was later disproved — that their
 sitemap listed dead blog URLs. It has been corrected in place there, in
 `source-copy/blog.md`, and in `AUDIT-THEIR-SITE.md` §2. The real shape: 12 live
 posts, 9 in the sitemap, **0 in both**.
+
+---
+
+## 7. Terms — the page that was never blocked
+
+Built in both languages. It was on the Blocked list with "their page is empty",
+and that was wrong.
+
+### The fifth read-before-hydration, and the most expensive one
+
+Their `/terms-and-conditions` carries **fifteen numbered sections, 9,730
+characters**, headed "Last Updated: Tue Mar 18 2025". The 3 Sep capture recorded
+423 characters and the line "Last Updated: Invalid Date", and everything
+downstream followed from it: `source-copy/terms-and-conditions.md` said "there
+is no copy to capture", `ISSUES.md` carried **"there is no terms of service, on
+a site taking $199 a month"** as a high-severity finding about the client, the
+footer pointed at their live site, and the page went on the Blocked list to wait
+for a client who had nothing to send.
+
+Same shape as About, About's re-capture, the feature pages, and the blog
+sitemap. The difference is where it landed: this one became a written accusation
+that the client had not written their own terms.
+
+**Withdrawn in `ISSUES.md` as issue 2**, alongside the two already withdrawn
+there. Three of the file's first three issues are now retractions of
+measurements taken before a page had settled.
+
+### What was done differently
+
+The document was re-read after `readyState === 'complete'` plus a full scroll,
+then **every clause was checked against the live DOM before a line of the page
+was written** — both directions, ours against theirs and theirs against ours:
+
+| Check                                       | Result                                  |
+| ------------------------------------------- | --------------------------------------- |
+| Numbered clauses on their page found in ours | 37 of 37                                |
+| Our strings found verbatim in their page     | 44 of 45                                |
+| The one difference                           | §15 sets their two-line address as one  |
+
+That check is cheap and it is the only thing that separates this page from the
+last four mistakes. It stays part of capturing a page.
+
+### Three defects, reproduced rather than fixed
+
+A rebuild that quietly improves a binding document creates a second version of
+an agreement people have already accepted. So all three ship verbatim and go to
+the client as questions, in `ISSUES.md` as issue 2b:
+
+1. **Clause 6.1 promises a flat 30-day refund from the date of purchase.** The
+   client told us it is monthly-plan only, and every marketing page here says
+   so. Their terms do not — and in a dispute the terms are the document that
+   governs. **This one needs answering before launch.**
+2. **Clause 9.3 contains the literal `[USD$100]`**, square brackets and all — an
+   unfilled template placeholder inside a liability cap.
+3. **Refunds are directed to `sammy@ecomsniper.io`**, a personal address, while
+   the published contact address is `management@ecomsniper.io`.
+
+### The budget fired, and it was not the manifest
+
+First build came in at **578KB against the 575KB ceiling**. The 4 Sep note above
+says a fire that is not the route manifest is a real regression — so it was
+measured against a stashed baseline instead of assumed:
+
+| | baseline | first attempt | delta |
+| --- | --- | --- | --- |
+| route manifest | 12KB | 13KB | +1KB |
+| eager JS | 557KB | 578KB | **+21KB** |
+
+Only 1KB was the manifest. The other 20KB was the contract itself: it had gone
+into `content/en|de/legal.js`, which `content/en/index.js` re-exports, so both
+languages of a ~10KB legal document were **eager on every route** — downloaded
+by everyone who lands on the homepage and never opens a contract. Exactly the
+trap `CLAUDE.md` records from About, at three times the weight.
+
+Fixed the documented way rather than by raising the ceiling: the body moved to
+page-owned `content/en|de/terms.js`, imported by `routes/terms.jsx` and merged
+with `usePageContent`, so it lands in that route's lazy chunk. `LegalPage` takes
+an optional pre-merged `doc`; privacy and cookies are small and site-wide and
+still read the deck. Only the **title** stays in the deck, because the other two
+documents link to the terms by name.
+
+**Final: 559KB, 16KB spare.** +2KB on the baseline, all of it manifest.
+
+### Two things found on the way
+
+- **The sitemap was listing 8 URLs while 16 pages were prerendered.** Careers,
+  affiliate, privacy and cookies had all shipped without being added. Fixed with
+  terms rather than after it — a half-listed sitemap is one defect, not four.
+  Now 18 URLs, 9 pages × 2 languages, matching `react-router.config.js` exactly.
+- **`vite preview` serves the SPA fallback for an extensionless directory URL.**
+  `/terms-and-conditions` returned the homepage's title and `/pricing` did too,
+  so it is pre-existing and not a regression; `/terms-and-conditions/` with the
+  slash is correct, and so is the built file. Netlify serves these properly.
+  Read the file in `build/client` before believing the preview server.
+
+### A trap worth writing down
+
+`*/` inside a block comment closes it. The path `content/*/index.js` in a JSDoc
+header broke the build with a parse error 15 lines below where the comment
+actually ended. Also: backticks in a bash `node -e` string are command
+substitution, and they silently ate spans of prose from three different files
+before it was noticed. **Write prose with the file tools, not through a shell.**

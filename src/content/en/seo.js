@@ -42,6 +42,11 @@ export const SEO = {
     description:
       'The full terms of the EcomSniper affiliate programme: who can join, how referrals are credited, how commissions are paid, and what ends a partnership.',
   },
+  terms: {
+    title: 'Terms and Conditions — EcomSniper',
+    description:
+      'The terms you agree to when you use EcomSniper: what the software is licensed for, how billing and renewal work, the refund period, liability, and the law that governs the agreement.',
+  },
   privacy: {
     title: 'Privacy Policy — EcomSniper',
     description:

@@ -36,6 +36,11 @@ export const overlay = {
       description:
         'Die vollständigen Bedingungen des EcomSniper-Partnerprogramms: Aufnahme, Zuordnung von Empfehlungen, Provisionen, Auszahlung und Beendigung.',
     },
+    terms: {
+      title: 'Allgemeine Geschäftsbedingungen — EcomSniper',
+      description:
+        'Die Bedingungen, denen du mit der Nutzung von EcomSniper zustimmst: wofür die Software lizenziert ist, wie Abrechnung und Verlängerung laufen, die Rückerstattungsfrist, die Haftung und das anwendbare Recht.',
+    },
     privacy: {
       title: 'Datenschutzerklärung — EcomSniper',
       description:

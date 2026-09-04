@@ -75,4 +75,84 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+<url>
+    <loc>https://ecomsniper.io/careers</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/careers" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/careers" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/careers" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/careers</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/careers" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/careers" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/careers" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/affiliate</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/affiliate" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/affiliate" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/affiliate" />
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/affiliate</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/affiliate" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/affiliate" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/affiliate" />
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/terms-and-conditions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/terms-and-conditions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/terms-and-conditions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/terms-and-conditions" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/terms-and-conditions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/terms-and-conditions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/terms-and-conditions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/terms-and-conditions" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/privacy-policy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/privacy-policy" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/privacy-policy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/privacy-policy" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/cookie-policy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/cookie-policy" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/cookie-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/cookie-policy" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/cookie-policy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/cookie-policy" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/cookie-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/cookie-policy" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

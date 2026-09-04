@@ -22,6 +22,7 @@ export default [
   route('free-play-book', 'routes/playbook.jsx'),
   route('careers', 'routes/careers.jsx'),
   route('affiliate', 'routes/affiliate.jsx'),
+  route('terms-and-conditions', 'routes/terms.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
   route('cookie-policy', 'routes/cookies.jsx'),
 
@@ -31,6 +32,7 @@ export default [
   route('de/free-play-book', 'routes/playbook.jsx', { id: 'de-playbook' }),
   route('de/careers', 'routes/careers.jsx', { id: 'de-careers' }),
   route('de/affiliate', 'routes/affiliate.jsx', { id: 'de-affiliate' }),
+  route('de/terms-and-conditions', 'routes/terms.jsx', { id: 'de-terms' }),
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),
   route('de/cookie-policy', 'routes/cookies.jsx', { id: 'de-cookies' }),
 

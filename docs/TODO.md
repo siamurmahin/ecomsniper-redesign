@@ -19,6 +19,15 @@ session.
 
 ## Now
 
+- **Terms and conditions — `/terms-and-conditions`.** In flight 4 Sep. Their
+  page is **not** empty: fifteen numbered sections, headed "Last Updated:
+  Tue Mar 18 2025". The 3 Sep note recording it as blank was a page read before
+  it had hydrated — the fifth time that mistake has been made here. The capture
+  was re-verified clause by clause against the live page before a line was
+  built: 37 clauses, 44 of 45 strings byte-identical. Reproduced verbatim,
+  defects included; the defects are client questions in `ISSUES.md` rather
+  than quiet corrections. A contract is not ours to edit.
+
 - **Rebuild the About page.** Design withdrawn on request 4 Sep. Everything
   expensive is kept: the corrected full capture in `docs/source-copy/about.md`,
   the copy in `content/en|de/about.js`, and six optimised photographs in

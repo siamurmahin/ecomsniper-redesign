@@ -1,5 +1,5 @@
 /**
- * The privacy and cookie policies.
+ * The three legal documents: terms, privacy and cookies.
  *
  * The privacy text is the client's own, captured from
  * https://ecomsniper.io/privacy-policy on 3 Sep 2026 and kept close to
@@ -24,6 +24,17 @@
  */
 
 export const LEGAL = {
+  /**
+   * Terms: title only.
+   *
+   * The document itself is page-owned copy in `content/en|de/terms.js`, and
+   * deliberately not here. This deck is eager — the header and footer read it
+   * on every route — and the terms are ~10KB a language, so putting the body
+   * here cost 20KB of eager JS, measured, on every page including the ones
+   * nobody reads a contract from. The title stays because the privacy and
+   * cookie pages link to the terms by name.
+   */
+  terms: { title: 'Terms and Conditions' },
   privacy: {
     title: 'Privacy Policy',
     updated: 'Last updated 3 September 2026',
