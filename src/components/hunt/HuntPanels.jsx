@@ -63,26 +63,43 @@ const rowDelay = (i) => `${(SCAN_SECONDS + i * ROW_STEP).toFixed(2)}s`;
  */
 
 /**
- * The unscanned state of a row: bars where the values will be.
+ * The scanning state: what the panel looks like while the sweep is running.
  *
- * Sits over the real content and clears once the beam has passed, so the scan
- * reads as the cause of the result rather than as decoration beside it.
- * `aria-hidden`, because the values underneath are the real ones and a screen
- * reader should never be told about a loading state that is illustrative.
+ * This is the homepage's own "find products already selling" visual, from the
+ * first step of `FeatureTourSection` — a sunken ground, candidate cards with a
+ * coloured tile and bars where the values will be, each breathing on
+ * `step-row-in`, with the beam crossing them. Reusing it rather than inventing
+ * a second idea of what scanning looks like is the point: a reader who has
+ * seen the homepage recognises this as the same machine doing the same job.
+ *
+ * A flat set of grey bars was tried first and read as an empty table rather
+ * than as work in progress.
+ *
+ * It covers the real rows and clears when the sweep finishes, so the results
+ * arrive out of the scan instead of beside it. `aria-hidden`, because the real
+ * values are underneath and a screen reader should never be handed a loading
+ * state that is illustrative.
  */
-function SkeletonRow({ columns = 3 }) {
-  const widths = ['45%', '18%', '18%', '14%'];
-
+function ScanningState({ rows, tone, counts }) {
   return (
-    <span aria-hidden="true" className="hunt-skel">
-      {Array.from({ length: columns + 1 }, (_, i) => (
-        <span
-          key={i}
-          className={`h-2 rounded-full ${i === 0 ? 'flex-1' : ''} bg-ink/[0.09]`}
-          style={i === 0 ? undefined : { width: widths[i] }}
-        />
-      ))}
-    </span>
+    <div aria-hidden="true" className="hunt-scanning">
+      <ul className="grid gap-2">
+        {Array.from({ length: rows }, (_, i) => (
+          <li
+            key={i}
+            className="flex items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-sm"
+            style={{ animation: `step-row-in 1.6s ease-in-out ${i * 0.14}s infinite` }}
+          >
+            <span className={`size-7 shrink-0 rounded-md ${tone.tile}`} />
+            <span className="flex-1 space-y-1.5">
+              <span className="block h-1.5 w-3/4 rounded-full bg-ink/15" />
+              <span className="block h-1.5 w-1/2 rounded-full bg-ink/10" />
+            </span>
+            {counts ? <span className={`micro-label ${tone.text}`}>{counts[i]}</span> : null}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -136,16 +153,20 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
             <span className="micro-label w-14 text-right text-muted">{copy.verdict}</span>
           </div>
 
+          {/* No verdicts during the scan: a row labelled "gap" before the
+              sweep has finished gives the answer away, which is the same
+              fault as showing the count early. */}
+          <ScanningState rows={rows.length} tone={t} />
+
           <ul>
             {rows.map((row, i) => (
               <li
                 key={row.name}
                 style={{ '--hunt-delay': rowDelay(i) }}
-                className={`hunt-row relative grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
+                className={`hunt-row grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
                   row.hit ? 'hunt-hit' : ''
                 } ${i ? 'border-t border-hairline/70' : ''}`}
               >
-                <SkeletonRow columns={3} />
                 <span className="truncate text-sm text-ink">{row.name}</span>
                 <span className="text-right text-sm font-semibold text-ink tabular-nums">
                   {row.ebay}
@@ -289,16 +310,17 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
             <span className="micro-label w-16 text-right text-muted">{copy.state}</span>
           </div>
 
+          <ScanningState rows={matches.length} tone={t} />
+
           <ul>
             {matches.map((match, i) => (
               <li
                 key={match.name}
                 style={{ '--hunt-delay': rowDelay(i) }}
-                className={`hunt-row relative grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
+                className={`hunt-row grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
                   match.ready ? 'hunt-hit' : ''
                 } ${i ? 'border-t border-hairline/70' : ''}`}
               >
-                <SkeletonRow columns={2} />
                 <span className="truncate text-sm text-ink">{match.name}</span>
                 <span className="text-right text-sm text-muted tabular-nums">
                   {match.price ?? '—'}

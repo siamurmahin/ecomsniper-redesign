@@ -466,22 +466,34 @@
       forwards;
   }
 
-  /* Phase 1: a row waiting to be scanned. Bars where the values will be,
-     sitting over the real content until the beam has passed it.
+  /* Phase 1: the panel while the sweep is running.
+
+     The homepage's own scanning visual, sitting over the real rows until the
+     beam has finished: sunken ground, candidate cards breathing on
+     `step-row-in`. A flat set of grey bars was tried first and read as an
+     empty table rather than as work happening.
 
      Hidden without JavaScript: the real values are in the prerendered markup,
-     and a reader without script should get them rather than permanent bars. */
-  .hunt-skel {
-    @apply pointer-events-none absolute inset-0 z-10 flex items-center gap-4 bg-white px-4;
+     and a reader without script should get them rather than a permanent
+     placeholder. */
+  .hunt-scanning {
+    @apply pointer-events-none absolute inset-0 z-10 bg-ink/[0.035] p-3;
     opacity: 0;
   }
 
-  .js-motion .hunt-skel {
+  .js-motion .hunt-scanning {
     opacity: 1;
   }
 
-  .is-running .hunt-skel {
-    animation: hunt-skel-out 0.35s ease-out var(--hunt-delay, 0s) 1 normal forwards;
+  /* Cleared once, when the sweep ends — the rows resolve out of it. */
+  .is-running .hunt-scanning {
+    animation: hunt-skel-out 0.4s ease-out var(--hunt-scan, 2s) 1 normal forwards;
+  }
+
+  /* The cards stop breathing as the state clears, rather than animating
+     against their own fade. */
+  .is-running .hunt-scanning li {
+    animation-iteration-count: 2 !important;
   }
 
   /* The flash marking a row worth listing. One pass as the row lands, not a
