@@ -68,6 +68,16 @@
   status = 301
 
 [[redirects]]
+  from = "/aiListerV6"
+  to = "/ai-powered-lister"
+  status = 301
+
+[[redirects]]
+  from = "/de/aiListerV6"
+  to = "/de/ai-powered-lister"
+  status = 301
+
+[[redirects]]
   from = "/de/*"
   to = "/de/404/index.html"
   status = 404

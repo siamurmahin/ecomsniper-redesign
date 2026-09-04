@@ -47,6 +47,11 @@ export const SEO = {
     description:
       'Find eBay sellers pricing above Amazon, extract every title they have sold, and scan Amazon for all of them in one click. Three steps, then list with the AI Lister.',
   },
+  aiLister: {
+    title: 'AI Lister — list on eBay in minutes, or hundreds at once',
+    description:
+      'Pick a product, let the AI write the title, and press Opti List. One item in minutes, or hundreds at a time with the Bulk Lister.',
+  },
   contact: {
     title: 'Contact EcomSniper — a real person answers',
     description:

@@ -18,7 +18,7 @@ import Icon from '../ui/Icon';
 const SCAN_SECONDS = 2;
 const ROW_STEP = 0.16;
 
-function huntTiming(rowCount) {
+export function huntTiming(rowCount) {
   return {
     '--hunt-scan': `${SCAN_SECONDS}s`,
     /* The beam has crossed the whole panel before the last row lands. */
@@ -27,7 +27,7 @@ function huntTiming(rowCount) {
 }
 
 /** When row `i` resolves: after the sweep, then in turn. */
-const rowDelay = (i) => `${(SCAN_SECONDS + i * ROW_STEP).toFixed(2)}s`;
+export const rowDelay = (i) => `${(SCAN_SECONDS + i * ROW_STEP).toFixed(2)}s`;
 
 /**
  * The Product Hunter panels — the software working, drawn rather than
@@ -104,7 +104,7 @@ function ScanningState({ rows, tone, counts }) {
 }
 
 /** Window chrome, so a panel reads as software rather than as a chart. */
-function Frame({ title, note, children }) {
+export function Frame({ title, note, children }) {
   return (
     <figure className="overflow-hidden rounded-2xl border border-hairline bg-white shadow-float">
       <div className="flex items-center gap-2 border-b border-hairline bg-paper-sunk px-4 py-3">

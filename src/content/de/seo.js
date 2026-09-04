@@ -41,6 +41,11 @@ export const overlay = {
       description:
         'Finde eBay-Verkäufer, die über Amazon-Preis anbieten, lies alle ihre Titel aus und durchsuche Amazon mit einem Klick. Drei Schritte, danach einstellen mit dem AI Lister.',
     },
+    aiLister: {
+      title: 'AI Lister — in Minuten bei eBay einstellen, oder hunderte auf einmal',
+      description:
+        'Produkt wählen, die KI schreibt den Titel, „Opti List" drücken. Ein Artikel in Minuten, oder hunderte auf einmal mit dem Bulk Lister.',
+    },
     contact: {
       title: 'Kontakt zu EcomSniper — es antwortet ein Mensch',
       description:

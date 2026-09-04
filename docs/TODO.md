@@ -156,7 +156,6 @@ is no `/about` route today. It sits in To build below.
 
 | #   | Page                    | Route on their site                                   | Notes                                                                       |
 | --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| 3   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
 | 4   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
 | 5   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**          |
 | 6   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
