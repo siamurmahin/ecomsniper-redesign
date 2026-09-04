@@ -36,6 +36,11 @@ export const overlay = {
       description:
         'Die vollständigen Bedingungen des EcomSniper-Partnerprogramms: Aufnahme, Zuordnung von Empfehlungen, Provisionen, Auszahlung und Beendigung.',
     },
+    productHunter: {
+      title: 'Product Hunter — profitable eBay-Artikel finden und über Amazon beziehen',
+      description:
+        'Finde eBay-Verkäufer, die über Amazon-Preis anbieten, lies alle ihre Titel aus und durchsuche Amazon mit einem Klick. Drei Schritte, danach einstellen mit dem AI Lister.',
+    },
     contact: {
       title: 'Kontakt zu EcomSniper — es antwortet ein Mensch',
       description:

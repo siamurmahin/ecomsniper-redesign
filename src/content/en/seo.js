@@ -42,6 +42,11 @@ export const SEO = {
     description:
       'The full terms of the EcomSniper affiliate programme: who can join, how referrals are credited, how commissions are paid, and what ends a partnership.',
   },
+  productHunter: {
+    title: 'Product Hunter — find profitable eBay items to source from Amazon',
+    description:
+      'Find eBay sellers pricing above Amazon, extract every title they have sold, and scan Amazon for all of them in one click. Three steps, then list with the AI Lister.',
+  },
   contact: {
     title: 'Contact EcomSniper — a real person answers',
     description:

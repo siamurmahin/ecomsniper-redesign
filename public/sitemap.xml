@@ -172,4 +172,21 @@
     <priority>0.7</priority>
   </url>
 
+<url>
+    <loc>https://ecomsniper.io/product-hunter</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/product-hunter" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/product-hunter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/product-hunter" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/product-hunter</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/product-hunter" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/product-hunter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/product-hunter" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>

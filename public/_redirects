@@ -9,6 +9,13 @@
 /free-playbook     /free-play-book     301!
 /de/free-playbook  /de/free-play-book  301!
 
+# The feature pages keep the readable slug. Their site publishes both
+# spellings with different copy; the camelCase one 301s here rather than
+# being deleted, so anything already linking or indexed against it survives.
+# Decided 4 Sep — see docs/TODO.md.
+/productHunterV6     /product-hunter     301!
+/de/productHunterV6  /de/product-hunter  301!
+
 # Anything else is a 404, and says so. Every route is prerendered, so a URL
 # that reaches this rule does not exist; the SPA fallback this replaces
 # answered it with the homepage under a 200. German first, so /de/anything

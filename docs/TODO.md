@@ -104,19 +104,18 @@ below are what it left behind.
 
 In the order the work wants to happen, not the order it was asked.
 
-| #   | Task                                                                                                                                                                                                 | Waiting on                                                                               |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight                             | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages** — eight, listed in the Pages section below                                                                                                                                             | Slug decisions and copy, per that section                                                |
-| 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                                               | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                         |
-| 4   | **Playbook form endpoint** — the playbook form still fakes success; contact does not, it hands off to a mail client instead                                                                          | Deferred by decision until the move to the client's server                               |
-| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                                                      | Real captures from the client                                                            |
-| 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                                                         | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
-| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                                                   | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
-| 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                                                     |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
-| 9   | **Pick the feature-page slugs** — readable (`/product-hunter`) or `V6` (`/productHunterV6`). Both live now with different copy; nav points at `V6`, sitemap at readable. Whichever loses needs a 301 | The client. Blocks pages 5–8                                                             |
-| 10  | **Decide how Careers and Blog are edited** — static now by decision. Storyblok, markdown in the repo, or something else, once the whole site is up                                                   | The client, after the site is complete                                                   |
-| 11  | Login / registration / checkout                                                                                                                                                                      | Out of this phase entirely — payments and auth are not in scope                          |
+| #   | Task                                                                                                                                                                     | Waiting on                                                                               |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                         |
+| 2   | **New pages** — eight, listed in the Pages section below                                                                                                                 | Slug decisions and copy, per that section                                                |
+| 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                   | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                         |
+| 4   | **Playbook form endpoint** — the playbook form still fakes success; contact does not, it hands off to a mail client instead                                              | Deferred by decision until the move to the client's server                               |
+| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                            |
+| 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                             | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
+| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                       | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
+| 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                         |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
+| 10  | **Decide how Careers and Blog are edited** — static now by decision. Storyblok, markdown in the repo, or something else, once the whole site is up                       | The client, after the site is complete                                                   |
+| 11  | Login / registration / checkout                                                                                                                                          | Out of this phase entirely — payments and auth are not in scope                          |
 
 ---
 
@@ -157,7 +156,6 @@ is no `/about` route today. It sits in To build below.
 
 | #   | Page                    | Route on their site                                   | Notes                                                                       |
 | --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| 2   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                   |
 | 3   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
 | 4   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
 | 5   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**          |
@@ -165,6 +163,24 @@ is no `/about` route today. It sits in To build below.
 | 7   | Blog index              | `/blog`                                               |                                                                             |
 | 8   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                      |
 | 9   | About                   | `/about`                                              | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
+
+### Decided 4 Sep
+
+- **Feature-page slugs: the readable ones win.** `/product-hunter`,
+  `/ai-powered-lister`, `/competitor-research`. The `V6` spellings become
+  **301s onto them**, not deletions, so anything already linking or indexed
+  against `/productHunterV6` keeps working. Same rule as `/free-playbook`,
+  which is a 301 in `netlify.toml` and `public/_redirects` for the same
+  reason. Each redirect ships with its page, never before it — a 301 onto a
+  route that does not exist yet is a 301 onto a 404.
+- **Price Monitor takes `/price-monitor`.** Their site has only
+  `/priceMonitorV6` — no readable slug exists to inherit — so one is chosen to
+  match the other three rather than leaving one page speaking camelCase. The
+  `V6` spelling redirects onto it like the rest.
+- **Where two versions of the copy exist, the newer one is the source.** Both
+  spellings are live on their site with different words; `V6` reads as the
+  later rewrite. Checked page by page rather than assumed, and recorded in the
+  relevant `source-copy` file.
 
 ### Decided 3 Sep
 

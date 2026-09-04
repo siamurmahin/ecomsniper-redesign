@@ -55,6 +55,18 @@
 #
 # `public/_redirects` says the same thing and ships in the build, but that file
 # is easy to lose in a public/ clear-out — worth stating twice.
+# The feature pages keep the readable slug; the camelCase spelling 301s onto
+# it rather than being deleted. Decided 4 Sep — see docs/TODO.md.
+[[redirects]]
+  from = "/productHunterV6"
+  to = "/product-hunter"
+  status = 301
+
+[[redirects]]
+  from = "/de/productHunterV6"
+  to = "/de/product-hunter"
+  status = 301
+
 [[redirects]]
   from = "/de/*"
   to = "/de/404/index.html"
