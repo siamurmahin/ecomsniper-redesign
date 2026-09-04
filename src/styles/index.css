@@ -407,6 +407,40 @@
     animation: brand-drift 6s ease-in-out infinite;
   }
 
+  /* The same two-layer technique as `.btn-brand-outline`, at panel scale: a
+     paper fill clipped to the padding box over the brand ramp clipped to the
+     border box. Named once rather than inlined, because the trick is easy to
+     get subtly wrong and there is now more than one surface that wants it.
+
+     Used on the contact form — the one surface on that page that asks the
+     visitor for something, and so the one that earns the ramp. The drift is
+     slower than the button's; a panel this size sweeping at 6s reads as a
+     loading state. `prefers-reduced-motion` stops it globally, further down. */
+  .panel-brand-outline {
+    border: 2px solid transparent;
+    background-image:
+      linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size:
+      100% 100%,
+      220% 100%;
+    animation: brand-drift 12s ease-in-out infinite;
+  }
+
+  /* The hero's colour floor, lifted out of `HeroSection` so a second page can
+     stand on it: two soft radials, red on the copy side and blue on the panel
+     side. The dot texture over it is the canvas `HeroDots`, the same component
+     the homepage mounts — not a CSS imitation, because two dot fields that are
+     nearly the same read worse than one that is. */
+  .brand-ground::before {
+    content: '';
+    @apply pointer-events-none absolute inset-0 -z-30;
+    background-image:
+      radial-gradient(48rem 36rem at 12% 14%, rgb(208 33 42 / 0.06), transparent 68%),
+      radial-gradient(52rem 40rem at 88% 28%, rgb(0 100 210 / 0.09), transparent 70%);
+  }
+
   /* The fill is a background-image layer here too, so hover moves what can be
      interpolated: the ramp saturates, the label takes the accent. */
   .btn-brand-outline:hover {

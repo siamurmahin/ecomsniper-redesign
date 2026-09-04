@@ -24,6 +24,10 @@ export const CONTACT = {
   eyebrow: 'Contact',
   headline: 'How can we help?',
   lead: 'Ask once. We’ve got you.',
+  /* The ink panel's heading, over their line. The right-hand form panel has
+     one, and a heading on one side of a two-column layout and not the other
+     reads as an oversight. */
+  methodsTitle: 'Reach us directly',
   intro: 'Send a message and a real person gets back to you.',
 
   /* Their three, in their order. `href` decides whether it becomes a link:
@@ -56,6 +60,12 @@ export const CONTACT = {
       label: 'Your message',
       placeholder: 'Tell us what you need. We read every message ourselves.',
     },
+    /* The form panel's own heading. Their page has none: three unlabelled
+       inputs sit under the contact block with nothing saying what they are
+       for. */
+    panelTitle: 'Send a message',
+    panelNote: 'We read every one ourselves. No ticket numbers, no bots.',
+
     submit: 'Send message',
     sending: 'Sending…',
 
@@ -69,6 +79,15 @@ export const CONTACT = {
 
     done: 'Thanks — that reached us. We answer every message, usually the same day.',
     error: 'That did not send. Email us at management@ecomsniper.io and we will pick it up.',
+  },
+
+  /* The second door, the same offer the footer makes. It was hardcoded in
+     the component, which is content in a page file — it belongs here so it
+     translates with everything else. */
+  secondDoor: {
+    title: 'Not ready to ask yet?',
+    body: 'Take the free playbook and read it first. No card, no pressure.',
+    cta: { label: 'Get the free playbook', href: '/free-play-book' },
   },
 
   closing: 'The training, the software, and the people who guide you. All in one place.',

@@ -6,6 +6,7 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
 import Icon from '../components/ui/Icon';
 import CtaButton from '../components/ui/CtaButton';
+import HeroDots from '../components/hero/HeroDots';
 
 /**
  * Contact.
@@ -183,7 +184,15 @@ export default function ContactPage() {
        `PlaybookPage` sets its own top padding rather than using the band. The
        first section of a page has to clear the header and then leave room to
        breathe; a band between two sections does not. */
-    <section ref={ref} className="pt-36 pb-20 sm:pt-44 lg:pt-52 lg:pb-24">
+    <section
+      ref={ref}
+      className="brand-ground relative isolate overflow-hidden pt-36 pb-20 sm:pt-44 lg:pt-52 lg:pb-24"
+    >
+      {/* The same dot field the homepage hero mounts, not a CSS imitation of
+          it. Lazy, and its IntersectionObserver unmounts the canvas once this
+          section scrolls away, so the rAF loop does not outlive the view. */}
+      <HeroDots />
+
       <div className="site-shell">
         {/* The ink pill with its live dot — the homepage opens on this, and a
             page about 24/7 support is the one other place a "we are awake"
@@ -218,14 +227,14 @@ export default function ContactPage() {
           {CONTACT.lead}
         </p>
 
-        <div className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+        <div className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-14">
           {/* One ink panel holding every way to reach a person that does not
               depend on this form working, or on JavaScript running at all.
               Weighting it against the white form is the point: the block a
               hesitant visitor needs is the solid one, and the form is the
               optional half. */}
           <div
-            className="relative isolate overflow-hidden rounded-2xl bg-ink p-8 sm:p-10"
+            className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-ink p-8 sm:p-10"
             data-reveal
             data-reveal-group="contact-methods"
           >
@@ -236,11 +245,17 @@ export default function ContactPage() {
               className="pointer-events-none absolute -top-16 -right-16 -z-10 size-48 rounded-full bg-gradient-to-br from-signal-blue/25 to-transparent blur-3xl"
             />
 
-            <p className="text-[length:var(--text-lead)] leading-relaxed text-paper">
-              {CONTACT.intro}
-            </p>
+            {/* Same shape as the form panel opposite: a title, a note, a rule.
+                A heading on one side of a two-column layout and not the other
+                reads as something half-finished. */}
+            <div className="border-b border-ink-line pb-5">
+              <p className="font-display text-xl font-extrabold tracking-tight text-paper">
+                {CONTACT.methodsTitle}
+              </p>
+              <p className="mt-1.5 text-sm text-muted-dark">{CONTACT.intro}</p>
+            </div>
 
-            <ul className="mt-8 grid gap-6 border-t border-ink-line pt-8">
+            <ul className="mt-8 grid gap-6">
               {CONTACT.methods.map((method, i) => (
                 <MethodRow
                   key={method.label}
@@ -250,25 +265,44 @@ export default function ContactPage() {
               ))}
             </ul>
 
-            {/* The second door, the same one the footer offers: someone who
-                came here to ask whether it is worth it can read it instead. */}
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-ink-line pt-8">
-              <span className="font-serif text-lg italic text-muted-dark">
-                Not ready to ask yet?
+            {/* The second door, at the foot of the panel: the way out for
+                someone who came to ask whether this is worth it and would
+                rather read than write. `mt-auto` pins it to the bottom so the
+                panel's base lines up with the form's however the rows fall. */}
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-5 border-t border-ink-line pt-8">
+              <span className="min-w-0">
+                <span className="block font-display text-base font-extrabold tracking-tight text-paper">
+                  {CONTACT.secondDoor.title}
+                </span>
+                <span className="mt-1 block text-sm leading-relaxed text-muted-dark">
+                  {CONTACT.secondDoor.body}
+                </span>
               </span>
-              <CtaButton href="/free-play-book" variant="onInk">
-                Get the free playbook
+
+              <CtaButton href={CONTACT.secondDoor.cta.href} variant="onInk">
+                {CONTACT.secondDoor.cta.label}
               </CtaButton>
             </div>
           </div>
 
-          {/* The form, on a surface rather than floating on the page ground. */}
+          {/* The brand ramp runs in this panel's border and nowhere else on
+              the page. It is the one surface asking the visitor for something,
+              so it is the one that earns the emphasis — the same reason the
+              hero puts the ramp on its primary button and its marked phrase
+              and then stops. */}
           <form
             onSubmit={onSubmit}
-            className="card-paper grid gap-5 sm:p-8"
+            className="panel-brand-outline grid gap-5 rounded-2xl p-6 shadow-lift sm:p-8"
             data-reveal
             data-reveal-group="contact-form"
           >
+            <div className="border-b border-hairline pb-5">
+              <p className="font-display text-xl font-extrabold tracking-tight">
+                {form.panelTitle}
+              </p>
+              <p className="mt-1.5 text-sm text-muted">{form.panelNote}</p>
+            </div>
+
             <Field
               id="name"
               label={form.name.label}

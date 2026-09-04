@@ -13,6 +13,7 @@ export const overlay = {
     eyebrow: 'Kontakt',
     headline: 'Wie können wir helfen?',
     lead: 'Einmal fragen. Wir kümmern uns.',
+    methodsTitle: 'Direkt erreichen',
     intro: 'Schreib uns — es antwortet ein Mensch.',
 
     methods: [
@@ -34,6 +35,9 @@ export const overlay = {
         label: 'Deine Nachricht',
         placeholder: 'Schreib, was du brauchst. Wir lesen jede Nachricht selbst.',
       },
+      panelTitle: 'Schreib uns',
+      panelNote: 'Wir lesen jede Nachricht selbst. Keine Ticketnummern, keine Bots.',
+
       submit: 'Nachricht senden',
       sending: 'Wird gesendet …',
 
@@ -44,6 +48,12 @@ export const overlay = {
       done: 'Danke — das ist bei uns angekommen. Wir antworten auf jede Nachricht, meist am selben Tag.',
       error:
         'Das ließ sich nicht senden. Schreib an management@ecomsniper.io, wir kümmern uns darum.',
+    },
+
+    secondDoor: {
+      title: 'Noch nicht bereit zu fragen?',
+      body: 'Nimm dir das kostenlose Playbook und lies es zuerst. Keine Karte, kein Druck.',
+      cta: { label: 'Kostenloses Playbook holen' },
     },
 
     closing: 'Die Schulung, die Software und die Menschen, die dich begleiten. Alles an einem Ort.',
