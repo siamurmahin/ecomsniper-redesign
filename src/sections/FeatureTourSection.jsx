@@ -1,10 +1,12 @@
 import ReticleMark from '../components/ui/ReticleMark';
 import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router';
 import CtaButton from '../components/ui/CtaButton';
 import Icon from '../components/ui/Icon';
 import SectionHeading from '../components/ui/SectionHeading';
 import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+import { languageFromPath, pathForLanguage } from '../lib/language';
 import { toneOf } from '../lib/signalTones';
 
 /**
@@ -17,30 +19,45 @@ import { toneOf } from '../lib/signalTones';
 
 /**
  * The named tools, as dashed accent pills like the live site draws them.
- * They link out to feature pages this rebuild does not have yet.
+ *
+ * Two of the four now exist here and two do not, so a pill is internal or
+ * external depending on its href — a relative one stays on this site, in the
+ * language the reader is already in, and an absolute one still opens their
+ * live page in a new tab. As the remaining feature pages land, the fix is a
+ * relative href in `content/en/home/features.js` and nothing here.
  */
 function ToolPills({ links }) {
+  const { pathname } = useLocation();
   if (!links?.length) return null;
+
+  /* Taller where it is a thumb doing the pressing: at `py-1.5` these measured
+     29px, which is a small target for a finger. They stay compact from `lg`,
+     where a pointer is doing it. */
+  const pillClass =
+    'group/pill inline-flex items-center gap-1.5 rounded-full border border-dashed border-accent/60 px-3.5 py-2.5 font-label text-[0.62rem] font-semibold uppercase tracking-[0.09em] text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-paper lg:px-3 lg:py-1.5';
+
+  const arrow = (
+    <Icon
+      name="arrowRight"
+      className="size-3 transition-transform duration-300 group-hover/pill:translate-x-0.5"
+    />
+  );
 
   return (
     <ul className="mt-5 flex flex-wrap gap-2">
       {links.map((link) => (
         <li key={link.label}>
-          <a
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            /* Taller where it is a thumb doing the pressing: at `py-1.5`
-               these measured 29px, which is a small target for a finger.
-               They stay compact from `lg`, where a pointer is doing it. */
-            className="group/pill inline-flex items-center gap-1.5 rounded-full border border-dashed border-accent/60 px-3.5 py-2.5 font-label text-[0.62rem] font-semibold uppercase tracking-[0.09em] text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-paper lg:px-3 lg:py-1.5"
-          >
-            {link.label}
-            <Icon
-              name="arrowRight"
-              className="size-3 transition-transform duration-300 group-hover/pill:translate-x-0.5"
-            />
-          </a>
+          {/^https?:/.test(link.href) ? (
+            <a href={link.href} target="_blank" rel="noopener noreferrer" className={pillClass}>
+              {link.label}
+              {arrow}
+            </a>
+          ) : (
+            <Link to={pathForLanguage(link.href, languageFromPath(pathname))} className={pillClass}>
+              {link.label}
+              {arrow}
+            </Link>
+          )}
         </li>
       ))}
     </ul>

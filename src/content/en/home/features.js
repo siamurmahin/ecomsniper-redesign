@@ -13,7 +13,12 @@ export const FEATURES = {
   eyebrow: "Let's start with the software",
   headline: 'The software does the heavy lifting.',
   lead: 'It handles the repetitive work. You make the decisions.',
-  /* One colour per step, in the live site's order: find, list, watch, fulfil. */
+  /* One colour per step, in the live site's order: find, list, watch, fulfil.
+   *
+   * A tool pill's href decides where it goes: relative means the page exists
+   * here and the reader stays on this site in their own language, absolute
+   * means it is still only on theirs and opens in a new tab. Competitor
+   * Research and Price Monitoring become relative when those pages land. */
   items: [
     {
       n: '1',
@@ -22,7 +27,7 @@ export const FEATURES = {
       metric: 'Live sales data',
       tone: 'blue',
       links: [
-        { label: 'Product Hunter', href: 'https://ecomsniper.io/productHunterV6' },
+        { label: 'Product Hunter', href: '/product-hunter' },
         { label: 'Competitor Research', href: 'https://ecomsniper.io/competitorResearchV6' },
       ],
     },
@@ -32,7 +37,7 @@ export const FEATURES = {
       body: 'AI writes the title, the description and the item specifics. Up to 3,000 listings a month on the monthly plan.',
       metric: 'Up to 3,000 listings / month',
       tone: 'red',
-      links: [{ label: 'AI Powered Lister', href: 'https://ecomsniper.io/aiListerV6' }],
+      links: [{ label: 'AI Powered Lister', href: '/ai-powered-lister' }],
     },
     {
       n: '3',
