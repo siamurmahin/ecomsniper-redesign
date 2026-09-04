@@ -7,7 +7,6 @@ import { toneOf } from '../lib/signalTones';
 import Icon from '../components/ui/Icon';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
-import CircularSeal from '../components/ui/CircularSeal';
 
 /**
  * Contact.
@@ -73,7 +72,7 @@ function Field({ id, label, type = 'text', placeholder, value, onChange, rows })
     value,
     onChange: (event) => onChange(event.target.value),
     className:
-      'mt-2 w-full rounded-xl border border-hairline bg-white/80 px-4 py-3 text-ink ' +
+      'mt-2.5 w-full rounded-xl border border-hairline bg-white/80 px-5 py-4 text-base text-ink ' +
       'transition-colors placeholder:text-muted hover:border-ink/20 ' +
       'focus-visible:border-accent focus-visible:outline focus-visible:outline-2 ' +
       'focus-visible:outline-offset-2 focus-visible:outline-accent',
@@ -263,14 +262,6 @@ export default function ContactPage() {
             {/* Same shape as the form panel opposite: a title, a note, a rule.
                 A heading on one side of a two-column layout and not the other
                 reads as something half-finished. */}
-            {/* The seal sits above the title, in the flow. Absolutely placed
-               in the corner it overlapped the note, and a stamp that lands on
-               the words it is meant to sit beside is worse than one with less
-               drama. */}
-            <div className="mb-7 flex justify-end">
-              <CircularSeal text={CONTACT.seal} className="text-signal-green-soft" />
-            </div>
-
             <div className="border-b border-ink-line pb-5">
               <p className="font-display text-xl font-extrabold tracking-tight text-paper">
                 {CONTACT.methodsTitle}
@@ -318,7 +309,7 @@ export default function ContactPage() {
               and then stops. */}
           <form
             onSubmit={onSubmit}
-            className="panel-brand-outline grid gap-5 rounded-2xl p-6 shadow-lift sm:p-8"
+            className="panel-brand-outline grid gap-6 rounded-2xl p-6 shadow-lift sm:p-8"
             data-reveal
             data-reveal-group="contact-form"
           >
@@ -350,7 +341,7 @@ export default function ContactPage() {
               placeholder={form.message.placeholder}
               value={message}
               onChange={setMessage}
-              rows={6}
+              rows={7}
             />
 
             {/* The trap. Off-screen rather than display:none, because some

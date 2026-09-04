@@ -51,15 +51,6 @@ export const CONTACT = {
 
   hours: 'Support is 24/7. Any hour.',
 
-  /* The words around the seal. Deliberately NOT the 24/7 promise: that is the
-     pill's line and it reads better up there, and a page that says the same
-     thing twice in two shapes is saying it once badly.
-
-     A seal says who and where — that is what a stamp on a document has always
-     said — and both facts are already on their own footer, so nothing here is
-     invented. Padded with a separator so it fills the ring evenly. */
-  seal: 'ECOMSNIPER • TORONTO, CANADA • ',
-
   form: {
     /* Real labels, because their page has them and losing them would be a
        regression in a rebuild that fixed six accessibility defects. */
