@@ -3,6 +3,9 @@ import { CONTACT as EN_CONTACT } from '../content/en/contact';
 import { overlay as germanContact } from '../content/de/contact';
 import { usePageContent } from '../hooks/usePageContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+import { toneOf } from '../lib/signalTones';
+import Icon from '../components/ui/Icon';
+import CtaButton from '../components/ui/CtaButton';
 
 /**
  * Contact.
@@ -12,8 +15,8 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
  * confirmed on the live page, not inferred — so a visitor who types a message
  * and presses send has no idea it went nowhere.
  *
- * This one never claims a delivery it did not make. There are two paths and
- * the visitor is told which one happened:
+ * This one never claims a delivery it did not make. Two paths, and the visitor
+ * is told which one happened:
  *
  * 1. `VITE_CONTACT_ENDPOINT` set — the message is POSTed, and success is
  *    reported only when the response says so.
@@ -22,15 +25,34 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
  *    says so plainly. A contact form that silently drops messages is worse
  *    than no contact form; the address is right there beside it.
  *
- * The day the endpoint exists it starts posting, with no change here.
+ * Without JavaScript the form cannot submit, which is why the phone number and
+ * email address are page content beside it rather than behind it — a no-JS
+ * visitor still has two working ways to reach a person.
  *
- * Without JavaScript the form cannot submit, which is why the email address
- * and phone number are page content beside it rather than being hidden behind
- * the form — a no-JS visitor still has two working ways to reach a person.
+ * **On the design.** The first build of this page used none of the site's
+ * vocabulary and read as a different product: a bare headline, naked inputs on
+ * the page ground, and a `<dl>` of hairlines. Everything here now is a device
+ * the homepage already owns — the ink pill with its live dot, `headline-type`
+ * with one `headline-mark-brand` run, tone-carrying icon tiles from
+ * `signalTones`, `card-paper` and `card-ink` surfaces, the corner wash. None
+ * of it is new; it was all sitting in the system unused.
  */
 
 /* Module scope so the hook memo has a stable dependency. */
 const OVERLAYS = { de: germanContact.CONTACT };
+
+/**
+ * A colour and a glyph per method, by position.
+ *
+ * The three are an enumeration, not a sequence, so they take the signal set
+ * the pillars and the hero already use rather than numbers. Blue, gold, red is
+ * the order this site runs them in everywhere else.
+ */
+const METHOD_META = [
+  { icon: 'phone', tone: 'blue' },
+  { icon: 'mail', tone: 'gold' },
+  { icon: 'mapPin', tone: 'red' },
+];
 
 /** Everything the mail client needs, encoded once. */
 function mailtoHref({ to, name, email, message }) {
@@ -49,18 +71,63 @@ function Field({ id, label, type = 'text', placeholder, value, onChange, rows })
     value,
     onChange: (event) => onChange(event.target.value),
     className:
-      'mt-2 w-full rounded-xl border border-hairline bg-paper px-4 py-3 text-ink ' +
-      'placeholder:text-muted focus-visible:outline focus-visible:outline-2 ' +
+      'mt-2 w-full rounded-xl border border-hairline bg-white/80 px-4 py-3 text-ink ' +
+      'transition-colors placeholder:text-muted hover:border-ink/20 ' +
+      'focus-visible:border-accent focus-visible:outline focus-visible:outline-2 ' +
       'focus-visible:outline-offset-2 focus-visible:outline-accent',
   };
 
   return (
     <p>
-      <label htmlFor={id} className="font-label text-sm text-ink">
+      <label htmlFor={id} className="micro-label text-ink">
         {label}
       </label>
       {rows ? <textarea {...shared} rows={rows} /> : <input {...shared} type={type} />}
     </p>
+  );
+}
+
+/** One way to reach a person, carrying its own colour. */
+function MethodCard({ method, meta }) {
+  const tone = toneOf(meta.tone);
+
+  return (
+    <li
+      data-reveal
+      data-reveal-group="contact-methods"
+      className="group card-paper relative isolate overflow-hidden"
+    >
+      {/* The same corner wash the pillar cards and the hero use. */}
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute -top-10 -right-10 -z-10 size-24 rounded-full bg-gradient-to-br to-transparent blur-2xl ${tone.wash}`}
+      />
+
+      <span className="flex items-start gap-4">
+        <span
+          aria-hidden="true"
+          className={`grid size-9 shrink-0 place-items-center rounded-lg transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${tone.tile}`}
+        >
+          <Icon name={meta.icon} className="size-4" />
+        </span>
+
+        <span className="min-w-0">
+          <span className={`micro-label block ${tone.text}`}>{method.label}</span>
+          <span className="mt-1 block font-display text-lg font-extrabold tracking-tight">
+            {method.href ? (
+              <a
+                href={method.href}
+                className="underline decoration-hairline underline-offset-4 hover:decoration-ink"
+              >
+                {method.value}
+              </a>
+            ) : (
+              method.value
+            )}
+          </span>
+        </span>
+      </span>
+    </li>
   );
 }
 
@@ -112,63 +179,94 @@ export default function ContactPage() {
   };
 
   const { form } = CONTACT;
+  const [headStart, headMark, headTail] = ['How can we ', 'help', '?'];
 
   return (
     <section ref={ref} className="section-band">
       <div className="site-shell">
-        <p className="section-eyebrow" data-reveal data-reveal-group="contact">
-          {CONTACT.eyebrow}
+        {/* The ink pill with its live dot — the homepage opens on this, and a
+            page about 24/7 support is the one other place a "we are awake"
+            indicator means something. */}
+        <p
+          data-reveal
+          data-reveal-group="contact"
+          className="inline-flex max-w-full items-center gap-x-2.5 rounded-full bg-ink px-4 py-2 font-label text-[0.7rem] font-semibold tracking-[0.14em] text-paper uppercase shadow-lift"
+        >
+          <span aria-hidden="true" className="relative grid size-2 place-items-center">
+            <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
+            <span className="size-2 rounded-full bg-signal-green-soft" />
+          </span>
+          {CONTACT.hours}
         </p>
 
         <h1
-          className="mt-5 text-[length:var(--text-hero)] leading-[0.95]"
+          className="mt-6 text-[length:var(--text-hero)] leading-[0.95]"
           data-reveal
           data-reveal-group="contact"
         >
-          {CONTACT.headline}
+          {headStart}
+          <span className="headline-mark-brand">{headMark}</span>
+          {headTail}
         </h1>
 
         <p
-          className="mt-5 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
+          className="mt-6 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
           data-reveal
           data-reveal-group="contact"
         >
           {CONTACT.lead}
         </p>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           {/* The ways to reach a person that do not depend on this form
               working, or on JavaScript running at all. */}
-          <div data-reveal data-reveal-group="contact-methods">
-            <p className="text-[length:var(--text-lead)] leading-relaxed text-ink">
+          <div>
+            <p
+              className="text-[length:var(--text-lead)] leading-relaxed"
+              data-reveal
+              data-reveal-group="contact-methods"
+            >
               {CONTACT.intro}
             </p>
 
-            <dl className="mt-8 grid gap-px border border-hairline bg-hairline">
-              {CONTACT.methods.map((method) => (
-                <div key={method.label} className="bg-paper px-6 py-5">
-                  <dt className="font-label text-xs tracking-[0.16em] text-muted uppercase">
-                    {method.label}
-                  </dt>
-                  <dd className="mt-2 text-lg text-ink">
-                    {method.href ? (
-                      <a href={method.href} className="underline underline-offset-2">
-                        {method.value}
-                      </a>
-                    ) : (
-                      method.value
-                    )}
-                  </dd>
-                </div>
+            <ul className="mt-7 grid gap-4">
+              {CONTACT.methods.map((method, i) => (
+                <MethodCard
+                  key={method.label}
+                  method={method}
+                  meta={METHOD_META[i % METHOD_META.length]}
+                />
               ))}
-            </dl>
+            </ul>
 
-            <p className="mt-6 font-label text-base text-ink">{CONTACT.hours}</p>
+            {/* The second door, the same one the footer offers: someone who
+                came here to ask whether it is worth it can read it instead. */}
+            <div
+              className="card-ink mt-4 flex flex-wrap items-center justify-between gap-4"
+              data-reveal
+              data-reveal-group="contact-methods"
+            >
+              <span className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="grid size-9 shrink-0 place-items-center rounded-lg bg-signal-blue text-paper"
+                >
+                  <Icon name="openBook" className="size-4" />
+                </span>
+                <span className="font-display text-base font-extrabold text-paper">
+                  Not ready to ask yet?
+                </span>
+              </span>
+              <CtaButton href="/free-play-book" variant="onInk">
+                Get the free playbook
+              </CtaButton>
+            </div>
           </div>
 
+          {/* The form, on a surface rather than floating on the page ground. */}
           <form
             onSubmit={onSubmit}
-            className="grid gap-5"
+            className="card-paper grid gap-5 sm:p-8"
             data-reveal
             data-reveal-group="contact-form"
           >
@@ -209,15 +307,18 @@ export default function ContactPage() {
               className="absolute left-[-9999px] size-px opacity-0"
             />
 
-            <div>
+            <div className="flex flex-wrap items-center gap-4">
               <button type="submit" className="btn-primary" disabled={status === 'submitting'}>
                 {status === 'submitting' ? form.sending : form.submit}
               </button>
+              <span className="font-serif text-base italic text-muted">
+                A real person, usually the same day.
+              </span>
             </div>
 
             {/* One live region, so a screen reader hears the outcome without
                 the message moving focus. */}
-            <p aria-live="polite" className="text-base leading-relaxed text-muted">
+            <p aria-live="polite" className="text-base leading-relaxed text-muted empty:hidden">
               {status === 'handoff' && (
                 <>
                   {form.handoff} <span className="block">{form.handoffFallback}</span>
