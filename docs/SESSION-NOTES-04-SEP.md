@@ -491,3 +491,50 @@ but not the assets. `charity-5.mp4` alone is 31MB, and it is in the history of
 a public repository. Nothing imports any of it and none of it reaches the
 build. Raised, not acted on: deleting from the working tree is easy, purging
 history is a rewrite and the client's call.
+
+## The AI Lister gallery got real photographs
+
+The "images found" panel was six grey squares. It is the one panel on the page
+whose whole claim is *what the software found*, and a grid of empty boxes says
+nothing about that.
+
+Six Unsplash photographs of garden work, under the Unsplash licence, in
+`src/assets/lister/`. They are garden tools and planting rather than the
+kneeler itself: the running example across both feature pages is a garden
+kneeler, and there is no stock set of one product from six angles. Every panel
+on the page is already captioned "Illustration of the interface", so the grid
+is illustrative, and the `alt` is empty because the label above it already says
+what the grid is.
+
+### The example product was left alone deliberately
+
+Changing it to something photographed from more angles would have been the
+other way to solve this, and it touches far more than this panel: the seller
+handle `homeandgarden_uk`, three extracted titles, the Amazon link list and the
+sourcing row all name the kneeler, in English and German. Not worth it for six
+thumbnails.
+
+### The size was measured, and then argued down twice
+
+The tiles render **177px** at a 1920 viewport, so the target is 360px for a 2x
+screen — that is the `lister` row now in `scripts/optimize-images.mjs`.
+
+First pass at quality 80 came out at **219KB** for six thumbnails, which is
+absurd for a grid that occupies 531px of the page. Two of the six were the
+problem and both for the same reason: `shovels on grass` alone was 42KB,
+because grass and loose soil are noise and WebP pays per pixel of noise. Swapped
+those two for flat-lays on plain surfaces and dropped quality to 50 — at a 2x
+downscale that is invisible, and it is a mock interface, not the product.
+
+**219KB → 88KB**, all six lazy, all below the fold, all with explicit
+dimensions. Budget unchanged at 568KB eager: the glob is eager but it only
+pulls in six URL strings, and this module is in the AI Lister route's chunk, so
+the homepage never sees it.
+
+### The Amazon panel reuses the selected one
+
+Asked for after the gallery landed, and it is the right call: the Amazon panel
+had its own grey square, so the first two panels were showing the same product
+as two different blanks. It now renders `PHOTOS[0]` — the tile the gallery
+marks selected — so the panels read as one product moving through the tool.
+Same URL, so it costs nothing beyond the fetch the gallery already makes.

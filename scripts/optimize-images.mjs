@@ -45,6 +45,8 @@ const TARGETS = [
   { dir: 'src/assets/flags', width: 64, webp: 82 },
   // Wordmark renders at 197px; the reticle mark is smaller still.
   { dir: 'src/assets/brand', width: 480 },
+  // The AI Lister gallery tiles measure 177px wide at a 1920 viewport.
+  { dir: 'src/assets/lister', width: 360, webp: 50 },
 ];
 
 /** Below this saving, the re-encode is not worth the quality it costs. */

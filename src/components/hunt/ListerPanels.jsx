@@ -5,6 +5,28 @@ import Icon from '../ui/Icon';
 import { Frame, huntTiming, rowDelay } from './HuntPanels';
 
 /**
+ * The photographs the gallery tiles show.
+ *
+ * Globbed rather than named one by one so the set is changed by dropping files
+ * in the folder, and eager because that only pulls in six URL strings — the
+ * files themselves are still fetched by the browser, lazily, when the panel
+ * scrolls up. This module is in the AI Lister route's chunk, so none of it is
+ * on the homepage's critical path.
+ *
+ * They are stock photographs of garden work, not the real listing: the client
+ * has not supplied captures yet, and every panel on this page is captioned as
+ * an illustration. Quality 50 at 360px, which is 2x the 177px the tiles
+ * measure — see the `lister` row in `scripts/optimize-images.mjs`.
+ */
+const GALLERY = import.meta.glob('../../assets/lister/*.webp', {
+  eager: true,
+  import: 'default',
+});
+const PHOTOS = Object.keys(GALLERY)
+  .sort()
+  .map((key) => GALLERY[key]);
+
+/**
  * The AI Lister panels.
  *
  * Same rule the Product Hunter panels follow, and it is the one that decides
@@ -31,7 +53,17 @@ export function PickPanel({ copy, tone = 'blue' }) {
   return (
     <Frame title={copy.title} note={copy.note}>
       <div className="flex gap-4 p-4">
-        <span aria-hidden="true" className="size-20 shrink-0 rounded-lg bg-ink/[0.06]" />
+        {/* The same photograph the gallery panel marks as selected, so the two
+            panels read as one product moving through the tool. */}
+        <img
+          src={PHOTOS[0]}
+          alt=""
+          width="360"
+          height="360"
+          loading="lazy"
+          decoding="async"
+          className="size-20 shrink-0 rounded-lg bg-ink/[0.06] object-cover"
+        />
 
         <span className="min-w-0 flex-1">
           <span className="block text-sm leading-snug text-ink">{copy.name}</span>
@@ -63,10 +95,9 @@ export function ImagePanel({ copy, tone = 'gold' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
   const t = toneOf(tone);
-  const tiles = [0, 1, 2, 3, 4, 5];
 
   return (
-    <div ref={ref} className={running ? 'is-running' : undefined} style={huntTiming(tiles.length)}>
+    <div ref={ref} className={running ? 'is-running' : undefined} style={huntTiming(PHOTOS.length)}>
       <Frame title={copy.title} note={copy.note}>
         <div className="p-4">
           <div className="flex items-center justify-between">
@@ -77,14 +108,26 @@ export function ImagePanel({ copy, tone = 'gold' }) {
           </div>
 
           <ul className="mt-3 grid grid-cols-3 gap-2.5">
-            {tiles.map((i) => (
+            {PHOTOS.map((src, i) => (
               <li
-                key={i}
+                key={src}
                 style={{ '--hunt-delay': rowDelay(i) }}
                 className={`hunt-row relative aspect-square rounded-lg bg-ink/[0.06] ${
                   i === 0 ? `ring-2 ${t.edge}` : ''
                 }`}
               >
+                {/* Decorative: the label above already says what this grid is,
+                    and the photographs are a mock rather than the listing. */}
+                <img
+                  src={src}
+                  alt=""
+                  width="360"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                  className="size-full rounded-lg object-cover"
+                />
+
                 {i === 0 ? (
                   <span
                     className={`hunt-summary absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full ${t.tile}`}
