@@ -3,7 +3,7 @@ import { overlay as germanProductHunter } from '../content/de/productHunter';
 import { usePageContent } from '../hooks/usePageContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
-import { HuntTable, PastePanel } from '../components/hunt/HuntPanels';
+import { HuntTable, ExtractPanel, PastePanel, ResultsPanel } from '../components/hunt/HuntPanels';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
 import AssuranceSection from '../sections/AssuranceSection';
@@ -55,20 +55,24 @@ function Marked({ parts }) {
 
 /** One step: marker, words, and its own mock, alternating sides. */
 /**
- * The panel that belongs to each step.
+ * The panel that belongs to each step. One each, and no two alike.
  *
- * Steps one and three are both the hunt table, because they are both the same
- * mechanic seen at different moments — finding the gap, and the list it
- * produces — and showing it twice is what makes the third step land. Step two
- * is the paste box, which is the only part of the flow the seller does by
- * hand.
+ * An earlier pass showed the hunt table for both step one and step three. Two
+ * steps illustrated by the same picture makes the second one read as
+ * decoration, and it left the real question of each step unanswered: where the
+ * candidate list comes from, and what the run hands back at the end. The hunt
+ * table stays in the hero, where it is the argument for the whole page.
  */
 function StepPanel({ index, panel, tone }) {
+  if (index === 0) {
+    return <ExtractPanel copy={panel.extract} listings={panel.listings} tone={tone} />;
+  }
+
   if (index === 1) {
     return <PastePanel copy={panel.paste} titles={panel.titles} tone={tone} />;
   }
 
-  return <HuntTable copy={panel.hunt} rows={panel.rows} tone={tone} />;
+  return <ResultsPanel copy={panel.results} matches={panel.matches} tone={tone} />;
 }
 
 function Step({ item, index, panel }) {
@@ -76,7 +80,7 @@ function Step({ item, index, panel }) {
   const flip = index % 2 === 1;
 
   return (
-    <li className="relative grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-16">
+    <li className="relative grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-16">
       <div className={flip ? 'lg:order-2' : undefined}>
         <span
           data-reveal
@@ -201,7 +205,7 @@ export default function ProductHunterPage() {
             {PH.steps.lead}
           </p>
 
-          <ol className="mt-16 grid gap-16 lg:gap-24">
+          <ol className="mt-16 grid gap-20 lg:gap-28">
             {PH.steps.items.map((item, index) => (
               <Step key={item.title} item={item} index={index} panel={PH.panel} />
             ))}

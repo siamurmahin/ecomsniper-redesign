@@ -133,6 +133,146 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
 }
 
 /**
+ * Step one: the competitor's profile, and everything they have sold coming
+ * off it in one press.
+ *
+ * Deliberately not the hunt table again. That table is the hero's job and it
+ * answers "which items are worth listing"; this answers a different question —
+ * where the list of candidates comes from in the first place — and showing the
+ * same panel twice would make the second one read as decoration.
+ */
+export function ExtractPanel({ copy, listings, tone = 'blue' }) {
+  const ref = useRef(null);
+  const running = useNearViewport(ref, '0px 0px -15% 0px');
+  const t = toneOf(tone);
+
+  return (
+    <div ref={ref} className={running ? 'is-running' : undefined}>
+      <Frame title={copy.title} note={copy.note}>
+        {/* The seller, so it is clear whose listings these are. */}
+        <div className="flex items-center gap-3 border-b border-hairline px-4 py-3.5">
+          <span
+            aria-hidden="true"
+            className={`grid size-9 place-items-center rounded-full ${t.tile}`}
+          >
+            <Icon name="people" className="size-4" />
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate font-display text-sm font-extrabold">
+              {copy.seller}
+            </span>
+            <span className="block text-xs text-muted">{copy.meta}</span>
+          </span>
+        </div>
+
+        <div className="px-4 py-3">
+          <p className="micro-label text-muted">{copy.listed}</p>
+
+          <ul className="mt-2.5 grid gap-2">
+            {listings.map((name, i) => (
+              <li
+                key={name}
+                style={{ '--hunt-delay': `${0.2 + i * 0.16}s` }}
+                className="hunt-row flex items-center gap-2.5"
+              >
+                <span aria-hidden="true" className="size-6 shrink-0 rounded-md bg-ink/[0.06]" />
+                <span className="truncate text-sm text-muted">{name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <p className="flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
+          <span
+            className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
+          >
+            <Icon name="arrowRight" className="size-3.5" />
+            {copy.button}
+          </span>
+          <span className="hunt-value micro-label tabular-nums" style={{ '--hunt-delay': '1.5s' }}>
+            <span className={t.text}>{copy.collected.replace('{n}', '238')}</span>
+          </span>
+        </p>
+      </Frame>
+    </div>
+  );
+}
+
+/**
+ * Step three: what came back, and what it is now ready for.
+ *
+ * The hunt table asked which listings had a gap; this shows the answer to the
+ * whole run — the matches Amazon returned, the ones it could not match, and
+ * the handoff to the AI Lister that the copy promises at the end of the step.
+ */
+export function ResultsPanel({ copy, matches, tone = 'red' }) {
+  const ref = useRef(null);
+  const running = useNearViewport(ref, '0px 0px -15% 0px');
+  const t = toneOf(tone);
+  const ready = matches.filter((m) => m.ready).length;
+
+  return (
+    <div ref={ref} className={running ? 'is-running' : undefined}>
+      <Frame title={copy.title} note={copy.note}>
+        <div className="relative">
+          <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
+            <span className="micro-label text-muted">{copy.item}</span>
+            <span className="micro-label text-right text-muted">{copy.source}</span>
+            <span className="micro-label w-16 text-right text-muted">{copy.state}</span>
+          </div>
+
+          <ul>
+            {matches.map((match, i) => (
+              <li
+                key={match.name}
+                style={{ '--hunt-delay': `${0.25 + i * 0.2}s` }}
+                className={`hunt-row grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
+                  match.ready ? 'hunt-hit' : ''
+                } ${i ? 'border-t border-hairline/70' : ''}`}
+              >
+                <span className="truncate text-sm text-ink">{match.name}</span>
+                <span className="text-right text-sm text-muted tabular-nums">
+                  {match.price ?? '—'}
+                </span>
+                <span
+                  className="hunt-value w-16 text-right"
+                  style={{ '--hunt-delay': `${0.45 + i * 0.2}s` }}
+                >
+                  {match.ready ? (
+                    <span className={`micro-label inline-flex items-center gap-1 ${t.text}`}>
+                      <Icon name="checkCircle" className="size-3" />
+                      {copy.ready}
+                    </span>
+                  ) : (
+                    <span className="micro-label text-muted/50">{copy.checking}</span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <span
+            aria-hidden="true"
+            className="hunt-beam pointer-events-none absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-transparent via-accent/20 to-transparent"
+          />
+        </div>
+
+        {/* The handoff the step's own copy ends on. */}
+        <p className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline bg-paper-sunk px-4 py-3">
+          <span className={`font-display text-sm font-extrabold ${t.text}`}>
+            {copy.summary.replace('{n}', ready)}
+          </span>
+          <span className="inline-flex items-center gap-2 rounded-lg bg-ink px-3 py-2 text-xs font-semibold text-paper">
+            {copy.handoff}
+            <Icon name="arrowRight" className="size-3.5" />
+          </span>
+        </p>
+      </Frame>
+    </div>
+  );
+}
+
+/**
  * Step two: the extracted titles going into the box, one line at a time, with
  * the count climbing beside them.
  *
