@@ -43,24 +43,17 @@ session.
   document that governs, so the client has to decide which is true.
   **Before launch.** `ISSUES.md` 2b carries this and two smaller defects.
 
-- **Rebuild the About page.** Design withdrawn on request 4 Sep. Everything
-  expensive is kept: the corrected full capture in `docs/source-copy/about.md`,
-  the copy in `content/en|de/about.js`, and six optimised photographs in
-  `src/assets/giving/`. The last built version is commit `db6a56f` — start
-  from their layout, not from ours.
+Nothing on the About page is in flight — see Parked below.
 
-- **The About photographs.** Their giving gallery is five images plus a
-  founder portrait, and we have none of them. Either we pull them from their
-  site and optimise, or the client sends originals. The page renders labelled
-  placeholders until then. Weight is a speed-gate item — decide before adding.
+- **The About photographs.** Their giving gallery is five real images plus a
+  founder portrait. **We hold optimised copies of all seven** in
+  `src/assets/giving/` (`b02e651`) — an earlier note here claiming "we have
+  none of them" was stale. What is still missing is a portrait big enough to
+  use: theirs is 260 × 260 and goes soft above about 300px.
 - **Their charity gallery contains a stock photo.** "Children smiling" is an
   Unsplash image sitting among real charity work, three screens under a promise
-  not to create false impressions. Not carried into the rebuild. Raise with the
-  client.
-
-- **Choose the About hero.** `/about-lab` on a local preview renders all
-  three. Variant A is live meanwhile. The choice deletes the lab route, the
-  two losing branches in `AboutHero`, and any content keys they used.
+  not to create false impressions. Kept out of the hero wall by name. Raise
+  with the client.
 
 Nothing in flight. The environment work is finished and verified; the items
 below are what it left behind.
@@ -68,6 +61,35 @@ below are what it left behind.
 | #   | Task                     | Why it matters                                                                                                                                       |
 | --- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | The last expensive frame | Worst frame in the first second is still ~83ms after everything in Done. Total blocking work halved; this one frame did not move. Not yet attributed |
+
+---
+
+## Parked
+
+- **The About page, and its hero.** Paused 4 Sep on request to move on to other
+  pages. Nothing about it is lost, and it should not be restarted from scratch:
+
+  - `src/pages/AboutHeroLab.jsx` holds **four passes of hero design**, ending
+    on the direction that was closest — a dense two-column hero after
+    shadcn hero-03, with a staggered wall of real Trustpilot reviews bleeding
+    off both edges. It is **deliberately not routed**: an unrouted module is
+    never bundled, so it costs nothing while it waits. One commented line in
+    `src/routes.js` brings it back.
+  - What the passes established, so it is not re-litigated: the earlier
+    designs failed because they were sparse left-aligned text in one column,
+    and because each carried five competing devices instead of committing to
+    one. The references that fixed that are in `SESSION-NOTES-04-SEP.md` §9.
+  - **Reviews, not photographs, in the hero.** Decided 4 Sep. It removes
+    ~243KB from the first screen, keeps LCP as text, and the reviews
+    corroborate the page's actual claim — that the team answers its own
+    support — which a charity photograph cannot.
+  - The **money-claim filter** in that file is not cosmetic. This page promises
+    not to show earnings screenshots; the filter enforces it against the deck
+    so a review added later cannot quietly break the promise.
+
+  Still undecided when it resumes: whether the hero is that one, and whether
+  the section order moves the offer up from 7th, which was agreed in principle
+  and never built.
 
 ---
 

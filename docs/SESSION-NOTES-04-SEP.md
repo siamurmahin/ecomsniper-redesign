@@ -399,3 +399,95 @@ they see a policy admitting to session recordings above a table saying this site
 sets no cookies. It fixes itself when the ids arrive, and becomes a real defect
 only if the site ships without them. `ISSUES.md` 11, to be checked before
 launch.
+
+---
+
+## 9. Four passes at the About hero, and why the first three failed
+
+Parked on request before a direction was chosen. The work is kept, unrouted, in
+`src/pages/AboutHeroLab.jsx`. This section is the reasoning, so the next
+attempt starts from pass four rather than from pass one.
+
+### The failures, and what they had in common
+
+- **Pass 1 — type and tone.** Four variants: a ledger, a founder portrait, a
+  dark single sentence, an inverted hierarchy. Rejected: _"need better layout,
+  I don't like any of them."_
+- **Pass 2 — arrangement.** Split screen, homepage-parallel, magazine cover,
+  asymmetric grid. Rejected: _"design is very poor and the layout is not good
+  enough."_
+- **Pass 3 — one device each**, after going and looking at work that lands.
+
+The first pass varied typography and kept one column of left-aligned text
+underneath — which is **the same criticism that killed the withdrawn design**
+("seven left-aligned prose bands, the right 45% empty"). The second varied
+arrangement but still gave every variant an eyebrow *and* a marked word *and* a
+tally *and* a panel *and* two buttons. Five devices, none dominant.
+
+**The lesson, which cost three passes: variety is not design.** Each variant
+has to commit to one idea and subordinate everything else to it.
+
+### What looking at real work changed
+
+Three references, chosen for proximity to this brief rather than for fame:
+
+| Reference | The device |
+| --- | --- |
+| [Linear](https://linear.app/about) | Scale and restraint — headline, one line, a full-bleed band, nothing else |
+| [37signals](https://37signals.com/) | One saturated colour field; the content _is_ the design, as a numbered index |
+| [Who Gives A Crap](https://au.whogivesacrap.org/pages/our-impact) | A documentary photograph interrupted by a shaped colour field |
+
+None of the three puts an eyebrow label over its headline. All three were on
+every variant of mine.
+
+### Pass four, and the client's own references
+
+The client then sent two shadcn/studio heroes (03 and 12). What transfers from
+them is the **right column**: not a single card but a layered composition that
+bleeds past its own bounds — cards running off the top and bottom of hero 03, a
+subject overflowing its panel in hero 12. That is precisely what the earlier
+passes lacked.
+
+What does not transfer is their content. Hero 03 fills that column with revenue
+dashboards, and this page says four screens down that it will not show
+screenshots of big earnings because they create false hope.
+
+### The decision that came out of it: reviews, not photographs
+
+Asked whether the wall should be testimonials instead of charity photographs.
+It should, and for a better reason than density:
+
+- **~243KB comes off the first screen.** Six photographs made an image the LCP
+  on a page that otherwise has none. `PROOF` is already re-exported from
+  `content/en/index.js`, so the reviews are in the eager deck every visitor
+  downloads — they cost **nothing**.
+- **They corroborate the claim the page actually makes.** The page says "a
+  small team… we read the support messages ourselves". The reviews say "they
+  really want you to succeed", "the support puts them above and beyond other
+  companies", "someone is on hand 24/7". A charity photograph cannot vouch for
+  that; a stranger on a public Trustpilot profile can.
+
+### The money filter is load-bearing
+
+The hero filters out any review quoting a sum of money, in code:
+
+```js
+const QUOTES_MONEY = /\$|\bUSD\b|\bdollars?\b|\bprofits?\b/i;
+```
+
+Today it removes exactly one — "Cost 99 USD… made me 500 USD". It is there so
+that a review added to the deck in six months by someone who never read this
+file cannot put an income claim in the hero of the page that promises not to
+make them. Verified in the rendered DOM: 16 cards, zero money figures.
+
+**The video testimonials can never go in this hero.** They are titled
+"$18K/Month", "$1,600 a month", "$100/Day".
+
+### Also found while looking
+
+`src/assets/charity/` is **44MB of video plus the Unsplash stock photo**, still
+tracked and entirely unreferenced — the revert in `c2c95b8` removed the page
+but not the assets. `charity-5.mp4` alone is 31MB, and it is in the history of
+a public repository. Nothing imports any of it and none of it reaches the
+build. Raised, not acted on: deleting from the working tree is easy, purging
+history is a rewrite and the client's call.

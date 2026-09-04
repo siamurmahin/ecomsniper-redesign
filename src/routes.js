@@ -36,5 +36,13 @@ export default [
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),
   route('de/cookie-policy', 'routes/cookies.jsx', { id: 'de-cookies' }),
 
+  /* The About hero lab is deliberately NOT routed. About is parked (see
+     docs/TODO.md), and an unrouted module is never bundled, so the four
+     passes of design work in `pages/AboutHeroLab.jsx` cost nothing while they
+     wait. Restore by uncommenting; it must stay out of the prerender list and
+     the sitemap.
+
+       route('about-lab', 'routes/about-lab.jsx'), */
+
   route('*', 'routes/not-found.jsx'),
 ];
