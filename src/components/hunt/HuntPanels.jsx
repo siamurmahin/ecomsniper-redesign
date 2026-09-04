@@ -144,15 +144,17 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
   return (
     <div ref={ref} className={running ? 'is-running' : undefined} style={huntTiming(rows.length)}>
       <Frame title={copy.title} note={copy.note}>
-        <div className="relative">
-          {/* Column heads, so the two prices are unambiguous. */}
-          <div className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
-            <span className="micro-label text-muted">{copy.item}</span>
-            <span className="micro-label text-right text-muted">{copy.ebay}</span>
-            <span className="micro-label text-right text-muted">{copy.amazon}</span>
-            <span className="micro-label w-14 text-right text-muted">{copy.verdict}</span>
-          </div>
+        {/* Column heads sit outside the scanned region. They are the panel's
+            furniture, not one of its results — covering them made the table
+            look like it was still deciding what its own columns were. */}
+        <div className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
+          <span className="micro-label text-muted">{copy.item}</span>
+          <span className="micro-label text-right text-muted">{copy.ebay}</span>
+          <span className="micro-label text-right text-muted">{copy.amazon}</span>
+          <span className="micro-label w-14 text-right text-muted">{copy.verdict}</span>
+        </div>
 
+        <div className="relative">
           {/* No verdicts during the scan: a row labelled "gap" before the
               sweep has finished gives the answer away, which is the same
               fault as showing the count early. */}
@@ -223,16 +225,14 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
  * same panel twice would make the second one read as decoration.
  */
 export function ExtractPanel({ copy, listings, tone = 'blue' }) {
-  const ref = useRef(null);
-  const running = useNearViewport(ref, '0px 0px -15% 0px');
   const t = toneOf(tone);
 
+  /* Static, like the paste box. These listings are already on the seller's
+     profile — they are what the page found, not what the software produced —
+     so loading them in would be inventing work. Only the two panels where a
+     scan genuinely runs animate: the hunt table and the results. */
   return (
-    <div
-      ref={ref}
-      className={running ? 'is-running' : undefined}
-      style={huntTiming(listings.length)}
-    >
+    <>
       <Frame title={copy.title} note={copy.note}>
         {/* The seller, so it is clear whose listings these are. */}
         <div className="flex items-center gap-3 border-b border-hairline px-4 py-3.5">
@@ -254,12 +254,8 @@ export function ExtractPanel({ copy, listings, tone = 'blue' }) {
           <p className="micro-label text-muted">{copy.listed}</p>
 
           <ul className="mt-2.5 grid gap-2">
-            {listings.map((name, i) => (
-              <li
-                key={name}
-                style={{ '--hunt-delay': rowDelay(i) }}
-                className="hunt-row flex items-center gap-2.5"
-              >
+            {listings.map((name) => (
+              <li key={name} className="flex items-center gap-2.5">
                 <span aria-hidden="true" className="size-6 shrink-0 rounded-md bg-ink/[0.06]" />
                 <span className="truncate text-sm text-muted">{name}</span>
               </li>
@@ -267,19 +263,19 @@ export function ExtractPanel({ copy, listings, tone = 'blue' }) {
           </ul>
         </div>
 
-        <p className="hunt-summary flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
+        <p className="flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
           <span
             className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
           >
             <Icon name="arrowRight" className="size-3.5" />
             {copy.button}
           </span>
-          <span className="hunt-value micro-label tabular-nums" style={{ '--hunt-delay': '1.5s' }}>
+          <span className="micro-label tabular-nums">
             <span className={t.text}>{copy.collected.replace('{n}', '238')}</span>
           </span>
         </p>
       </Frame>
-    </div>
+    </>
   );
 }
 
@@ -303,13 +299,14 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
       style={huntTiming(matches.length)}
     >
       <Frame title={copy.title} note={copy.note}>
-        <div className="relative">
-          <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
-            <span className="micro-label text-muted">{copy.item}</span>
-            <span className="micro-label text-right text-muted">{copy.source}</span>
-            <span className="micro-label w-16 text-right text-muted">{copy.state}</span>
-          </div>
+        {/* Furniture, not a result — outside the scanned region. */}
+        <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
+          <span className="micro-label text-muted">{copy.item}</span>
+          <span className="micro-label text-right text-muted">{copy.source}</span>
+          <span className="micro-label w-16 text-right text-muted">{copy.state}</span>
+        </div>
 
+        <div className="relative">
           <ScanningState rows={matches.length} tone={t} />
 
           <ul>
@@ -371,41 +368,41 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
  * catalogue at once, not one product — so it is stated rather than implied.
  */
 export function PastePanel({ copy, titles, tone = 'gold' }) {
-  const ref = useRef(null);
-  const running = useNearViewport(ref, '0px 0px -15% 0px');
   const t = toneOf(tone);
 
+  /* Nothing animates here, and nothing should. This step is not a scan: the
+     titles were pasted by the seller a moment ago, the count is simply how
+     many of them there are, and the button has not been pressed yet. Loading
+     any of it in would be pretending work is happening that is not — the
+     panel's whole job is to show the box already full, waiting. */
   return (
-    <div ref={ref} className={running ? 'is-running' : undefined} style={huntTiming(titles.length)}>
-      <Frame title={copy.title} note={copy.note}>
-        <div className="p-4">
-          <div className="flex items-center justify-between">
-            <span className="micro-label text-muted">{copy.field}</span>
-            <span className="hunt-summary micro-label tabular-nums">
-              <span className={t.text}>{copy.count}</span>
-            </span>
-          </div>
-
-          <div className="mt-2.5 grid gap-2 rounded-lg border border-hairline bg-paper-sunk p-3">
-            {titles.map((title, i) => (
-              <span
-                key={title}
-                style={{ '--hunt-delay': rowDelay(i) }}
-                className="hunt-row truncate font-mono text-[0.7rem] leading-relaxed text-muted"
-              >
-                {title}
-              </span>
-            ))}
-          </div>
-
-          <span
-            className={`hunt-summary mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
-          >
-            <Icon name="magnifier" className="size-3.5" />
-            {copy.button}
+    <Frame title={copy.title} note={copy.note}>
+      <div className="p-4">
+        <div className="flex items-center justify-between">
+          <span className="micro-label text-muted">{copy.field}</span>
+          <span className="micro-label tabular-nums">
+            <span className={t.text}>{copy.count}</span>
           </span>
         </div>
-      </Frame>
-    </div>
+
+        <div className="mt-2.5 grid gap-2 rounded-lg border border-hairline bg-paper-sunk p-3">
+          {titles.map((title) => (
+            <span
+              key={title}
+              className="truncate font-mono text-[0.7rem] leading-relaxed text-muted"
+            >
+              {title}
+            </span>
+          ))}
+        </div>
+
+        <span
+          className={`mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
+        >
+          <Icon name="magnifier" className="size-3.5" />
+          {copy.button}
+        </span>
+      </div>
+    </Frame>
   );
 }

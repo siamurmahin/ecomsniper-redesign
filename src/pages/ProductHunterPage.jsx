@@ -6,6 +6,7 @@ import { toneOf } from '../lib/signalTones';
 import { HuntTable, ExtractPanel, PastePanel, ResultsPanel } from '../components/hunt/HuntPanels';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
+import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
 
 /**
@@ -213,8 +214,17 @@ export default function ProductHunterPage() {
         </div>
       </section>
 
-      {/* The guarantee closes it, as on Contact and /faq: the last thing read
-          before a decision should be what happens if it goes wrong. */}
+      {/* The questions, then the guarantee — the order Contact and /faq both
+          use. Somebody who has just read how the tool works has questions
+          about it, and the last thing read before a decision should be what
+          happens if it goes wrong.
+
+          The same sections the homepage renders, never a second set of
+          answers, and no FAQPage schema here: that lives on the /faq route,
+          because several pages each claiming to be the FAQ is how a search
+          engine picks the wrong one. */}
+      <FaqSection />
+
       <AssuranceSection />
     </>
   );
