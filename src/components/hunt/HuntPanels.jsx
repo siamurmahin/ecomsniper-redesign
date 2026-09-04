@@ -1,44 +1,33 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useNearViewport } from '../../hooks/useNearViewport';
 import { toneOf } from '../../lib/signalTones';
 import Icon from '../ui/Icon';
 
 /**
- * Two states, because the panels do two different things.
+ * The sequence, as numbers the stylesheet can read.
  *
- * `is-running` is one-shot and sticky, from `useNearViewport`: the rows fill
- * in once and stay filled, because a row that keeps re-appearing is a page
- * that never settles.
+ * One pass of the beam, then the rows resolve behind it one at a time, then
+ * the count lands. It ran as an infinite sweep for a while and that was wrong
+ * twice over: a page that never stops moving reads as one that has not
+ * finished loading, and a total sitting on screen while the scan is still
+ * running says the scan was theatre.
  *
- * `is-live` toggles both ways, which `useNearViewport` deliberately does not —
- * it is written never to go back to false. The sweep and the flash loop for as
- * long as a panel is on screen and stop the moment it leaves, so a page with
- * four panels on it is only ever animating the one being looked at.
+ * Computed here rather than written into the CSS so the stagger stays correct
+ * whatever number of rows a panel has.
  */
-function useLive(ref) {
-  const [live, setLive] = useState(false);
+const SCAN_SECONDS = 2;
+const ROW_STEP = 0.16;
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return undefined;
-
-    const observer = new IntersectionObserver(([entry]) => setLive(entry.isIntersecting), {
-      rootMargin: '0px 0px -10% 0px',
-    });
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [ref]);
-
-  return live;
+function huntTiming(rowCount) {
+  return {
+    '--hunt-scan': `${SCAN_SECONDS}s`,
+    /* The beam has crossed the whole panel before the last row lands. */
+    '--hunt-summary-delay': `${(SCAN_SECONDS + rowCount * ROW_STEP + 0.2).toFixed(2)}s`,
+  };
 }
 
-/** Both classes for a panel, as one string. */
-function panelState(running, live) {
-  return (
-    [running ? 'is-running' : '', live ? 'is-live' : ''].filter(Boolean).join(' ') || undefined
-  );
-}
+/** When row `i` resolves: after the sweep, then in turn. */
+const rowDelay = (i) => `${(SCAN_SECONDS + i * ROW_STEP).toFixed(2)}s`;
 
 /**
  * The Product Hunter panels — the software working, drawn rather than
@@ -50,13 +39,17 @@ function panelState(running, live) {
  * this shows the mechanic — a price gap being found, a list being scanned —
  * which is the part that actually explains the product.
  *
- * **Two states, and they do different jobs.** `is-running` fills the rows in
- * once and leaves them filled — a row that keeps re-appearing is a page that
- * never settles. `is-live` drives the sweep and the flash, and it toggles with
- * visibility, so the panel being looked at is the only one animating and an
- * off-screen panel runs nothing at all. That was first written as a fixed two
- * cycles to avoid a permanent spinner, which just looked broken: the page went
- * still a few seconds after it loaded.
+ * **One sequence, once.** `is-running` is added when the panel is first
+ * reached and never removed: the beam crosses the panel over rows that are
+ * still bars, the rows resolve behind it one at a time, the count lands, and
+ * it stops. Nothing repeats and nothing plays off screen.
+ *
+ * Two earlier versions were wrong in opposite directions. A fixed two cycles
+ * went still a few seconds after load and read as broken; an infinite sweep
+ * with a pulsing wash read as a page that had never finished loading, and a
+ * total sitting on screen while the scan was still running said the scan was
+ * theatre. Holding the count until the last row lands is what makes the scan
+ * look like the thing that produced it.
  *
  * With `prefers-reduced-motion` the global rule collapses every duration, and
  * because the fill has `forwards` the panel reads as a completed result rather
@@ -128,12 +121,11 @@ function Frame({ title, note, children }) {
 export function HuntTable({ copy, tone = 'blue', rows }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
-  const live = useLive(ref);
   const t = toneOf(tone);
   const hits = rows.filter((row) => row.hit).length;
 
   return (
-    <div ref={ref} className={panelState(running, live)}>
+    <div ref={ref} className={running ? 'is-running' : undefined} style={huntTiming(rows.length)}>
       <Frame title={copy.title} note={copy.note}>
         <div className="relative">
           {/* Column heads, so the two prices are unambiguous. */}
@@ -148,7 +140,7 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
             {rows.map((row, i) => (
               <li
                 key={row.name}
-                style={{ '--hunt-delay': `${0.25 + i * 0.22}s` }}
+                style={{ '--hunt-delay': rowDelay(i) }}
                 className={`hunt-row relative grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
                   row.hit ? 'hunt-hit' : ''
                 } ${i ? 'border-t border-hairline/70' : ''}`}
@@ -161,7 +153,7 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
                 <span className="text-right text-sm text-muted tabular-nums">{row.amazon}</span>
                 <span
                   className="hunt-value w-14 text-right"
-                  style={{ '--hunt-delay': `${0.45 + i * 0.22}s` }}
+                  style={{ '--hunt-delay': rowDelay(i) }}
                 >
                   {row.hit ? (
                     <span
@@ -189,7 +181,7 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
 
         {/* The count, which is the answer the reader wants: of these, how many
             are worth my time. */}
-        <p className="flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
+        <p className="hunt-summary flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
           <span className="micro-label text-muted">{copy.scanned.replace('{n}', rows.length)}</span>
           <span className={`font-display text-sm font-extrabold ${t.text}`}>
             {copy.found.replace('{n}', hits)}
@@ -212,11 +204,14 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
 export function ExtractPanel({ copy, listings, tone = 'blue' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
-  const live = useLive(ref);
   const t = toneOf(tone);
 
   return (
-    <div ref={ref} className={panelState(running, live)}>
+    <div
+      ref={ref}
+      className={running ? 'is-running' : undefined}
+      style={huntTiming(listings.length)}
+    >
       <Frame title={copy.title} note={copy.note}>
         {/* The seller, so it is clear whose listings these are. */}
         <div className="flex items-center gap-3 border-b border-hairline px-4 py-3.5">
@@ -241,7 +236,7 @@ export function ExtractPanel({ copy, listings, tone = 'blue' }) {
             {listings.map((name, i) => (
               <li
                 key={name}
-                style={{ '--hunt-delay': `${0.2 + i * 0.16}s` }}
+                style={{ '--hunt-delay': rowDelay(i) }}
                 className="hunt-row flex items-center gap-2.5"
               >
                 <span aria-hidden="true" className="size-6 shrink-0 rounded-md bg-ink/[0.06]" />
@@ -251,7 +246,7 @@ export function ExtractPanel({ copy, listings, tone = 'blue' }) {
           </ul>
         </div>
 
-        <p className="flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
+        <p className="hunt-summary flex items-center justify-between border-t border-hairline bg-paper-sunk px-4 py-3">
           <span
             className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
           >
@@ -277,12 +272,15 @@ export function ExtractPanel({ copy, listings, tone = 'blue' }) {
 export function ResultsPanel({ copy, matches, tone = 'red' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
-  const live = useLive(ref);
   const t = toneOf(tone);
   const ready = matches.filter((m) => m.ready).length;
 
   return (
-    <div ref={ref} className={panelState(running, live)}>
+    <div
+      ref={ref}
+      className={running ? 'is-running' : undefined}
+      style={huntTiming(matches.length)}
+    >
       <Frame title={copy.title} note={copy.note}>
         <div className="relative">
           <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
@@ -295,7 +293,7 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
             {matches.map((match, i) => (
               <li
                 key={match.name}
-                style={{ '--hunt-delay': `${0.25 + i * 0.2}s` }}
+                style={{ '--hunt-delay': rowDelay(i) }}
                 className={`hunt-row relative grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
                   match.ready ? 'hunt-hit' : ''
                 } ${i ? 'border-t border-hairline/70' : ''}`}
@@ -307,7 +305,7 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
                 </span>
                 <span
                   className="hunt-value w-16 text-right"
-                  style={{ '--hunt-delay': `${0.45 + i * 0.2}s` }}
+                  style={{ '--hunt-delay': rowDelay(i) }}
                 >
                   {match.ready ? (
                     <span className={`micro-label inline-flex items-center gap-1 ${t.text}`}>
@@ -329,7 +327,7 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
         </div>
 
         {/* The handoff the step's own copy ends on. */}
-        <p className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline bg-paper-sunk px-4 py-3">
+        <p className="hunt-summary flex flex-wrap items-center justify-between gap-3 border-t border-hairline bg-paper-sunk px-4 py-3">
           <span className={`font-display text-sm font-extrabold ${t.text}`}>
             {copy.summary.replace('{n}', ready)}
           </span>
@@ -353,19 +351,15 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
 export function PastePanel({ copy, titles, tone = 'gold' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
-  const live = useLive(ref);
   const t = toneOf(tone);
 
   return (
-    <div ref={ref} className={panelState(running, live)}>
+    <div ref={ref} className={running ? 'is-running' : undefined} style={huntTiming(titles.length)}>
       <Frame title={copy.title} note={copy.note}>
         <div className="p-4">
           <div className="flex items-center justify-between">
             <span className="micro-label text-muted">{copy.field}</span>
-            <span
-              className="hunt-value micro-label tabular-nums"
-              style={{ '--hunt-delay': '1.5s' }}
-            >
+            <span className="hunt-summary micro-label tabular-nums">
               <span className={t.text}>{copy.count}</span>
             </span>
           </div>
@@ -374,7 +368,7 @@ export function PastePanel({ copy, titles, tone = 'gold' }) {
             {titles.map((title, i) => (
               <span
                 key={title}
-                style={{ '--hunt-delay': `${0.25 + i * 0.2}s` }}
+                style={{ '--hunt-delay': rowDelay(i) }}
                 className="hunt-row truncate font-mono text-[0.7rem] leading-relaxed text-muted"
               >
                 {title}
@@ -383,8 +377,7 @@ export function PastePanel({ copy, titles, tone = 'gold' }) {
           </div>
 
           <span
-            className={`hunt-value mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
-            style={{ '--hunt-delay': '1.7s' }}
+            className={`hunt-summary mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${t.tile}`}
           >
             <Icon name="magnifier" className="size-3.5" />
             {copy.button}

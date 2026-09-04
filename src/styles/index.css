@@ -430,41 +430,47 @@
 
   /* --- The hunt panels ---------------------------------------------------
      The feature pages show the software working rather than a screenshot of
-     it. Everything below runs only once its panel is near the viewport — the
-     component adds `is-running` — so nothing animates off screen, and it
-     plays a fixed number of times rather than looping forever: this is a
-     demonstration, not a spinner.
+     it, and the demonstration is a sequence with an end, not a loop:
 
-     `prefers-reduced-motion` is handled by the global rule further down, and
-     every element's resting state is its finished state, so with motion off
-     the panel simply reads as a filled-in result. */
-  /* Hidden only where JavaScript is running, the same rule `[data-reveal]`
-     follows and for the same reason: `is-running` is added by script, so
-     without script it never arrives and an unscoped `opacity: 0` would leave a
-     no-JS visitor an empty panel on a prerendered page. Reduced motion is
-     already safe — the global rule runs the animation at 0.001ms and
-     `forwards` holds the finished state. */
+       1. the beam sweeps the panel once, over rows that are still bars
+       2. the rows resolve one at a time behind it
+       3. the count lands, and everything stops
+
+     It ran as an infinite sweep with a pulsing green wash for a while. That
+     read as a page that had not finished loading — and a result already on
+     screen while the scan was still running said the scan did not matter.
+     Nothing here repeats.
+
+     `is-running` is added by an observer when the panel is first reached, so
+     nothing plays off screen and each panel plays once per visit.
+
+     Timings come from the component as `--hunt-scan` and `--hunt-delay`, so
+     the stagger stays correct whatever number of rows a panel has. */
   .js-motion .hunt-row,
-  .js-motion .hunt-value {
+  .js-motion .hunt-value,
+  .js-motion .hunt-summary {
     opacity: 0;
   }
 
-  /* Filling in happens once. A row that keeps re-appearing is a page that
-     never settles, and the reader has already seen it arrive. */
+  /* Phase 2: each row's real values arrive, behind the beam that just passed. */
   .is-running .hunt-row,
   .is-running .hunt-value {
-    animation: hunt-resolve 0.5s var(--ease-out-expo) forwards;
-    animation-delay: var(--hunt-delay, 0s);
+    animation: hunt-resolve 0.45s var(--ease-out-expo) var(--hunt-delay, 0s) 1 normal forwards;
   }
 
-  /* A row waiting to be scanned: bars where the values will be, sitting over
-     the real content until the beam reaches it. The row itself is already
-     there, so nothing moves when the skeleton clears — only the content
-     changes, which is what a scan resolving actually looks like.
+  /* Phase 3: the answer, once there is actually an answer. Held back until the
+     last row has resolved — a count that is already on screen while the panel
+     is still scanning is the panel telling you the scan was theatre. */
+  .is-running .hunt-summary {
+    animation: hunt-resolve 0.45s var(--ease-out-expo) var(--hunt-summary-delay, 0s) 1 normal
+      forwards;
+  }
 
-     Hidden without JavaScript, like everything else here: the real values are
-     in the prerendered markup, and a no-JS reader should get them rather than
-     a permanent set of grey bars. */
+  /* Phase 1: a row waiting to be scanned. Bars where the values will be,
+     sitting over the real content until the beam has passed it.
+
+     Hidden without JavaScript: the real values are in the prerendered markup,
+     and a reader without script should get them rather than permanent bars. */
   .hunt-skel {
     @apply pointer-events-none absolute inset-0 z-10 flex items-center gap-4 bg-white px-4;
     opacity: 0;
@@ -475,24 +481,17 @@
   }
 
   .is-running .hunt-skel {
-    animation: hunt-skel-out 0.4s ease-out forwards;
-    /* A beat after the row lands, so there is a visible "looking… found". */
-    animation-delay: calc(var(--hunt-delay, 0s) + 0.45s);
+    animation: hunt-skel-out 0.35s ease-out var(--hunt-delay, 0s) 1 normal forwards;
   }
 
-  @keyframes hunt-skel-out {
-    to {
-      opacity: 0;
-    }
-  }
+  /* The flash marking a row worth listing. One pass as the row lands, not a
+     pulse: it is a result being noted, and a colour that keeps breathing turns
+     it into a status light.
 
-  /* The flash on a row worth listing lives on a pseudo-element, not on the row.
-
-     It was on the row itself, sharing the `animation` shorthand with
-     `hunt-resolve` at equal specificity — the later rule won outright, the
-     flagged rows lost their opacity animation, and three of five rows in the
-     hero table never appeared. Moving it here means the two can never collide
-     again whatever order the rules end up in. */
+     It lives on a pseudo-element rather than the row because it shared the
+     `animation` shorthand with the fill at equal specificity, the later rule
+     won outright, and three of five rows lost their opacity animation and
+     never appeared. On `::after` they cannot collide whatever the rule order. */
   .hunt-hit {
     position: relative;
   }
@@ -504,16 +503,15 @@
     opacity: 0;
   }
 
-  /* The sweep, and the flash that rides with it. Both loop for as long as the
-     panel is on screen and stop the moment it is not: `is-live` is toggled by
-     an observer, so an off-screen panel runs nothing at all. Same 2.6s on each
-     so a row lights as the beam crosses it. */
-  .is-live .hunt-beam {
-    animation: step-scan 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .is-running .hunt-hit::after {
+    animation: hunt-flag 1s ease-out var(--hunt-delay, 0s) 1 normal both;
   }
 
-  .is-live .hunt-hit::after {
-    animation: hunt-flag 2.6s ease-out var(--hunt-delay, 0s) infinite;
+  /* The sweep. One pass across the panel, then gone. */
+  .is-running .hunt-beam {
+    animation:
+      step-scan var(--hunt-scan, 2s) cubic-bezier(0.4, 0, 0.6, 1) 1 normal forwards,
+      hunt-beam-out 0.3s ease-out var(--hunt-scan, 2s) 1 normal forwards;
   }
 
   @keyframes hunt-resolve {
@@ -527,21 +525,330 @@
     }
   }
 
-  /* Opacity rather than background-color, because it runs on a tinted overlay
-     now and opacity is the cheaper of the two to animate. The lit window is
-     short: the row should catch as the beam passes, not glow for a whole
-     cycle. */
-  @keyframes hunt-flag {
-    0%,
-    22%,
-    100% {
+  @keyframes hunt-skel-out {
+    to {
       opacity: 0;
-    }
-    8% {
-      opacity: 1;
     }
   }
 
+  @keyframes hunt-beam-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes hunt-flag {
+    0% {
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* The hero headline shares its column with the panel, so it gets a lower
+     ceiling; at --text-hero it breaks as "ESCAPE THE / 9 TO 5". */
+  --text-hero-split: clamp(2.3rem, 3.7vw, 3.55rem);
+  --text-display: clamp(1.85rem, 3.6vw, 3.15rem);
+  --text-section: clamp(1.6rem, 2.8vw, 2.55rem);
+  --text-lead: clamp(1.05rem, 1.35vw, 1.3rem);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+
+  /* --- Depth ------------------------------------------------------------ */
+  --shadow-lift: 0 1px 2px rgb(30 31 35 / 0.04), 0 8px 24px -12px rgb(30 31 35 / 0.18);
+  --shadow-float: 0 2px 6px rgb(30 31 35 / 0.05), 0 24px 60px -24px rgb(30 31 35 / 0.28);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* Height of the sticky conversion bar; sections use it for scroll offset. */
+    --sticky-cta-height: 4.25rem;
+    color-scheme: light;
+
+    /* Defined once so every surface carrying the ramp stays in step. */
+    --gradient-brand: linear-gradient(
+      135deg,
+      var(--color-brand-red) 0%,
+      var(--color-brand-violet) 48%,
+      var(--color-accent) 100%
+    );
+  }
+
+  * {
+    border-color: var(--color-hairline);
+  }
+
+  /* Anything that can be clicked says so.
+
+     Tailwind v4 dropped the preflight rule that used to put `cursor: pointer`
+     on buttons, and the browser default for `<button>` is `default` — so links
+     got the hand and buttons did not. Measured on the homepage, 70 of 125
+     clickable elements were showing an arrow: every audience panel, every
+     hero-panel beat, every video thumbnail, every receipt card, the menu
+     toggle. The one place it had been noticed got a local `cursor-pointer`
+     patch; this fixes the cause instead. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
+  }
+
+  /* A disabled control should read as unavailable, not as unclickable-looking
+     but otherwise normal. */
+  button:disabled,
+  [role='button'][aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  html {
+    /* Lenis drives smooth scroll; native smooth would fight it. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+    /* `clip`, not `hidden`: hidden makes this a scroll container, which breaks
+       sticky inside it and desyncs Lenis from window.scrollY. */
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  /* Anchor links land below the fixed header instead of under it. */
+  :where(section[id], div[id]) {
+    scroll-margin-top: 6rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Brand blue: legible on both the paper and the ink bands. */
+  :focus-visible {
+    outline: 2px solid var(--color-ebay-blue);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-accent-wash);
+    color: var(--color-ink);
+  }
+
+  img,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ==========================================================================
+   Reusable component classes
+   Named for what they are, never for where they sit.
+   ========================================================================== */
+
+/* @utility, not @layer components: Tailwind v4 only lets @apply reference real
+   utilities, and the .btn-* variants below build on this. */
+@utility btn {
+  @apply relative inline-flex items-center justify-center gap-2 rounded-full
+         px-7 py-3.5 text-sm font-semibold tracking-tight
+         transition-[transform,box-shadow,background-color,border-color,color,filter]
+         duration-[400ms] ease-[var(--ease-out-expo)]
+         will-change-transform select-none;
+}
+
+@layer components {
+  /* --- Layout ----------------------------------------------------------- */
+  .site-shell {
+    @apply mx-auto w-full max-w-[82rem] px-5 sm:px-7 lg:px-10;
+  }
+
+  /* Both edges pad, so the gap a visitor sees between two bands is twice this.
+     Symmetric padding has to stay or the coloured bands sit off-centre. */
+  .section-band {
+    @apply relative py-16 sm:py-20 lg:py-24;
+  }
+
+  /*
+   * Skip layout and paint for a section until it is near the viewport.
+   *
+   * For the two evidence walls only. Between them they are 2,849 elements —
+   * 58% of the homepage — and both run a marquee that never stops, far below
+   * the fold. Lighthouse measured the main thread busy for 14s on work almost
+   * none of which was JavaScript.
+   *
+   * 'auto' on contain-intrinsic-size so the browser remembers each section's
+   * real height once it has been rendered; the fallback only has to be close
+   * enough that the scrollbar does not jump on the way down.
+   */
+  /* The placeholder height is per section now, because the set grew past the
+     two walls it was written for and 900px is only right for those.
+
+     `auto` means the browser keeps the real height once it has rendered the
+     section once, so the number below only decides the very first pass — but
+     that pass is the one a visitor scrolls through, and a section guessed
+     950px short moves the ground under them. The values are each section's
+     measured desktop height; a phone is taller and still underestimates,
+     which the `auto` keyword corrects after the first sighting. */
+  .defer-render {
+    content-visibility: auto;
+    contain-intrinsic-size: auto var(--defer-h, 900px);
+  }
+
+  /*
+   * A deep link has to land on its section, and 900px is a guess.
+   *
+   * `/#training` scrolls past both walls, so the trip is measured against two
+   * placeholders rather than two sections — and they resolve to their real
+   * height on the way down, moving the target after the page has stopped.
+   * Measured: the landing came up 246px short.
+   *
+   * `is-landing` is on the document only while a hash is being resolved, so
+   * the walls are measured, not estimated. It costs that one navigation the
+   * work this rule exists to skip; a visitor who asked for a section far down
+   * the page is going to scroll through both of them anyway.
+   */
+  .is-landing .defer-render {
+    content-visibility: visible;
+  }
+
+  /* Neutral by default: a rule carries the eye. An accent on all 15 sections
+     reads as noise. */
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2.5 font-label text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-muted;
+  }
+  .section-eyebrow::before {
+    content: '';
+    @apply h-px w-6 shrink-0 bg-ink/25;
+  }
+
+  .section-eyebrow-on-ink {
+    @apply text-muted-dark;
+  }
+  .section-eyebrow-on-ink::before {
+    @apply bg-paper/30;
+  }
+
+  .micro-label {
+    @apply font-label text-[0.65rem] font-semibold uppercase tracking-[0.14em];
+  }
+
+  /* --- Buttons ----------------------------------------------------------
+     Every variant answers hover with a background change, not only lift and
+     shadow: on a trackpad a 2px rise is easy to miss. */
+  .btn-primary {
+    @apply btn relative overflow-hidden text-paper shadow-lift hover:-translate-y-0.5 hover:shadow-float;
+    background-image: var(--gradient-brand);
+  }
+
+  /* Hover deepens the ramp rather than swapping it for another one.
+     `background-image` is not an animatable property — the old version changed
+     gradients on a single frame however long the transition was — while
+     `filter` interpolates, so the same "lit differently" idea now actually
+     eases. */
+  .btn-primary:hover {
+    filter: saturate(1.12) brightness(0.93);
+  }
+
+  /* Sheen that crosses the button on hover. */
+  .btn-primary::after {
+    content: '';
+    @apply pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-12;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.28), transparent);
+    transition: transform 700ms var(--ease-out-expo);
+  }
+
+  .btn-primary:hover::after {
+    transform: translateX(400%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primary::after {
+      display: none;
+    }
+  }
+
+  .btn-secondary {
+    @apply btn border border-hairline bg-paper text-ink hover:-translate-y-0.5 hover:border-accent/30 hover:bg-accent-wash;
+  }
+
+  /* Paper fill, brand ramp in the border, drifting on the same loop as the
+     hero mark. Two background layers do the work: a solid paper fill clipped
+     to the padding box, over the ramp clipped to the border box — the only way
+     to paint a gradient into a border without wrapping the button in a second
+     element. `background-size` on the ramp is what gives the drift somewhere
+     to travel. Used on the hero's second door only; the other secondary
+     buttons stay quiet. */
+  .btn-brand-outline {
+    @apply btn text-ink shadow-lift hover:-translate-y-0.5 hover:shadow-float;
+    border: 2px solid transparent;
+    background-image:
+      linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size:
+      100% 100%,
+      220% 100%;
+    animation: brand-drift 6s ease-in-out infinite;
+  }
+
+  /* The same two-layer technique as `.btn-brand-outline`, at panel scale: a
+     paper fill clipped to the padding box over the brand ramp clipped to the
+     border box. Named once rather than inlined, because the trick is easy to
+     get subtly wrong and there is now more than one surface that wants it.
+
+     Used on the contact form — the one surface on that page that asks the
+     visitor for something, and so the one that earns the ramp. The drift is
+     slower than the button's; a panel this size sweeping at 6s reads as a
+     loading state. `prefers-reduced-motion` stops it globally, further down. */
+  .panel-brand-outline {
+    border: 2px solid transparent;
+    background-image:
+      linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size:
+      100% 100%,
+      220% 100%;
+    animation: brand-drift 12s ease-in-out infinite;
+  }
+
+  /* --- The hunt panels ---------------------------------------------------
+     The feature pages show the software working rather than a screenshot of
+     it. Everything below runs only once its panel is near the viewport — the
+     component adds `is-running` — so nothing animates off screen, and it
+     plays a fixed number of times rather than looping forever: this is a
+     demonstration, not a spinner.
+
+     `prefers-reduced-motion` is handled by the global rule further down, and
+     every element's resting state is its finished state, so with motion off
+     the panel simply reads as a filled-in result. */
   /* The hero's colour floor, lifted out of `HeroSection` so a second page can
      stand on it: two soft radials, red on the copy side and blue on the panel
      side. The dot texture over it is the canvas `HeroDots`, the same component
