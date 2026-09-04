@@ -68,7 +68,7 @@ In the order the work wants to happen, not the order it was asked.
 | #   | Task                                                                                                                                                                                                 | Waiting on                                                                               |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight                             | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages** — eleven, listed in the Pages section below                                                                                                                                            | Slug decisions and copy, per that section                                                |
+| 2   | **New pages** — nine, listed in the Pages section below                                                                                                                                              | Slug decisions and copy, per that section                                                |
 | 3   | **Wire GTM for real** — loader, consent gate and cookie policy are built and inert                                                                                                                   | `VITE_GTM_ID`                                                                            |
 | 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                                                      | Deferred by decision until the move to the client's server                               |
 | 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                                                      | Real captures from the client                                                            |
@@ -101,26 +101,31 @@ payments and auth are out of this phase.
 | Free playbook  | `/free-play-book`                                              |
 | Privacy policy | `/privacy-policy`                                              |
 | Cookie policy  | `/cookie-policy` — ours, no equivalent on their site           |
-| About          | `/about` — their copy, refund qualified to the monthly plan    |
 | Careers        | `/careers` — static list; role description awaited from client |
 | Affiliate      | `/affiliate` — their full terms, 11 clauses, both languages    |
 | Terms          | `/terms-and-conditions` — their 15 sections, verbatim          |
 
-All of the above exist in both languages.
+All of the above exist in both languages — nine pages, eighteen URLs, which is
+exactly what `react-router.config.js` prerenders and what `sitemap.xml` lists.
+Those three numbers agreeing is the check; when they last disagreed the sitemap
+was four pages behind without anyone noticing.
+
+**About is not on this list.** Its design was withdrawn in `c2c95b8` and there
+is no `/about` route today. It sits in To build below.
 
 ### To build
 
 | #   | Page                    | Route on their site                                   | Notes                                                                       |
 | --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
 | 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                  |
-| 3   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                   |
-| 4   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
-| 5   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
-| 6   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**          |
-| 7   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
-| 8   | Blog index              | `/blog`                                               |                                                                             |
-| 9   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                      |
-| 10  | About                   | `/about`                                              | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
+| 2   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                   |
+| 3   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
+| 4   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
+| 5   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**          |
+| 6   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
+| 7   | Blog index              | `/blog`                                               |                                                                             |
+| 8   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                      |
+| 9   | About                   | `/about`                                              | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
 
 ### Decided 3 Sep
 
