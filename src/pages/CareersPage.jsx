@@ -77,7 +77,10 @@ export default function CareersPage() {
 
   return (
     <>
-      <Band>
+      {/* The page opens here, so it clears the floating header rather than
+          using section-band, which is shorter than the header is tall. Same
+          padding as FAQ, Pricing, Playbook and Contact. */}
+      <Band className="pt-36 sm:pt-44">
         <p className="section-eyebrow" data-reveal data-reveal-group="hero">
           {CAREERS.eyebrow}
         </p>

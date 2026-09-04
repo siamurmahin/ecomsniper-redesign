@@ -45,7 +45,10 @@ export default function AffiliatePage() {
 
   return (
     <div ref={scopeRef}>
-      <section className="section-band">
+      {/* The page opens here, so it clears the floating header rather than
+          using section-band, which is shorter than the header is tall. Same
+          padding as FAQ, Pricing, Playbook and Contact. */}
+      <section className="section-band pt-36 sm:pt-44">
         <div className="site-shell">
           <p className="section-eyebrow" data-reveal data-reveal-group="hero">
             {AFFILIATE.eyebrow}

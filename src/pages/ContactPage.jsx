@@ -178,7 +178,12 @@ export default function ContactPage() {
   const [headStart, headMark, headTail] = ['How can we ', 'help', '?'];
 
   return (
-    <section ref={ref} className="section-band">
+    /* Not `section-band`. That is py-16/20/24, which is shorter than the
+       floating header, so the eyebrow landed under it — the same reason
+       `PlaybookPage` sets its own top padding rather than using the band. The
+       first section of a page has to clear the header and then leave room to
+       breathe; a band between two sections does not. */
+    <section ref={ref} className="pt-36 pb-20 sm:pt-44 lg:pt-52 lg:pb-24">
       <div className="site-shell">
         {/* The ink pill with its live dot — the homepage opens on this, and a
             page about 24/7 support is the one other place a "we are awake"
@@ -196,7 +201,7 @@ export default function ContactPage() {
         </p>
 
         <h1
-          className="mt-6 text-[length:var(--text-hero)] leading-[0.95]"
+          className="mt-8 text-[length:var(--text-hero)] leading-[0.95]"
           data-reveal
           data-reveal-group="contact"
         >
@@ -206,14 +211,14 @@ export default function ContactPage() {
         </h1>
 
         <p
-          className="mt-6 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
+          className="mt-7 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
           data-reveal
           data-reveal-group="contact"
         >
           {CONTACT.lead}
         </p>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+        <div className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           {/* One ink panel holding every way to reach a person that does not
               depend on this form working, or on JavaScript running at all.
               Weighting it against the white form is the point: the block a

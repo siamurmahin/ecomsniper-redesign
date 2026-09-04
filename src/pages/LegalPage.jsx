@@ -32,7 +32,7 @@ export default function LegalPage({ which, doc: ownCopy }) {
   const cookies = which === 'cookies' ? declaredCookies() : [];
 
   return (
-    <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6 sm:py-24">
+    <article className="mx-auto max-w-3xl px-5 pt-36 pb-16 sm:px-6 sm:pt-44 sm:pb-24">
       <h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{doc.title}</h1>
       <p className="mt-2 text-sm text-muted">{doc.updated}</p>
 
