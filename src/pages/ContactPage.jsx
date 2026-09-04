@@ -87,44 +87,40 @@ function Field({ id, label, type = 'text', placeholder, value, onChange, rows })
   );
 }
 
-/** One way to reach a person, carrying its own colour. */
-function MethodCard({ method, meta }) {
+/**
+ * One way to reach a person, carrying its own colour, as a row inside the ink
+ * panel.
+ *
+ * The label takes `tone.onInk` rather than `tone.text`: the plain signal hues
+ * are chosen to sit on paper and go muddy on ink, which is the whole reason
+ * `signalTones` carries a second set. The filled tile keeps its full-strength
+ * colour, since it is a block rather than type.
+ */
+function MethodRow({ method, meta }) {
   const tone = toneOf(meta.tone);
 
   return (
-    <li
-      data-reveal
-      data-reveal-group="contact-methods"
-      className="group card-paper relative isolate overflow-hidden"
-    >
-      {/* The same corner wash the pillar cards and the hero use. */}
+    <li data-reveal data-reveal-group="contact-methods" className="group flex items-start gap-4">
       <span
         aria-hidden="true"
-        className={`pointer-events-none absolute -top-10 -right-10 -z-10 size-24 rounded-full bg-gradient-to-br to-transparent blur-2xl ${tone.wash}`}
-      />
+        className={`grid size-9 shrink-0 place-items-center rounded-lg transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${tone.tile}`}
+      >
+        <Icon name={meta.icon} className="size-4" />
+      </span>
 
-      <span className="flex items-start gap-4">
-        <span
-          aria-hidden="true"
-          className={`grid size-9 shrink-0 place-items-center rounded-lg transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${tone.tile}`}
-        >
-          <Icon name={meta.icon} className="size-4" />
-        </span>
-
-        <span className="min-w-0">
-          <span className={`micro-label block ${tone.text}`}>{method.label}</span>
-          <span className="mt-1 block font-display text-lg font-extrabold tracking-tight">
-            {method.href ? (
-              <a
-                href={method.href}
-                className="underline decoration-hairline underline-offset-4 hover:decoration-ink"
-              >
-                {method.value}
-              </a>
-            ) : (
-              method.value
-            )}
-          </span>
+      <span className="min-w-0">
+        <span className={`micro-label block ${tone.onInk}`}>{method.label}</span>
+        <span className="mt-1 block font-display text-lg font-extrabold tracking-tight text-paper">
+          {method.href ? (
+            <a
+              href={method.href}
+              className="underline decoration-ink-line underline-offset-4 transition-colors hover:decoration-paper"
+            >
+              {method.value}
+            </a>
+          ) : (
+            method.value
+          )}
         </span>
       </span>
     </li>
@@ -218,20 +214,30 @@ export default function ContactPage() {
         </p>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-          {/* The ways to reach a person that do not depend on this form
-              working, or on JavaScript running at all. */}
-          <div>
-            <p
-              className="text-[length:var(--text-lead)] leading-relaxed"
-              data-reveal
-              data-reveal-group="contact-methods"
-            >
+          {/* One ink panel holding every way to reach a person that does not
+              depend on this form working, or on JavaScript running at all.
+              Weighting it against the white form is the point: the block a
+              hesitant visitor needs is the solid one, and the form is the
+              optional half. */}
+          <div
+            className="relative isolate overflow-hidden rounded-2xl bg-ink p-8 sm:p-10"
+            data-reveal
+            data-reveal-group="contact-methods"
+          >
+            {/* The corner wash the pillar cards use, in the accent, so the
+                panel is not a flat rectangle of black. */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-16 -right-16 -z-10 size-48 rounded-full bg-gradient-to-br from-signal-blue/25 to-transparent blur-3xl"
+            />
+
+            <p className="text-[length:var(--text-lead)] leading-relaxed text-paper">
               {CONTACT.intro}
             </p>
 
-            <ul className="mt-7 grid gap-4">
+            <ul className="mt-8 grid gap-6 border-t border-ink-line pt-8">
               {CONTACT.methods.map((method, i) => (
-                <MethodCard
+                <MethodRow
                   key={method.label}
                   method={method}
                   meta={METHOD_META[i % METHOD_META.length]}
@@ -241,21 +247,9 @@ export default function ContactPage() {
 
             {/* The second door, the same one the footer offers: someone who
                 came here to ask whether it is worth it can read it instead. */}
-            <div
-              className="card-ink mt-4 flex flex-wrap items-center justify-between gap-4"
-              data-reveal
-              data-reveal-group="contact-methods"
-            >
-              <span className="flex items-center gap-3">
-                <span
-                  aria-hidden="true"
-                  className="grid size-9 shrink-0 place-items-center rounded-lg bg-signal-blue text-paper"
-                >
-                  <Icon name="openBook" className="size-4" />
-                </span>
-                <span className="font-display text-base font-extrabold text-paper">
-                  Not ready to ask yet?
-                </span>
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-ink-line pt-8">
+              <span className="font-serif text-lg italic text-muted-dark">
+                Not ready to ask yet?
               </span>
               <CtaButton href="/free-play-book" variant="onInk">
                 Get the free playbook
