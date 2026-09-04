@@ -1,7 +1,44 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNearViewport } from '../../hooks/useNearViewport';
 import { toneOf } from '../../lib/signalTones';
 import Icon from '../ui/Icon';
+
+/**
+ * Two states, because the panels do two different things.
+ *
+ * `is-running` is one-shot and sticky, from `useNearViewport`: the rows fill
+ * in once and stay filled, because a row that keeps re-appearing is a page
+ * that never settles.
+ *
+ * `is-live` toggles both ways, which `useNearViewport` deliberately does not —
+ * it is written never to go back to false. The sweep and the flash loop for as
+ * long as a panel is on screen and stop the moment it leaves, so a page with
+ * four panels on it is only ever animating the one being looked at.
+ */
+function useLive(ref) {
+  const [live, setLive] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+
+    const observer = new IntersectionObserver(([entry]) => setLive(entry.isIntersecting), {
+      rootMargin: '0px 0px -10% 0px',
+    });
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref]);
+
+  return live;
+}
+
+/** Both classes for a panel, as one string. */
+function panelState(running, live) {
+  return (
+    [running ? 'is-running' : '', live ? 'is-live' : ''].filter(Boolean).join(' ') || undefined
+  );
+}
 
 /**
  * The Product Hunter panels — the software working, drawn rather than
@@ -13,12 +50,17 @@ import Icon from '../ui/Icon';
  * this shows the mechanic — a price gap being found, a list being scanned —
  * which is the part that actually explains the product.
  *
- * **Each panel plays once, when it is reached.** `useNearViewport` adds
- * `is-running`; the CSS in `index.css` runs a fixed two cycles rather than an
- * infinite loop, so nothing animates off screen and nothing turns a marketing
- * page into a permanent spinner. Every element's resting state is its finished
- * state, so with `prefers-reduced-motion` the panel reads as a completed
- * result rather than as an empty box.
+ * **Two states, and they do different jobs.** `is-running` fills the rows in
+ * once and leaves them filled — a row that keeps re-appearing is a page that
+ * never settles. `is-live` drives the sweep and the flash, and it toggles with
+ * visibility, so the panel being looked at is the only one animating and an
+ * off-screen panel runs nothing at all. That was first written as a fixed two
+ * cycles to avoid a permanent spinner, which just looked broken: the page went
+ * still a few seconds after it loaded.
+ *
+ * With `prefers-reduced-motion` the global rule collapses every duration, and
+ * because the fill has `forwards` the panel reads as a completed result rather
+ * than as an empty box.
  *
  * **On the numbers.** They are prices, not earnings. This site promises, on
  * the About page, not to show screenshots of big earnings, and a panel
@@ -26,6 +68,30 @@ import Icon from '../ui/Icon';
  * is shown is the arithmetic the software does — what an item costs in two
  * places — and the panels are labelled as an illustration.
  */
+
+/**
+ * The unscanned state of a row: bars where the values will be.
+ *
+ * Sits over the real content and clears once the beam has passed, so the scan
+ * reads as the cause of the result rather than as decoration beside it.
+ * `aria-hidden`, because the values underneath are the real ones and a screen
+ * reader should never be told about a loading state that is illustrative.
+ */
+function SkeletonRow({ columns = 3 }) {
+  const widths = ['45%', '18%', '18%', '14%'];
+
+  return (
+    <span aria-hidden="true" className="hunt-skel">
+      {Array.from({ length: columns + 1 }, (_, i) => (
+        <span
+          key={i}
+          className={`h-2 rounded-full ${i === 0 ? 'flex-1' : ''} bg-ink/[0.09]`}
+          style={i === 0 ? undefined : { width: widths[i] }}
+        />
+      ))}
+    </span>
+  );
+}
 
 /** Window chrome, so a panel reads as software rather than as a chart. */
 function Frame({ title, note, children }) {
@@ -62,11 +128,12 @@ function Frame({ title, note, children }) {
 export function HuntTable({ copy, tone = 'blue', rows }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
+  const live = useLive(ref);
   const t = toneOf(tone);
   const hits = rows.filter((row) => row.hit).length;
 
   return (
-    <div ref={ref} className={running ? 'is-running' : undefined}>
+    <div ref={ref} className={panelState(running, live)}>
       <Frame title={copy.title} note={copy.note}>
         <div className="relative">
           {/* Column heads, so the two prices are unambiguous. */}
@@ -82,10 +149,11 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
               <li
                 key={row.name}
                 style={{ '--hunt-delay': `${0.25 + i * 0.22}s` }}
-                className={`hunt-row grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
+                className={`hunt-row relative grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
                   row.hit ? 'hunt-hit' : ''
                 } ${i ? 'border-t border-hairline/70' : ''}`}
               >
+                <SkeletonRow columns={3} />
                 <span className="truncate text-sm text-ink">{row.name}</span>
                 <span className="text-right text-sm font-semibold text-ink tabular-nums">
                   {row.ebay}
@@ -144,10 +212,11 @@ export function HuntTable({ copy, tone = 'blue', rows }) {
 export function ExtractPanel({ copy, listings, tone = 'blue' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
+  const live = useLive(ref);
   const t = toneOf(tone);
 
   return (
-    <div ref={ref} className={running ? 'is-running' : undefined}>
+    <div ref={ref} className={panelState(running, live)}>
       <Frame title={copy.title} note={copy.note}>
         {/* The seller, so it is clear whose listings these are. */}
         <div className="flex items-center gap-3 border-b border-hairline px-4 py-3.5">
@@ -208,11 +277,12 @@ export function ExtractPanel({ copy, listings, tone = 'blue' }) {
 export function ResultsPanel({ copy, matches, tone = 'red' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
+  const live = useLive(ref);
   const t = toneOf(tone);
   const ready = matches.filter((m) => m.ready).length;
 
   return (
-    <div ref={ref} className={running ? 'is-running' : undefined}>
+    <div ref={ref} className={panelState(running, live)}>
       <Frame title={copy.title} note={copy.note}>
         <div className="relative">
           <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 border-b border-hairline px-4 py-2.5 sm:gap-x-6">
@@ -226,10 +296,11 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
               <li
                 key={match.name}
                 style={{ '--hunt-delay': `${0.25 + i * 0.2}s` }}
-                className={`hunt-row grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
+                className={`hunt-row relative grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-4 py-3 sm:gap-x-6 ${
                   match.ready ? 'hunt-hit' : ''
                 } ${i ? 'border-t border-hairline/70' : ''}`}
               >
+                <SkeletonRow columns={2} />
                 <span className="truncate text-sm text-ink">{match.name}</span>
                 <span className="text-right text-sm text-muted tabular-nums">
                   {match.price ?? '—'}
@@ -282,10 +353,11 @@ export function ResultsPanel({ copy, matches, tone = 'red' }) {
 export function PastePanel({ copy, titles, tone = 'gold' }) {
   const ref = useRef(null);
   const running = useNearViewport(ref, '0px 0px -15% 0px');
+  const live = useLive(ref);
   const t = toneOf(tone);
 
   return (
-    <div ref={ref} className={running ? 'is-running' : undefined}>
+    <div ref={ref} className={panelState(running, live)}>
       <Frame title={copy.title} note={copy.note}>
         <div className="p-4">
           <div className="flex items-center justify-between">

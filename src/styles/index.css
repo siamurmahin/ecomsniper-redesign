@@ -449,30 +449,71 @@
     opacity: 0;
   }
 
+  /* Filling in happens once. A row that keeps re-appearing is a page that
+     never settles, and the reader has already seen it arrive. */
   .is-running .hunt-row,
   .is-running .hunt-value {
     animation: hunt-resolve 0.5s var(--ease-out-expo) forwards;
     animation-delay: var(--hunt-delay, 0s);
   }
 
-  /* A row worth listing both resolves and flashes, and it has to declare BOTH
-     animations in one list.
+  /* A row waiting to be scanned: bars where the values will be, sitting over
+     the real content until the beam reaches it. The row itself is already
+     there, so nothing moves when the skeleton clears — only the content
+     changes, which is what a scan resolving actually looks like.
 
-     It did not, and the bug was invisible rows: `.is-running .hunt-hit` and
-     `.is-running .hunt-row` have the same specificity, so the later rule won
-     the `animation` shorthand outright and replaced `hunt-resolve` with
-     `hunt-flag`. `hunt-flag` only touches background-color, so every flagged
-     row kept the `opacity: 0` it starts at — three of the five rows in the
-     hero table never appeared at all. */
-  .is-running .hunt-hit {
-    animation:
-      hunt-resolve 0.5s var(--ease-out-expo) var(--hunt-delay, 0s) 1 normal forwards,
-      hunt-flag 1.1s ease-out var(--hunt-delay, 0s) 2;
+     Hidden without JavaScript, like everything else here: the real values are
+     in the prerendered markup, and a no-JS reader should get them rather than
+     a permanent set of grey bars. */
+  .hunt-skel {
+    @apply pointer-events-none absolute inset-0 z-10 flex items-center gap-4 bg-white px-4;
+    opacity: 0;
   }
 
-  /* The sweep. One pass per cycle, the length of the whole stagger. */
-  .is-running .hunt-beam {
-    animation: step-scan 2.6s cubic-bezier(0.4, 0, 0.6, 1) 2;
+  .js-motion .hunt-skel {
+    opacity: 1;
+  }
+
+  .is-running .hunt-skel {
+    animation: hunt-skel-out 0.4s ease-out forwards;
+    /* A beat after the row lands, so there is a visible "looking… found". */
+    animation-delay: calc(var(--hunt-delay, 0s) + 0.45s);
+  }
+
+  @keyframes hunt-skel-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* The flash on a row worth listing lives on a pseudo-element, not on the row.
+
+     It was on the row itself, sharing the `animation` shorthand with
+     `hunt-resolve` at equal specificity — the later rule won outright, the
+     flagged rows lost their opacity animation, and three of five rows in the
+     hero table never appeared. Moving it here means the two can never collide
+     again whatever order the rules end up in. */
+  .hunt-hit {
+    position: relative;
+  }
+
+  .hunt-hit::after {
+    content: '';
+    @apply pointer-events-none absolute inset-0;
+    background-color: rgb(134 184 23 / 0.16);
+    opacity: 0;
+  }
+
+  /* The sweep, and the flash that rides with it. Both loop for as long as the
+     panel is on screen and stop the moment it is not: `is-live` is toggled by
+     an observer, so an off-screen panel runs nothing at all. Same 2.6s on each
+     so a row lights as the beam crosses it. */
+  .is-live .hunt-beam {
+    animation: step-scan 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .is-live .hunt-hit::after {
+    animation: hunt-flag 2.6s ease-out var(--hunt-delay, 0s) infinite;
   }
 
   @keyframes hunt-resolve {
@@ -486,13 +527,18 @@
     }
   }
 
+  /* Opacity rather than background-color, because it runs on a tinted overlay
+     now and opacity is the cheaper of the two to animate. The lit window is
+     short: the row should catch as the beam passes, not glow for a whole
+     cycle. */
   @keyframes hunt-flag {
     0%,
+    22%,
     100% {
-      background-color: transparent;
+      opacity: 0;
     }
-    35% {
-      background-color: rgb(134 184 23 / 0.16);
+    8% {
+      opacity: 1;
     }
   }
 
