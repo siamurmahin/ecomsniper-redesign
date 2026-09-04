@@ -3,6 +3,7 @@ import { useNearViewport } from '../../hooks/useNearViewport';
 import { toneOf } from '../../lib/signalTones';
 import Icon from '../ui/Icon';
 import { Frame, huntTiming, rowDelay } from './HuntPanels';
+import amazonSource from '../../assets/lister/amazon-source.webp';
 
 /**
  * The photographs the gallery tiles show.
@@ -18,7 +19,7 @@ import { Frame, huntTiming, rowDelay } from './HuntPanels';
  * an illustration. Quality 50 at 360px, which is 2x the 177px the tiles
  * measure — see the `lister` row in `scripts/optimize-images.mjs`.
  */
-const GALLERY = import.meta.glob('../../assets/lister/*.webp', {
+const GALLERY = import.meta.glob('../../assets/lister/garden-*.webp', {
   eager: true,
   import: 'default',
 });
@@ -53,13 +54,16 @@ export function PickPanel({ copy, tone = 'blue' }) {
   return (
     <Frame title={copy.title} note={copy.note}>
       <div className="flex gap-4 p-4">
-        {/* The same photograph the gallery panel marks as selected, so the two
-            panels read as one product moving through the tool. */}
+        {/* Deliberately the worst photograph in the set: an item dumped on
+            pavement, which is what a source listing usually gives you. The
+            next panel is the software finding better ones, and that step only
+            reads if there is something here to improve on. It is not one of
+            the six, so it is imported rather than globbed. */}
         <img
-          src={PHOTOS[0]}
+          src={amazonSource}
           alt=""
-          width="360"
-          height="360"
+          width="160"
+          height="160"
           loading="lazy"
           decoding="async"
           className="size-20 shrink-0 rounded-lg bg-ink/[0.06] object-cover"

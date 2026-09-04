@@ -531,10 +531,25 @@ dimensions. Budget unchanged at 568KB eager: the glob is eager but it only
 pulls in six URL strings, and this module is in the AI Lister route's chunk, so
 the homepage never sees it.
 
-### The Amazon panel reuses the selected one
+### The Amazon panel gets the worst photograph, not the best
 
-Asked for after the gallery landed, and it is the right call: the Amazon panel
-had its own grey square, so the first two panels were showing the same product
-as two different blanks. It now renders `PHOTOS[0]` — the tile the gallery
-marks selected — so the panels read as one product moving through the tool.
-Same URL, so it costs nothing beyond the fetch the gallery already makes.
+First pass reused the tile the gallery marks selected. Wrong, and the client
+caught it: step 02 is the software finding better images, and that step only
+reads if there is something to improve on. The Amazon panel now carries its own
+photograph — an item dumped on pavement, which is what a source listing usually
+gives you — and the clean flat-lay is what the tool comes back with. The two
+panels are a before and an after rather than the same picture twice.
+
+It is not one of the six, so it is imported directly and the gallery glob was
+narrowed to `garden-*.webp`. Left as `*.webp` it would have become a seventh
+tile against copy that says "6 found".
+
+Fetched at 160px, because the panel renders it at 80px: 3.2KB, and under Vite's
+4KB inline limit, so it ships as a data URI inside the route chunk rather than
+a seventh request.
+
+**A trap, for whoever checks this panel in a browser next.** Reaching it with
+`scrollIntoView` leaves the reveal unfired and the section renders blank, which
+looks exactly like a broken image — two screenshots were read that way before a
+real wheel scroll showed the photograph sitting there fine. Same trap `CLAUDE.md`
+already warns about with backgrounded tabs, in a new shape.
