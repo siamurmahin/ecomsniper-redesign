@@ -155,4 +155,21 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+<url>
+    <loc>https://ecomsniper.io/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/contact" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/contact" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/contact" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/contact" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

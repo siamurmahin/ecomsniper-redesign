@@ -107,9 +107,9 @@ In the order the work wants to happen, not the order it was asked.
 | #   | Task                                                                                                                                                                                                 | Waiting on                                                                               |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight                             | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages** — nine, listed in the Pages section below                                                                                                                                              | Slug decisions and copy, per that section                                                |
+| 2   | **New pages** — eight, listed in the Pages section below                                                                                                                                             | Slug decisions and copy, per that section                                                |
 | 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                                               | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                         |
-| 4   | **Playbook form endpoint** — every form currently fakes success                                                                                                                                      | Deferred by decision until the move to the client's server                               |
+| 4   | **Playbook form endpoint** — the playbook form still fakes success; contact does not, it hands off to a mail client instead                                                                          | Deferred by decision until the move to the client's server                               |
 | 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                                                      | Real captures from the client                                                            |
 | 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                                                         | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
 | 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                                                   | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
@@ -143,6 +143,7 @@ payments and auth are out of this phase.
 | Careers        | `/careers` — static list; role description awaited from client |
 | Affiliate      | `/affiliate` — their full terms, 11 clauses, both languages    |
 | Terms          | `/terms-and-conditions` — their 15 sections, verbatim          |
+| Contact        | `/contact` — their copy; the form never fakes a delivery       |
 
 All of the above exist in both languages — nine pages, eighteen URLs, which is
 exactly what `react-router.config.js` prerenders and what `sitemap.xml` lists.
@@ -156,7 +157,6 @@ is no `/about` route today. It sits in To build below.
 
 | #   | Page                    | Route on their site                                   | Notes                                                                       |
 | --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| 1   | Contact                 | `/contact`                                            | In the sitemap and the nav                                                  |
 | 2   | Product Hunter          | `/product-hunter` **or** `/productHunterV6`           | Both live, different copy                                                   |
 | 3   | AI Lister               | `/ai-powered-lister` **or** `/aiListerV6`             | Both live                                                                   |
 | 4   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |

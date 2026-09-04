@@ -42,6 +42,11 @@ export const SEO = {
     description:
       'The full terms of the EcomSniper affiliate programme: who can join, how referrals are credited, how commissions are paid, and what ends a partnership.',
   },
+  contact: {
+    title: 'Contact EcomSniper — a real person answers',
+    description:
+      'Call 1 (800) 994-9831, email management@ecomsniper.io, or send a message. Support is 24/7 and we read every message ourselves.',
+  },
   terms: {
     title: 'Terms and Conditions — EcomSniper',
     description:

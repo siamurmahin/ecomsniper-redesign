@@ -36,6 +36,11 @@ export const overlay = {
       description:
         'Die vollständigen Bedingungen des EcomSniper-Partnerprogramms: Aufnahme, Zuordnung von Empfehlungen, Provisionen, Auszahlung und Beendigung.',
     },
+    contact: {
+      title: 'Kontakt zu EcomSniper — es antwortet ein Mensch',
+      description:
+        'Ruf an unter 1 (800) 994-9831, schreib an management@ecomsniper.io oder sende eine Nachricht. Support rund um die Uhr, und wir lesen jede Nachricht selbst.',
+    },
     terms: {
       title: 'Allgemeine Geschäftsbedingungen — EcomSniper',
       description:
