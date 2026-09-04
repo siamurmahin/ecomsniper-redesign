@@ -309,7 +309,7 @@ export default function ContactPage() {
               and then stops. */}
           <form
             onSubmit={onSubmit}
-            className="panel-brand-outline grid gap-6 rounded-2xl p-6 shadow-lift sm:p-8"
+            className="panel-brand-outline grid gap-4 rounded-2xl p-6 shadow-lift sm:p-8"
             data-reveal
             data-reveal-group="contact-form"
           >
@@ -320,21 +320,29 @@ export default function ContactPage() {
               <p className="mt-1.5 text-sm text-muted">{form.panelNote}</p>
             </div>
 
-            <Field
-              id="name"
-              label={form.name.label}
-              placeholder={form.name.placeholder}
-              value={name}
-              onChange={setName}
-            />
-            <Field
-              id="email"
-              type="email"
-              label={form.email.label}
-              placeholder={form.email.placeholder}
-              value={email}
-              onChange={setEmail}
-            />
+            {/* Name and email share a row from `sm` up — they are both short
+                single-line answers, and stacking them made the form taller
+                than it needs to be. Below `sm` they go full width: two 50%
+                columns on a phone leave neither enough room to read the value
+                being typed into it. */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                id="name"
+                label={form.name.label}
+                placeholder={form.name.placeholder}
+                value={name}
+                onChange={setName}
+              />
+              <Field
+                id="email"
+                type="email"
+                label={form.email.label}
+                placeholder={form.email.placeholder}
+                value={email}
+                onChange={setEmail}
+              />
+            </div>
+
             <Field
               id="message"
               label={form.message.label}
