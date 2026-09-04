@@ -7,6 +7,8 @@ import { toneOf } from '../lib/signalTones';
 import Icon from '../components/ui/Icon';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
+import FaqSection from '../sections/FaqSection';
+import ComparisonSection from '../sections/ComparisonSection';
 
 /**
  * Contact.
@@ -179,223 +181,239 @@ export default function ContactPage() {
   const [headStart, headMark, headTail] = ['How can we ', 'help', '?'];
 
   return (
-    /* Not `section-band`. That is py-16/20/24, which is shorter than the
-       floating header, so the eyebrow landed under it — the same reason
-       `PlaybookPage` sets its own top padding rather than using the band. The
-       first section of a page has to clear the header and then leave room to
-       breathe; a band between two sections does not. */
-    <section
-      ref={ref}
-      className="brand-ground relative isolate overflow-hidden pt-36 pb-20 sm:pt-44 lg:pt-52 lg:pb-24"
-    >
-      {/* The same dot field the homepage hero mounts, not a CSS imitation of
+    <>
+      {/* Not `section-band`. That is py-16/20/24, which is shorter than the
+          floating header, so the eyebrow landed under it — the same reason
+          `PlaybookPage` sets its own top padding rather than using the band.
+          The first section of a page has to clear the header and then leave
+          room to breathe; a band between two sections does not. */}
+      <section
+        ref={ref}
+        className="brand-ground relative isolate overflow-hidden pt-36 pb-20 sm:pt-44 lg:pt-52 lg:pb-24"
+      >
+        {/* The same dot field the homepage hero mounts, not a CSS imitation of
           it. Lazy, and its IntersectionObserver unmounts the canvas once this
           section scrolls away, so the rAF loop does not outlive the view. */}
-      <HeroDots />
+        <HeroDots />
 
-      <div className="site-shell">
-        {/* The ink pill with its live dot — the homepage opens on this, and a
+        <div className="site-shell">
+          {/* The ink pill with its live dot — the homepage opens on this, and a
             page about 24/7 support is the one other place a "we are awake"
             indicator means something. */}
-        <p
-          data-reveal
-          data-reveal-group="contact"
-          className="inline-flex max-w-full items-center gap-x-2.5 rounded-full bg-ink px-4 py-2 font-label text-[0.7rem] font-semibold tracking-[0.14em] text-paper uppercase shadow-lift"
-        >
-          <span aria-hidden="true" className="relative grid size-2 place-items-center">
-            <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
-            <span className="size-2 rounded-full bg-signal-green-soft" />
-          </span>
-          {CONTACT.hours}
-        </p>
+          <p
+            data-reveal
+            data-reveal-group="contact"
+            className="inline-flex max-w-full items-center gap-x-2.5 rounded-full bg-ink px-4 py-2 font-label text-[0.7rem] font-semibold tracking-[0.14em] text-paper uppercase shadow-lift"
+          >
+            <span aria-hidden="true" className="relative grid size-2 place-items-center">
+              <span className="absolute size-2 rounded-full bg-signal-green-soft/70 motion-safe:animate-ping" />
+              <span className="size-2 rounded-full bg-signal-green-soft" />
+            </span>
+            {CONTACT.hours}
+          </p>
 
-        <h1
-          className="mt-8 text-[length:var(--text-hero)] leading-[0.95]"
-          data-reveal
-          data-reveal-group="contact"
-        >
-          {headStart}
-          <span className="headline-mark-brand">{headMark}</span>
-          {headTail}
-        </h1>
+          <h1
+            className="mt-8 text-[length:var(--text-hero)] leading-[0.95]"
+            data-reveal
+            data-reveal-group="contact"
+          >
+            {headStart}
+            <span className="headline-mark-brand">{headMark}</span>
+            {headTail}
+          </h1>
 
-        <p
-          className="mt-7 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
-          data-reveal
-          data-reveal-group="contact"
-        >
-          {CONTACT.lead}
-        </p>
+          <p
+            className="mt-7 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
+            data-reveal
+            data-reveal-group="contact"
+          >
+            {CONTACT.lead}
+          </p>
 
-        <div className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-14">
-          {/* One ink panel holding every way to reach a person that does not
+          <div className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-14">
+            {/* One ink panel holding every way to reach a person that does not
               depend on this form working, or on JavaScript running at all.
               Weighting it against the white form is the point: the block a
               hesitant visitor needs is the solid one, and the form is the
               optional half. */}
-          <div
-            className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-ink p-8 sm:p-10"
-            data-reveal
-            data-reveal-group="contact-methods"
-          >
-            {/* Lit the way the homepage lights its dark panels: a large soft
+            <div
+              className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-ink p-8 sm:p-10"
+              data-reveal
+              data-reveal-group="contact-methods"
+            >
+              {/* Lit the way the homepage lights its dark panels: a large soft
                 blob rather than a flat rectangle of black. `AssuranceSection`
                 uses one at `size-96 blur-3xl`; two here, blue into the corner
                 the seal sits in and green up from the foot where the playbook
                 door is, so neither end of the panel goes dead. Both are behind
                 the content and neither is a fill — the ink still reads as ink. */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-28 -right-24 -z-10 size-80 rounded-full bg-signal-blue/20 blur-3xl"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -bottom-28 -left-24 -z-10 size-80 rounded-full bg-signal-green/12 blur-3xl"
-            />
-            {/* A top sheen, so the panel has a light source rather than only
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-28 -right-24 -z-10 size-80 rounded-full bg-signal-blue/20 blur-3xl"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-28 -left-24 -z-10 size-80 rounded-full bg-signal-green/12 blur-3xl"
+              />
+              {/* A top sheen, so the panel has a light source rather than only
                 two coloured corners. */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-white/[0.07] to-transparent"
-            />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-white/[0.07] to-transparent"
+              />
 
-            {/* Same shape as the form panel opposite: a title, a note, a rule.
+              {/* Same shape as the form panel opposite: a title, a note, a rule.
                 A heading on one side of a two-column layout and not the other
                 reads as something half-finished. */}
-            <div className="border-b border-ink-line pb-5">
-              <p className="font-display text-xl font-extrabold tracking-tight text-paper">
-                {CONTACT.methodsTitle}
-              </p>
-              <p className="mt-1.5 text-sm text-muted-dark">{CONTACT.intro}</p>
-            </div>
+              <div className="border-b border-ink-line pb-5">
+                <p className="font-display text-xl font-extrabold tracking-tight text-paper">
+                  {CONTACT.methodsTitle}
+                </p>
+                <p className="mt-1.5 text-sm text-muted-dark">{CONTACT.intro}</p>
+              </div>
 
-            {/* flex-1 lets the three methods take the height the stretched
+              {/* flex-1 lets the three methods take the height the stretched
                 grid gives this panel, instead of the whole surplus pooling as
                 one dead gap above the playbook door. */}
-            <ul className="mt-8 flex flex-1 flex-col justify-center gap-8">
-              {CONTACT.methods.map((method, i) => (
-                <MethodRow
-                  key={method.label}
-                  method={method}
-                  meta={METHOD_META[i % METHOD_META.length]}
-                />
-              ))}
-            </ul>
+              <ul className="mt-8 flex flex-1 flex-col justify-center gap-8">
+                {CONTACT.methods.map((method, i) => (
+                  <MethodRow
+                    key={method.label}
+                    method={method}
+                    meta={METHOD_META[i % METHOD_META.length]}
+                  />
+                ))}
+              </ul>
 
-            {/* The second door, at the foot of the panel: the way out for
+              {/* The second door, at the foot of the panel: the way out for
                 someone who came to ask whether this is worth it and would
                 rather read than write. `mt-auto` pins it to the bottom so the
                 panel's base lines up with the form's however the rows fall. */}
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-5 border-t border-ink-line pt-8">
-              <span className="min-w-0">
-                <span className="block font-display text-base font-extrabold tracking-tight text-paper">
-                  {CONTACT.secondDoor.title}
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-5 border-t border-ink-line pt-8">
+                <span className="min-w-0">
+                  <span className="block font-display text-base font-extrabold tracking-tight text-paper">
+                    {CONTACT.secondDoor.title}
+                  </span>
+                  <span className="mt-1 block text-sm leading-relaxed text-muted-dark">
+                    {CONTACT.secondDoor.body}
+                  </span>
                 </span>
-                <span className="mt-1 block text-sm leading-relaxed text-muted-dark">
-                  {CONTACT.secondDoor.body}
-                </span>
-              </span>
 
-              <CtaButton href={CONTACT.secondDoor.cta.href} variant="onInk">
-                {CONTACT.secondDoor.cta.label}
-              </CtaButton>
+                <CtaButton href={CONTACT.secondDoor.cta.href} variant="onInk">
+                  {CONTACT.secondDoor.cta.label}
+                </CtaButton>
+              </div>
             </div>
-          </div>
 
-          {/* The brand ramp runs in this panel's border and nowhere else on
+            {/* The brand ramp runs in this panel's border and nowhere else on
               the page. It is the one surface asking the visitor for something,
               so it is the one that earns the emphasis — the same reason the
               hero puts the ramp on its primary button and its marked phrase
               and then stops. */}
-          <form
-            onSubmit={onSubmit}
-            className="panel-brand-outline grid gap-4 rounded-2xl p-6 shadow-lift sm:p-8"
-            data-reveal
-            data-reveal-group="contact-form"
-          >
-            <div className="border-b border-hairline pb-5">
-              <p className="font-display text-xl font-extrabold tracking-tight">
-                {form.panelTitle}
-              </p>
-              <p className="mt-1.5 text-sm text-muted">{form.panelNote}</p>
-            </div>
+            <form
+              onSubmit={onSubmit}
+              className="panel-brand-outline grid gap-4 rounded-2xl p-6 shadow-lift sm:p-8"
+              data-reveal
+              data-reveal-group="contact-form"
+            >
+              <div className="border-b border-hairline pb-5">
+                <p className="font-display text-xl font-extrabold tracking-tight">
+                  {form.panelTitle}
+                </p>
+                <p className="mt-1.5 text-sm text-muted">{form.panelNote}</p>
+              </div>
 
-            {/* Name and email share a row from `sm` up — they are both short
+              {/* Name and email share a row from `sm` up — they are both short
                 single-line answers, and stacking them made the form taller
                 than it needs to be. Below `sm` they go full width: two 50%
                 columns on a phone leave neither enough room to read the value
                 being typed into it. */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field
-                id="name"
-                label={form.name.label}
-                placeholder={form.name.placeholder}
-                value={name}
-                onChange={setName}
-              />
-              <Field
-                id="email"
-                type="email"
-                label={form.email.label}
-                placeholder={form.email.placeholder}
-                value={email}
-                onChange={setEmail}
-              />
-            </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field
+                  id="name"
+                  label={form.name.label}
+                  placeholder={form.name.placeholder}
+                  value={name}
+                  onChange={setName}
+                />
+                <Field
+                  id="email"
+                  type="email"
+                  label={form.email.label}
+                  placeholder={form.email.placeholder}
+                  value={email}
+                  onChange={setEmail}
+                />
+              </div>
 
-            <Field
-              id="message"
-              label={form.message.label}
-              placeholder={form.message.placeholder}
-              value={message}
-              onChange={setMessage}
-              rows={7}
-            />
+              <Field
+                id="message"
+                label={form.message.label}
+                placeholder={form.message.placeholder}
+                value={message}
+                onChange={setMessage}
+                rows={7}
+              />
 
-            {/* The trap. Off-screen rather than display:none, because some
+              {/* The trap. Off-screen rather than display:none, because some
                 bots skip hidden inputs, and never announced or focusable. */}
-            <input
-              type="text"
-              name="company"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              value={trap}
-              onChange={(event) => setTrap(event.target.value)}
-              className="absolute left-[-9999px] size-px opacity-0"
-            />
+              <input
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={trap}
+                onChange={(event) => setTrap(event.target.value)}
+                className="absolute left-[-9999px] size-px opacity-0"
+              />
 
-            <div className="flex flex-wrap items-center gap-4">
-              <button type="submit" className="btn-primary" disabled={status === 'submitting'}>
-                {status === 'submitting' ? form.sending : form.submit}
-              </button>
-              <span className="font-serif text-base italic text-muted">
-                A real person, usually the same day.
-              </span>
-            </div>
+              <div className="flex flex-wrap items-center gap-4">
+                <button type="submit" className="btn-primary" disabled={status === 'submitting'}>
+                  {status === 'submitting' ? form.sending : form.submit}
+                </button>
+                <span className="font-serif text-base italic text-muted">
+                  A real person, usually the same day.
+                </span>
+              </div>
 
-            {/* One live region, so a screen reader hears the outcome without
+              {/* One live region, so a screen reader hears the outcome without
                 the message moving focus. */}
-            <p aria-live="polite" className="text-base leading-relaxed text-muted empty:hidden">
-              {status === 'handoff' && (
-                <>
-                  {form.handoff} <span className="block">{form.handoffFallback}</span>
-                </>
-              )}
-              {status === 'posted' && form.done}
-              {status === 'error' && form.error}
-            </p>
-          </form>
-        </div>
+              <p aria-live="polite" className="text-base leading-relaxed text-muted empty:hidden">
+                {status === 'handoff' && (
+                  <>
+                    {form.handoff} <span className="block">{form.handoffFallback}</span>
+                  </>
+                )}
+                {status === 'posted' && form.done}
+                {status === 'error' && form.error}
+              </p>
+            </form>
+          </div>
 
-        <p
-          className="mt-16 max-w-3xl border-t border-hairline pt-8 font-serif text-xl leading-relaxed italic text-muted"
-          data-reveal
-          data-reveal-group="contact"
-        >
-          {CONTACT.closing}
-        </p>
-      </div>
-    </section>
+          <p
+            className="mt-16 max-w-3xl border-t border-hairline pt-8 font-serif text-xl leading-relaxed italic text-muted"
+            data-reveal
+            data-reveal-group="contact"
+          >
+            {CONTACT.closing}
+          </p>
+        </div>
+      </section>
+
+      {/* The questions first, because somebody on this page has one and the
+          fastest answer is the one already written down. It is the same
+          section the homepage and /faq render, never a second set of answers:
+          a refund term corrected once has to correct all three.
+
+          Deliberately no FAQPage schema here. That lives on the /faq route,
+          and three pages each claiming to be the FAQ is how a search engine
+          picks the wrong one. */}
+      <FaqSection />
+
+      {/* Then the comparison, for the reader whose question was really
+          "why you rather than a listing tool". */}
+      <ComparisonSection />
+    </>
   );
 }
