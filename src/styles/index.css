@@ -453,8 +453,17 @@
     transform-origin: center;
   }
 
-  .circular-seal-glyph {
-    @apply grid size-9 place-items-center rounded-full;
+  /* The field and its perforated edge, from the guarantee seal in
+     `AssuranceSection`: a tint rather than a fill, and a dashed rim, so it
+     reads as pressed into the ink instead of stuck onto it. */
+  .circular-seal-field {
+    @apply pointer-events-none absolute inset-0 rounded-full border border-dashed;
+    background-color: rgb(134 184 23 / 0.08);
+    border-color: rgb(158 212 32 / 0.35);
+  }
+
+  .circular-seal-mark {
+    @apply size-8;
   }
 
   @keyframes seal-spin {

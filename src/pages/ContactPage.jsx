@@ -239,24 +239,57 @@ export default function ContactPage() {
             data-reveal
             data-reveal-group="contact-methods"
           >
-            {/* The corner wash the pillar cards use, in the accent, so the
-                panel is not a flat rectangle of black. */}
+            {/* Lit the way the homepage lights its dark panels: a large soft
+                blob rather than a flat rectangle of black. `AssuranceSection`
+                uses one at `size-96 blur-3xl`; two here, blue into the corner
+                the seal sits in and green up from the foot where the playbook
+                door is, so neither end of the panel goes dead. Both are behind
+                the content and neither is a fill — the ink still reads as ink. */}
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -top-16 -right-16 -z-10 size-48 rounded-full bg-gradient-to-br from-signal-blue/25 to-transparent blur-3xl"
+              className="pointer-events-none absolute -top-28 -right-24 -z-10 size-80 rounded-full bg-signal-blue/20 blur-3xl"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-28 -left-24 -z-10 size-80 rounded-full bg-signal-green/12 blur-3xl"
+            />
+            {/* A top sheen, so the panel has a light source rather than only
+                two coloured corners. */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-white/[0.07] to-transparent"
+            />
+
+            {/* The seal, stamped into the corner the wash already lights, which
+                was the one part of this panel with nothing in it. In the flow
+                it floated in the middle of the block with air on both sides;
+                a seal belongs at an edge, the way one does on a document.
+
+                Hidden below `sm`: on a phone the panel is narrow enough that a
+                120px ring would sit on the heading, and the promise is still
+                in the copy either way. */}
+            <CircularSeal
+              text={CONTACT.seal}
+              className="absolute top-5 right-5 hidden text-signal-green-soft sm:grid"
             />
 
             {/* Same shape as the form panel opposite: a title, a note, a rule.
                 A heading on one side of a two-column layout and not the other
                 reads as something half-finished. */}
-            <div className="border-b border-ink-line pb-5">
+            {/* Right padding from sm up keeps the note clear of the seal
+                stamped into that corner; below sm the seal is hidden and the
+                copy takes the full width. */}
+            <div className="border-b border-ink-line pb-5 sm:pr-36">
               <p className="font-display text-xl font-extrabold tracking-tight text-paper">
                 {CONTACT.methodsTitle}
               </p>
               <p className="mt-1.5 text-sm text-muted-dark">{CONTACT.intro}</p>
             </div>
 
-            <ul className="mt-8 grid gap-6">
+            {/* flex-1 lets the three methods take the height the stretched
+                grid gives this panel, instead of the whole surplus pooling as
+                one dead gap above the playbook door. */}
+            <ul className="mt-8 flex flex-1 flex-col justify-center gap-8">
               {CONTACT.methods.map((method, i) => (
                 <MethodRow
                   key={method.label}
@@ -265,15 +298,6 @@ export default function ContactPage() {
                 />
               ))}
             </ul>
-
-            {/* The seal fills the space `mt-auto` opens between the methods
-                and the second door, and restates the page's promise as a
-                continuous thing rather than a line of text. The eyebrow pill
-                above said the same words; a ring that never stops turning
-                says them better, so the pill went back to being an eyebrow. */}
-            <div className="mt-8 flex justify-end">
-              <CircularSeal text={CONTACT.seal} className="text-signal-green-soft" />
-            </div>
 
             {/* The second door, at the foot of the panel: the way out for
                 someone who came to ask whether this is worth it and would
