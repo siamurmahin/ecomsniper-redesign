@@ -8,7 +8,7 @@ import Icon from '../components/ui/Icon';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
 import FaqSection from '../sections/FaqSection';
-import ComparisonSection from '../sections/ComparisonSection';
+import AssuranceSection from '../sections/AssuranceSection';
 
 /**
  * Contact.
@@ -411,9 +411,12 @@ export default function ContactPage() {
           picks the wrong one. */}
       <FaqSection />
 
-      {/* Then the comparison, for the reader whose question was really
-          "why you rather than a listing tool". */}
-      <ComparisonSection />
+      {/* Then the guarantee, in the order `FaqPage` already uses it: the last
+          thing somebody reads after "can I get a refund" should be the answer,
+          with the door beside it. On a page whose visitor is mid-decision that
+          matters more than a feature comparison, which is what sat here first
+          and was a pitch aimed at a reader who came to ask a question. */}
+      <AssuranceSection />
     </>
   );
 }
