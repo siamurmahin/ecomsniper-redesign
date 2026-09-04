@@ -201,6 +201,6 @@ export const AFFILIATE = {
     contact: 'For any questions about the affiliate programme, contact the EcomSniper team.',
     /* Points at the live site until our own /contact ships — the same
        arrangement the footer's Contact link is under. Flip both together. */
-    cta: { label: 'Contact us', href: 'https://ecomsniper.io/contact' },
+    cta: { label: 'Contact us', href: '/contact' },
   },
 };

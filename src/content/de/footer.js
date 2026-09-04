@@ -27,10 +27,16 @@ export const overlay = {
       },
       {
         title: 'Unternehmen',
+        /* Fünf Einträge, und die Reihenfolge zählt — genau wie bei
+           "Rechtliches" unten. Als das Partnerprogramm auf Englisch ergänzt
+           wurde, stand hier noch die alte Liste mit vier Einträgen: "Kontakt"
+           rutschte auf Position 4 und zeigte damit auf /affiliate, und der
+           echte Kontakt-Link fiel unübersetzt ins Englische zurück. */
         links: [
           { label: 'Über uns' },
           { label: 'Blog' },
           { label: 'Karriere' },
+          { label: 'Partnerprogramm' },
           { label: 'Kontakt' },
         ],
       },

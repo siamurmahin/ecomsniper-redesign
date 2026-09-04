@@ -47,16 +47,20 @@ export const SITE = {
   ],
 };
 
-/* The nav maps this page, not the site. About points at our founders
-   section until that page is rebuilt; Contact goes to the live site. */
+/* The nav maps this page, not the site. About still points at our founders
+   section until that page is rebuilt; everything else is now a route here. */
 export const NAV_LINKS = [
   /* In the order the page actually runs, measured not assumed. The routes
-     and the outside link come last, because they leave the page. */
+     come last, because they leave the page. */
   { label: 'Proof', href: '/#proof' },
   { label: 'How it works', href: '/#how-it-works' },
   { label: 'Training', href: '/#training' },
   { label: 'About', href: '/#founders' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'FAQ', href: '/faq' },
-  { label: 'Contact', href: 'https://ecomsniper.io/contact' },
+  /* Relative, so `pathForLanguage` prefixes it: a German reader gets
+     /de/contact rather than being dropped back into English. While this was
+     an absolute link to the live site it could not be prefixed at all — see
+     the note in `lib/language.js`. */
+  { label: 'Contact', href: '/contact' },
 ];
