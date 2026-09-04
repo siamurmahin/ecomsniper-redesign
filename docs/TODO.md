@@ -107,7 +107,7 @@ In the order the work wants to happen, not the order it was asked.
 | #   | Task                                                                                                                                                                     | Waiting on                                                                               |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
 | 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages** — eight, listed in the Pages section below                                                                                                                 | Slug decisions and copy, per that section                                                |
+| 2   | **New pages** — six, listed in the Pages section below                                                                                                                   | Slug decisions and copy, per that section                                                |
 | 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                   | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                         |
 | 4   | **Playbook form endpoint** — the playbook form still fakes success; contact does not, it hands off to a mail client instead                                              | Deferred by decision until the move to the client's server                               |
 | 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                            |
@@ -143,25 +143,34 @@ payments and auth are out of this phase.
 | Affiliate      | `/affiliate` — their full terms, 11 clauses, both languages    |
 | Terms          | `/terms-and-conditions` — their 15 sections, verbatim          |
 | Contact        | `/contact` — their copy; the form never fakes a delivery       |
+| Product Hunter | `/product-hunter` — `/productHunterV6` 301s onto it            |
+| AI Lister      | `/ai-powered-lister` — `/aiListerV6` 301s onto it              |
 
-All of the above exist in both languages — nine pages, eighteen URLs, which is
-exactly what `react-router.config.js` prerenders and what `sitemap.xml` lists.
-Those three numbers agreeing is the check; when they last disagreed the sitemap
-was four pages behind without anyone noticing.
+All of the above exist in both languages — **twelve pages, 24 URLs**, which is
+exactly what `sitemap.xml` lists and what `react-router.config.js` prerenders
+(26 documents: the 24 plus a 404 per language, which is kept out of the
+sitemap). Those three numbers agreeing is the check; when they last disagreed
+the sitemap was four pages behind without anyone noticing.
 
 **About is not on this list.** Its design was withdrawn in `c2c95b8` and there
 is no `/about` route today. It sits in To build below.
 
-### To build
+### To build — six left
 
-| #   | Page                    | Route on their site                                   | Notes                                                                       |
-| --- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| 4   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live                                                                   |
-| 5   | Price Monitor           | `/priceMonitorV6`                                     | In the nav and the bundle, **no sitemap entry and no non-V6 slug**          |
-| 6   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
-| 7   | Blog index              | `/blog`                                               |                                                                             |
-| 8   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                      |
-| 9   | About                   | `/about`                                              | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
+| #   | Page                    | Route                                                 | Notes                                                                        |
+| --- | ----------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 1   | Competitor Research     | `/competitor-research` **or** `/competitorResearchV6` | Both live. Third of the four feature pages                                   |
+| 2   | Price Monitor           | `/price-monitor`                                      | Theirs is `/priceMonitorV6` only — **no sitemap entry and no readable slug** |
+| 3   | Dropship Mastery course | `/course/dropshipMastery`                             | Sitemap also lists a lowercase `/course/dropshipmastery`                     |
+| 4   | Blog index              | `/blog`                                               |                                                                              |
+| 5   | Blog posts              | `/blog/<slug>`                                        | Nine in the sitemap. Template plus content — see below                       |
+| 6   | About                   | `/about`                                              | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later  |
+
+Two of these are the last feature pages, and the homepage is already waiting on
+them: the Competitor Research and Price Monitoring tool pills in section 07
+still point at their live site, and become relative hrefs in
+`content/en/home/features.js` the day each page lands. Nothing in the component
+changes — see `SESSION-NOTES-05-SEP.md`.
 
 ### Decided 4 Sep
 
