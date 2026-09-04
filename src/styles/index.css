@@ -428,6 +428,64 @@
     animation: brand-drift 12s ease-in-out infinite;
   }
 
+  /* --- The hunt panels ---------------------------------------------------
+     The feature pages show the software working rather than a screenshot of
+     it. Everything below runs only once its panel is near the viewport — the
+     component adds `is-running` — so nothing animates off screen, and it
+     plays a fixed number of times rather than looping forever: this is a
+     demonstration, not a spinner.
+
+     `prefers-reduced-motion` is handled by the global rule further down, and
+     every element's resting state is its finished state, so with motion off
+     the panel simply reads as a filled-in result. */
+  /* Hidden only where JavaScript is running, the same rule `[data-reveal]`
+     follows and for the same reason: `is-running` is added by script, so
+     without script it never arrives and an unscoped `opacity: 0` would leave a
+     no-JS visitor an empty panel on a prerendered page. Reduced motion is
+     already safe — the global rule runs the animation at 0.001ms and
+     `forwards` holds the finished state. */
+  .js-motion .hunt-row,
+  .js-motion .hunt-value {
+    opacity: 0;
+  }
+
+  .is-running .hunt-row,
+  .is-running .hunt-value {
+    animation: hunt-resolve 0.5s var(--ease-out-expo) forwards;
+    animation-delay: var(--hunt-delay, 0s);
+  }
+
+  /* The margin found on a row worth listing. Fires as the beam reaches it. */
+  .is-running .hunt-hit {
+    animation: hunt-flag 1.1s ease-out var(--hunt-delay, 0s) 2;
+  }
+
+  /* The sweep. One pass per cycle, the length of the whole stagger. */
+  .is-running .hunt-beam {
+    animation: step-scan 2.6s cubic-bezier(0.4, 0, 0.6, 1) 2;
+  }
+
+  @keyframes hunt-resolve {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 6px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes hunt-flag {
+    0%,
+    100% {
+      background-color: transparent;
+    }
+    35% {
+      background-color: rgb(134 184 23 / 0.16);
+    }
+  }
+
   /* The hero's colour floor, lifted out of `HeroSection` so a second page can
      stand on it: two soft radials, red on the copy side and blue on the panel
      side. The dot texture over it is the canvas `HeroDots`, the same component

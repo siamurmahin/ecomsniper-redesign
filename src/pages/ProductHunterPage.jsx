@@ -3,7 +3,7 @@ import { overlay as germanProductHunter } from '../content/de/productHunter';
 import { usePageContent } from '../hooks/usePageContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
-import Icon from '../components/ui/Icon';
+import { HuntTable, PastePanel } from '../components/hunt/HuntPanels';
 import CtaButton from '../components/ui/CtaButton';
 import HeroDots from '../components/hero/HeroDots';
 import AssuranceSection from '../sections/AssuranceSection';
@@ -53,111 +53,25 @@ function Marked({ parts }) {
   );
 }
 
+/** One step: marker, words, and its own mock, alternating sides. */
 /**
- * A small mock of each step, drawn rather than photographed.
+ * The panel that belongs to each step.
  *
- * One per step and each specific to it — a generic panel three times would be
- * decoration. The animations are the step happening; `prefers-reduced-motion`
- * stops every one of them through the global rule in `index.css`.
+ * Steps one and three are both the hunt table, because they are both the same
+ * mechanic seen at different moments — finding the gap, and the list it
+ * produces — and showing it twice is what makes the third step land. Step two
+ * is the paste box, which is the only part of the flow the seller does by
+ * hand.
  */
-function StepVisual({ index, tone }) {
-  /* 01 — eBay rows scanned for a price gap against Amazon. */
-  if (index === 0) {
-    const rows = [
-      { ebay: '£24.99', amazon: '£11.40', gap: true },
-      { ebay: '£18.50', amazon: '£16.90', gap: false },
-      { ebay: '£42.00', amazon: '£19.75', gap: true },
-      { ebay: '£9.99', amazon: '£8.80', gap: false },
-    ];
-
-    return (
-      <ul className="step-visual grid gap-2">
-        {rows.map((row, i) => (
-          <li
-            key={i}
-            className="flex items-center gap-3 rounded-lg bg-white px-3 py-2.5 shadow-sm"
-            style={{ animation: `step-row-in 3.2s ease-in-out ${i * 0.18}s infinite` }}
-          >
-            <span className={`size-6 shrink-0 rounded-md ${tone.tile}`} />
-            <span className="flex-1 space-y-1.5">
-              <span className="block h-1.5 w-3/4 rounded-full bg-ink/15" />
-              <span className="block h-1.5 w-1/2 rounded-full bg-ink/10" />
-            </span>
-            <span className="text-right text-xs leading-tight">
-              <span className="block font-semibold text-ink">{row.ebay}</span>
-              <span className="block text-muted">{row.amazon}</span>
-            </span>
-            {row.gap ? (
-              <span className={`micro-label ${tone.text}`}>gap</span>
-            ) : (
-              <span className="micro-label text-muted/50">—</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  /* 02 — titles pasted into the box. */
+function StepPanel({ index, panel, tone }) {
   if (index === 1) {
-    return (
-      <div className="step-visual">
-        <div className="rounded-lg bg-white p-3 shadow-sm">
-          <p className="micro-label text-muted">Paste titles</p>
-          <div className="mt-2.5 grid gap-1.5 rounded-md border border-hairline p-2.5">
-            {[0, 1, 2, 3, 4].map((line) => (
-              <span
-                key={line}
-                className="block h-1.5 rounded-full bg-ink/12"
-                style={{
-                  width: `${[92, 78, 88, 64, 71][line]}%`,
-                  animation: `step-row-in 3.2s ease-in-out ${line * 0.12}s infinite`,
-                }}
-              />
-            ))}
-          </div>
-          <span
-            className={`mt-3 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold ${tone.tile}`}
-          >
-            <Icon name="magnifier" className="size-3" />
-            Open Product Hunter
-          </span>
-        </div>
-      </div>
-    );
+    return <PastePanel copy={panel.paste} titles={panel.titles} tone={tone} />;
   }
 
-  /* 03 — the scan returning matches. */
-  return (
-    <div className="step-visual">
-      <div className="relative overflow-hidden rounded-lg bg-white p-3 shadow-sm">
-        <p className="micro-label text-muted">Results</p>
-        <ul className="mt-2.5 grid gap-2">
-          {[0, 1, 2].map((row) => (
-            <li key={row} className="flex items-center gap-3">
-              <span className="size-7 shrink-0 rounded-md bg-ink/8" />
-              <span className="flex-1 space-y-1.5">
-                <span className="block h-1.5 w-2/3 rounded-full bg-ink/15" />
-                <span className="block h-1.5 w-1/3 rounded-full bg-ink/10" />
-              </span>
-              <span className={`micro-label ${tone.text}`}>+{[38, 61, 24][row]}%</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* The beam, the same device the homepage's first step visual uses. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-transparent via-accent/25 to-transparent"
-          style={{ animation: 'step-scan 3.2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
-        />
-      </div>
-    </div>
-  );
+  return <HuntTable copy={panel.hunt} rows={panel.rows} tone={tone} />;
 }
 
-/** One step: marker, words, and its own mock, alternating sides. */
-function Step({ item, index }) {
+function Step({ item, index, panel }) {
   const tone = toneOf(item.tone);
   const flip = index % 2 === 1;
 
@@ -194,7 +108,7 @@ function Step({ item, index }) {
         data-reveal-group={`step-${index}`}
         className={flip ? 'lg:order-1' : undefined}
       >
-        <StepVisual index={index} tone={tone} />
+        <StepPanel index={index} panel={panel} tone={item.tone} />
       </div>
     </li>
   );
@@ -253,7 +167,7 @@ export default function ProductHunterPage() {
                 puts a screenshot of Amazon here; this is the same idea drawn
                 in markup until real captures arrive. */}
             <div data-reveal data-reveal-group="ph-hero">
-              <StepVisual index={0} tone={toneOf('blue')} />
+              <HuntTable copy={PH.panel.hunt} rows={PH.panel.rows} tone="blue" />
             </div>
           </div>
         </div>
@@ -289,7 +203,7 @@ export default function ProductHunterPage() {
 
           <ol className="mt-16 grid gap-16 lg:gap-24">
             {PH.steps.items.map((item, index) => (
-              <Step key={item.title} item={item} index={index} />
+              <Step key={item.title} item={item} index={index} panel={PH.panel} />
             ))}
           </ol>
         </div>

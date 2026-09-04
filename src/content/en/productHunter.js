@@ -43,6 +43,62 @@ export const PRODUCT_HUNTER = {
     secondary: { label: 'Get the free playbook', href: '/free-play-book' },
   },
 
+  /**
+   * The panels that show the software working.
+   *
+   * Prices, not earnings. This site promises on the About page not to show
+   * screenshots of big earnings, so nothing here implies a return: what is
+   * shown is the arithmetic the software does — what an item costs in two
+   * places — and every panel says it is an illustration.
+   *
+   * The names are deliberately generic goods rather than real brands: a mock
+   * naming a manufacturer is a claim about that manufacturer.
+   */
+  panel: {
+    hunt: {
+      title: 'Product Hunter — results',
+      note: 'Illustration of the interface. Prices are examples, not a forecast.',
+      item: 'Listing',
+      ebay: 'eBay',
+      amazon: 'Amazon',
+      verdict: 'Gap',
+      hitTitle: 'Priced above Amazon — worth listing',
+      skip: 'none',
+      scanned: '{n} listings scanned',
+      found: '{n} worth listing',
+    },
+
+    paste: {
+      title: 'EcomSniper — Product Hunter',
+      note: 'Illustration of the interface.',
+      field: 'Paste extracted titles',
+      count: '238 titles',
+      button: 'Search Titles',
+    },
+
+    rows: [
+      {
+        name: 'Garden kneeler and seat',
+        ebay: '£24.99',
+        amazon: '£11.40',
+        gap: '£13.59',
+        hit: true,
+      },
+      { name: 'Stainless steel mixing bowls', ebay: '£18.50', amazon: '£16.90', hit: false },
+      { name: 'Cordless glue gun kit', ebay: '£42.00', amazon: '£19.75', gap: '£22.25', hit: true },
+      { name: 'Reusable produce bags', ebay: '£9.99', amazon: '£8.80', hit: false },
+      { name: 'Car boot organiser', ebay: '£31.95', amazon: '£14.20', gap: '£17.75', hit: true },
+    ],
+
+    titles: [
+      'GARDEN KNEELER AND SEAT FOLDING BENCH',
+      'STAINLESS STEEL MIXING BOWLS SET OF 5',
+      'CORDLESS GLUE GUN KIT WITH 30 STICKS',
+      'REUSABLE PRODUCE BAGS MESH 12 PACK',
+      'CAR BOOT ORGANISER COLLAPSIBLE',
+    ],
+  },
+
   steps: {
     eyebrow: 'The hunt',
     headlineParts: [

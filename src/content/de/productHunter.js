@@ -26,6 +26,33 @@ export const overlay = {
       secondary: { label: 'Kostenloses Playbook holen' },
     },
 
+    /* Nur die Beschriftungen. `rows` und `titles` fallen ins Englische durch:
+       es sind Produktnamen und Preise in einer Beispiel-Oberfläche, keine
+       Sprache — und übersetzte Beispielpreise in Euro wären eine Behauptung
+       über einen Markt, den diese Zahlen nicht abbilden. */
+    panel: {
+      hunt: {
+        title: 'Product Hunter — Ergebnisse',
+        note: 'Darstellung der Oberfläche. Die Preise sind Beispiele, keine Prognose.',
+        item: 'Angebot',
+        ebay: 'eBay',
+        amazon: 'Amazon',
+        verdict: 'Differenz',
+        hitTitle: 'Teurer als auf Amazon — lohnt sich',
+        skip: 'keine',
+        scanned: '{n} Angebote geprüft',
+        found: '{n} lohnen sich',
+      },
+
+      paste: {
+        title: 'EcomSniper — Product Hunter',
+        note: 'Darstellung der Oberfläche.',
+        field: 'Ausgelesene Titel einfügen',
+        count: '238 Titel',
+        button: 'Search Titles',
+      },
+    },
+
     steps: {
       eyebrow: 'Die Jagd',
       headlineParts: [
