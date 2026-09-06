@@ -481,3 +481,95 @@ this site has used on all sixteen pages since the beginning and lifted from the
 client's own live site. Consistency across the site beats novelty on one page
 of it, and a course page that quietly adopted different typographic furniture
 would read as a page from somewhere else.
+
+## The course page, rebuilt as a funnel
+
+Asked for a CRO pass. The page was structurally sound — promise, mechanic,
+market, offer, instructors, proof, close — and was leaking in six places that
+have nothing to do with how it looks.
+
+### The biggest one: it never said the price
+
+"Enrol now" sent a reader to `/pricing` to find out what it costs. Price
+discovered *after* the decision is where a funnel loses people who had already
+made it, and it also made the guarantee meaningless — a risk reversal against
+an unknown number reassures nobody.
+
+$97 for the first month, then $199, cancel whenever, now sits beside the button
+in the hero and again beside the button at the foot, with the 30-day reversal
+on the same line both times.
+
+### The H1 was a product name
+
+"Dropship Mastery" tells a reader what the thing is called, not what changes
+for them. The name moved into the eyebrow — still said, still indexed — and the
+headline carries the promise.
+
+The promise is deliberately **the mechanism, not an outcome**: "Learn eBay
+dropshipping without buying stock first." No income, no timeframe, nothing that
+needs a disclaimer under it, and it is the one thing that genuinely separates
+this model from every other e-commerce course. On a page where four claims were
+already held out for being unsupportable, the headline had to be the kind of
+claim that survives being checked.
+
+### Qualification, before anything is sold
+
+Four things that fit and four that do not, including "you need this month's
+rent from it" and "you want to be told exactly how much you will make — we will
+not tell you, because we do not know."
+
+Naming who should not buy costs a few sign-ups and buys back the refunds that
+follow the wrong ones. It is also the About page's own promise being kept
+rather than contradicted: *"we would rather have 100 users who get real value
+than 1,000 who feel like they wasted their money."*
+
+### Objections instead of the site-wide FAQ
+
+`FaqSection` answers site-wide questions — the plans, the software, what the
+community is for. None of those is what stands between a reader and this
+button. The five that do: is it still worth doing in 2026, will eBay suspend
+me, what do I need beyond the course, I have never sold anything online, and
+what if I want out.
+
+Three of them link to evidence rather than asking to be believed — our own
+margins post, the VeRO guide, the FAQ's cost breakdown. Answering "will eBay
+ban me" with a link to a guide we wrote about exactly that is worth more than
+any amount of reassurance.
+
+Two FAQs on one page would also have been two things claiming to be the FAQ,
+and only one of them carries the schema. `/faq` keeps that, and is linked twice
+from here.
+
+### A sticky bar, and the trap under it
+
+Ten thousand pixels with a door at each end. The bar carries the price and the
+button, appears when the hero's buttons leave, and hides when the closing ones
+arrive — so it is only ever on screen when no other door is.
+
+**No urgency in it.** No timer, no counter, no "3 people are viewing this".
+About rules that out, and it would have been the fourth thing on this page
+contradicting a promise two clicks away.
+
+The mechanism is worth writing down. The first version watched a 1px sentinel
+placed under the hero buttons, and it never appeared. An `IntersectionObserver`
+fires on threshold *crossings*: a zero-height element can start outside the
+root — the hero is tall, the sentinel began below the fold — and then go from
+not-intersecting straight to not-intersecting without ever crossing anything,
+so the callback fires once on setup and is never heard from again. Watching the
+button rows themselves, which genuinely enter and leave, cannot fail that way,
+and "is one of the page's own buttons on screen" was the real question anyway.
+
+### A measuring trap, again
+
+Three separate readings said the bar was broken when it was not. The waits were
+400–700ms, and this browser throttles rAF to a couple of frames a second —
+`IntersectionObserver` delivery rides the same loop, so the callbacks had
+genuinely not been dispatched yet. At 2,500ms every state read correctly.
+
+`CLAUDE.md` already says this browser is useless for frame timing. It is worth
+extending: **anything delivered on the rendering loop needs seconds, not
+milliseconds, when read through it** — intersection observers, resize
+observers, transitions. The fourth wrong reading of the week and the second
+today, both from trusting a measurement taken too early rather than the code.
+
+Eager JS and CSS both unchanged: all of it is in the page's own lazy chunk.
