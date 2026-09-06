@@ -350,3 +350,80 @@ card reachable.
 Worth noting that the second fault would have shipped invisibly to almost
 everyone and been the *only* thing the machine this is built on would ever
 show, since it runs with animation turned off system-wide.
+
+## Dropship Mastery, and the page that argued with another page
+
+The last page in the plan, and the only one on this site that is a sales page
+rather than a description of something. So it is built as a funnel: the
+promise, the mechanic, why the market works, what you get, who teaches it, what
+other people say, a last door, the questions, the guarantee. Six routes to
+`/pricing` on the way down, with the Discord beside the first one because the
+free room is the right door for somebody who has not decided yet.
+
+Their slug appears twice in their own sitemap — `/course/dropshipMastery` and a
+lowercase `/course/dropshipmastery`. Ours is `/course/dropship-mastery` and all
+four spellings, both languages, 301 onto it.
+
+### Four things their page says that this one does not
+
+Three of them are not a matter of taste. They collide with a promise the About
+page makes **in the client's own words**, four screens down its own page:
+
+> We will not show you screenshots of big earnings. Those create false hope.
+> They make people spend money expecting the same results.
+>
+> We will not rush you with countdown timers or "limited spots." If you need a
+> week to decide, take a week.
+
+Against that, their course page carries "Learn How to Build a Six-Figure eBay
+Dropshipping Business" in an H2, "Already Helped People Create A Second Income
+Stream" in the H1's subheading, "I have done over $1,000,000 on eBay" in an
+instructor bio, and a "Limited Time Bonus" of three $97 items struck to $0.
+
+A site that promises something on one page and does the opposite two clicks
+away has not been rebuilt; it has been re-typeset. So all four are held out and
+all four are flagged for the client, who can reinstate them — but not silently,
+and not while About says the opposite.
+
+The bonuses themselves stay, and so do their values. What is gone is the
+countdown around them. Saying what something is worth is ordinary; saying it
+expires when it does not is the part About rules out.
+
+### And one that is not a claim but an error
+
+Their page states eBay has **"over 2 billion transactions daily"**. That is not
+a real eBay figure — its own reported numbers are nowhere near it, and it reads
+as a garbled version of its live listing count. It is a factual assertion about
+a third party, so it is not carried at all: the section makes the same argument
+from figures that are true and checkable. The client is asked what they meant,
+because if it was live listings then the real number is worth having.
+
+### What replaces an income claim in a hero
+
+Three figures a reader can go and check: the Trustpilot score, with a link to
+the profile it comes from; the member count; and the guarantee. That is the
+whole substitution, and it is the same move the About hero makes.
+
+Their $89 → $150 example is kept, because it is how they explain the model —
+but labelled an illustration, and carrying a link to **their own blog post**
+that works through the six fees which come out of that gap. A sales page
+showing a 69% margin and saying nothing about fees is precisely the thing this
+rebuild keeps taking apart on their behalf.
+
+The proof is `TestimonialsSection`, the questions `FaqSection`, the guarantee
+`AssuranceSection` — the site's own, not this page's invention. A sales page
+that grows its own testimonial component is where a made-up testimonial
+eventually appears.
+
+### The last ceiling raise
+
++2,826 bytes for two routes, 598,856 → 601,682, so 586 → 590. It is the last
+one the build-out needs and the reason is worth writing down: **blog posts do
+not add routes.** `/blog/:slug` is one entry in `routes.js` and the prerender
+list turns it into as many documents as there are slugs, so the five remaining
+posts cost HTML files and nothing in this number.
+
+Which means the next time the budget fires it is either a regression or the
+repayment finally being attempted. `errorBoundaries` at 107KB and
+`vendor-react` at 187KB have been named in that file since 4 September and
+neither has been opened once.
