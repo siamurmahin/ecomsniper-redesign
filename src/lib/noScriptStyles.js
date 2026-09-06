@@ -33,6 +33,12 @@
  * which is the correct trade — a hero a screen taller beats a hero missing
  * four fifths of its content.
  *
+ * ### `[data-blog-controls]`
+ *
+ * The blog's search field and category tabs filter on the client. With no
+ * script they cannot filter anything, and the prerendered index already lists
+ * every post — a search box that does nothing is worse than no search box.
+ *
  * ### `[data-panel-rail]`
  *
  * Its nodes are buttons and its connectors are a progress bar. With no script
@@ -43,6 +49,7 @@
 export const NO_SCRIPT_STYLES =
   '#preloader{display:none!important}' +
   '[data-panel-rail]{display:none!important}' +
+  '[data-blog-controls]{display:none!important}' +
   '[data-panel-steps]{height:auto!important;padding-bottom:1.25rem}' +
   '[data-panel-step]{position:static!important;opacity:1!important}' +
   '[data-panel-step]+[data-panel-step]{margin-top:1.25rem;border-top:1px solid rgba(255,255,255,.1);padding-top:1.25rem}';

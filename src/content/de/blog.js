@@ -25,6 +25,12 @@ export const overlay = {
     headline: 'Was wir lernen, aufgeschrieben.',
     lead: 'Was auf eBay gerade funktioniert, was sich diesen Monat geändert hat und was wir falsch gemacht haben. Geschrieben von den Leuten, die die Software bauen und selbst damit verkaufen.',
 
+    searchLabel: 'Blog durchsuchen',
+    searchPlaceholder: 'Beiträge durchsuchen…',
+    allLabel: 'Alle',
+    resultCount: '{n} Beiträge passen',
+    noMatches: 'Dazu passt nichts. Versuch ein anderes Wort oder wähle Alle.',
+
     featuredLabel: 'Empfohlen',
     readMore: 'Beitrag lesen',
     readTimeSuffix: 'Min. Lesezeit',

@@ -67,6 +67,15 @@ export const BLOG = {
      either: a control that cannot change what you see is furniture. The
      categories are still on each card, because that is a label, not a
      control. */
+  /* Search and the category tabs. Both filter live, so there is no Search
+     button — theirs has one, and a button that submits a filter the page could
+     have applied on the keystroke is a step the reader has to find. */
+  searchLabel: 'Search the blog',
+  searchPlaceholder: 'Search posts…',
+  allLabel: 'All',
+  resultCount: '{n} posts match',
+  noMatches: 'Nothing matches that. Try a different word, or pick All.',
+
   featuredLabel: 'Featured',
   readMore: 'Read the post',
   readTimeSuffix: 'min read',
