@@ -278,27 +278,36 @@ Three `<link>` tags in `root.jsx`. Costs less than the 404 it replaces.
 | First layout of the whole 15,700px document cost 494ms with no JavaScript involved                                                                                                                     | `a504959`          |
 | Diagnostic reveal probe left in the repo after its question was answered                                                                                                                               | `7917e4b`          |
 
-### 14. Without JavaScript the hero panel shows only its first step — `low`
+### 14. ~~Without JavaScript the panel shows only its first step~~ — fixed 6 Sep, and it was the smaller half
 
-The prerendered HTML carries the **animated** branch of `PipelinePanel`:
-`useReducedMotion()` returns `false` on the server, deliberately, because that
-is what makes the hydrating render match the HTML. Nothing about that is wrong.
+Filed as a panel problem. Measuring it found what was sitting on top: with
+JavaScript disabled the **whole site was a spinner**, on every page.
 
-The consequence is that a visitor with JavaScript disabled gets step one and
-nothing else. Steps two to five are in the document, but they are `inert` and
-at `opacity: 0`, and the script that would reveal them never runs. The five
-rail nodes are `<button>`s, which do nothing without JS either.
+`#preloader` is `position: fixed; inset: 0; z-index: 9999` and is removed by
+script — by the app once it has painted, and otherwise by the six-second
+backstop in `preloaderShell`, which is also a script. With scripts off neither
+ever runs. Measured: preloader fixed and opaque at z-index 9999, with 1699
+characters of main content sitting behind it, unreachable. Every route is
+prerendered, so the finished page was there the entire time.
 
-Found 6 Sep while making the reduced-motion fallback compact. It is **not** the
-same question as reduced motion, which is now handled — that path has JS and
-its rail works.
+That is **issue 5 above** — the one filed against their live site for being
+invisible without JavaScript — reproduced in the rebuild, and it had been true
+since the preloader was added.
 
-Low because the site already needs JS for the reveals, the language switcher
-and the consent banner, and because the panel is an illustration of a process
-that is also described in words elsewhere on the page. It becomes worth fixing
-if no-JS rendering is ever made a requirement.
+The panel half was real too: five steps stacked absolutely in a fixed-height
+box with only the active one at full opacity, and nothing able to advance them.
+Four of five unreachable, including the offer the panel builds towards.
 
-**Fix, when someone decides it matters:** render every step visible and drop
-the `inert`/`opacity` treatment when the panel has not hydrated — a
-`<noscript>` stylesheet is the boring way to do it, and costs nothing to a
-visitor who does run scripts.
+`lib/noScriptStyles.js`, rendered in a `<noscript>` in the head, hides the
+preloader and un-stacks the steps. `aria-hidden` and `inert` moved behind an
+effect, because in the prerendered markup they hid four steps from a screen
+reader while the stylesheet showed all five — seen and announced have to agree.
+
+The panel is taller than the design intends in that rendering. That is the
+right trade: a hero a screen taller beats a hero missing four fifths of its
+content, and nothing can page through it anyway.
+
+Verified with JavaScript disabled — preloader not covering, five of five steps
+visible — and with it on, where nothing moved: steps still 224px and absolute,
+rail still shown, all six `.defer-render` sections still `content-visibility:
+auto`, panel 396px in both motion modes. Fixed by `6c36468`.

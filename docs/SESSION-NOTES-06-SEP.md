@@ -203,3 +203,54 @@ only; steps two to five are in the document but `inert` and at `opacity: 0`.
 Pre-existing, not introduced here, and not the same question as reduced motion.
 Filed as `ISSUES.md` 14 rather than fixed, because the fix is a design decision
 about what a no-JS visitor should see.
+
+## Asked for the panel's no-JS rendering; found the site was a spinner
+
+The `<noscript>` stylesheet was agreed as a small thing for the hero panel.
+Measuring it first — with `page.setJavaScriptEnabled(false)` rather than by
+reasoning about it — turned up something an order of magnitude larger.
+
+`#preloader` is `position: fixed; inset: 0; z-index: 9999`. It is removed by
+the app once it has painted, and otherwise by a six-second backstop that exists
+precisely for "a bundle that never executes" — but that backstop is itself a
+script. With scripts off neither ever runs. **Every page was a spinner over an
+empty ground, permanently**, with the finished prerendered page underneath it
+the whole time: 1699 characters of main content, unreachable.
+
+That is `ISSUES.md` 5 — the finding written against *their* live site for being
+invisible without JavaScript — reproduced in the rebuild, and true since the
+preloader was added. The irony is that prerendering was the fix for their
+version of it.
+
+One `<noscript>` block in the head answers both halves. The important rule is
+one line.
+
+### Two details worth keeping
+
+**The stylesheet is eager JS, even though script-running browsers never parse
+it.** `<noscript>` content is skipped by the parser, but the string still has
+to exist in `root.jsx`'s chunk, because the client re-renders the document
+during hydration. Written longhand with its reasoning inside the template
+literal it cost 2KB and took the budget to 572KB. Moving the prose into a
+comment above the constant — which the minifier removes — and concatenating
+terse rules got it to a quarter of that, landing at 571KB with 4KB spare. The
+explanation is not lost; it is just not shipped.
+
+**`aria-hidden` and `inert` had to move behind an effect.** They are correct
+once the panel can page itself and wrong before. In the prerendered markup they
+hid four steps of five from a screen reader, while the new stylesheet put all
+five on screen — so a sighted no-JS visitor and a screen-reader no-JS visitor
+would have been given different pages. `false` for the hydrating render, which
+is what the prerender wrote, then `true` from an effect: an ordinary update,
+not a mismatch.
+
+### And a measuring mistake, made and caught in the same hour
+
+The first screenshots of `/affiliate/terms` came back **blank** — header,
+cookie banner, footer, nothing in between — and it looked exactly like a broken
+page. It was the screenshot. `CLAUDE.md` says to drop `js-motion` from `<html>`
+**and** strip the inline styles GSAP wrote; only the second half was done, so
+`.js-motion [data-reveal] { opacity: 0 }` was still hiding all 101 reveals.
+
+Third time this week that a reading, not the thing being read, produced the
+defect. The rule in `CLAUDE.md` was right there and was followed halfway.
