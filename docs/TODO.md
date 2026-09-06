@@ -19,6 +19,17 @@ session.
 
 ## Now
 
+- **A `<noscript>` stylesheet, for the preloader first and the hero panel
+  second.** Asked for 6 Sep, as the panel half of it. Measuring the panel found
+  the larger one: `#preloader` is `position: fixed; inset: 0; z-index: 9999`
+  and is removed **only by script** — the app removes it, and the 6s backstop
+  that catches a bundle which never executes is itself a script. So a visitor
+  with JavaScript disabled gets a spinner over an empty ground, on every page,
+  forever. The prerendered HTML underneath is complete, so a crawler reading
+  markup is unaffected; this is about what a person sees. One `<noscript>`
+  block fixes both: hide the preloader, and un-stack the panel's steps so all
+  five are readable without the script that would page through them.
+
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
   container rather than replacing it. Built the way GTM is — declared in

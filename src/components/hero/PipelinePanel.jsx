@@ -62,6 +62,24 @@ export default function PipelinePanel() {
   const autoPlay = isAutoPlaying && !isStatic;
 
   /*
+   * Whether this panel can actually page itself yet.
+   *
+   * `aria-hidden` and `inert` on the steps that are not in front are correct
+   * once it can, and wrong before: the prerendered HTML carries them too, and
+   * a visitor whose browser never runs the script has no way to bring the
+   * other four forward — so the markup hides four steps of five from a screen
+   * reader while the `<noscript>` stylesheet puts all five on screen. Seen and
+   * announced have to agree.
+   *
+   * `false` for the hydrating render, which is what the prerender wrote, then
+   * `true` from the effect — an ordinary update rather than a mismatch. The
+   * one frame in between has all five steps focusable and nothing else amiss.
+   */
+  const [isInteractive, setIsInteractive] = useState(false);
+
+  useEffect(() => setIsInteractive(true), []);
+
+  /*
    * The steps that are not on screen yet are painted for the first moment of
    * the page's life, at an opacity nobody can see, and hidden once the panel
    * has finished arriving.
@@ -169,8 +187,11 @@ export default function PipelinePanel() {
           </p>
         </div>
 
-        {/* Stepper rail */}
-        <div className="flex items-center px-5 py-5">
+        {/* Stepper rail. `data-panel-rail` is the handle the `<noscript>`
+            stylesheet hides it by: its nodes are buttons and its connectors
+            are a progress bar, and with no script the buttons do nothing while
+            the bar claims "step 1 of 5" over a list showing all five. */}
+        <div data-panel-rail className="flex items-center px-5 py-5">
           {steps.map((step, index) => {
             const tone = step.isFinale ? null : toneOf(step.tone);
             const isActive = index === activeIndex;
@@ -255,14 +276,21 @@ export default function PipelinePanel() {
                 forward. The steps are absolutely positioned, so padding here
                 reserves nothing — the height carries the gap, set from the
                 tallest step (the offer, 199px) plus room under its button. */}
-        <div className="relative h-[16.5rem] px-5 sm:h-[14rem]">
+        <div data-panel-steps className="relative h-[16.5rem] px-5 sm:h-[14rem]">
           {steps.map((step, index) => {
             const isActive = index === activeIndex;
 
             return (
               <div
                 key={step.chip}
-                aria-hidden={!isActive}
+                data-panel-step
+                /* Hidden from the accessibility tree only once something can
+                   bring this step forward. In the prerendered HTML nothing
+                   can, so `aria-hidden` there would hide four steps of five
+                   from a reader whose browser never runs the script — while
+                   the `<noscript>` stylesheet shows all five on screen. Seen
+                   and announced have to agree. */
+                aria-hidden={isInteractive ? !isActive : undefined}
                 /* `inert` as well as `aria-hidden`, because the beat that
                        is fading out still holds a button — the finale's replay
                        — and an aria-hidden subtree with something tabbable in
@@ -270,7 +298,7 @@ export default function PipelinePanel() {
                        announce. `inert` takes the whole subtree out of the tab
                        order and the a11y tree together; `pointer-events-none`
                        above only ever stopped the mouse. */
-                inert={!isActive || undefined}
+                inert={(isInteractive && !isActive) || undefined}
                 /*
                  * A staggered crossfade: the old step leaves over 500ms,
                  * the new one waits 420ms. They overlap for ~80ms, short

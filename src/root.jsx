@@ -7,6 +7,7 @@ import { languageFromPath } from './lib/language';
 import { LanguageMemory, PreloaderRelease, RouteScrollManager } from './components/layout/routing';
 import { PRELOADER_MARKUP, PRELOADER_STYLES, PRELOADER_BACKSTOP } from './lib/preloaderShell';
 import { MOTION_ARM } from './lib/motionArm';
+import { NO_SCRIPT_STYLES } from './lib/noScriptStyles';
 import { CONSENT_MODE_BOOTSTRAP } from './consent/consentMode';
 import ConsentBanner from './consent/ConsentBanner';
 import './styles/index.css';
@@ -86,6 +87,15 @@ export function Layout({ children }) {
             drawn. Left until the bundle loaded, the prerendered page painted
             in full and then every reveal on it snapped to invisible. */}
         <script dangerouslySetInnerHTML={{ __html: MOTION_ARM }} />
+
+        {/* Last in the head so it outranks the bundle's stylesheet without
+            needing specificity tricks, and inside `<noscript>` so a browser
+            that runs scripts never parses a byte of it. Every route is
+            prerendered, so the page underneath is already complete — this is
+            only about what is painted over it. See `lib/noScriptStyles`. */}
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: NO_SCRIPT_STYLES }} />
+        </noscript>
       </head>
 
       <body>
