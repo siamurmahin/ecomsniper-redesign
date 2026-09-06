@@ -22,4 +22,27 @@
  * visitor without JavaScript must never receive the CSS that hides the page,
  * and prerendered HTML is exactly what they are served.
  */
-export const MOTION_ARM = `document.documentElement.classList.add('js-motion');`;
+/**
+ * The review escape hatch, armed in the same breath.
+ *
+ * `?motion=on` sets `motion-force` on `<html>` and remembers it for this
+ * browser; `?motion=off` forgets it. Everything that asks whether to animate —
+ * the stylesheet's `prefers-reduced-motion` block, `prefersReducedMotion()`
+ * and `useReducedMotion()` — reads that class first.
+ *
+ * It exists because Windows turns animation off system-wide far more readily
+ * than a designer expects, so the person reviewing this site's motion is quite
+ * often a person the site is refusing to animate for, and the only remedy was
+ * to change an accessibility preference they may have set deliberately. A
+ * whole day was lost to a site that was working exactly as written.
+ *
+ * It cannot be reached by accident — it takes a query parameter and a
+ * deliberate one — so no visitor's stated preference is ever overridden. It
+ * has to be here rather than in a module for the same reason `js-motion` does:
+ * the class must be on `<html>` before the first pixel is drawn.
+ *
+ * Wrapped in try/catch because `localStorage` throws outright in a browser set
+ * to block site data, and an exception here would leave `js-motion` unset and
+ * the whole page unhidden.
+ */
+export const MOTION_ARM = `(function(){var d=document.documentElement;d.classList.add('js-motion');try{var m=/[?&]motion=(on|off)/.exec(location.search);if(m)localStorage.setItem('motionForce',m[1]);if(localStorage.getItem('motionForce')==='on')d.classList.add('motion-force')}catch(e){}})();`;

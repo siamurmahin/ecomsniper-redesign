@@ -15,9 +15,23 @@ import gsap from 'gsap';
 
 gsap.defaults({ ease: 'expo.out', duration: 1 });
 
-/** True when the visitor has asked the OS to reduce motion. */
+/**
+ * True when the visitor has asked the OS to reduce motion.
+ *
+ * `motion-force` on `<html>` overrides it — the review escape hatch set by
+ * `?motion=on`, see `lib/motionArm`. It is checked here rather than at each
+ * call site so the stylesheet and the script can never disagree about whether
+ * this page animates.
+ *
+ * Safe to call from an effect. Calling it during **render** is a hydration
+ * bug — the prerender has no `window`, so the HTML and the first client render
+ * disagree and React throws the whole prerendered document away. Use
+ * `hooks/useReducedMotion` wherever the answer decides what is rendered.
+ */
 export const prefersReducedMotion = () =>
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  typeof window !== 'undefined' &&
+  !document.documentElement.classList.contains('motion-force') &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Shared easing and distances so every section animates with one voice. */
 export const MOTION = {

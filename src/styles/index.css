@@ -1293,17 +1293,36 @@
   }
 }
 
-/* Honour the OS setting: kill transforms, keep everything readable. */
+/* Honour the OS setting: kill transforms, keep everything readable.
+
+   `html:not(.motion-force)` is the review escape hatch, and it is only ever
+   on when somebody has asked for it by hand — see `lib/motionArm`. Windows
+   turns animation off system-wide far more often than a designer expects
+   ("adjust for best performance" sets it), so the person reviewing this site's
+   motion is quite likely to be a person the site refuses to animate for. This
+   is how they see the work without changing an accessibility preference they
+   set on purpose. No visitor reaches it by accident: it takes a query
+   parameter, and the default is untouched. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  /* `html` itself is in the list, not only its descendants: `scroll-behavior`
+     is set on the root element, and a bare `*` was matching it before this
+     guard was added. */
+  html:not(.motion-force),
+  html:not(.motion-force) *,
+  html:not(.motion-force) *::before,
+  html:not(.motion-force) *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .js-motion [data-reveal] {
+
+  /* No space before `.js-motion`: it is the same element. `js-motion` is set
+     on `<html>`, so a descendant combinator here matches nothing, every
+     `[data-reveal]` keeps the `opacity: 0` that hides it, and a reduced-motion
+     visitor is served a blank page. `useRevealOnScroll` calls `clearProps` in
+     that branch, so this rule is the only thing making the content visible. */
+  html:not(.motion-force).js-motion [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
   }

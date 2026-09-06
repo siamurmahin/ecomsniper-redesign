@@ -114,3 +114,50 @@ file failing `format:check`. It was complete. `/affiliate` is the offer,
 prerender, `/affiliate/join` redirects to the terms in `_redirects` and
 `netlify.toml`, and the SEO deck has an entry for each. Only prettier had not
 been run. Committed as it stood.
+
+## The ending: it was the Windows setting, and now there is a way past it
+
+Confirmed live once the setting was turned back on — `prefers-reduced-motion`
+reporting `false`, the typewriter caught mid-word, the hero panel back to the
+compact self-advancing version rather than the four-step stack, 81 reveals
+armed. Nothing had been lost at any point.
+
+What made it hard to believe was that the reduced-motion fallback for the hero
+panel is not just "the same panel without motion" — it renders **all four steps
+stacked**, which is four times the height and runs off the bottom of the
+screen. That reads as a broken layout rather than as an accessibility
+fallback, which is why "the right side box is not working" was a fair
+description of what was on screen. Worth revisiting on its own merits: the
+compact panel with autoplay off would be a better still version than the stack.
+
+### `?motion=on`
+
+A reviewer whose machine has animation turned off cannot see this site's
+motion, and that is most of what this site is. `?motion=on` sets `motion-force`
+on `<html>` and remembers it for that browser; `?motion=off` forgets it. The
+stylesheet's reduced-motion block, `prefersReducedMotion()` and
+`useReducedMotion()` all read the class first, so CSS and JS can never
+disagree.
+
+Costs 1KB of eager JS — 570KB to 571KB, leaving 4KB of headroom. Flagged
+before building rather than after.
+
+It cannot be reached by accident: it takes a deliberate query parameter, and
+the default is untouched, so no visitor's stated preference is overridden.
+
+### The regression the test caught, which is the point of writing tests first
+
+The first attempt guarded the block with `html:not(.motion-force) .js-motion
+[data-reveal]`. That is a **descendant** combinator, and `js-motion` is on
+`<html>` itself — so the selector matched nothing, every `[data-reveal]` kept
+the `opacity: 0` that hides it, and a reduced-motion visitor was served a
+blank page. `useRevealOnScroll` calls `clearProps` in that branch, so that CSS
+rule is the only thing making the content visible.
+
+`html:not(.motion-force).js-motion [data-reveal]` — no space. The `*` list
+gained `html` itself for the same reason: `scroll-behavior` is set on the root
+element, and a bare `*` had been matching it.
+
+Caught because the override was tested against `--force-prefers-reduced-motion`
+with a probe that counts hidden reveals, not by looking at the page. Looking at
+it would have shown a blank screen and read as "still broken".

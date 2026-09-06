@@ -44,7 +44,12 @@ const subscribe = (onChange) => {
   return () => mql.removeEventListener('change', onChange);
 };
 
-const getSnapshot = () => mediaQuery()?.matches ?? false;
+/* `motion-force` is the review escape hatch — `?motion=on`, see
+   `lib/motionArm`. It is set on `<html>` before first paint, so it is already
+   there by the time this is first read, and it is deliberate enough that no
+   visitor reaches it by accident. */
+const getSnapshot = () =>
+  !document.documentElement.classList.contains('motion-force') && (mediaQuery()?.matches ?? false);
 
 /* What the prerender rendered. Also what React uses for the hydrating render,
    which is the whole point of this file. */
