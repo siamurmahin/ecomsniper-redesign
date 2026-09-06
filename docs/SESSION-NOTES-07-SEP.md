@@ -573,3 +573,65 @@ observers, transitions. The fourth wrong reading of the week and the second
 today, both from trusting a measurement taken too early rather than the code.
 
 Eager JS and CSS both unchanged: all of it is in the page's own lazy chunk.
+
+## Four misses, then one specific sentence fixed it
+
+The course page was rejected twice ("black and white, nothing impressive", then
+"I don't like your concept"), and three lab directions — dark, editorial,
+layered — were rejected together. Building a fourth variant would have been a
+fourth guess.
+
+What ended it was one question with two options: **is it the colour and surface,
+or the layout and type?** The answer was colour and surface. That is a
+different, much smaller job than the one three lab directions were trying to do,
+and the tokens confirmed it immediately:
+
+- `--color-paper` is `#fbfbfa` and `--color-paper-sunk` is `#f4f4f1`. **Two per
+  cent apart.** Every "alternating band" on this site resolves to one plane.
+- `--shadow-float` tops out at `0.05` alpha. On a near-white ground that is not
+  a shadow, it is a rumour of one.
+
+So the pages were pale and flat because the surfaces are pale and flat. No
+amount of layout work was going to fix that, which is why three directions all
+missed while all three kept the same grounds underneath.
+
+### What was built
+
+`surface-deep`, `surface-rich` and `card-raised`, scoped to these two pages
+rather than pushed into tokens that sixteen pages stand on. Deep is near-black
+with the brand blue and green bleeding in from opposite corners as **light
+sources** rather than tints. Rich is a genuinely deeper warm ground with two
+brand washes, so a light band is a surface rather than an absence of one.
+
+Both pages alternate deep and rich for nine bands. The About giving gallery
+lands on dark, where five photographs carry the whole band, and the course
+hero, mechanic and offer are dark while the reading sections stay light.
+
+### Layer order beat specificity, again
+
+The colour flips were written beside `surface-deep` in `@layer components`.
+Tailwind's utilities layer comes after components, so `.text-ink` beat
+`.surface-deep .text-ink` despite being less specific, and the hero's price
+line rendered ink on near-black — invisible, on the single most important line
+of a sales page.
+
+**That is the second time today**, after the `noscript` nav rule. The lesson is
+now worth stating as a rule rather than an anecdote: **on this codebase, any
+rule that has to override a Tailwind utility must live in `@layer utilities`.**
+Writing it in `components` and reaching for a more specific selector cannot
+work, and looks like it should.
+
+### And a smaller one
+
+The header stands on the hero and assumes the hero is pale. Over a dark hero
+the nav sat at roughly 2.4:1 and the language switcher rendered as an empty
+pill. Its transparent state now takes paper type on these two pages — keyed on
+the surface class, because `HeroSurface` forwards `className` and nothing else,
+so the data attribute tried first was dropped without complaint.
+
+### Worth keeping
+
+A specific complaint is worth more than any number of options. "Too pale and
+flat" pointed at two token values and took under an hour to answer; three fully
+built directions answered nothing, because they all inherited the thing that
+was actually wrong.
