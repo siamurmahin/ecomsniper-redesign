@@ -60,12 +60,29 @@ function RoleRow({ role, language, viewLabel }) {
   const pills = [role.location, role.type].filter(Boolean);
 
   return (
-    <li data-reveal data-reveal-group="roles" className="border-b border-hairline">
+    <li data-reveal data-reveal-group="roles">
       <Link
         to={pathForLanguage(`/careers/${role.slug}`, language)}
-        className="group flex flex-col gap-3 rounded-xl px-2 py-6 outline-none transition-colors hover:bg-paper-sunk/70 focus-visible:bg-paper-sunk/70 sm:flex-row sm:items-center sm:gap-6"
+        className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-hairline bg-paper p-6 outline-none transition-[transform,border-color,box-shadow] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-lift focus-visible:-translate-y-0.5 focus-visible:border-ink/20 focus-visible:shadow-lift sm:flex-row sm:items-center sm:gap-6 sm:p-7"
       >
-        <span className="min-w-0 flex-1">
+        {/* The corner wash the pillar and hero-support cards use, held at zero
+            until the card is under the cursor. A background tint would have
+            been the obvious hover and it is the one thing this card cannot
+            do: it sits on `paper-sunk`, so tinting it toward paper makes it
+            look disabled rather than live. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full bg-gradient-to-br from-accent/25 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+        />
+
+        {/* A rule that grows down the leading edge — the one moving part, and
+            it points the way the row is about to take the reader. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-4 left-0 w-0.5 origin-top scale-y-0 rounded-full bg-accent transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-y-100 group-focus-visible:scale-y-100"
+        />
+
+        <span className="relative min-w-0 flex-1">
           <span className="block text-xl font-bold tracking-[-0.02em] sm:text-2xl">
             {role.title}
           </span>
@@ -90,9 +107,11 @@ function RoleRow({ role, language, viewLabel }) {
           )}
         </span>
 
-        {role.salary && <span className="shrink-0 font-semibold sm:text-right">{role.salary}</span>}
+        {role.salary && (
+          <span className="relative shrink-0 font-semibold sm:text-right">{role.salary}</span>
+        )}
 
-        <span className="flex shrink-0 items-center gap-1.5 font-label text-[0.7rem] uppercase tracking-[0.14em] text-accent">
+        <span className="relative flex shrink-0 items-center gap-1.5 font-label text-[0.7rem] uppercase tracking-[0.14em] text-accent">
           {viewLabel}
           <span
             aria-hidden="true"
@@ -151,7 +170,7 @@ function RolesByDepartment({ openRoles, language }) {
               {group.name}
             </h3>
 
-            <ul className="mt-3 border-t border-hairline">
+            <ul className="mt-3 grid gap-3">
               {group.roles.map((role) => (
                 <RoleRow
                   key={role.slug}

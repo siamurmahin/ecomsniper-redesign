@@ -63,7 +63,20 @@ export function pathForLanguage(target, code) {
   const path = cut === -1 ? target : target.slice(0, cut);
   const tail = cut === -1 ? '' : target.slice(cut);
 
-  const bare = stripLanguage(path || '/');
+  /*
+   * A target with no path — "#apply", "?page=2" — addresses the document the
+   * reader is already on, so there is no language to move it into. Falling
+   * through sent it to `path || '/'` and produced "/#apply": the *homepage's*
+   * anchor. Every in-page CTA written as a bare hash quietly became a link off
+   * the page, which is what "Apply for this role" did on a job advert and
+   * "Apply to join" did on the affiliate page.
+   *
+   * "/#proof" is a different thing and still gets prefixed — it names the
+   * homepage explicitly, so from /de it has to become "/de#proof".
+   */
+  if (!path) return target;
+
+  const bare = stripLanguage(path);
   if (!language.prefix) return `${bare}${tail}`;
 
   // Avoid "/de/" for the homepage.
