@@ -141,7 +141,19 @@ export default function SiteHeader() {
           >
             {NAV_LINKS.map((link) =>
               link.items ? (
-                <div key={link.label} data-nav-group className="relative">
+                <div
+                  key={link.label}
+                  data-nav-group
+                  className="relative"
+                  /* Hover opens it on a pointer device. Click is kept rather
+                     than replaced: it is what a keyboard and a touch screen
+                     have, and a menu that only answers hover is a menu half
+                     the visitors cannot open. */
+                  onMouseEnter={() => setOpenGroup(link.label)}
+                  onMouseLeave={() =>
+                    setOpenGroup((current) => (current === link.label ? null : current))
+                  }
+                >
                   {/* A button, not a link: it goes nowhere, and a link that goes
                       nowhere is the thing screen-reader users complain about.
                       `aria-expanded` announces the state; the chevron is only
@@ -261,19 +273,34 @@ export default function SiteHeader() {
           <nav aria-label={A11Y.navMobile} className="flex flex-col">
             {NAV_LINKS.map((link) =>
               link.items ? (
-                /* Open, always. A dropdown inside a menu the reader has already
-                   opened is a second tap to find four pages, and the panel
-                   scrolls anyway. */
-                <div key={link.label} className="px-4 pt-3 pb-1">
-                  <p className="font-label text-xs tracking-[0.12em] text-muted uppercase">
+                <div key={link.label}>
+                  {/* A control, not a heading. It was rendered permanently open
+                     on the theory that a second tap to reach four pages is a
+                     tap too many; in the panel that reads as four stray links
+                     under a label rather than as a group somebody opened. */}
+                  <button
+                    type="button"
+                    aria-expanded={openGroup === link.label}
+                    onClick={() =>
+                      setOpenGroup((current) => (current === link.label ? null : link.label))
+                    }
+                    className="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5"
+                  >
                     {link.label}
-                  </p>
-                  <div className="mt-1 flex flex-col">
+                    <Icon
+                      name="chevronDown"
+                      className={`size-3.5 transition-transform duration-200 ${
+                        openGroup === link.label ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  <div hidden={openGroup !== link.label} className="flex flex-col pb-1 pl-4">
                     {link.items.map((item) => (
                       <Link
                         key={item.href}
                         to={pathForLanguage(item.href, language)}
-                        className="-mx-2 rounded-2xl px-2 py-3 text-base font-medium transition-colors hover:bg-ink/5"
+                        className="rounded-2xl px-4 py-3 text-base font-medium text-muted transition-colors hover:bg-ink/5 hover:text-ink"
                       >
                         {item.label}
                       </Link>
