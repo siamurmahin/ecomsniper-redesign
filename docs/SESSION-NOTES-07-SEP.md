@@ -310,3 +310,43 @@ which is the only reason this took minutes rather than an afternoon.
 rather than after it — noted on `TODO.md` beside the page itself. The repayment
 is still `errorBoundaries` at 107KB and `vendor-react` at 187KB, neither of
 which has been looked at once.
+
+## The About hero wall became the homepage's, on request
+
+Asked for section 04d's testimonial animation and design in the About hero, so
+the static staggered wall built this morning is gone and the hero now runs the
+same component's card and the same motion: `card-ink`, the initial disc, the
+rating drawn from each review's own score, the body never clipped, dealt
+round-robin into columns drifting at different speeds in opposite directions.
+
+It defines nothing. `animate-rail-up`, `animate-rail-down`, `rail-hold` and
+`edge-fade-y` are already in the stylesheet for 04d, so the CSS budget did not
+move and a reader who has seen the homepage recognises this as the same
+evidence rather than a second design of it. Two columns instead of three,
+because the hero has half a screen where 04d has the full width — the same
+reason 04d drops its own third column at tablet width.
+
+### Two faults in the version it replaced
+
+**The wall was `aria-hidden`.** The justification, written this morning, was
+that the reviews appear again in the proof section further down the page. That
+is true of the homepage and false of this one: About has no second reviews
+section. The attribute was removing the page's only social proof from anyone
+not reading it with their eyes, and the comment explaining it was quoting a
+fact about a different page.
+
+**Reduced motion parked it on the second copy.** The global rule collapses
+every animation to its end frame, and the end frame of a looping rail is the
+echo — so a visitor with reduced motion would have got the duplicate list with
+the real one scrolled off the top and unreachable inside `overflow-hidden`.
+`ProofWallSection` already solved this with `rail-viewport`, which gives the
+box a scrollbar when the drift is off. Added, and the echo copy is not rendered
+at all in that case: it exists to close a loop that is no longer running.
+
+Both were verified rather than assumed — drifting, 32 cards with `overflow:
+hidden`; still, 5,819px of content scrollable inside a 640px box with every
+card reachable.
+
+Worth noting that the second fault would have shipped invisibly to almost
+everyone and been the *only* thing the machine this is built on would ever
+show, since it runs with animation turned off system-wide.
