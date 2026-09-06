@@ -215,6 +215,50 @@ launch rather than after. Owner: client for the ids, us for the check.
 
 ---
 
+### 12. ~~A reader with reduced motion got the prerender thrown away~~ — fixed 6 Sep
+
+Reported as "the animations stopped working". Two separate things, and only
+one of them was ours.
+
+**Not a defect:** this machine has Windows animation effects off
+(`HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate = 0`), so Chrome reports
+`prefers-reduced-motion: reduce` and the site serves its still version — no
+reveals, no typewriter, no smooth scroll. That is the site working correctly.
+Turning the setting back on brings all of it back, verified.
+
+**The defect underneath it:** seven components read `prefersReducedMotion()`
+**during render**. The prerender has no `window`, so the HTML always carried
+the animated branch, and a reader with the preference set rendered the still
+one. React 19 does not patch a mismatch of that size up — it reports error
+`#418` and regenerates the whole tree on the client. The prerendered document
+was thrown away on every page, and `js-motion` — set on `<html>` by the inline
+script in `root.jsx` before first paint — went with it, so nothing on the page
+could animate for the rest of the visit even after the setting changed.
+
+`hooks/useReducedMotion.js` now reads it through `useSyncExternalStore` with a
+server snapshot of `false`, which is what the prerender rendered. Nothing was
+added to the bundle; `useSyncExternalStore` is part of React. Callers that only
+decide what an **effect** does still call `prefersReducedMotion()` — those run
+after hydration and cannot mismatch anything.
+
+Verified across all 28 prerendered pages, Chrome run twice, once with
+`--force-prefers-reduced-motion` and once without: no page errors, no failed
+requests, `js-motion` intact on every page in both modes.
+
+### 13. Nothing linked the favicon — `medium`
+
+`public/` has carried `favicon.svg`, `apple-touch-icon.png` and
+`site.webmanifest` since the move off `index.html`, and nothing has referenced
+any of them since. The document is rendered from `root.jsx` now and the tags
+did not come with it, so every tab on the site showed the blank default page
+icon and every page load spent a request on `/favicon.ico` to be told it does
+not exist.
+
+Three `<link>` tags in `root.jsx`. Costs less than the 404 it replaces.
+**Fixed 6 Sep.**
+
+---
+
 ## Closed
 
 | Issue                                                                                                                                                                                                  | Fixed by           |
