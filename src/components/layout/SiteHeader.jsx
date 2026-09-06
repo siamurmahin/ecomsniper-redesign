@@ -4,17 +4,39 @@ import BrandLogo from '../ui/BrandLogo';
 import LanguageSwitcher from './LanguageSwitcher';
 import { languageFromPath, pathForLanguage } from '../../lib/language';
 import CtaButton from '../ui/CtaButton';
+import Icon from '../ui/Icon';
 import { useContent } from '../../hooks/useContent';
 
 /**
  * Fixed header in two states: transparent over the hero, condensed and frosted
  * once past it. The mobile panel traps nothing and closes on route change and
  * Escape, which is what people expect from a marketing menu.
+ *
+ * **The Features dropdown reuses the panel machinery rather than adding its
+ * own.** Escape, the outside `pointerdown` and the close-on-route-change were
+ * already here for the mobile panel; the dropdown joins the same effects, so
+ * what it costs is one piece of state and the markup. A second set of
+ * listeners doing the same job would have been the expensive way to write the
+ * same behaviour, and this component is eager on every route.
+ *
+ * Body scroll locks for the panel and deliberately not for the dropdown: a
+ * dropdown is a few links in a bar, the page behind it stays usable, and
+ * locking scroll for it is the modal treatment applied to something that is
+ * not a modal.
+ *
+ * **Nav links are `Link`, not `<a>`.** They were anchors while four of them
+ * were hash links into the homepage. Now that every one is a real route, an
+ * anchor would reload the whole application to move between two prerendered
+ * pages the router already has in hand.
  */
 export default function SiteHeader() {
   const { NAV_LINKS, SITE, A11Y } = useContent();
   const [isCondensed, setIsCondensed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  /* Which dropdown is open, by label, or null. One at a time: two open menus
+     in a seven-item bar is a mess, and a single value makes that impossible
+     rather than merely discouraged. */
+  const [openGroup, setOpenGroup] = useState(null);
   const headerRef = useRef(null);
   const location = useLocation();
   /* Every internal link keeps the language the reader is in. */
@@ -29,8 +51,11 @@ export default function SiteHeader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close the mobile panel whenever the route changes.
-  useEffect(() => setIsMenuOpen(false), [location.pathname, location.hash]);
+  // Close the mobile panel and any open dropdown whenever the route changes.
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setOpenGroup(null);
+  }, [location.pathname, location.hash]);
 
   /* Escape or a tap outside closes the panel; body scroll is locked while it
      is open. Without the outside tap the only way out was the X, which is the
@@ -39,14 +64,22 @@ export default function SiteHeader() {
      pointerdown, not click: with body scroll locked, a tap on the page behind
      can end without ever producing a click. */
   useEffect(() => {
-    if (!isMenuOpen) return undefined;
+    if (!isMenuOpen && !openGroup) return undefined;
 
-    const onKey = (event) => event.key === 'Escape' && setIsMenuOpen(false);
-    const onOutside = (event) => {
-      if (!headerRef.current?.contains(event.target)) setIsMenuOpen(false);
+    const closeAll = () => {
+      setIsMenuOpen(false);
+      setOpenGroup(null);
     };
 
-    document.body.style.overflow = 'hidden';
+    const onKey = (event) => event.key === 'Escape' && closeAll();
+    const onOutside = (event) => {
+      if (!headerRef.current?.contains(event.target)) closeAll();
+    };
+
+    /* Only the panel locks the page. A dropdown is a few links in a bar and
+       the page behind it stays usable; locking scroll for it would be the
+       modal treatment applied to something that is not a modal. */
+    if (isMenuOpen) document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKey);
     document.addEventListener('pointerdown', onOutside);
 
@@ -55,7 +88,7 @@ export default function SiteHeader() {
       window.removeEventListener('keydown', onKey);
       document.removeEventListener('pointerdown', onOutside);
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, openGroup]);
 
   return (
     <header ref={headerRef} className="fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4">
@@ -91,15 +124,63 @@ export default function SiteHeader() {
             aria-label={A11Y.navPrimary}
             className="hidden shrink-0 items-center gap-0.5 whitespace-nowrap lg:flex xl:gap-1"
           >
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={pathForLanguage(link.href, language)}
-                className="rounded-full px-2.5 py-2 text-sm font-medium text-muted transition-colors duration-200 hover:bg-ink/5 hover:text-ink xl:px-3.5"
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.items ? (
+                <div key={link.label} data-nav-group className="relative">
+                  {/* A button, not a link: it goes nowhere, and a link that goes
+                      nowhere is the thing screen-reader users complain about.
+                      `aria-expanded` announces the state; the chevron is only
+                      for the people who can see it. */}
+                  <button
+                    type="button"
+                    data-nav-group-toggle
+                    aria-expanded={openGroup === link.label}
+                    onClick={() =>
+                      setOpenGroup((current) => (current === link.label ? null : link.label))
+                    }
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-2 text-sm font-medium transition-colors duration-200 hover:bg-ink/5 hover:text-ink xl:px-3.5 ${
+                      openGroup === link.label ? 'bg-ink/5 text-ink' : 'text-muted'
+                    }`}
+                  >
+                    {link.label}
+                    <Icon
+                      name="chevronDown"
+                      className={`size-3 transition-transform duration-200 ${
+                        openGroup === link.label ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* `hidden` rather than unmounting: the links are in the
+                      prerendered HTML either way, so a crawler and a no-JS
+                      visitor both get four real hrefs rather than a button that
+                      does nothing. */}
+                  <div
+                    data-nav-group-panel
+                    hidden={openGroup !== link.label}
+                    className="absolute top-full left-0 mt-2 min-w-[15rem] rounded-2xl border border-hairline bg-paper/95 p-2 shadow-float backdrop-blur-xl"
+                  >
+                    {link.items.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={pathForLanguage(item.href, language)}
+                        className="block rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-ink/5 hover:text-ink"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={pathForLanguage(link.href, language)}
+                  className="rounded-full px-2.5 py-2 text-sm font-medium text-muted transition-colors duration-200 hover:bg-ink/5 hover:text-ink xl:px-3.5"
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
@@ -163,15 +244,37 @@ export default function SiteHeader() {
           className="mt-2 overflow-hidden rounded-3xl border border-hairline bg-paper/95 p-2 shadow-float backdrop-blur-xl lg:hidden"
         >
           <nav aria-label={A11Y.navMobile} className="flex flex-col">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={pathForLanguage(link.href, language)}
-                className="rounded-2xl px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5"
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.items ? (
+                /* Open, always. A dropdown inside a menu the reader has already
+                   opened is a second tap to find four pages, and the panel
+                   scrolls anyway. */
+                <div key={link.label} className="px-4 pt-3 pb-1">
+                  <p className="font-label text-xs tracking-[0.12em] text-muted uppercase">
+                    {link.label}
+                  </p>
+                  <div className="mt-1 flex flex-col">
+                    {link.items.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={pathForLanguage(item.href, language)}
+                        className="-mx-2 rounded-2xl px-2 py-3 text-base font-medium transition-colors hover:bg-ink/5"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={pathForLanguage(link.href, language)}
+                  className="rounded-2xl px-4 py-3.5 text-base font-medium transition-colors hover:bg-ink/5"
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
             <a
               href={SITE.loginUrl}
               className="rounded-2xl px-4 py-3.5 text-base font-medium text-muted transition-colors hover:bg-ink/5"

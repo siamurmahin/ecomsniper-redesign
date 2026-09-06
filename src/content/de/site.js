@@ -20,12 +20,23 @@ export const overlay = {
       { text: 'Die Garantie schützt dich' },
     ],
   },
+  /* Positionsgleich gespiegelt: der Merge arbeitet über den Index, und die
+     hrefs stehen nur im englischen Deck, damit eine Übersetzung nie eine URL
+     anfasst. Produktnamen bleiben englisch — die Werkzeuge heißen in der
+     Erweiterung so. */
   NAV_LINKS: [
-    { label: 'Belege' },
-    { label: 'So funktioniert es' },
-    { label: 'Schulung' },
-    { label: 'Über uns' },
+    {
+      label: 'Funktionen',
+      items: [
+        { label: 'Product Hunter' },
+        { label: 'AI Powered Lister' },
+        { label: 'Competitor Research' },
+        { label: 'Price Monitor' },
+      ],
+    },
     { label: 'Preise' },
+    { label: 'Blog' },
+    { label: 'Über uns' },
     { label: 'FAQ' },
     { label: 'Kontakt' },
   ],

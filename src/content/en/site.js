@@ -47,22 +47,45 @@ export const SITE = {
   ],
 };
 
-/* The nav still maps the homepage rather than the site: four of these are
-   hash links into homepage sections, which is what it had to be when the
-   homepage was the only page. Reorganising it — a Features dropdown, no hash
-   links — is on `docs/TODO.md` under Now. About is a real route as of 7 Sep. */
+/**
+ * The nav maps the site. It used to map the homepage.
+ *
+ * Until 7 Sep four of its seven entries were hash links into homepage
+ * sections — `/#proof`, `/#how-it-works`, `/#training`, `/#founders` — which
+ * is what it had to be when the homepage was the only page there was. With
+ * fifteen pages built, a nav that mostly scrolls one of them is a table of
+ * contents for the wrong document, and the four feature pages were reachable
+ * from nothing but a pill in section 07.
+ *
+ * Every href is now a real route and every one is relative, so
+ * `pathForLanguage` prefixes it and a German reader gets `/de/pricing` rather
+ * than being dropped back into English.
+ *
+ * **The three dropped entries are not lost.** Proof, How it works and Training
+ * are homepage sections, and the homepage is the logo — one click from
+ * anywhere, which is where a reader looks for them. Careers and Affiliate are
+ * in the footer, which is where a visitor looks for a company's own business
+ * rather than its product.
+ *
+ * An item with `items` is a group. It renders as a dropdown on desktop and as
+ * a labelled block inside the mobile panel, so a phone never hides anything
+ * behind a tap it has to discover.
+ */
 export const NAV_LINKS = [
-  /* In the order the page actually runs, measured not assumed. The routes
-     come last, because they leave the page. */
-  { label: 'Proof', href: '/#proof' },
-  { label: 'How it works', href: '/#how-it-works' },
-  { label: 'Training', href: '/#training' },
-  { label: 'About', href: '/about' },
+  {
+    label: 'Features',
+    /* The four tools, in the order somebody uses them: find the product,
+       list it, watch what the competition does, keep the listing right. */
+    items: [
+      { label: 'Product Hunter', href: '/product-hunter' },
+      { label: 'AI Powered Lister', href: '/ai-powered-lister' },
+      { label: 'Competitor Research', href: '/competitor-research' },
+      { label: 'Price Monitor', href: '/price-monitor' },
+    ],
+  },
   { label: 'Pricing', href: '/pricing' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'About', href: '/about' },
   { label: 'FAQ', href: '/faq' },
-  /* Relative, so `pathForLanguage` prefixes it: a German reader gets
-     /de/contact rather than being dropped back into English. While this was
-     an absolute link to the live site it could not be prefixed at all — see
-     the note in `lib/language.js`. */
   { label: 'Contact', href: '/contact' },
 ];
