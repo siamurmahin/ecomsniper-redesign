@@ -21,8 +21,28 @@ import { LANGUAGES, languageFromPath, pathForLanguage } from './language';
  */
 export function metaFor(key, pathname, route, schema) {
   const language = languageFromPath(pathname);
-  const { SEO, SITE } = contentFor(language);
-  const { title, description } = SEO[key];
+  const { SEO } = contentFor(language);
+
+  return metaForContent(SEO[key], pathname, route, schema);
+}
+
+/**
+ * The same tags, for a page whose title and description are not in the deck.
+ *
+ * A job advert's are the role's own — one entry per role in `SEO` would be a
+ * second list to keep in step with the first, and the copy would be written
+ * twice. Anything with a per-item page rather than a per-route page belongs
+ * here: roles now, blog posts next.
+ *
+ * @param {{title: string, description: string}} content
+ * @param {string} pathname Where we are, which decides the language.
+ * @param {string} route The route's own path, unprefixed, for the canonical.
+ * @param {object|object[]} [schema] JSON-LD for this route.
+ * @returns {Array} React Router meta descriptors.
+ */
+export function metaForContent({ title, description }, pathname, route, schema) {
+  const language = languageFromPath(pathname);
+  const { SITE } = contentFor(language);
 
   /* The canonical follows the language, so /de/pricing does not declare itself
      a duplicate of /pricing. */

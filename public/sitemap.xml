@@ -92,6 +92,22 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://ecomsniper.io/careers/video-editor</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/careers/video-editor" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/careers/video-editor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/careers/video-editor" />
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/careers/video-editor</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/careers/video-editor" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/careers/video-editor" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/careers/video-editor" />
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://ecomsniper.io/affiliate</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/affiliate" />
     <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/affiliate" />

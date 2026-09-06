@@ -20,6 +20,20 @@
  * than written in after the fact. Without them the host has nothing to serve
  * but the homepage. See the redirects in `netlify.toml`.
  */
+/*
+ * The job adverts are read from the content deck rather than listed here.
+ * A role owns its slug; a second list of the same slugs is one edit away from
+ * disagreeing with the first, and the copy that goes stale is always the one
+ * nobody looks at. Adding a role to `content/en/careers.js` prerenders its
+ * page in both languages.
+ */
+import { ROLE_SLUGS } from './src/content/en/careers.js';
+
+/** Every job advert, in both languages. */
+const jobRoutes = [
+  ...ROLE_SLUGS.map((slug) => `/careers/${slug}`),
+  ...ROLE_SLUGS.map((slug) => `/de/careers/${slug}`),
+];
 export default {
   appDirectory: 'src',
   ssr: false,
@@ -52,5 +66,6 @@ export default {
     '/de/privacy-policy',
     '/de/cookie-policy',
     '/de/404',
+    ...jobRoutes,
   ],
 };
