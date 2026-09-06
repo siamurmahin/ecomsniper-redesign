@@ -132,47 +132,47 @@ payments and auth are out of this phase.
 
 ### Built
 
-| Page                | Route                                                          |
-| ------------------- | -------------------------------------------------------------- |
-| Home                | `/`                                                            |
-| Pricing             | `/pricing`                                                     |
-| FAQ                 | `/faq`                                                         |
-| Free playbook       | `/free-play-book`                                              |
-| Privacy policy      | `/privacy-policy`                                              |
-| Cookie policy       | `/cookie-policy` — ours, no equivalent on their site           |
-| Careers             | `/careers` — static list; role description awaited from client |
-| Affiliate           | `/affiliate` — their full terms, 11 clauses, both languages    |
-| Terms               | `/terms-and-conditions` — their 15 sections, verbatim          |
-| Contact             | `/contact` — their copy; the form never fakes a delivery       |
-| Product Hunter      | `/product-hunter` — `/productHunterV6` 301s onto it            |
-| AI Lister           | `/ai-powered-lister` — `/aiListerV6` 301s onto it              |
-| Blog                | `/blog`, and four posts at `/blog/<slug>`                      |
-| Competitor Research | `/competitor-research` — `/competitorResearchV6` 301s onto it  |
+| Page                | Route                                                               |
+| ------------------- | ------------------------------------------------------------------- |
+| Home                | `/`                                                                 |
+| Pricing             | `/pricing`                                                          |
+| FAQ                 | `/faq`                                                              |
+| Free playbook       | `/free-play-book`                                                   |
+| Privacy policy      | `/privacy-policy`                                                   |
+| Cookie policy       | `/cookie-policy` — ours, no equivalent on their site                |
+| Careers             | `/careers` — static list; role description awaited from client      |
+| Affiliate           | `/affiliate` — their full terms, 11 clauses, both languages         |
+| Terms               | `/terms-and-conditions` — their 15 sections, verbatim               |
+| Contact             | `/contact` — their copy; the form never fakes a delivery            |
+| Product Hunter      | `/product-hunter` — `/productHunterV6` 301s onto it                 |
+| AI Lister           | `/ai-powered-lister` — `/aiListerV6` 301s onto it                   |
+| Blog                | `/blog`, and four posts at `/blog/<slug>`                           |
+| Competitor Research | `/competitor-research` — `/competitorResearchV6` 301s onto it       |
+| Price Monitor       | `/price-monitor` — `/priceMonitorV6` 301s onto it; the slug is ours |
 
-All of the above exist in both languages — **twenty URLs per language, 40
+All of the above exist in both languages — **twenty-one URLs per language, 42
 in all**, which is exactly what `sitemap.xml` lists and what
-`react-router.config.js` prerenders (42 documents: the 40 plus a 404 per
+`react-router.config.js` prerenders (44 documents: the 42 plus a 404 per
 language, which is kept out of the sitemap). Those three numbers agreeing is
 the check; when they last disagreed the sitemap was four pages behind without
-anyone noticing. Twenty rather than the thirteen pages above because the
+anyone noticing. Twenty-one rather than the fourteen pages above because the
 advert, the affiliate terms and the four posts each own a URL.
 
 **About is not on this list.** Its design was withdrawn in `c2c95b8` and there
 is no `/about` route today. It sits in To build below.
 
-### To build — three pages and five posts
+### To build — two pages and five posts
 
-| #   | Page                     | Route                     | Notes                                                                        |
-| --- | ------------------------ | ------------------------- | ---------------------------------------------------------------------------- |
-| 1   | Price Monitor            | `/price-monitor`          | Theirs is `/priceMonitorV6` only — **no sitemap entry and no readable slug** |
-| 2   | Dropship Mastery course  | `/course/dropshipMastery` | Sitemap also lists a lowercase `/course/dropshipmastery`                     |
-| 3   | Blog posts, five of them | `/blog/<slug>`            | Template and index are built; four of the nine in their sitemap are written  |
-| 4   | About                    | `/about`                  | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later  |
+| #   | Page                     | Route                     | Notes                                                                       |
+| --- | ------------------------ | ------------------------- | --------------------------------------------------------------------------- |
+| 1   | Dropship Mastery course  | `/course/dropshipMastery` | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
+| 2   | Blog posts, five of them | `/blog/<slug>`            | Template and index are built; four of the nine in their sitemap are written |
+| 3   | About                    | `/about`                  | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
 
-One of these is the last feature page. The Competitor Research pill in section
-07 became a relative href the day that page landed, exactly as planned and with
-no change to the component; Price Monitoring is the one still pointing at their
-live site — see `SESSION-NOTES-05-SEP.md`.
+**All four feature pages are built**, and section 07 of the homepage no longer
+links off this site: both remaining pills became relative hrefs the day their
+pages landed, with no change to the component, exactly as
+`SESSION-NOTES-05-SEP.md` said they would.
 
 ### Decided 4 Sep
 
@@ -241,10 +241,12 @@ come from the index, and their sitemap is advertising URLs that may 404.
   `V6`; the sitemap lists the readable slugs and omits Price Monitor entirely.
   Picking wrong means either building the stale copy or breaking the URLs
   Google already has. The client decides, and the losing slug should 301.
-  **Three of the four are built on the 4 Sep precedent** — readable slug
-  canonical, `V6` 301ing onto it — so a decision the other way is a redirect
-  edit and a canonical, not a rebuild. Price Monitor is the one that cannot
-  follow it: theirs has no readable slug to keep.
+  **All four are built on the 4 Sep precedent** — readable slug canonical,
+  `V6` 301ing onto it — so a decision the other way is a redirect edit and a
+  canonical, not a rebuild. Price Monitor had no readable slug of theirs to
+  keep, so `/price-monitor` is ours; that one is a naming decision rather than
+  a choice between two of their URLs, and it is the one the client is most
+  likely to have an opinion about.
 - **Whether the blog is nine static posts or a CMS collection.** Nine today,
   and a blog only grows. If posts are going into Storyblok this waits for it
   rather than being built twice.
@@ -259,18 +261,19 @@ come from the index, and their sitemap is advertising URLs that may 404.
 
 ## Blocked — needs the client
 
-| Item                                  | Detail                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Storyblok pricing                     | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — schemas get built against whatever plan they buy                                                                                                                                                                                                                                                                                                                                                                |
-| GTM container ID                      | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but never loads                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| Legal text needs sign-off             | The privacy copy is the client's own with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy, the terms' German translation and the whole German deck are new. **No lawyer has read any of it.** See the headers of `src/content/en/legal.js` and `en/terms.js`                                                                                                                                                                                                            |
-| Microsoft Clarity project id          | **Answered 4 Sep: Clarity stays, alongside GTM.** Declared in vendors.js, consent-gated behind marketing, inert until VITE_CLARITY_ID is set. Until it is, the privacy policy names a vendor the build does not load — ISSUES.md 11                                                                                                                                                                                                                                                                                                                 |
-| Privacy policy contradicts the banner | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission                                                                                                                                                                                                                                                                                                                                                                                    |
-| Blog post bodies                      | **The four post bodies are our draft, not the client's.** Their slugs, titles, categories and dates are real, read off the live index; the prose is written by us on the same instruction as the job advert. Their real posts run to ~25,000 characters each and should be imported rather than retyped. The founder's letter carries only its captured opening and says so. **Replace before launch**                                                                                                                                              |
-| Job advert copy                       | **The Video Editor description on `/careers/video-editor` is our draft, not the client's.** Written 6 Sep on the instruction to build now and replace later. Every fact around it — title, department, location, type, pay — is real; the summary, the about, the responsibilities and both requirement lists are not. `content/en/careers.js` says so in its header. **Replace or sign off before launch** — an unread draft is exactly how "This is a one liner description" reached their production site                                        |
-| CV upload on job applications         | The application form asks for a portfolio link rather than a file. A `mailto:` cannot carry an attachment, and no endpoint exists to receive one — the hand-off tells the applicant to attach a CV to the email instead. Add the field when `VITE_JOBS_ENDPOINT` exists and can take multipart                                                                                                                                                                                                                                                      |
-| Competitor Research says "snipe them" | The page is built on undercutting **named** competitors — spot Amazon-to-eBay dropshippers, save them, post under their listing. That is their product and their positioning, and it ships as they wrote it. But it is the one page whose copy makes a claim about how the tool treats other sellers, and the rebuild has been careful about claims everywhere else. **Raise it; do not soften it unasked.** The price ladder's floor line — what the item costs from Amazon — is the one thing added, so the panel does not read as a race to zero |
-| Footer links                          | Those still pointing at `https://ecomsniper.io/*` are soft-404s on their site: `/about`, `/blog`, `/contact`. Careers, affiliate and terms now point at our own routes                                                                                                                                                                                                                                                                                                                                                                              |
+| Item                                    | Detail                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Storyblok pricing                       | Free tier is one user; paid starts ~$99/mo. Flagged 3 Sep, still unconfirmed. **No CMS work should begin until this is answered** — schemas get built against whatever plan they buy                                                                                                                                                                                                                                                                                                                                                                |
+| GTM container ID                        | Needed to fill `VITE_GTM_ID`. Until then GTM is wired but never loads                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Legal text needs sign-off               | The privacy copy is the client's own with two changes: the implied-consent sentence removed, and Microsoft Clarity replaced by what actually loads. The cookie policy, the terms' German translation and the whole German deck are new. **No lawyer has read any of it.** See the headers of `src/content/en/legal.js` and `en/terms.js`                                                                                                                                                                                                            |
+| Microsoft Clarity project id            | **Answered 4 Sep: Clarity stays, alongside GTM.** Declared in vendors.js, consent-gated behind marketing, inert until VITE_CLARITY_ID is set. Until it is, the privacy policy names a vendor the build does not load — ISSUES.md 11                                                                                                                                                                                                                                                                                                                 |
+| Privacy policy contradicts the banner   | The live copy says _"By using our site, you consent to this data being collected"_ — implied consent, not valid under GDPR, and it contradicts asking permission                                                                                                                                                                                                                                                                                                                                                                                    |
+| Blog post bodies                        | **The four post bodies are our draft, not the client's.** Their slugs, titles, categories and dates are real, read off the live index; the prose is written by us on the same instruction as the job advert. Their real posts run to ~25,000 characters each and should be imported rather than retyped. The founder's letter carries only its captured opening and says so. **Replace before launch**                                                                                                                                              |
+| Job advert copy                         | **The Video Editor description on `/careers/video-editor` is our draft, not the client's.** Written 6 Sep on the instruction to build now and replace later. Every fact around it — title, department, location, type, pay — is real; the summary, the about, the responsibilities and both requirement lists are not. `content/en/careers.js` says so in its header. **Replace or sign off before launch** — an unread draft is exactly how "This is a one liner description" reached their production site                                        |
+| CV upload on job applications           | The application form asks for a portfolio link rather than a file. A `mailto:` cannot carry an attachment, and no endpoint exists to receive one — the hand-off tells the applicant to attach a CV to the email instead. Add the field when `VITE_JOBS_ENDPOINT` exists and can take multipart                                                                                                                                                                                                                                                      |
+| Price Monitor's two cases are our draft | Their page lists two things that change and both entries repeat the headline with a single word swapped — _"Never have an issue keeping track of your inventory for price changes"_ under **Prices change**, and the same again with _"stockouts"_. That is placeholder that was never rewritten, so the bodies are ours, written to say what each case does. Every claim in them is one their own page or the homepage already makes. **Replace or sign off before launch**, as with the job advert and the blog bodies                            |
+| Competitor Research says "snipe them"   | The page is built on undercutting **named** competitors — spot Amazon-to-eBay dropshippers, save them, post under their listing. That is their product and their positioning, and it ships as they wrote it. But it is the one page whose copy makes a claim about how the tool treats other sellers, and the rebuild has been careful about claims everywhere else. **Raise it; do not soften it unasked.** The price ladder's floor line — what the item costs from Amazon — is the one thing added, so the panel does not read as a race to zero |
+| Footer links                            | Those still pointing at `https://ecomsniper.io/*` are soft-404s on their site: `/about`, `/blog`, `/contact`. Careers, affiliate and terms now point at our own routes                                                                                                                                                                                                                                                                                                                                                                              |
 
 ---
 
@@ -308,6 +311,8 @@ come from the index, and their sitemap is advertising URLs that may 404.
 
 | Date       | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Commit    |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 7 Sep 2026 | **Price Monitor, and the four feature pages are done.** `/price-monitor` in both languages, `/priceMonitorV6` 301ing onto it. The one page with no second version: no readable slug on their site and no sitemap entry, so there was nothing to choose between and the slug is ours. Two sections rather than numbered steps, because the product is that you do nothing — a numbered list would have been the previous page's shape borrowed. The two case bodies are our draft: theirs repeat the headline with one word swapped. Eager JS +2,446 bytes, page 14KB in its own chunk                                        | `e0b987e` |
+| 7 Sep 2026 | **The footer's Blog link stopped pointing at their site.** `/blog` shipped 6 Sep and the footer was not moved with it, so a link in the site furniture was still a soft-404 on `ecomsniper.io`. About is the only external one left, and only until that page exists                                                                                                                                                                                                                                                                                                                                                         | `e0b987e` |
 | 6 Sep 2026 | **Competitor Research, the third feature page.** `/competitor-research` in both languages, `/competitorResearchV6` 301ing onto it. Their copy exists twice and this is the first page where V6 was the _worse_ of the two: it has the better headline and loses the four concrete steps, so the hero is V6's and the steps are the readable slug's, verbatim. Five drawn panels built on `HuntPanels` — same chrome, same scan, no second set of CSS. Eager JS +2,531 bytes, all route table; the page itself is 17KB in its own chunk. Ceiling 578 → 586, once, for the six routes the three remaining pages need           | `1d7725e` |
 | 6 Sep 2026 | **A post without cover art gets a drawn one.** Not every post has a cover and not every post will — the founder's letter has none on their own site. A card with a gap where the others have an image reads as a page that failed to load rather than as a post without a picture. The fallback is the brand ground, a CSS dot field and the reticle that already exists: no request, no bytes beyond markup, so a hundred coverless posts cost what one does. Eager ceiling 575 → 578, and the raise is the manifest naming a shared `ReticleMark` chunk the first screen never fetches — 104 bytes, measured on both sides | `cbacfd8` |
 | 6 Sep 2026 | **Search, category tabs and cover art on the blog index.** Built after looking at their live blog rather than the captured notes: theirs runs twelve posts across six categories and the covers do most of the work. Both controls filter on the keystroke, so their Search button is not reproduced. Covers are the client's own, re-encoded and cropped to the 16:9 the cards render at rather than left square and cropped with `object-fit`, which still downloads the rows it throws away — the margins cover is a 1.8MB PNG on their site and 55KB here. Three covers, 144KB, all page-local                           | `1342b36` |
