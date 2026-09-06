@@ -31,6 +31,14 @@ export default [
   route('competitor-research', 'routes/competitor-research.jsx'),
   route('price-monitor', 'routes/price-monitor.jsx'),
   route('about', 'routes/about.jsx'),
+  /* The design lab is deliberately NOT routed. It holds three directions for
+     About and Dropship Mastery, built to be looked at and argued with, and an
+     unrouted module is never bundled — so the three cost nothing while the
+     choice is made, and the losers are deleted with the file. It must stay
+     out of the prerender list and the sitemap.
+
+       route('design-lab', 'routes/design-lab.jsx'), */
+
   route('course/dropship-mastery', 'routes/course.jsx'),
   route('contact', 'routes/contact.jsx'),
   route('terms-and-conditions', 'routes/terms.jsx'),

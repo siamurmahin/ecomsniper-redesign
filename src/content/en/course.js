@@ -65,8 +65,9 @@ export const COURSE = {
      stock first" is the actual thing that makes this model different from
      every other e-commerce course, and it is checkable. */
   headlineParts: [
-    { text: 'Learn eBay dropshipping ' },
-    { text: 'without buying stock first.', mark: true },
+    { text: 'Learn eBay dropshipping without buying ' },
+    { text: 'stock', mark: true },
+    { text: ' first.' },
   ],
   headline: 'Learn eBay dropshipping without buying stock first.',
 

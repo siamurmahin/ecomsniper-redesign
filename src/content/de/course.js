@@ -19,8 +19,9 @@ export const overlay = {
     eyebrow: 'Dropship Mastery · der Kurs',
 
     headlineParts: [
-      { text: 'Lerne eBay-Dropshipping — ' },
-      { text: 'ohne vorher Ware zu kaufen.', mark: true },
+      { text: 'Lerne eBay-Dropshipping — ohne vorher ' },
+      { text: 'Ware', mark: true },
+      { text: ' zu kaufen.' },
     ],
     headline: 'Lerne eBay-Dropshipping — ohne vorher Ware zu kaufen.',
 
