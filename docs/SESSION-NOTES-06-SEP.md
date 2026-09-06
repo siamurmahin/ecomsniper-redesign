@@ -305,3 +305,16 @@ card is now the same height as the two beside it, brand ground under the
 reticle with `NEWS & UPDATES` beneath the mark. No stock photograph, which
 would have been the only image on the site illustrating nothing, on the one
 post that is a person speaking plainly.
+
+### The last gate failed twice for a reason that was not the site
+
+`npx lhci autorun` exited 1 with `Runtime error encountered: EPERM, Permission
+denied: ...\Temp\lighthouse.12485175`, and again on a fresh temp directory. It
+looks like a failed audit and is not one: the line arrives after "Generating
+results", and it is chrome-launcher failing to delete its own profile
+directory. Windows holds the handle; lhci reads the exit code and throws the
+run away regardless.
+
+Running it with `TMP` and `TEMP` pointed at a directory of our own passed three
+runs and every assertion. Written into `CLAUDE.md` beside the other measuring
+traps, because the failure names Lighthouse and means the filesystem.
