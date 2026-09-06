@@ -47,15 +47,17 @@ export const SITE = {
   ],
 };
 
-/* The nav maps this page, not the site. About still points at our founders
-   section until that page is rebuilt; everything else is now a route here. */
+/* The nav still maps the homepage rather than the site: four of these are
+   hash links into homepage sections, which is what it had to be when the
+   homepage was the only page. Reorganising it — a Features dropdown, no hash
+   links — is on `docs/TODO.md` under Now. About is a real route as of 7 Sep. */
 export const NAV_LINKS = [
   /* In the order the page actually runs, measured not assumed. The routes
      come last, because they leave the page. */
   { label: 'Proof', href: '/#proof' },
   { label: 'How it works', href: '/#how-it-works' },
   { label: 'Training', href: '/#training' },
-  { label: 'About', href: '/#founders' },
+  { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'FAQ', href: '/faq' },
   /* Relative, so `pathForLanguage` prefixes it: a German reader gets

@@ -30,6 +30,7 @@ export default [
   route('ai-powered-lister', 'routes/ai-powered-lister.jsx'),
   route('competitor-research', 'routes/competitor-research.jsx'),
   route('price-monitor', 'routes/price-monitor.jsx'),
+  route('about', 'routes/about.jsx'),
   route('contact', 'routes/contact.jsx'),
   route('terms-and-conditions', 'routes/terms.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
@@ -51,18 +52,11 @@ export default [
     id: 'de-competitor-research',
   }),
   route('de/price-monitor', 'routes/price-monitor.jsx', { id: 'de-price-monitor' }),
+  route('de/about', 'routes/about.jsx', { id: 'de-about' }),
   route('de/contact', 'routes/contact.jsx', { id: 'de-contact' }),
   route('de/terms-and-conditions', 'routes/terms.jsx', { id: 'de-terms' }),
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),
   route('de/cookie-policy', 'routes/cookies.jsx', { id: 'de-cookies' }),
-
-  /* The About hero lab is deliberately NOT routed. About is parked (see
-     docs/TODO.md), and an unrouted module is never bundled, so the four
-     passes of design work in `pages/AboutHeroLab.jsx` cost nothing while they
-     wait. Restore by uncommenting; it must stay out of the prerender list and
-     the sitemap.
-
-       route('about-lab', 'routes/about-lab.jsx'), */
 
   route('*', 'routes/not-found.jsx'),
 ];

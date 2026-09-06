@@ -112,23 +112,23 @@ export const ABOUT = {
       'This is not marketing. It is just something we do. When you join, you become part of it too.',
     ],
     everySubscription: 'Every subscription helps us do a little more for people who need it.',
-    /* Their gallery. Six captions on their page; the sixth image is a stock
-       photograph and is deliberately not carried over — see
-       `docs/source-copy/about.md`. Photographs still to be supplied. */
+    /* Their gallery, minus its stock photograph — see below and
+       `docs/source-copy/about.md`. All five are the client's own, held
+       optimised in `src/assets/giving/`. */
     gallery: [
       { caption: 'School supplies for children', alt: 'Supporting education', image: 'education' },
       { caption: 'Time spent at the orphanage', alt: 'Orphanage visit', image: 'orphanage' },
       { caption: 'School supplies distribution', alt: 'Community support', image: 'supplies' },
       { caption: 'Medical support program', alt: 'Medical assistance', image: 'medical' },
       { caption: 'Orphanage visit', alt: 'Education program', image: 'visit' },
-      /* The stock photograph. Their caption, their slot — but not their
-         photograph, and it must not launch this way. */
-      {
-        caption: 'Moments that matter',
-        alt: 'Children smiling',
-        image: 'moments',
-        placeholder: true,
-      },
+      /* Their sixth tile is not here. It was an Unsplash stock photograph
+         captioned "Moments that matter", sitting among five real charity
+         photographs three screens under a promise not to create false
+         impressions — on the one page whose entire argument is that this
+         company is honest. Five real photographs is the honest gallery, and
+         a five-tile layout is not a hole where a sixth should be. Decided
+         7 Sep; still flagged for the client in `docs/TODO.md` in case they
+         have a sixth real photograph to send. */
     ],
     closer: 'We share this because you are part of it now. Not to impress.',
   },

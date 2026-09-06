@@ -62,6 +62,11 @@ export const SEO = {
     description:
       'Spot Amazon-to-eBay dropshippers, scan their store for what sold more than once, and post the same item at a lower price. Four steps, then list in one click.',
   },
+  about: {
+    title: 'About EcomSniper — what your money costs you, and what you get',
+    description:
+      'A small team that built these tools for itself first. What a subscription costs in hours, what it buys, where some of it goes, and the things we will not do to sell it.',
+  },
   priceMonitor: {
     title: 'Price Monitor — your listings keep themselves right',
     description:

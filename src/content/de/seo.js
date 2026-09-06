@@ -41,6 +41,12 @@ export const overlay = {
       description:
         'Finde eBay-Verkäufer, die über Amazon-Preis anbieten, lies alle ihre Titel aus und durchsuche Amazon mit einem Klick. Drei Schritte, danach einstellen mit dem AI Lister.',
     },
+    about: {
+      title: 'Über EcomSniper — was dein Geld dich kostet, und was du bekommst',
+      description:
+        'Ein kleines Team, das diese Werkzeuge zuerst für sich selbst gebaut hat. Was ein Abo an Stunden kostet, was es dir bringt, wohin ein Teil davon geht — und was wir nicht tun, um es zu verkaufen.',
+    },
+
     priceMonitor: {
       title: 'Price Monitor — deine Angebote halten sich selbst aktuell',
       description:

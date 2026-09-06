@@ -11,16 +11,17 @@
  * in there would not survive bundling. The deck names an image; this resolves
  * it.
  *
- * Five of these are the client's own charity photographs. `moments` is not: it
- * is the Unsplash stock image their page carries, kept for now so the sixth
- * tile is not empty, and flagged as a launch blocker in `docs/ISSUES.md`.
+ * All five are the client's own charity photographs. Their page has a sixth,
+ * an Unsplash stock image captioned "Moments that matter"; it was held here as
+ * a placeholder and was removed on 7 Sep when the page was built, because a
+ * bought-in photograph among real charity work is a credibility risk on the
+ * one page arguing that this company is honest.
  */
 import education from './giving-education.webp';
 import orphanage from './giving-orphanage.webp';
 import supplies from './giving-supplies.webp';
 import medical from './giving-medical.webp';
 import visit from './giving-visit.webp';
-import moments from './giving-moments.webp';
 import portrait from './sammy-portrait.webp';
 
 /** Intrinsic sizes, so tiles reserve their space before the file arrives. */
@@ -30,10 +31,6 @@ export const GIVING_IMAGES = {
   supplies: { src: supplies, width: 720, height: 540 },
   medical: { src: medical, width: 720, height: 540 },
   visit: { src: visit, width: 720, height: 540 },
-  /* PLACEHOLDER. An Unsplash stock photograph, not the client's charity work.
-     It restores the sixth tile their page has while the real image is found.
-     Replace or remove before launch — see `docs/ISSUES.md`. */
-  moments: { src: moments, width: 720, height: 540 },
 };
 
 export const SAMMY_PORTRAIT = { src: portrait, width: 260, height: 260 };

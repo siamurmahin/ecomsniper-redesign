@@ -30,7 +30,7 @@ export const FOOTER = {
     {
       title: 'Company',
       links: [
-        { label: 'About', href: 'https://ecomsniper.io/about' },
+        { label: 'About', href: '/about' },
         { label: 'Blog', href: '/blog' },
         { label: 'Careers', href: '/careers' },
         { label: 'Affiliate', href: '/affiliate' },
