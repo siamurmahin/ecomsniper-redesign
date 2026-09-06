@@ -427,3 +427,57 @@ Which means the next time the budget fires it is either a regression or the
 repayment finally being attempted. `errorBoundaries` at 107KB and
 `vendor-react` at 187KB have been named in that file since 4 September and
 neither has been opened once.
+
+## "Black and white, nothing impressive" — and the fix was already in the sheet
+
+Fair, and it was worth hearing said plainly. The course page shipped as a wall
+of white cards on paper and paper-sunk, with the tones showing up only as a
+dashed ring around a number and a small tile on each bonus. Every other page
+opens on something — the feature pages on a drawn software panel, About on the
+drifting reviews — and the one page whose entire job is to sell had the least
+to look at.
+
+### What was added, and what was deliberately not
+
+The hero has a panel now: the model as four nodes on an **ink** field, tones at
+full strength instead of a tint on white, a halo at each node, and the brand
+ramp at 7% underneath so it is not a flat black rectangle.
+
+**Nothing new went into the stylesheet.** `system-wire`, `system-current` and
+`system-node-halo` were written for section 06, to say that three separate
+cards are one system. The claim here has the same shape — four steps that are
+one loop — so the device is reused rather than reinvented. That is also why the
+CSS moved 130KB to 131KB and not further: almost every class was already
+generated for somewhere else.
+
+Colour then goes in **structurally**, not as decoration:
+
+- The four step cards take a rule down the edge, a solid number tile and a wash
+  out of the far corner, in the tone that stage already wears on the homepage
+  and the feature pages. Four identical white cards said nothing about which
+  stage you were reading.
+- The hero's three figures and the three reasons eBay works both run blue,
+  gold, green — the same order the steps run — so the page has one colour logic
+  rather than a different one per band.
+- Red stays out of both. It is the tone this site uses for the thing that goes
+  wrong, and spending it on a proof figure would cost it that meaning.
+- The example panel's two numbers take blue and gold, the tones those two
+  stages already wear, so the arithmetic is tied to the story rather than being
+  two large grey numbers.
+
+### One list, not two
+
+The hero panel and the section below read the same four steps out of the deck.
+A `kicker` and an `icon` joined the existing entries rather than a second array
+being written for the panel — two lists of the same four steps is one edit away
+from a hero that disagrees with the section under it.
+
+### The thing not done
+
+The design guidance for this kind of work warns against ALL-CAPS eyebrows and
+accenting a single word in a headline, as generic tells. Both are used here,
+and both stay: they are `section-eyebrow` and `headline-mark-ink`, the devices
+this site has used on all sixteen pages since the beginning and lifted from the
+client's own live site. Consistency across the site beats novelty on one page
+of it, and a course page that quietly adopted different typographic furniture
+would read as a page from somewhere else.
