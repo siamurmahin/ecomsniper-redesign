@@ -21,8 +21,16 @@ const PRIME_TIMEOUT_MS = 2500;
  * the highest-intent moment on a repeat. The connectors are the clock, so the
  * bar cannot drift from the content and pausing one pauses both.
  *
- * Nodes are real buttons and a click ends autoplay. Reduced motion renders
- * every step at once, which is also the no-JS rendering.
+ * Nodes are real buttons and a click ends autoplay.
+ *
+ * Reduced motion gets the **same panel** with autoplay off, not a different
+ * one. It used to render all five steps stacked, which is about four times the
+ * height: it ran off the bottom of the first screen and pushed the rest of the
+ * hero down, so the section a reader met was not the section that was
+ * designed. It was reported as a broken layout, and that was a fair reading.
+ * Reducing motion is not licence to redesign the page around it — the rail is
+ * already made of real buttons, so every step stays reachable by click and by
+ * keyboard, and nothing moves until a reader asks it to.
  */
 export default function PipelinePanel() {
   const { HERO_PANEL, A11Y } = useContent();
@@ -36,10 +44,22 @@ export default function PipelinePanel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  // Decides which panel is rendered, so it comes from the hook rather than
-  // from the media query — a direct read cannot agree with the prerender.
-  // See `hooks/useReducedMotion`.
+  // From the hook rather than the media query: a direct read during render
+  // cannot agree with the prerender. See `hooks/useReducedMotion`.
   const isStatic = useReducedMotion();
+
+  /*
+   * Autoplay is the only thing reduced motion takes away, and it is derived
+   * rather than stored so the two can never drift apart. `isStatic` is false
+   * for the hydrating render — it has to be, that is what the prerender wrote
+   * — and flips immediately after, which a `useState` initialiser would have
+   * missed entirely.
+   *
+   * Everything else about the panel is unchanged: the connectors render their
+   * settled state instead of running, exactly as they already do the moment a
+   * reader clicks a node.
+   */
+  const autoPlay = isAutoPlaying && !isStatic;
 
   /*
    * The steps that are not on screen yet are painted for the first moment of
@@ -149,160 +169,134 @@ export default function PipelinePanel() {
           </p>
         </div>
 
-        {isStatic ? (
-          <>
-            <ul className="flex flex-col divide-y divide-ink-line">
-              {beats.map((beat, index) => (
-                <li key={beat.chip} className="flex gap-4 px-5 py-5">
+        {/* Stepper rail */}
+        <div className="flex items-center px-5 py-5">
+          {steps.map((step, index) => {
+            const tone = step.isFinale ? null : toneOf(step.tone);
+            const isActive = index === activeIndex;
+            const isDone = index < activeIndex;
+            const isLast = index === lastIndex;
+
+            return (
+              <div key={step.chip} className="flex flex-1 items-center last:flex-none">
+                <button
+                  type="button"
+                  onClick={() => goTo(index)}
+                  aria-label={`${index + 1}. ${step.chip}: ${step.title}`}
+                  aria-current={isActive}
+                  className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
+                >
+                  {/* Brand ramp on the offer node: the beats are stages,
+                          this one is the thing being sold. */}
                   <span
-                    className={`mt-0.5 grid size-8 shrink-0 place-items-center rounded-full font-label text-xs font-bold ${
-                      toneOf(beat.tone).tile
+                    className={`grid size-8 place-items-center rounded-full border font-label text-xs font-bold transition-[background-color,border-color,color,transform] duration-700 ease-[var(--ease-out-expo)] ${
+                      isActive
+                        ? `${step.isFinale ? 'brand-fill text-paper' : tone.tile} scale-110 border-transparent`
+                        : isDone
+                          ? `border-transparent opacity-85 ${step.isFinale ? 'brand-fill text-paper' : tone.tile}`
+                          : `bg-ink-soft text-muted-dark hover:border-paper/40 ${
+                              step.isFinale ? 'border-dashed border-paper/35' : 'border-ink-line'
+                            }`
                     }`}
                   >
-                    {index + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <Beat beat={beat} isActive={false} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <div className="border-t border-ink-line px-5 py-5">
-              <Finale finale={finale} onReplay={null} />
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Stepper rail */}
-            <div className="flex items-center px-5 py-5">
-              {steps.map((step, index) => {
-                const tone = step.isFinale ? null : toneOf(step.tone);
-                const isActive = index === activeIndex;
-                const isDone = index < activeIndex;
-                const isLast = index === lastIndex;
-
-                return (
-                  <div key={step.chip} className="flex flex-1 items-center last:flex-none">
-                    <button
-                      type="button"
-                      onClick={() => goTo(index)}
-                      aria-label={`${index + 1}. ${step.chip}: ${step.title}`}
-                      aria-current={isActive}
-                      className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
-                    >
-                      {/* Brand ramp on the offer node: the beats are stages,
-                          this one is the thing being sold. */}
-                      <span
-                        className={`grid size-8 place-items-center rounded-full border font-label text-xs font-bold transition-[background-color,border-color,color,transform] duration-700 ease-[var(--ease-out-expo)] ${
-                          isActive
-                            ? `${step.isFinale ? 'brand-fill text-paper' : tone.tile} scale-110 border-transparent`
-                            : isDone
-                              ? `border-transparent opacity-85 ${step.isFinale ? 'brand-fill text-paper' : tone.tile}`
-                              : `bg-ink-soft text-muted-dark hover:border-paper/40 ${
-                                  step.isFinale
-                                    ? 'border-dashed border-paper/35'
-                                    : 'border-ink-line'
-                                }`
-                        }`}
-                      >
-                        {step.isFinale ? (
-                          <Icon name="salesGrowth" className="size-3.5" />
-                        ) : isDone ? (
-                          <Icon name="check" className="size-3.5" />
-                        ) : (
-                          index + 1
-                        )}
-                      </span>
-                    </button>
-
-                    {/* Filled for good once passed; the active one is the
-                        clock. The last node has none, which ends the run. */}
-                    {!isLast && (
-                      <span
-                        aria-hidden="true"
-                        className="relative mx-2 h-0.5 flex-1 overflow-hidden rounded-full bg-paper/12"
-                      >
-                        <span
-                          key={isActive ? `run-${activeIndex}` : `state-${index}`}
-                          onAnimationEnd={() => {
-                            if (isActive && isAutoPlaying) {
-                              setActiveIndex(index + 1);
-                            }
-                          }}
-                          style={isActive ? { animationDuration: `${BEAT_MS}ms` } : undefined}
-                          className={`absolute inset-y-0 left-0 w-full origin-left rounded-full transition-transform duration-700 ${
-                            step.isFinale ? 'brand-fill' : tone.rule
-                          } ${
-                            isDone
-                              ? 'scale-x-100'
-                              : isActive
-                                ? `${isAutoPlaying ? 'animate-beat-fill' : 'scale-x-100'} ${
-                                    isPaused ? '[animation-play-state:paused]' : ''
-                                  }`
-                                : 'scale-x-0'
-                          }`}
-                        />
-                      </span>
+                    {step.isFinale ? (
+                      <Icon name="salesGrowth" className="size-3.5" />
+                    ) : isDone ? (
+                      <Icon name="check" className="size-3.5" />
+                    ) : (
+                      index + 1
                     )}
-                  </div>
-                );
-              })}
-            </div>
+                  </span>
+                </button>
 
-            {/* Steps */}
-            <p aria-live="polite" className="sr-only">
-              {A11Y.stepWithTitle
-                .replace('{n}', activeIndex + 1)
-                .replace('{total}', total)
-                .replace('{title}', activeStep.title)}
-            </p>
+                {/* Filled for good once passed; the active one is the
+                        clock. The last node has none, which ends the run. */}
+                {!isLast && (
+                  <span
+                    aria-hidden="true"
+                    className="relative mx-2 h-0.5 flex-1 overflow-hidden rounded-full bg-paper/12"
+                  >
+                    <span
+                      key={isActive ? `run-${activeIndex}` : `state-${index}`}
+                      onAnimationEnd={() => {
+                        if (isActive && autoPlay) {
+                          setActiveIndex(index + 1);
+                        }
+                      }}
+                      style={isActive ? { animationDuration: `${BEAT_MS}ms` } : undefined}
+                      className={`absolute inset-y-0 left-0 w-full origin-left rounded-full transition-transform duration-700 ${
+                        step.isFinale ? 'brand-fill' : tone.rule
+                      } ${
+                        isDone
+                          ? 'scale-x-100'
+                          : isActive
+                            ? `${autoPlay ? 'animate-beat-fill' : 'scale-x-100'} ${
+                                isPaused ? '[animation-play-state:paused]' : ''
+                              }`
+                            : 'scale-x-0'
+                      }`}
+                    />
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-            {/* Fixed height so the panel does not resize as steps come
+        {/* Steps */}
+        <p aria-live="polite" className="sr-only">
+          {A11Y.stepWithTitle
+            .replace('{n}', activeIndex + 1)
+            .replace('{total}', total)
+            .replace('{title}', activeStep.title)}
+        </p>
+
+        {/* Fixed height so the panel does not resize as steps come
                 forward. The steps are absolutely positioned, so padding here
                 reserves nothing — the height carries the gap, set from the
                 tallest step (the offer, 199px) plus room under its button. */}
-            <div className="relative h-[16.5rem] px-5 sm:h-[14rem]">
-              {steps.map((step, index) => {
-                const isActive = index === activeIndex;
+        <div className="relative h-[16.5rem] px-5 sm:h-[14rem]">
+          {steps.map((step, index) => {
+            const isActive = index === activeIndex;
 
-                return (
-                  <div
-                    key={step.chip}
-                    aria-hidden={!isActive}
-                    /* `inert` as well as `aria-hidden`, because the beat that
+            return (
+              <div
+                key={step.chip}
+                aria-hidden={!isActive}
+                /* `inert` as well as `aria-hidden`, because the beat that
                        is fading out still holds a button — the finale's replay
                        — and an aria-hidden subtree with something tabbable in
                        it is a keyboard trap that a screen reader cannot
                        announce. `inert` takes the whole subtree out of the tab
                        order and the a11y tree together; `pointer-events-none`
                        above only ever stopped the mouse. */
-                    inert={!isActive || undefined}
-                    /*
-                     * A staggered crossfade: the old step leaves over 500ms,
-                     * the new one waits 420ms. They overlap for ~80ms, short
-                     * enough that nobody reads both. Opacity only — the slide
-                     * it replaced made a 2.9s step feel hurried.
-                     */
-                    className={`absolute inset-x-5 top-0 ${
-                      isActive
-                        ? 'opacity-100 transition-opacity duration-[900ms] delay-[420ms] ease-[var(--ease-out-expo)]'
-                        : `pointer-events-none transition-opacity duration-[500ms] ease-linear ${
-                            isPriming ? 'opacity-[0.01]' : 'opacity-0'
-                          }`
-                    }`}
-                  >
-                    {step.isFinale ? (
-                      <Finale finale={step} onReplay={replay} />
-                    ) : (
-                      <Beat beat={step} isActive={isActive} />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
+                inert={!isActive || undefined}
+                /*
+                 * A staggered crossfade: the old step leaves over 500ms,
+                 * the new one waits 420ms. They overlap for ~80ms, short
+                 * enough that nobody reads both. Opacity only — the slide
+                 * it replaced made a 2.9s step feel hurried.
+                 */
+                className={`absolute inset-x-5 top-0 ${
+                  isActive
+                    ? 'opacity-100 transition-opacity duration-[900ms] delay-[420ms] ease-[var(--ease-out-expo)]'
+                    : `pointer-events-none transition-opacity duration-[500ms] ease-linear ${
+                        isPriming ? 'opacity-[0.01]' : 'opacity-0'
+                      }`
+                }`}
+              >
+                {/* No replay under reduced motion: the button exists to
+                        restart a run, and there is no run to restart. The
+                        rail's own nodes are how a reader goes back. */}
+                {step.isFinale ? (
+                  <Finale finale={step} onReplay={isStatic ? null : replay} />
+                ) : (
+                  <Beat beat={step} isActive={isActive} />
+                )}
+              </div>
+            );
+          })}
+        </div>
 
         {/* The one fact in the panel that is not an illustration, and the
             answer to the question the headline raises: sell where? */}

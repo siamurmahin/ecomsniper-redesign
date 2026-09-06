@@ -19,6 +19,15 @@ session.
 
 ## Now
 
+- **The hero panel's reduced-motion fallback stays compact.** Asked for 6 Sep,
+  after it was mistaken for a broken layout — which was fair. The still version
+  renders all five steps stacked, roughly four times the height of the panel it
+  replaces, so it runs off the bottom of the first screen and pushes everything
+  under it down. Reducing motion should not mean redesigning the section. The
+  fallback becomes the **same compact panel with autoplay off**: the stepper
+  rail is already made of real buttons, so every step stays reachable by click
+  and by keyboard, and nothing moves until a reader asks it to.
+
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
   container rather than replacing it. Built the way GTM is — declared in
