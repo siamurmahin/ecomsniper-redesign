@@ -118,7 +118,7 @@ export default function AboutPage() {
 
   return (
     <>
-      <HeroSurface>
+      <HeroSurface className="surface-deep">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <p className="section-eyebrow" data-reveal data-reveal-group="about-hero">
@@ -205,10 +205,10 @@ export default function AboutPage() {
       </HeroSurface>
 
       {/* 1. What it costs them. */}
-      <ProseBand id="cost" section={ABOUT.cost} tone="bg-paper-sunk" />
+      <ProseBand id="cost" section={ABOUT.cost} tone="surface-rich" />
 
       {/* 2. What they get for it — moved up from seventh on their page. */}
-      <section aria-labelledby="offer-headline" className="section-band">
+      <section aria-labelledby="offer-headline" className="section-band surface-deep">
         <div className="site-shell">
           <div className="max-w-3xl">
             <p className="section-eyebrow" data-reveal data-reveal-group="offer">
@@ -253,10 +253,14 @@ export default function AboutPage() {
       </section>
 
       {/* 3. How it started. */}
-      <ProseBand id="origin" section={ABOUT.origin} tone="bg-paper-sunk" />
+      <ProseBand id="origin" section={ABOUT.origin} tone="surface-rich" />
 
       {/* 4. The giving, and the photographs. */}
-      <section ref={givingRef} aria-labelledby="giving-headline" className="section-band">
+      <section
+        ref={givingRef}
+        aria-labelledby="giving-headline"
+        className="section-band surface-deep"
+      >
         <div className="site-shell">
           <div className="max-w-3xl">
             <p className="section-eyebrow" data-reveal data-reveal-group="giving">
@@ -290,7 +294,7 @@ export default function AboutPage() {
                 key={gift.label}
                 data-reveal
                 data-reveal-group="giving"
-                className="rounded-2xl border border-hairline bg-paper p-6"
+                className="card-raised rounded-2xl border border-hairline bg-paper p-6"
               >
                 <p className="font-label text-sm tracking-[0.08em] text-muted uppercase">
                   {gift.label}
@@ -363,7 +367,7 @@ export default function AboutPage() {
       <section
         ref={boundariesRef}
         aria-labelledby="boundaries-headline"
-        className="section-band bg-paper-sunk"
+        className="section-band surface-rich"
       >
         <div className="site-shell">
           <div className="max-w-3xl">
@@ -390,7 +394,7 @@ export default function AboutPage() {
                   key={item.lead}
                   data-reveal
                   data-reveal-group="boundaries"
-                  className="flex gap-5 rounded-2xl border border-hairline bg-paper p-6"
+                  className="flex gap-5 card-raised rounded-2xl border border-hairline bg-paper p-6"
                 >
                   <span
                     aria-hidden="true"
@@ -421,10 +425,10 @@ export default function AboutPage() {
       </section>
 
       {/* 6. When it does not work out. */}
-      <ProseBand id="responsibility" section={ABOUT.responsibility} />
+      <ProseBand id="responsibility" section={ABOUT.responsibility} tone="surface-deep" />
 
       {/* 7. The team, and the founder's own line. */}
-      <section ref={teamRef} aria-labelledby="team-headline" className="section-band bg-paper-sunk">
+      <section ref={teamRef} aria-labelledby="team-headline" className="section-band surface-rich">
         <div className="site-shell">
           <div className="grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-start lg:gap-16">
             <div className="max-w-3xl">
@@ -462,7 +466,7 @@ export default function AboutPage() {
             <figure
               data-reveal
               data-reveal-group="team"
-              className="rounded-2xl border border-hairline bg-paper p-7"
+              className="card-raised rounded-2xl border border-hairline bg-paper p-7"
             >
               <blockquote className="font-serif text-lg leading-relaxed italic text-ink">
                 “{ABOUT.team.quote.text}”
@@ -493,7 +497,11 @@ export default function AboutPage() {
       </section>
 
       {/* 8. The invitation, which is the one place this page asks for anything. */}
-      <section ref={invitationRef} aria-labelledby="invitation-headline" className="section-band">
+      <section
+        ref={invitationRef}
+        aria-labelledby="invitation-headline"
+        className="section-band surface-deep"
+      >
         <div className="site-shell">
           <div className="max-w-3xl">
             <p className="section-eyebrow" data-reveal data-reveal-group="invitation">

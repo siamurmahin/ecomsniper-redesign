@@ -628,6 +628,50 @@
       radial-gradient(52rem 40rem at 88% 28%, rgb(0 100 210 / 0.09), transparent 70%);
   }
 
+  /* ------------------------------------------------------------------ *
+     Surfaces for the two pages that carry weight: About and the course.
+
+     The site's two grounds are #fbfbfa and #f4f4f1 — a two per cent
+     difference, which means "alternating bands" have always read as one
+     continuous plane, and the shadows sit at 0.04 alpha where nobody can
+     see them. On the pages that are mostly words that is fine. On a sales
+     page and on the page arguing for the company it is the reason both read
+     as pale and flat.
+
+     These two classes give those pages real surfaces to alternate between,
+     without touching the tokens every other page stands on.
+     ------------------------------------------------------------------ */
+
+  /* The dark band. Near-black, with the brand's own blue and green as light
+     sources bleeding in from opposite corners — colour as illumination
+     rather than as a tint laid on top. */
+  .surface-deep {
+    background:
+      radial-gradient(58rem 34rem at 10% -12%, rgb(0 100 210 / 0.3), transparent 62%),
+      radial-gradient(50rem 30rem at 90% 112%, rgb(134 184 23 / 0.22), transparent 62%),
+      linear-gradient(180deg, #15161a 0%, #1e1f23 55%, #17181c 100%);
+    color: var(--color-paper);
+  }
+
+  /* The light band, which is a surface rather than an absence: a warmer,
+     deeper ground than the page's own, with two brand washes so it is not a
+     flat rectangle of grey. */
+  .surface-rich {
+    background:
+      radial-gradient(46rem 26rem at 86% -18%, rgb(0 100 210 / 0.08), transparent 64%),
+      radial-gradient(40rem 24rem at 6% 118%, rgb(245 175 2 / 0.07), transparent 64%),
+      linear-gradient(180deg, #f1f0ed 0%, #e8e7e3 100%);
+  }
+
+  /* Elevation you can actually see. `shadow-float` tops out at 0.05 alpha,
+     which on a pale ground is indistinguishable from no shadow at all. */
+  .card-raised {
+    box-shadow:
+      0 1px 2px rgb(30 31 35 / 0.06),
+      0 4px 12px rgb(30 31 35 / 0.07),
+      0 20px 44px -22px rgb(30 31 35 / 0.4);
+  }
+
   /* The fill is a background-image layer here too, so hover moves what can be
      interpolated: the ramp saturates, the label takes the accent. */
   .btn-brand-outline:hover {
@@ -1543,6 +1587,50 @@
 }
 
 @layer utilities {
+  /* ------------------------------------------------------------------ *
+     Type and edges inside a dark band.
+
+     These live in @layer utilities rather than beside `.surface-deep` in
+     @layer components, and the reason is the same one the noscript nav rule
+     ran into: **layer order beats specificity**. Tailwind's utilities layer
+     comes after components, so `.text-ink` there beat
+     `.surface-deep .text-ink` here despite being less specific — and the
+     hero's price line rendered ink on near-black, invisible. Inside the same
+     layer the two-class selector wins on its own merits.
+     ------------------------------------------------------------------ */
+  .surface-deep :is(h1, h2, h3, h4, dt, .text-ink) {
+    color: var(--color-paper);
+  }
+  .surface-deep :is(.text-muted, dd, .text-muted/60, .text-muted/70) {
+    color: var(--color-muted-dark);
+  }
+  .surface-deep .border-hairline {
+    border-color: var(--color-ink-line);
+  }
+  .surface-deep :is(.bg-paper, .bg-paper-sunk) {
+    background-color: rgb(255 255 255 / 0.05);
+  }
+  .surface-deep .section-eyebrow {
+    color: var(--color-muted-dark);
+  }
+  .surface-deep .headline-mark-ink {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .surface-deep .divide-hairline/70 > * + * {
+    border-color: var(--color-ink-line);
+  }
+
+  /* The header stands on the hero, and on these two pages the hero is dark.
+     Only its transparent state needs this — once it condenses it has its own
+     paper surface to sit on, and `border-transparent` is the class present in
+     exactly that state. Keyed on the surface class rather than a data
+     attribute: `HeroSurface` forwards className and nothing else, so an
+     attribute passed to it is silently dropped. */
+  body:has(.surface-deep) header .border-transparent :is(a, button, span) {
+    color: var(--color-paper);
+  }
+
   /* Horizontal testimonial rows. `marquee-drift` above already walks a track
      left; this is its mirror, so alternating rows can run against each other.
      A separate keyframe rather than `animation-direction: reverse` because

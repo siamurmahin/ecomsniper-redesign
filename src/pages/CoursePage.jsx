@@ -97,7 +97,7 @@ export default function CoursePage() {
 
   return (
     <>
-      <HeroSurface>
+      <HeroSurface className="surface-deep">
         <div className="grid gap-12 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-16">
           <div>
             <p className="section-eyebrow" data-reveal data-reveal-group="course-hero">
@@ -194,7 +194,7 @@ export default function CoursePage() {
         ref={fitRef}
         id="is-it-for-me"
         aria-labelledby="fit-headline"
-        className="section-band"
+        className="section-band surface-rich"
       >
         <div className="site-shell">
           <BandHead id="fit" section={COURSE.fit} />
@@ -211,7 +211,7 @@ export default function CoursePage() {
                   key={side.label}
                   data-reveal
                   data-reveal-group="fit"
-                  className="relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
+                  className="relative overflow-hidden card-raised rounded-2xl border border-hairline bg-paper p-7 pl-8"
                 >
                   <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${t.rule}`} />
 
@@ -238,7 +238,7 @@ export default function CoursePage() {
         ref={mechanicRef}
         id="how-it-works"
         aria-labelledby="mechanic-headline"
-        className="section-band bg-paper-sunk"
+        className="section-band surface-deep"
       >
         <div className="site-shell">
           <BandHead id="mechanic" section={COURSE.mechanic} />
@@ -252,7 +252,7 @@ export default function CoursePage() {
                   key={step.title}
                   data-reveal
                   data-reveal-group="mechanic-steps"
-                  className="relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
+                  className="relative overflow-hidden card-raised rounded-2xl border border-hairline bg-paper p-7 pl-8"
                 >
                   {/* The tone as a rule down the edge and a wash out of the
                       far corner. Four identical white cards told a reader
@@ -293,7 +293,7 @@ export default function CoursePage() {
           <div
             data-reveal
             data-reveal-group="mechanic-steps"
-            className="panel-brand-outline mt-10 bg-paper p-7"
+            className="panel-brand-outline card-raised mt-10 bg-paper p-7"
           >
             <p className="micro-label text-muted">{COURSE.mechanic.example.label}</p>
 
@@ -337,7 +337,11 @@ export default function CoursePage() {
       </section>
 
       {/* 2. Why the market works. */}
-      <section ref={marketRef} aria-labelledby="market-headline" className="section-band">
+      <section
+        ref={marketRef}
+        aria-labelledby="market-headline"
+        className="section-band surface-rich"
+      >
         <div className="site-shell">
           <BandHead id="market" section={COURSE.market} />
 
@@ -377,7 +381,7 @@ export default function CoursePage() {
         ref={includedRef}
         id="what-you-get"
         aria-labelledby="included-headline"
-        className="section-band bg-paper-sunk"
+        className="section-band surface-deep"
       >
         <div className="site-shell">
           <BandHead id="included" section={COURSE.included} />
@@ -387,7 +391,7 @@ export default function CoursePage() {
             <div
               data-reveal
               data-reveal-group="included"
-              className="panel-brand-outline bg-paper p-8"
+              className="panel-brand-outline card-raised bg-paper p-8"
             >
               <p className="micro-label text-muted">{COURSE.eyebrow}</p>
               <h3 className="mt-3 font-display text-2xl font-extrabold text-ink">
@@ -425,7 +429,7 @@ export default function CoursePage() {
                     key={bonus.name}
                     data-reveal
                     data-reveal-group="included"
-                    className="flex gap-5 rounded-2xl border border-hairline bg-paper p-6"
+                    className="flex gap-5 card-raised rounded-2xl border border-hairline bg-paper p-6"
                   >
                     <span
                       aria-hidden="true"
@@ -455,7 +459,11 @@ export default function CoursePage() {
       </section>
 
       {/* 4. Who teaches it. */}
-      <section ref={instructorsRef} aria-labelledby="instructors-headline" className="section-band">
+      <section
+        ref={instructorsRef}
+        aria-labelledby="instructors-headline"
+        className="section-band surface-rich"
+      >
         <div className="site-shell">
           <BandHead id="instructors" section={COURSE.instructors} />
 
@@ -465,7 +473,7 @@ export default function CoursePage() {
                 key={person.name}
                 data-reveal
                 data-reveal-group="instructors"
-                className="rounded-2xl border border-hairline bg-paper p-8"
+                className="card-raised rounded-2xl border border-hairline bg-paper p-8"
               >
                 <p className="font-display text-xl font-extrabold text-ink">{person.name}</p>
                 <p className="font-label text-xs tracking-[0.12em] text-muted uppercase">
@@ -502,7 +510,7 @@ export default function CoursePage() {
         ref={objectionsRef}
         id="questions"
         aria-labelledby="objections-headline"
-        className="section-band bg-paper-sunk"
+        className="section-band surface-rich"
       >
         <div className="site-shell">
           <BandHead id="objections" section={COURSE.objections} />
@@ -516,7 +524,7 @@ export default function CoursePage() {
                   key={item.question}
                   data-reveal
                   data-reveal-group="objections"
-                  className="relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
+                  className="relative overflow-hidden card-raised rounded-2xl border border-hairline bg-paper p-7 pl-8"
                 >
                   <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${t.rule}`} />
 
@@ -554,7 +562,11 @@ export default function CoursePage() {
 
       {/* 7. The last door, with the guarantee beside it rather than a screen
              below it. */}
-      <section ref={closeRef} aria-labelledby="close-headline" className="section-band">
+      <section
+        ref={closeRef}
+        aria-labelledby="close-headline"
+        className="section-band surface-deep"
+      >
         <div className="site-shell">
           <BandHead id="close" section={COURSE.close} />
 
