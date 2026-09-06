@@ -21,9 +21,9 @@ export const overlay = {
       { text: ', dieses Geld zu verdienen.' },
     ],
     statementParts: [
-      { text: 'Wenn du für etwas bezahlst, gibst du uns ' },
-      { text: 'Stunden deines Lebens', mark: true },
-      { text: '. Daran denken wir.' },
+      {
+        text: 'Wenn du für etwas bezahlst, gibst du uns Stunden deines Lebens. Daran denken wir.',
+      },
     ],
 
     hours: ['Die Spätschichten.', 'Die Überstunden.', 'Die müden Morgen.'],

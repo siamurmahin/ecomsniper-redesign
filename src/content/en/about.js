@@ -32,9 +32,9 @@ export const ABOUT = {
     { text: ' to earn this money.' },
   ],
   statementParts: [
-    { text: 'When you pay for something, you are giving us ' },
-    { text: 'hours of your life', mark: true },
-    { text: '. We think about that.' },
+    {
+      text: 'When you pay for something, you are giving us hours of your life. We think about that.',
+    },
   ],
 
   /* The figure their page opens on. $200 is the monthly charge as the client
