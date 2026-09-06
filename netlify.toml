@@ -78,6 +78,17 @@
   status = 301
 
 [[redirects]]
+  from = "/affiliate/join"
+  to = "/affiliate/terms"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/affiliate/join"
+  to = "/de/affiliate/terms"
+  status = 301
+  force = true
+[[redirects]]
   from = "/de/*"
   to = "/de/404/index.html"
   status = 404

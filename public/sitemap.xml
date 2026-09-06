@@ -108,6 +108,22 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://ecomsniper.io/affiliate/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/affiliate/terms" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/affiliate/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/affiliate/terms" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/affiliate/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/affiliate/terms" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/affiliate/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/affiliate/terms" />
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://ecomsniper.io/terms-and-conditions</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/terms-and-conditions" />
     <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/terms-and-conditions" />

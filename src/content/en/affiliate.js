@@ -1,206 +1,155 @@
 /**
- * The affiliate programme terms.
+ * The affiliate programme — the landing page and its application form.
  *
- * Captured in full from ecomsniper.io/affiliate/join on 4 Sep 2026 — 11
- * sections, 6,720 characters. See `docs/source-copy/affiliate.md`.
+ * Their site has no page like this. `/affiliate` renders blank on their live
+ * site: their router has no such route, only `/affiliate/join`, which is the
+ * contract and nothing else. So a reader who wants to know what the programme
+ * pays has a legal document and no offer. This page is the offer.
  *
- * **This page is a legal document, not a landing page.** Their page has no
- * form and no signup — it is the programme's terms, readable before anyone
- * applies, which is what affiliate terms are for. It is reproduced as that
- * and nothing more.
+ * **Every claim here is taken from a clause, not invented.** The programme's
+ * facts come from `affiliateTerms.js`, and where the terms decline to say
+ * something, so does this page:
  *
- * Their own footer links "Affiliate" to `/login`, so today this page is
- * unlinked while a password prompt sits where the programme should be. Ours
- * links to the page. Whether the client also wants a programme landing page
- * in front of it — what the affiliate earns, how it works — is a separate
- * page and a separate decision, recorded in `docs/TODO.md`.
+ *   quarterly payouts, 1st-10th   clause 8, payment schedule
+ *   PayPal only                   clause 8, payment method
+ *   $100 minimum                  clause 8, minimum payout
+ *   active paid subscription      clause 1, enrollment
+ *   18 or older                   clause 1, enrollment
+ *   approval at their discretion  clause 1, enrollment
+ *   links or coupon codes         clause 5, promotion guidelines
  *
- * Wording is kept close to verbatim because it is a contract. Two things were
- * deliberately not carried over: the "NEW" and "UPDATED" badges on sections 2,
- * 3, 4, 6 and 8, which date from their edit and mean nothing to a first-time
- * reader; and the commission percentage, which their terms decline to state
- * ("communicated separately") and which is therefore not ours to supply.
+ * **There is no commission percentage on this page, and there cannot be.**
+ * Clause 7 says percentages "may vary and will be communicated separately".
+ * A landing page that headlines a rate the contract refuses to state would be
+ * making the company's offer for it. The hero sells the mechanics instead —
+ * which is honest, and is the same reason the playbook page does not promise
+ * a figure. If the client supplies a rate, it belongs here and in clause 7 at
+ * the same time. Recorded in `docs/TODO.md` as blocked on them.
+ *
+ * **Page-owned copy, not part of the global deck.** Imported by the route and
+ * merged with `usePageContent`, so it lands in that route's lazy chunk.
  */
 export const AFFILIATE = {
   eyebrow: 'Affiliate programme',
-  headline: 'Terms and conditions',
-  intro:
-    'Thank you for your interest in becoming an affiliate partner of EcomSniper. Our affiliate program is designed to reward individuals and businesses for promoting EcomSniper and helping grow our community. By applying to or participating in the affiliate program, you agree to the following terms and conditions.',
 
-  /* Numbered because their document is numbered and a contract is referred to
-     by clause number. The numbers are content here, not decoration. */
-  sections: [
-    {
-      title: 'Enrollment',
-      items: [
-        'To participate in the EcomSniper Affiliate Program, you must complete and submit the official affiliate application.',
-        'EcomSniper reserves the right to approve or reject any application at its sole discretion.',
-        'Applicants must be at least 18 years old or the legal age in their country of residence.',
-        'To remain eligible as an affiliate, you must maintain an active paid EcomSniper subscription. If your subscription becomes inactive or cancelled, your affiliate status may also be suspended or removed.',
-      ],
-    },
-    {
-      title: 'Affiliate conduct and community standards',
-      lead: 'Affiliates represent the EcomSniper brand and community. Professional conduct is required at all times. By participating in the program, affiliates agree to:',
-      items: [
-        'Respect all other affiliates, staff members, and community members.',
-        'Avoid drama, harassment, toxic behavior, or public conflicts.',
-        "Not engage in infighting, competition abuse, or attempts to damage another affiliate's reputation or business.",
-        'Maintain professionalism when speaking about EcomSniper publicly or privately.',
-      ],
-      closer:
-        'Failure to follow these standards may result in removal from the affiliate program and community.',
-    },
-    {
-      title: 'Brand protection and reputation',
-      lead: 'Affiliates may not damage, misrepresent, or harm the EcomSniper brand in any way. The following actions are strictly prohibited:',
-      items: [
-        'False claims or misleading marketing',
-        'Public attacks against EcomSniper, its staff, users, or affiliates',
-        'Creating unnecessary public disputes regarding payments, policies, or internal operations',
-        'Sharing confidential company information',
-        'Any behavior that may negatively impact the reputation of EcomSniper',
-      ],
-      closerLead: 'If an affiliate violates this section, EcomSniper reserves the right to:',
-      closerItems: [
-        'Immediately terminate affiliate access',
-        'Remove community access',
-        'Remove company or staff positions',
-        'Cancel pending commissions or affiliate payments',
-        'Permanently ban the individual from all EcomSniper platforms and services',
-      ],
-    },
-    {
-      title: 'Referral ownership',
-      items: [
-        'Affiliate ownership is determined by the final convincing interaction that led the customer to join EcomSniper.',
-        'If multiple affiliates interacted with the same potential customer, the affiliate who ultimately convinced or closed the user into becoming a paying customer will receive the referral credit.',
-        'EcomSniper reserves the right to make the final decision in any referral dispute.',
-      ],
-    },
-    {
-      title: 'Promotion guidelines',
-      items: [
-        'Affiliates will receive unique referral links or coupon codes for promotion.',
-        'Affiliates are responsible for promoting EcomSniper ethically and professionally.',
-      ],
-      closerLead: 'The following promotion methods are prohibited:',
-      closerItems: [
-        'Spam marketing',
-        'Fake testimonials',
-        'Misleading income claims',
-        'Blackhat marketing methods',
-        'Harassment or forced promotion',
-        'Creating fake urgency or false promises',
-      ],
-      closer:
-        'Affiliates must always comply with platform rules, local laws, and advertising regulations.',
-    },
-    {
-      title: 'Accountability for referrals',
-      lead: 'Affiliates are expected to maintain accountability for the users they refer into the EcomSniper ecosystem. This includes:',
-      items: [
-        'Properly explaining the service before referring users',
-        'Avoiding misleading expectations',
-        'Assisting referred users when reasonably possible',
-        'Helping maintain a positive experience within the community',
-      ],
-      closer:
-        'Affiliates who repeatedly bring harmful, fraudulent, abusive, or problematic users into the platform may face affiliate review or removal.',
-    },
-    {
-      title: 'Commission structure',
-      items: [
-        'Affiliates earn commissions on qualifying sales generated through their approved referral links or coupon codes.',
-        'Commission percentages and structures may vary and will be communicated separately.',
-      ],
-      closerLead: 'Commissions may be adjusted, delayed, withheld, or reversed in cases involving:',
-      closerItems: [
-        'Refunds',
-        'Chargebacks',
-        'Fraudulent transactions',
-        'Abuse of the affiliate system',
-        'Violation of company policies',
-      ],
-    },
-    {
-      title: 'Payment terms',
-      /* The only section with labelled clauses on their page. Kept as pairs so
-         the label stays attached to what it governs. */
-      definitions: [
-        {
-          term: 'Payment schedule',
-          body: 'Affiliate commissions are processed quarterly (every three months) and are generally paid between the 1st and 10th day of the payout month.',
-        },
-        {
-          term: 'Payout request requirement',
-          body: 'Affiliates must submit a payout request through the affiliate dashboard before commissions can be processed.',
-        },
-        {
-          term: 'Processing delays',
-          body: 'While EcomSniper aims to process all payments within the standard payout window, occasional delays may occur due to verification, operational, or processing reasons. Affiliates agree not to publicly create drama, disputes, or reputational harm regarding delayed payments. Any concerns regarding payouts must be handled privately with the EcomSniper team.',
-        },
-        {
-          term: 'Payment method',
-          body: 'All affiliate payments are sent exclusively through PayPal.',
-        },
-        {
-          term: 'Minimum payout',
-          body: 'A minimum balance of $100 USD is required before requesting a payout.',
-        },
-        {
-          term: 'Payment fees',
-          body: 'Affiliates are responsible for all PayPal fees, currency conversion fees, transaction fees, or local taxes associated with receiving payments.',
-        },
-        {
-          term: 'Payment confirmation',
-          body: 'Affiliates will receive confirmation once payments have been processed.',
-        },
-      ],
-    },
-    {
-      title: 'Compliance',
-      items: [
-        'Affiliates must comply with all applicable laws, regulations, platform policies, and industry standards.',
-        'Affiliates may not infringe on intellectual property rights.',
-        'Affiliates may not misrepresent EcomSniper products or services.',
-        'Affiliates may not use deceptive sales practices.',
-        'Affiliates may not engage in unethical marketing behavior.',
-      ],
-    },
-    {
-      title: 'Termination',
-      items: [
-        'Either party may terminate the affiliate relationship at any time.',
-        'EcomSniper reserves the right to immediately suspend or terminate affiliates for violations of these terms without prior warning.',
-      ],
-      closerLead: 'Upon termination:',
-      closerItems: [
-        'Affiliate access may be revoked immediately',
-        'Community access may be removed',
-        'Future commissions may be cancelled',
-        'Pending commissions may be withheld during investigation if fraud or misconduct is suspected',
-      ],
-    },
-    {
-      title: 'Modifications',
-      items: [
-        'EcomSniper reserves the right to modify, update, or change these terms at any time without prior notice.',
-        'Continued participation in the affiliate program after updates constitutes acceptance of the revised terms.',
-        "It is the affiliate's responsibility to regularly review and stay updated on the latest affiliate policies.",
-      ],
-    },
+  /* Punctuation inside the marked run — the mark is an inline-block, so a
+     stop left outside it gets its own break opportunity and orphans. */
+  headlineParts: [{ text: 'Get paid for the people you ' }, { text: 'bring.', mark: true }],
+  headline: 'Get paid for the people you bring.',
+
+  lead: 'Share a referral link, and earn on every subscription that comes through it. Payouts run quarterly through PayPal, once you pass $100.',
+
+  ctas: {
+    primary: { label: 'Apply to join', href: '#apply' },
+    secondary: { label: 'Read the terms', href: '/affiliate/terms' },
+  },
+
+  /**
+   * The four facts a reader actually wants before applying, and the four the
+   * contract states plainly. Deliberately not dressed as achievements.
+   */
+  facts: [
+    { tone: 'blue', label: 'Payouts', value: 'Quarterly', note: 'Paid between the 1st and 10th' },
+    { tone: 'gold', label: 'Paid through', value: 'PayPal', note: 'The only method offered' },
+    { tone: 'green', label: 'Minimum payout', value: '$100', note: 'Before a request is made' },
+    { tone: 'red', label: 'Eligibility', value: '18+', note: 'And a paid subscription' },
   ],
 
-  final: {
-    title: 'Final agreement',
-    body: [
-      'By joining the EcomSniper Affiliate Program, you acknowledge that you have read, understood, and agreed to all terms and conditions listed above.',
-      'You also acknowledge that failure to comply with these terms may result in removal from the affiliate program, loss of commissions, or permanent restriction from EcomSniper services and communities.',
+  /**
+   * Three steps, and this is a genuine sequence — apply, then promote, then
+   * get paid — which is the only reason it carries numbers.
+   */
+  steps: {
+    eyebrow: 'How it works',
+    headlineParts: [{ text: 'Three steps, then it ' }, { text: 'runs itself.', mark: true }],
+    headline: 'Three steps, then it runs itself.',
+
+    items: [
+      {
+        n: '01',
+        tone: 'blue',
+        title: 'Apply',
+        body: 'Tell us who you reach and how. Applications are reviewed by a person, and EcomSniper approves or declines at its own discretion.',
+      },
+      {
+        n: '02',
+        tone: 'gold',
+        title: 'Share your link',
+        body: 'Approved affiliates get a unique referral link or coupon code. Promote it honestly — no fake urgency, no income claims, no spam.',
+      },
+      {
+        n: '03',
+        tone: 'green',
+        title: 'Request a payout',
+        body: 'Commissions build up on qualifying sales. Once your balance passes $100, request a payout from the affiliate dashboard.',
+      },
     ],
-    contact: 'For any questions about the affiliate programme, contact the EcomSniper team.',
-    /* Points at the live site until our own /contact ships — the same
-       arrangement the footer's Contact link is under. Flip both together. */
-    cta: { label: 'Contact us', href: '/contact' },
+  },
+
+  /** What gets an application declined. Better said before than after. */
+  eligibility: {
+    title: 'Before you apply',
+    lead: 'The programme has real conditions, and they are worth knowing now rather than after a rejection.',
+    items: [
+      'You are 18, or the legal age where you live.',
+      'You hold an active paid EcomSniper subscription — affiliate status is suspended if it lapses.',
+      'You promote it honestly. Misleading income claims and fake testimonials end a partnership.',
+      'Commission rates are set by EcomSniper and shared with you after approval.',
+    ],
+  },
+
+  /**
+   * The application.
+   *
+   * It collects what an approve-or-decline decision is actually made on and
+   * nothing else. No PayPal address: that is a payout detail, it is personal
+   * data, and asking for it before anyone is approved collects it from people
+   * who will never be paid.
+   */
+  form: {
+    id: 'apply',
+    eyebrow: 'The application',
+    title: 'Apply to the programme',
+    lead: 'A person reads every application. Expect a reply by email either way.',
+
+    name: { label: 'Your name', placeholder: 'Alex Fischer' },
+    email: { label: 'Email', placeholder: 'you@example.com' },
+    country: { label: 'Country', placeholder: 'United Kingdom' },
+    channels: {
+      label: 'Where you would promote it',
+      placeholder: 'YouTube, a Discord server, a newsletter — whatever you actually run',
+    },
+    audience: { label: 'Roughly how many people you reach', placeholder: '4,000 subscribers' },
+    links: {
+      label: 'Links to your channels',
+      placeholder: 'youtube.com/@yourchannel\ninstagram.com/yourhandle',
+    },
+
+    /* The consent line. It links the contract rather than summarising it —
+       a summary of a contract inside a checkbox is not the contract. */
+    consent: {
+      before: 'I have read and agree to the ',
+      link: { label: 'affiliate programme terms', href: '/affiliate/terms' },
+      after: '.',
+    },
+
+    submit: 'Send application',
+    sending: 'Sending…',
+
+    /* No fake success. Same rule the contact form is built on: without an
+       endpoint the application is handed to the visitor's mail client and the
+       page says so, rather than showing a tick for a thing that never left. */
+    done: 'Application sent. We read every one and will reply by email.',
+    handoff:
+      'Your email app should be opening with the application filled in. Press send there and it reaches us.',
+    error: 'That did not send. Email management@ecomsniper.io and we will pick it up from there.',
+    trap: 'Leave this field empty',
+  },
+
+  /** The contract, one click away and named as what it is. */
+  terms: {
+    title: 'The full terms',
+    body: 'Eleven clauses covering enrollment, conduct, referral ownership, commissions, payment and termination. Worth reading before you apply, not after.',
+    cta: { label: 'Read the affiliate terms', href: '/affiliate/terms' },
   },
 };

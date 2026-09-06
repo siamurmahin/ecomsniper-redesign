@@ -18,6 +18,13 @@
 /de/productHunterV6  /de/product-hunter  301!
 /de/aiListerV6       /de/ai-powered-lister  301!
 
+# Their real affiliate URL. On their site /affiliate is a blank unmatched
+# route and the contract lives at /affiliate/join; ours splits the offer
+# from the contract, so their URL lands on the contract rather than the
+# landing page a reader following an old link was not looking for.
+/affiliate/join     /affiliate/terms     301!
+/de/affiliate/join  /de/affiliate/terms  301!
+
 # Anything else is a 404, and says so. Every route is prerendered, so a URL
 # that reaches this rule does not exist; the SPA fallback this replaces
 # answered it with the homepage under a 200. German first, so /de/anything
