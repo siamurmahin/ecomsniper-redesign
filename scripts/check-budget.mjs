@@ -88,8 +88,26 @@ const BUDGETS = {
      575 had 0.6KB of room left, so this ceiling was going to round against
      the next component whatever it was. The three is headroom, not a budget
      for new weight: nothing on the first screen grew here, and if the next
-     failure is application code the answer is still "make it lazy". */
-  eagerJs: 578,
+     failure is application code the answer is still "make it lazy".
+
+     586, raised from 578 on 6 Sep when Competitor Research landed, and raised
+     once for the three pages left rather than three times. Measured across
+     that page: 589,322 bytes to 591,853, **+2,531**, of which the route
+     manifest is 2,057 and the lazy-import plumbing in the eager `index`
+     chunk is 542. The page's own 17KB is in its own chunk and is not in this
+     number at all. Two routes, so roughly 1.3KB a route — the same figure the
+     4 Sep raise measured, arrived at independently.
+
+     Price Monitor, Dropship Mastery and About are six routes between them,
+     so 8KB covers the build-out with a little spare and 578 covered none of
+     it: the ceiling sat exactly on the number the day this was written.
+     Raising it three more times, a page at a time, would be three commits
+     each of which looks like a regression and none of which is one.
+
+     The repayment is unchanged and unstarted: errorBoundaries is 107KB eager
+     and vendor-react 187KB. That is where the 26KB this ceiling has gained
+     since 560 comes back from, once the site is complete. */
+  eagerJs: 586,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake.

@@ -79,8 +79,12 @@ export const rowDelay = (i) => `${(SCAN_SECONDS + i * ROW_STEP).toFixed(2)}s`;
  * arrive out of the scan instead of beside it. `aria-hidden`, because the real
  * values are underneath and a screen reader should never be handed a loading
  * state that is illustrative.
+ *
+ * Exported for the Competitor Research panels, which show a different scan of
+ * the same shape. A second loading state that was nearly this one would be the
+ * fault this component was written to avoid, one page further along.
  */
-function ScanningState({ rows, tone, counts }) {
+export function ScanningState({ rows, tone, counts }) {
   return (
     <div aria-hidden="true" className="hunt-scanning">
       <ul className="grid gap-2">

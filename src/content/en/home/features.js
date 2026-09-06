@@ -28,7 +28,7 @@ export const FEATURES = {
       tone: 'blue',
       links: [
         { label: 'Product Hunter', href: '/product-hunter' },
-        { label: 'Competitor Research', href: 'https://ecomsniper.io/competitorResearchV6' },
+        { label: 'Competitor Research', href: '/competitor-research' },
       ],
     },
     {

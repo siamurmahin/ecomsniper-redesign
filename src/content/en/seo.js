@@ -57,6 +57,11 @@ export const SEO = {
     description:
       'Pick a product, let the AI write the title, and press Opti List. One item in minutes, or hundreds at a time with the Bulk Lister.',
   },
+  competitorResearch: {
+    title: 'Competitor Research — find who is winning on eBay, and go under them',
+    description:
+      'Spot Amazon-to-eBay dropshippers, scan their store for what sold more than once, and post the same item at a lower price. Four steps, then list in one click.',
+  },
   contact: {
     title: 'Contact EcomSniper — a real person answers',
     description:

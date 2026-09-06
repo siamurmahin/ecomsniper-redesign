@@ -317,4 +317,20 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://ecomsniper.io/competitor-research</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/competitor-research" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/competitor-research" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/competitor-research" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/competitor-research</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/competitor-research" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/competitor-research" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/competitor-research" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

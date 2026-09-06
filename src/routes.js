@@ -28,6 +28,7 @@ export default [
   route('affiliate/terms', 'routes/affiliate-terms.jsx'),
   route('product-hunter', 'routes/product-hunter.jsx'),
   route('ai-powered-lister', 'routes/ai-powered-lister.jsx'),
+  route('competitor-research', 'routes/competitor-research.jsx'),
   route('contact', 'routes/contact.jsx'),
   route('terms-and-conditions', 'routes/terms.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
@@ -45,6 +46,9 @@ export default [
   route('de/affiliate/terms', 'routes/affiliate-terms.jsx', { id: 'de-affiliate-terms' }),
   route('de/product-hunter', 'routes/product-hunter.jsx', { id: 'de-product-hunter' }),
   route('de/ai-powered-lister', 'routes/ai-powered-lister.jsx', { id: 'de-ai-lister' }),
+  route('de/competitor-research', 'routes/competitor-research.jsx', {
+    id: 'de-competitor-research',
+  }),
   route('de/contact', 'routes/contact.jsx', { id: 'de-contact' }),
   route('de/terms-and-conditions', 'routes/terms.jsx', { id: 'de-terms' }),
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),

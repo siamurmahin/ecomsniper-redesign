@@ -41,6 +41,12 @@ export const overlay = {
       description:
         'Finde eBay-Verkäufer, die über Amazon-Preis anbieten, lies alle ihre Titel aus und durchsuche Amazon mit einem Klick. Drei Schritte, danach einstellen mit dem AI Lister.',
     },
+    competitorResearch: {
+      title: 'Competitor Research — sieh, wer verkauft, und geh darunter',
+      description:
+        'Finde Dropshipper, die von Amazon nach eBay verkaufen, durchsuche ihren Store nach mehrfach verkauften Artikeln und stelle denselben Artikel günstiger ein. Vier Schritte, dann ein Klick.',
+    },
+
     aiLister: {
       title: 'AI Lister — in Minuten bei eBay einstellen, oder hunderte auf einmal',
       description:
