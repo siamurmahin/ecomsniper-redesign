@@ -277,3 +277,28 @@ Three `<link>` tags in `root.jsx`. Costs less than the 404 it replaces.
 | The marquee's CSS sat in a lazy chunk while its markup was prerendered — a 366px reflow                                                                                                                | `8513d61`          |
 | First layout of the whole 15,700px document cost 494ms with no JavaScript involved                                                                                                                     | `a504959`          |
 | Diagnostic reveal probe left in the repo after its question was answered                                                                                                                               | `7917e4b`          |
+
+### 14. Without JavaScript the hero panel shows only its first step — `low`
+
+The prerendered HTML carries the **animated** branch of `PipelinePanel`:
+`useReducedMotion()` returns `false` on the server, deliberately, because that
+is what makes the hydrating render match the HTML. Nothing about that is wrong.
+
+The consequence is that a visitor with JavaScript disabled gets step one and
+nothing else. Steps two to five are in the document, but they are `inert` and
+at `opacity: 0`, and the script that would reveal them never runs. The five
+rail nodes are `<button>`s, which do nothing without JS either.
+
+Found 6 Sep while making the reduced-motion fallback compact. It is **not** the
+same question as reduced motion, which is now handled — that path has JS and
+its rail works.
+
+Low because the site already needs JS for the reveals, the language switcher
+and the consent banner, and because the panel is an illustration of a process
+that is also described in words elsewhere on the page. It becomes worth fixing
+if no-JS rendering is ever made a requirement.
+
+**Fix, when someone decides it matters:** render every step visible and drop
+the `inert`/`opacity` treatment when the panel has not hydrated — a
+`<noscript>` stylesheet is the boring way to do it, and costs nothing to a
+visitor who does run scripts.

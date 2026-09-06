@@ -161,3 +161,45 @@ element, and a bare `*` had been matching it.
 Caught because the override was tested against `--force-prefers-reduced-motion`
 with a probe that counts hidden reveals, not by looking at the page. Looking at
 it would have shown a blank screen and read as "still broken".
+
+## The hero panel's fallback, fixed on its own merits
+
+Asked for once the setting was back on, and it is the right call: the still
+version was not "the panel without motion", it was a different and worse
+section. Five steps stacked, roughly four times the panel's height, running off
+the bottom of the first screen and pushing everything below it down.
+
+It is now the same panel with autoplay off — 396px in both modes, bottom inside
+the fold in both. The stepper rail was already built from real buttons, so
+every step stays reachable by click and by keyboard; the connectors render
+their settled state rather than running, which is precisely what they already
+did the moment a reader clicked a node. The replay button goes, because it
+exists to restart a run and there is no run to restart.
+
+Autoplay is **derived**, not stored — `isAutoPlaying && !isStatic`. A
+`useState` initialiser would have missed it entirely, for the same reason the
+whole hydration bug happened: `isStatic` is false for the hydrating render,
+because that is what the prerender wrote, and flips immediately afterwards.
+
+Measured at 1440×900:
+
+| | reduced | normal |
+| --- | --- | --- |
+| panel height | 396px | 396px |
+| bottom inside the fold | yes | yes |
+| auto-advances over 9s | no, holds at 0 | yes, reaches step 3 |
+| steps reachable via the rail | 5 of 5 | 5 of 5 |
+| replay button | hidden | shown |
+
+Eager JS went **down**, 571KB to 570KB: the stacked list was the larger of the
+two renderings and it is gone, which paid back the kilobyte `?motion=on` cost.
+
+### Still open, found while in here
+
+The prerendered HTML is the **animated** branch — `useReducedMotion` returns
+`false` on the server, which is deliberate and is what makes hydration match.
+That means a visitor with **no JavaScript** gets the panel showing step one
+only; steps two to five are in the document but `inert` and at `opacity: 0`.
+Pre-existing, not introduced here, and not the same question as reduced motion.
+Filed as `ISSUES.md` 14 rather than fixed, because the fix is a design decision
+about what a no-JS visitor should see.
