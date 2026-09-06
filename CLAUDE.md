@@ -79,6 +79,11 @@ Other traps this codebase has already fallen into:
   drop `js-motion` from `<html>` and strip the inline styles GSAP wrote:
   `document.querySelectorAll('[data-reveal]').forEach(e => e.removeAttribute('style'))`.
   Setting `style.opacity` yourself does not work; GSAP overwrites it.
+- **That same ritual strips inline styles, including ones you meant to keep.**
+  `removeAttribute('style')` on every `[data-reveal]` takes the element’s own
+  `style` prop with it. A card whose background was set inline rendered with no
+  background in every screenshot and looked broken; it was not. Anything visual
+  on a revealed element belongs in a class, not an inline style.
 - **`chrome-devtools-mcp` throttles requestAnimationFrame** to a couple of
   frames a second. Fine for geometry and DOM state, useless for frame timing.
   Use the untuned browser for anything time-based.

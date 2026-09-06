@@ -70,6 +70,9 @@ const ORIGIN_TONES = ['blue', 'gold', 'green'];
    and say it at length; these are the page telling a reader where they are
    in the story before they read it. */
 const ORIGIN_LABELS = ['Doing it by hand', 'Building the tools', 'Becoming a company'];
+/* Distinct from the offer icons (robot, headset, people) and the giving ones
+   (home, shield, graduationCap): nine cards on one page, no icon used twice. */
+const ORIGIN_ICONS = ['magnifier', 'laptopCode', 'handshake'];
 
 /** A band of prose: eyebrow, headline, paragraphs. The shape most of this page is. */
 function ProseBand({ id, section, tone = '', children, lead }) {
@@ -480,28 +483,27 @@ export default function AboutPage() {
                   key={paragraph}
                   data-reveal
                   data-reveal-group="origin"
-                  className="card-raised relative flex flex-col overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
+                  className="card-ink-gradient card-raised relative flex flex-col overflow-hidden rounded-2xl border border-ink-line p-7 pl-8"
                 >
-                  {/* Same card as everywhere else on this page — a rule down
-                      the edge in the beat's tone — with the numeral ghosted
-                      behind the text rather than sitting in a circle above it.
-                      The circles were three floating dots on a line; the
-                      numeral belongs to its own paragraph. */}
                   <span
                     aria-hidden="true"
                     className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
                   />
 
+                  {/* An icon rather than 01 / 02 / 03. The numbers were doing
+                      no work the order of the cards does not already do, and
+                      this is a story rather than a procedure — none of these
+                      is a step anybody follows. */}
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute -top-4 right-3 font-display text-[5.5rem] leading-none font-extrabold text-ink/[0.06] tabular-nums"
+                    className={`grid size-12 place-items-center rounded-xl ${tone.tile}`}
                   >
-                    {String(i + 1).padStart(2, '0')}
+                    <Icon name={ORIGIN_ICONS[i]} className="size-5" />
                   </span>
 
-                  <span className={`micro-label relative ${tone.text}`}>{ORIGIN_LABELS[i]}</span>
+                  <span className={`micro-label mt-6 ${tone.onInk}`}>{ORIGIN_LABELS[i]}</span>
 
-                  <p className="relative mt-4 leading-relaxed text-muted">{paragraph}</p>
+                  <p className="mt-3 leading-relaxed text-muted-dark">{paragraph}</p>
                 </li>
               );
             })}
