@@ -37,6 +37,10 @@ export default function SiteHeader() {
      in a seven-item bar is a mess, and a single value makes that impossible
      rather than merely discouraged. */
   const [openGroup, setOpenGroup] = useState(null);
+  /* Whether this page's hero is one of the dark ones. About and the course
+     stand on `surface-deep`, and the ink wordmark loses half its lettering on
+     it — "Sniper" is black artwork, so it simply disappears. */
+  const [hasDeepHero, setHasDeepHero] = useState(false);
   const headerRef = useRef(null);
   const location = useLocation();
   /* Every internal link keeps the language the reader is in. */
@@ -56,6 +60,14 @@ export default function SiteHeader() {
     setIsMenuOpen(false);
     setOpenGroup(null);
   }, [location.pathname, location.hash]);
+
+  /* Read after paint rather than during render, and re-read on navigation.
+     False on the server and on the hydrating render, which is what keeps the
+     markup matching; the swap is an ordinary update the frame after. */
+  useEffect(() => {
+    const hero = document.querySelector('main section, section');
+    setHasDeepHero(Boolean(hero?.classList.contains('surface-deep')));
+  }, [location.pathname]);
 
   /* Escape or a tap outside closes the panel; body scroll is locked while it
      is open. Without the outside tap the only way out was the X, which is the
@@ -113,8 +125,11 @@ export default function SiteHeader() {
               isCondensed ? 'opacity-70' : 'opacity-0'
             }`}
           />
+          {/* Paper lettering while the bar is transparent over a dark hero;
+              ink once it condenses onto its own paper surface, which is the
+              state every other page is in from the first pixel. */}
           <Link to={homeHref} aria-label={A11Y.home} className="min-w-0 shrink">
-            <BrandLogo />
+            <BrandLogo tone={hasDeepHero && !isCondensed ? 'paper' : 'ink'} />
           </Link>
 
           {/* shrink-0 and nowrap: seven items wrapped to a second row between
