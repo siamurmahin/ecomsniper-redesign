@@ -19,6 +19,23 @@ session.
 
 ## Now
 
+- **The affiliate form's panel has square corners.** Asked for 6 Sep — nothing
+  else on this site has a sharp corner. `.panel-brand-outline` sets a gradient
+  border and no radius, so it renders square unless the caller remembers to add
+  one. `ContactPage` does (`rounded-2xl`); `AffiliatePage` does not. The radius
+  goes on the class rather than the caller, so it cannot be forgotten again.
+
+- **Half the stylesheet is a duplicate.** Found 6 Sep while fixing the above.
+  `index.css` is 1838 lines and lines 161-433 reappear verbatim at 584-856 —
+  272 consecutive identical lines, two `@layer base` blocks and two
+  `@layer components` blocks. 220 of 852 substantial lines appear more than
+  once. It is not only weight: the **later copy wins**, so editing the first
+  one silently does nothing, which nearly happened to the radius fix above.
+  CSS is at 129KB of a 130KB budget with 1KB spare, so this is also where the
+  headroom is. Wants its own pass — the blocks have to be diffed to the end
+  before anything is deleted, not assumed identical because their first 272
+  lines are. `ISSUES.md` 15.
+
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
   container rather than replacing it. Built the way GTM is — declared in

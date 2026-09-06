@@ -311,3 +311,30 @@ Verified with JavaScript disabled — preloader not covering, five of five steps
 visible — and with it on, where nothing moved: steps still 224px and absolute,
 rail still shown, all six `.defer-render` sections still `content-visibility:
 auto`, panel 396px in both motion modes. Fixed by `6c36468`.
+
+### 15. Half of `index.css` is a verbatim duplicate — `medium`
+
+`src/styles/index.css` is 1838 lines, and **lines 161-433 reappear at
+584-856** — 272 consecutive identical lines, giving two `@layer base` blocks
+and two `@layer components` blocks. 220 of 852 substantial lines appear more
+than once.
+
+Found 6 Sep while adding a border radius to `.panel-brand-outline`, and it
+found itself: the class is defined **twice**, so editing the first definition
+would have changed nothing. The later copy wins at equal specificity. Both were
+patched, which is the wrong long-term answer.
+
+Two costs, and the second is the serious one:
+
+1. **Weight.** CSS is at 129KB against a 130KB budget with 1KB spare. This is
+   where the headroom is.
+2. **A silent trap.** Anyone editing a rule in the first half changes nothing
+   and gets no warning — not a build error, not a lint error, no visible
+   difference. It looks like the browser ignoring valid CSS.
+
+**Fix:** diff the two regions **to their ends** before deleting anything. The
+first 272 lines are identical; that does not prove the blocks are identical all
+the way down, and a rule that diverges is doing real work in the second copy.
+Deleting on the assumption they match would be the same class of mistake as the
+measurement errors already in this file. Owner: us. Wants its own pass, and it
+is on `TODO.md` under Now.

@@ -416,7 +416,14 @@
      visitor for something, and so the one that earns the ramp. The drift is
      slower than the button's; a panel this size sweeping at 6s reads as a
      loading state. `prefers-reduced-motion` stops it globally, further down. */
+  /* Rounded here rather than by the caller: the gradient border is painted
+     with two background layers clipped to the padding box and the border box,
+     and both follow this radius. Left to the caller it is one utility away
+     from a square panel on a site that has no square corners anywhere else —
+     which is exactly what happened on the affiliate form, while the contact
+     form remembered. Callers can still override with a utility. */
   .panel-brand-outline {
+    @apply rounded-2xl;
     border: 2px solid transparent;
     background-image:
       linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
@@ -839,7 +846,14 @@
      visitor for something, and so the one that earns the ramp. The drift is
      slower than the button's; a panel this size sweeping at 6s reads as a
      loading state. `prefers-reduced-motion` stops it globally, further down. */
+  /* Rounded here rather than by the caller: the gradient border is painted
+     with two background layers clipped to the padding box and the border box,
+     and both follow this radius. Left to the caller it is one utility away
+     from a square panel on a site that has no square corners anywhere else —
+     which is exactly what happened on the affiliate form, while the contact
+     form remembered. Callers can still override with a utility. */
   .panel-brand-outline {
+    @apply rounded-2xl;
     border: 2px solid transparent;
     background-image:
       linear-gradient(var(--color-paper), var(--color-paper)), var(--gradient-brand);
