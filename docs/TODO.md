@@ -97,6 +97,8 @@ below are what it left behind.
 
 - **Generate `sitemap.xml` from the route list.** The prerender list reads role slugs from the content deck, so adding a role writes its page automatically — but the sitemap is still hand-kept, which makes it the one list that can now disagree with the others. It already carries two job URLs added by hand. Not urgent while there is one role; it becomes a real trap at five.
 
+- **A real CSS reduction pass.** The ceiling was raised 130 → 135KB on 6 Sep to unblock the build-out, with the reason written into `check-budget.mjs`. That is a deferral, not a fix. Candidates not yet investigated: utilities Tailwind generates that no markup matches, the vendored `LogoLoop.css`, the four dead token declarations sitting inside `@layer components` with no selector, and whatever the safelist is holding open. **If the budget fires again, this is the answer rather than another raise.**
+
 - **Win the 15KB back from the router runtime.** `errorBoundaries` is 107KB
   eager and `vendor-react` 187KB; neither has been examined. This is where the
   raised ceiling gets repaid.
