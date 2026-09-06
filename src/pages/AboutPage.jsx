@@ -57,6 +57,16 @@ import AssuranceSection from '../sections/AssuranceSection';
 /* Module scope so the hook memo has a stable dependency. */
 const OVERLAYS = { de: germanAbout.ABOUT };
 
+/* One colour logic for the whole page, the same one the course page uses:
+   blue, gold, green in the order things are read. Red is deliberately absent
+   from all three — on this site it means the thing that went wrong, and it is
+   spent on the boundaries section, where something has. */
+const OFFER_TONES = ['blue', 'gold', 'green'];
+const OFFER_ICONS = ['robot', 'headset', 'people'];
+const GIVING_TONES = ['blue', 'gold', 'green'];
+const GIVING_ICONS = ['home', 'shield', 'graduationCap'];
+const ORIGIN_TONES = ['blue', 'gold', 'green'];
+
 /** A band of prose: eyebrow, headline, paragraphs. The shape most of this page is. */
 function ProseBand({ id, section, tone = '', children, lead }) {
   const ref = useRevealOnScroll();
@@ -117,6 +127,8 @@ export default function AboutPage() {
      true afterwards for a visitor who has asked the OS to reduce motion, who
      gets all three lines at once instead of a caret that never rests. */
   const isStatic = useReducedMotion();
+  const costRef = useRevealOnScroll();
+  const originRef = useRevealOnScroll();
   const givingRef = useRevealOnScroll();
   const boundariesRef = useRevealOnScroll();
   const teamRef = useRevealOnScroll();
@@ -256,7 +268,91 @@ export default function AboutPage() {
       </HeroSurface>
 
       {/* 1. What it costs them. */}
-      <ProseBand id="cost" section={ABOUT.cost} tone="surface-rich" />
+      {/* The cost, as the comparison the copy is actually making.
+          `cost.hours` and `cost.unknown` have been in the deck since 4 Sep
+          with a note saying to delete them if no hero used them. Nothing ever
+          did, and they are the best thing in the section: the same $200 is a
+          few hours to one reader and a week to another, and the page's whole
+          argument is that we cannot tell which you are. Shown as two figures
+          either side of that sentence, it lands in a glance; buried as the
+          first line of a paragraph it did not land at all. */}
+      <section ref={costRef} aria-labelledby="cost-headline" className="section-band surface-rich">
+        <div className="site-shell">
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+            <div>
+              <p className="section-eyebrow" data-reveal data-reveal-group="cost">
+                {ABOUT.cost.eyebrow}
+              </p>
+
+              <h2
+                id="cost-headline"
+                className="mt-4 text-[length:var(--text-section)] leading-[1.05]"
+                data-reveal
+                data-reveal-group="cost"
+              >
+                {ABOUT.cost.headline}
+              </h2>
+
+              {/* The figure the page opens on, given its own weight here. */}
+              <p
+                className="mt-8 font-display text-[clamp(3rem,7vw,5rem)] leading-none font-extrabold text-ink"
+                data-reveal
+                data-reveal-group="cost"
+              >
+                {ABOUT.figure.value}
+              </p>
+              <p className="mt-2 text-sm text-muted" data-reveal data-reveal-group="cost">
+                {ABOUT.figure.label}
+              </p>
+
+              <ul className="mt-10 grid gap-4">
+                {ABOUT.cost.hours.map((entry, i) => {
+                  const tone = toneOf(i === 0 ? 'blue' : 'gold');
+
+                  return (
+                    <li
+                      key={entry.who}
+                      data-reveal
+                      data-reveal-group="cost"
+                      className="card-raised relative overflow-hidden rounded-2xl border border-hairline bg-paper p-5 pl-6"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
+                      />
+                      <p className={`micro-label ${tone.text}`}>{entry.who}</p>
+                      <p className="mt-1 font-display text-lg leading-snug font-extrabold text-ink">
+                        {entry.what}
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <p
+                className="mt-6 font-serif text-xl leading-relaxed italic text-ink"
+                data-reveal
+                data-reveal-group="cost"
+              >
+                {ABOUT.cost.unknown}
+              </p>
+            </div>
+
+            <div className="grid content-center gap-5">
+              {ABOUT.cost.body.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="text-[length:var(--text-lead)] leading-relaxed text-muted"
+                  data-reveal
+                  data-reveal-group="cost"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 2. What they get for it — moved up from seventh on their page. */}
       <section aria-labelledby="offer-headline" className="section-band surface-deep">
@@ -276,21 +372,45 @@ export default function AboutPage() {
             </h2>
           </div>
 
-          <ul className="mt-12 grid gap-8 md:grid-cols-3">
-            {ABOUT.offer.items.map((item, i) => (
-              <li
-                key={item.lead}
-                data-reveal
-                data-reveal-group="offer"
-                className="border-t-2 border-hairline pt-5"
-              >
-                <p className="font-display text-lg leading-snug font-extrabold text-ink">
-                  {item.lead}
-                </p>
-                <p className="mt-3 leading-relaxed text-muted">{item.body}</p>
-                <span className="sr-only">{i + 1}</span>
-              </li>
-            ))}
+          {/* Three cards rather than three hairlines. Each takes the tone of
+              what it is — the tools blue, the people gold, the community
+              green — as a lit tile, a rule along the top and a wash out of the
+              corner, which is the treatment the course page's steps use. Red
+              stays out: it means the thing that went wrong. */}
+          <ul className="mt-12 grid gap-6 md:grid-cols-3">
+            {ABOUT.offer.items.map((item, i) => {
+              const tone = toneOf(OFFER_TONES[i]);
+
+              return (
+                <li
+                  key={item.lead}
+                  data-reveal
+                  data-reveal-group="offer"
+                  className="card-raised relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-x-0 top-0 h-1 ${tone.rule}`}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute -top-14 -right-14 size-36 rounded-full bg-gradient-to-br ${tone.wash} to-transparent`}
+                  />
+
+                  <span
+                    aria-hidden="true"
+                    className={`relative grid size-11 place-items-center rounded-xl ${tone.tile}`}
+                  >
+                    <Icon name={OFFER_ICONS[i]} className="size-5" />
+                  </span>
+
+                  <p className="relative mt-5 font-display text-lg leading-snug font-extrabold text-ink">
+                    {item.lead}
+                  </p>
+                  <p className="relative mt-3 leading-relaxed text-muted">{item.body}</p>
+                </li>
+              );
+            })}
           </ul>
 
           <p
@@ -304,7 +424,66 @@ export default function AboutPage() {
       </section>
 
       {/* 3. How it started. */}
-      <ProseBand id="origin" section={ABOUT.origin} tone="surface-rich" />
+      {/* How it started, as the three beats it actually is: doing it by hand,
+          building tools to stop, and the tools becoming a company. Three
+          paragraphs in a column read as one block of text and the turn in the
+          middle — the moment it stopped being their own problem — was
+          invisible. Numbered and strung on a rule, the shape of the story is
+          the shape of the section. */}
+      <section
+        ref={originRef}
+        aria-labelledby="origin-headline"
+        className="section-band surface-rich"
+      >
+        <div className="site-shell">
+          <div className="max-w-3xl">
+            <p className="section-eyebrow" data-reveal data-reveal-group="origin">
+              {ABOUT.origin.eyebrow}
+            </p>
+
+            <h2
+              id="origin-headline"
+              className="mt-4 text-[length:var(--text-section)] leading-[1.05]"
+              data-reveal
+              data-reveal-group="origin"
+            >
+              {ABOUT.origin.headline}
+            </h2>
+          </div>
+
+          <ol className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+            {/* The rule the three beats are strung on. Behind the markers, and
+                only where there is room for three across. */}
+            <span
+              aria-hidden="true"
+              className="absolute top-6 right-[16%] left-[16%] hidden h-px bg-hairline md:block"
+            />
+
+            {ABOUT.origin.body.map((paragraph, i) => {
+              const tone = toneOf(ORIGIN_TONES[i]);
+
+              return (
+                <li
+                  key={paragraph}
+                  data-reveal
+                  data-reveal-group="origin"
+                  className="relative flex gap-5 md:block"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`grid size-12 shrink-0 place-items-center rounded-full border-4 border-[color:var(--surface-rich-marker,transparent)] font-display text-sm font-extrabold ${tone.tile}`}
+                    style={{ '--surface-rich-marker': '#efeeea' }}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+
+                  <p className="leading-relaxed text-muted md:mt-6">{paragraph}</p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
 
       {/* 4. The giving, and the photographs. */}
       <section
@@ -339,22 +518,41 @@ export default function AboutPage() {
           {/* Their one sentence names three things. Shown as three, because a
               list of what a company does with your money is the part a sceptic
               reads, and it was buried mid-paragraph. */}
-          <ul className="mt-10 grid gap-6 md:grid-cols-3">
-            {ABOUT.giving.gifts.map((gift) => (
-              <li
-                key={gift.label}
-                data-reveal
-                data-reveal-group="giving"
-                className="card-raised rounded-2xl border border-hairline bg-paper p-6"
-              >
-                <p className="font-label text-sm tracking-[0.08em] text-muted uppercase">
-                  {gift.label}
-                </p>
-                <p className="mt-2 text-[length:var(--text-lead)] leading-relaxed text-ink">
-                  {gift.body}
-                </p>
-              </li>
-            ))}
+          {/* This band is dark, so the cards are lit rather than printed: a
+              glow in the tone behind each one, the tile at full strength, and
+              the label in the tone's own light value. Three grey boxes on
+              near-black was the flattest thing on the page. */}
+          <ul className="mt-12 grid gap-6 md:grid-cols-3">
+            {ABOUT.giving.gifts.map((gift, i) => {
+              const tone = toneOf(GIVING_TONES[i]);
+
+              return (
+                <li key={gift.label} data-reveal data-reveal-group="giving" className="relative">
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -inset-px rounded-2xl ${tone.rule} opacity-25 blur-md`}
+                  />
+
+                  <div className="relative h-full rounded-2xl border border-ink-line bg-ink-soft/90 p-7">
+                    <span
+                      aria-hidden="true"
+                      className={`grid size-11 place-items-center rounded-xl ${tone.tile}`}
+                    >
+                      <Icon name={GIVING_ICONS[i]} className="size-5" />
+                    </span>
+
+                    <p
+                      className={`mt-5 font-label text-sm tracking-[0.08em] uppercase ${tone.onInk}`}
+                    >
+                      {gift.label}
+                    </p>
+                    <p className="mt-2 text-[length:var(--text-lead)] leading-relaxed text-paper">
+                      {gift.body}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="mt-10 grid max-w-3xl gap-5">
