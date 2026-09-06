@@ -41,6 +41,12 @@ export const overlay = {
       description:
         'Finde eBay-Verkäufer, die über Amazon-Preis anbieten, lies alle ihre Titel aus und durchsuche Amazon mit einem Klick. Drei Schritte, danach einstellen mit dem AI Lister.',
     },
+    course: {
+      title: 'Dropship Mastery — der eBay-Dropshipping-Kurs Schritt für Schritt',
+      description:
+        'Stelle ein, was ein Händler ohnehin auf Lager hat, und kaufe es erst, wenn dich jemand bezahlt hat. Der gesamte Ablauf von null an — mit Software, Blueprint und Community.',
+    },
+
     about: {
       title: 'Über EcomSniper — was dein Geld dich kostet, und was du bekommst',
       description:

@@ -62,6 +62,11 @@ export const SEO = {
     description:
       'Spot Amazon-to-eBay dropshippers, scan their store for what sold more than once, and post the same item at a lower price. Four steps, then list in one click.',
   },
+  course: {
+    title: 'Dropship Mastery — the step-by-step eBay dropshipping course',
+    description:
+      'List what a retailer already stocks, and only buy it once somebody has paid you. The whole process taught from zero, with the software, the blueprint and the community included.',
+  },
   about: {
     title: 'About EcomSniper — what your money costs you, and what you get',
     description:

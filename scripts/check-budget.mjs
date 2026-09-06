@@ -106,8 +106,25 @@ const BUDGETS = {
 
      The repayment is unchanged and unstarted: errorBoundaries is 107KB eager
      and vendor-react 187KB. That is where the 26KB this ceiling has gained
-     since 560 comes back from, once the site is complete. */
-  eagerJs: 586,
+     since 560 comes back from, once the site is complete.
+
+     590, raised from 586 on 7 Sep for the Dropship Mastery course page, and
+     this is the last raise the build-out needs. Measured: 598,856 to 601,682
+     bytes, **+2,826** for two routes — the route table again, at the same
+     ~1.3KB a route every measurement since 4 Sep has found.
+
+     Why it is the last one. Every page in the plan is now built. What remains
+     is five blog posts, and posts do not add routes: `/blog/:slug` is a
+     single entry in `routes.js` and the prerender list turns it into as many
+     documents as there are slugs. More posts cost more HTML files and nothing
+     at all in this number — which is worth knowing before somebody budgets
+     for them.
+
+     So the next time this fires it will not be a page. It will be a
+     regression, or it will be the repayment finally being attempted: 586 was
+     spent to 588 by the last page, and errorBoundaries at 107KB and
+     vendor-react at 187KB are still sitting there untouched. */
+  eagerJs: 590,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake.

@@ -68,6 +68,26 @@
   status = 301
 
 [[redirects]]
+  from = "/course/dropshipMastery"
+  to = "/course/dropship-mastery"
+  status = 301
+
+[[redirects]]
+  from = "/course/dropshipmastery"
+  to = "/course/dropship-mastery"
+  status = 301
+
+[[redirects]]
+  from = "/de/course/dropshipMastery"
+  to = "/de/course/dropship-mastery"
+  status = 301
+
+[[redirects]]
+  from = "/de/course/dropshipmastery"
+  to = "/de/course/dropship-mastery"
+  status = 301
+
+[[redirects]]
   from = "/priceMonitorV6"
   to = "/price-monitor"
   status = 301

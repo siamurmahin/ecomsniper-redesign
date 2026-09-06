@@ -23,7 +23,7 @@ export const FOOTER = {
       links: [
         { label: 'How it works', href: '/#how-it-works' },
         { label: 'Pricing', href: '/pricing' },
-        { label: 'Dropship Mastery', href: '/#training' },
+        { label: 'Dropship Mastery', href: '/course/dropship-mastery' },
         { label: 'Free playbook', href: '/free-play-book' },
       ],
     },
