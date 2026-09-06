@@ -1,6 +1,7 @@
 import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
 import { useContent } from '../hooks/useContent';
+import { MarkedLastWord } from '../components/ui/MarkedHeadline';
 
 /**
  * /faq — the same thirteen questions the homepage answers, never a second set
@@ -25,7 +26,7 @@ export default function FaqPage() {
         <p className="section-eyebrow">{FAQ.eyebrow}</p>
 
         <h1 className="mt-5 max-w-3xl text-[length:var(--text-hero)] leading-[0.95]">
-          {FAQ.headline}
+          <MarkedLastWord text={FAQ.headline} tone="brand" />
         </h1>
 
         <p className="mt-6 max-w-xl text-[length:var(--text-lead)] leading-relaxed text-muted">

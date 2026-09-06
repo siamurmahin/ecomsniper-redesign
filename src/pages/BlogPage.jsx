@@ -292,7 +292,7 @@ export default function BlogPage() {
           data-reveal
           data-reveal-group="blog-hero"
         >
-          <MarkedHeadline parts={BLOG.headlineParts} />
+          <MarkedHeadline parts={BLOG.headlineParts} tone="brand" />
         </h1>
 
         <p

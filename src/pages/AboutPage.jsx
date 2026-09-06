@@ -66,6 +66,10 @@ const OFFER_ICONS = ['robot', 'headset', 'people'];
 const GIVING_TONES = ['blue', 'gold', 'green'];
 const GIVING_ICONS = ['home', 'shield', 'graduationCap'];
 const ORIGIN_TONES = ['blue', 'gold', 'green'];
+/* What each beat is, in two or three words. The paragraphs are the client’s
+   and say it at length; these are the page telling a reader where they are
+   in the story before they read it. */
+const ORIGIN_LABELS = ['Doing it by hand', 'Building the tools', 'Becoming a company'];
 
 /** A band of prose: eyebrow, headline, paragraphs. The shape most of this page is. */
 function ProseBand({ id, section, tone = '', children, lead }) {
@@ -160,7 +164,7 @@ export default function AboutPage() {
               data-reveal
               data-reveal-group="about-hero"
             >
-              <MarkedHeadline parts={ABOUT.headlineParts} />
+              <MarkedHeadline parts={ABOUT.headlineParts} tone="brand" />
             </h1>
 
             {/* Their three lines, typed one after another — the homepage's own
@@ -278,67 +282,21 @@ export default function AboutPage() {
           first line of a paragraph it did not land at all. */}
       <section ref={costRef} aria-labelledby="cost-headline" className="section-band surface-rich">
         <div className="site-shell">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-            <div>
-              <p className="section-eyebrow" data-reveal data-reveal-group="cost">
-                {ABOUT.cost.eyebrow}
-              </p>
+          <div className="max-w-3xl">
+            <p className="section-eyebrow" data-reveal data-reveal-group="cost">
+              {ABOUT.cost.eyebrow}
+            </p>
 
-              <h2
-                id="cost-headline"
-                className="mt-4 text-[length:var(--text-section)] leading-[1.05]"
-                data-reveal
-                data-reveal-group="cost"
-              >
-                {ABOUT.cost.headline}
-              </h2>
+            <h2
+              id="cost-headline"
+              className="mt-4 text-[length:var(--text-section)] leading-[1.05]"
+              data-reveal
+              data-reveal-group="cost"
+            >
+              {ABOUT.cost.headline}
+            </h2>
 
-              {/* The figure the page opens on, given its own weight here. */}
-              <p
-                className="mt-8 font-display text-[clamp(3rem,7vw,5rem)] leading-none font-extrabold text-ink"
-                data-reveal
-                data-reveal-group="cost"
-              >
-                {ABOUT.figure.value}
-              </p>
-              <p className="mt-2 text-sm text-muted" data-reveal data-reveal-group="cost">
-                {ABOUT.figure.label}
-              </p>
-
-              <ul className="mt-10 grid gap-4">
-                {ABOUT.cost.hours.map((entry, i) => {
-                  const tone = toneOf(i === 0 ? 'blue' : 'gold');
-
-                  return (
-                    <li
-                      key={entry.who}
-                      data-reveal
-                      data-reveal-group="cost"
-                      className="card-raised relative overflow-hidden rounded-2xl border border-hairline bg-paper p-5 pl-6"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
-                      />
-                      <p className={`micro-label ${tone.text}`}>{entry.who}</p>
-                      <p className="mt-1 font-display text-lg leading-snug font-extrabold text-ink">
-                        {entry.what}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              <p
-                className="mt-6 font-serif text-xl leading-relaxed italic text-ink"
-                data-reveal
-                data-reveal-group="cost"
-              >
-                {ABOUT.cost.unknown}
-              </p>
-            </div>
-
-            <div className="grid content-center gap-5">
+            <div className="mt-6 grid gap-5">
               {ABOUT.cost.body.map((paragraph) => (
                 <p
                   key={paragraph}
@@ -351,6 +309,61 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
+
+          {/* The comparison, as the payoff rather than the opening. The
+              figure sits between the two halves at reading size — it was set
+              at 5rem here and shouted over the section it belongs to, which
+              is a section about not knowing what a number means to somebody.
+              The hero already carries it as a headline figure; here it only
+              needs to be the thing the two cards are about. */}
+          <div className="mt-14 grid items-stretch gap-5 md:grid-cols-[1fr_auto_1fr]">
+            {ABOUT.cost.hours.map((entry, i) => {
+              const tone = toneOf(i === 0 ? 'blue' : 'gold');
+
+              return [
+                <div
+                  key={entry.who}
+                  data-reveal
+                  data-reveal-group="cost"
+                  className="card-raised relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7"
+                  style={{ order: i === 0 ? 0 : 2 }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-x-0 top-0 h-1 ${tone.rule}`}
+                  />
+                  <p className={`micro-label ${tone.text}`}>{entry.who}</p>
+                  <p className="mt-3 font-display text-xl leading-snug font-extrabold text-ink">
+                    {entry.what}
+                  </p>
+                </div>,
+
+                /* The figure, once, between them. */
+                i === 0 ? (
+                  <div
+                    key="figure"
+                    data-reveal
+                    data-reveal-group="cost"
+                    className="flex flex-col items-center justify-center px-2 text-center"
+                    style={{ order: 1 }}
+                  >
+                    <p className="font-display text-2xl font-extrabold text-ink">
+                      {ABOUT.figure.value}
+                    </p>
+                    <p className="mt-1 text-xs text-muted">{ABOUT.figure.label}</p>
+                  </div>
+                ) : null,
+              ];
+            })}
+          </div>
+
+          <p
+            className="mt-8 max-w-3xl font-serif text-xl leading-relaxed italic text-ink"
+            data-reveal
+            data-reveal-group="cost"
+          >
+            {ABOUT.cost.unknown}
+          </p>
         </div>
       </section>
 
@@ -386,28 +399,28 @@ export default function AboutPage() {
                   key={item.lead}
                   data-reveal
                   data-reveal-group="offer"
-                  className="card-raised relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7"
+                  className="relative flex flex-col overflow-hidden rounded-2xl border border-ink-line bg-white/[0.04] p-7 pl-8"
                 >
+                  {/* The tone as a rule down the edge — the same anatomy the
+                      course page's steps use, and the same one the giving
+                      cards below use. One card on this page, not three
+                      variations on one. */}
                   <span
                     aria-hidden="true"
-                    className={`absolute inset-x-0 top-0 h-1 ${tone.rule}`}
-                  />
-                  <span
-                    aria-hidden="true"
-                    className={`pointer-events-none absolute -top-14 -right-14 size-36 rounded-full bg-gradient-to-br ${tone.wash} to-transparent`}
+                    className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
                   />
 
                   <span
                     aria-hidden="true"
-                    className={`relative grid size-11 place-items-center rounded-xl ${tone.tile}`}
+                    className={`grid size-12 place-items-center rounded-xl ${tone.tile}`}
                   >
                     <Icon name={OFFER_ICONS[i]} className="size-5" />
                   </span>
 
-                  <p className="relative mt-5 font-display text-lg leading-snug font-extrabold text-ink">
+                  <p className="mt-6 font-display text-xl leading-snug font-extrabold text-paper">
                     {item.lead}
                   </p>
-                  <p className="relative mt-3 leading-relaxed text-muted">{item.body}</p>
+                  <p className="mt-3 leading-relaxed text-muted-dark">{item.body}</p>
                 </li>
               );
             })}
@@ -467,17 +480,28 @@ export default function AboutPage() {
                   key={paragraph}
                   data-reveal
                   data-reveal-group="origin"
-                  className="relative flex gap-5 md:block"
+                  className="card-raised relative flex flex-col overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
                 >
+                  {/* Same card as everywhere else on this page — a rule down
+                      the edge in the beat's tone — with the numeral ghosted
+                      behind the text rather than sitting in a circle above it.
+                      The circles were three floating dots on a line; the
+                      numeral belongs to its own paragraph. */}
                   <span
                     aria-hidden="true"
-                    className={`grid size-12 shrink-0 place-items-center rounded-full border-4 border-[color:var(--surface-rich-marker,transparent)] font-display text-sm font-extrabold ${tone.tile}`}
-                    style={{ '--surface-rich-marker': '#efeeea' }}
+                    className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
+                  />
+
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-4 right-3 font-display text-[5.5rem] leading-none font-extrabold text-ink/[0.06] tabular-nums"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
 
-                  <p className="leading-relaxed text-muted md:mt-6">{paragraph}</p>
+                  <span className={`micro-label relative ${tone.text}`}>{ORIGIN_LABELS[i]}</span>
+
+                  <p className="relative mt-4 leading-relaxed text-muted">{paragraph}</p>
                 </li>
               );
             })}
@@ -527,29 +551,33 @@ export default function AboutPage() {
               const tone = toneOf(GIVING_TONES[i]);
 
               return (
-                <li key={gift.label} data-reveal data-reveal-group="giving" className="relative">
+                <li
+                  key={gift.label}
+                  data-reveal
+                  data-reveal-group="giving"
+                  className="relative flex flex-col overflow-hidden rounded-2xl border border-ink-line bg-white/[0.04] p-7 pl-8"
+                >
+                  {/* The glow that was here is gone. It was decoration doing
+                      the job hierarchy should do, and a neon halo around a
+                      sentence about visiting orphanages was the wrong note in
+                      the wrong section. The rule, the tile and the label carry
+                      it — the same card the offer above uses. */}
                   <span
                     aria-hidden="true"
-                    className={`absolute -inset-px rounded-2xl ${tone.rule} opacity-25 blur-md`}
+                    className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
                   />
 
-                  <div className="relative h-full rounded-2xl border border-ink-line bg-ink-soft/90 p-7">
-                    <span
-                      aria-hidden="true"
-                      className={`grid size-11 place-items-center rounded-xl ${tone.tile}`}
-                    >
-                      <Icon name={GIVING_ICONS[i]} className="size-5" />
-                    </span>
+                  <span
+                    aria-hidden="true"
+                    className={`grid size-12 place-items-center rounded-xl ${tone.tile}`}
+                  >
+                    <Icon name={GIVING_ICONS[i]} className="size-5" />
+                  </span>
 
-                    <p
-                      className={`mt-5 font-label text-sm tracking-[0.08em] uppercase ${tone.onInk}`}
-                    >
-                      {gift.label}
-                    </p>
-                    <p className="mt-2 text-[length:var(--text-lead)] leading-relaxed text-paper">
-                      {gift.body}
-                    </p>
-                  </div>
+                  <p className={`micro-label mt-6 ${tone.onInk}`}>{gift.label}</p>
+                  <p className="mt-2 text-[length:var(--text-lead)] leading-relaxed text-paper">
+                    {gift.body}
+                  </p>
                 </li>
               );
             })}
