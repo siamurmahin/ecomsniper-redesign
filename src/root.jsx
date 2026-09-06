@@ -62,6 +62,17 @@ export function Layout({ children }) {
         <meta name="theme-color" content="#fbfbfa" />
         <meta name="author" content="EcomSniper" />
 
+        {/* `public/` has carried favicon.svg, apple-touch-icon.png and
+            site.webmanifest since the move off `index.html`, and nothing has
+            linked them since: the document is rendered from here now, and the
+            tags did not come with it. Every tab on the site showed the blank
+            default page icon, and every load spent a request on `/favicon.ico`
+            to be told it does not exist. An SVG icon is one file for every
+            size, and it costs less than the 404 it replaces. */}
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
         <Meta />
         <Links />
 
