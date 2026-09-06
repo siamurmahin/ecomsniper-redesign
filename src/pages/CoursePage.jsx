@@ -6,6 +6,7 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
 import CtaButton from '../components/ui/CtaButton';
 import HeroSurface from '../components/hero/HeroSurface';
+import CourseFlow from '../components/course/CourseFlow';
 import MarkedHeadline from '../components/ui/MarkedHeadline';
 import Icon from '../components/ui/Icon';
 import TestimonialsSection from '../sections/TestimonialsSection';
@@ -40,6 +41,12 @@ import AssuranceSection from '../sections/AssuranceSection';
 
 /* Module scope so the hook memo has a stable dependency. */
 const OVERLAYS = { de: germanCourse.COURSE };
+
+/* The hero's three figures and the three reasons eBay works both read left to
+   right as blue, gold, green — the same order the steps run in, so the page
+   has one colour logic rather than a different one per section. Red is kept
+   out of both: it is the tone this site uses for the thing that goes wrong. */
+const PROOF_TONES = ['blue', 'gold', 'green'];
 
 /** A band heading: eyebrow, marked headline, optional lead. */
 function BandHead({ id, section, align = '' }) {
@@ -83,55 +90,71 @@ export default function CoursePage() {
   return (
     <>
       <HeroSurface>
-        <div className="max-w-4xl">
-          <p className="section-eyebrow" data-reveal data-reveal-group="course-hero">
-            {COURSE.eyebrow}
-          </p>
+        <div className="grid gap-12 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-16">
+          <div>
+            <p className="section-eyebrow" data-reveal data-reveal-group="course-hero">
+              {COURSE.eyebrow}
+            </p>
 
-          <h1
-            className="mt-5 text-[length:var(--text-hero)] leading-[0.98]"
-            data-reveal
-            data-reveal-group="course-hero"
-          >
-            <MarkedHeadline parts={COURSE.headlineParts} />
-          </h1>
+            <h1
+              className="mt-5 text-[length:var(--text-hero)] leading-[0.98]"
+              data-reveal
+              data-reveal-group="course-hero"
+            >
+              <MarkedHeadline parts={COURSE.headlineParts} />
+            </h1>
 
-          <p
-            className="mt-6 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
-            data-reveal
-            data-reveal-group="course-hero"
-          >
-            {COURSE.lead}
-          </p>
+            <p
+              className="mt-6 max-w-2xl font-serif text-2xl leading-relaxed italic text-muted"
+              data-reveal
+              data-reveal-group="course-hero"
+            >
+              {COURSE.lead}
+            </p>
 
-          <div
-            className="mt-9 flex flex-wrap items-center gap-4"
-            data-reveal
-            data-reveal-group="course-hero"
-          >
-            <CtaButton href={COURSE.ctas.primary.href}>{COURSE.ctas.primary.label}</CtaButton>
-            {/* Their above-the-fold button. It keeps its place as the second
+            <div
+              className="mt-9 flex flex-wrap items-center gap-4"
+              data-reveal
+              data-reveal-group="course-hero"
+            >
+              <CtaButton href={COURSE.ctas.primary.href}>{COURSE.ctas.primary.label}</CtaButton>
+              {/* Their above-the-fold button. It keeps its place as the second
                 door: the free room is the right one for a reader who has not
                 decided yet, and this page is long. */}
-            <CtaButton href={SITE.discordUrl} variant="secondary">
-              {COURSE.ctas.secondary.label}
-            </CtaButton>
+              <CtaButton href={SITE.discordUrl} variant="secondary">
+                {COURSE.ctas.secondary.label}
+              </CtaButton>
+            </div>
+
+            {/* What stands in for the income claims their page opens with:
+                three figures a reader can go and check, each standing on its
+                own signal rule rather than a row of identical grey hairlines.
+                The colour is doing the job it does everywhere else on this
+                site — telling three things apart at a glance. */}
+            <dl
+              className="mt-12 grid gap-6 sm:grid-cols-3"
+              data-reveal
+              data-reveal-group="course-hero"
+            >
+              {COURSE.proof.map((item, index) => (
+                <div
+                  key={item.label}
+                  className={`border-t-2 pt-4 ${toneOf(PROOF_TONES[index]).edge}`}
+                >
+                  <dt className="font-display text-2xl font-extrabold text-ink">{item.value}</dt>
+                  <dd className="mt-1 text-sm leading-relaxed text-muted">{item.label}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
 
-          {/* What stands in for the income claims their page opens with: three
-              figures a reader can go and check, one of which is a link. */}
-          <dl
-            className="mt-12 grid gap-6 border-t border-hairline pt-8 sm:grid-cols-3"
-            data-reveal
-            data-reveal-group="course-hero"
-          >
-            {COURSE.proof.map((item) => (
-              <div key={item.label}>
-                <dt className="font-display text-2xl font-extrabold text-ink">{item.value}</dt>
-                <dd className="mt-1 text-sm leading-relaxed text-muted">{item.label}</dd>
-              </div>
-            ))}
-          </dl>
+          {/* The page had no hero visual and read as a wall of white cards.
+              This is the model as four nodes with a current running through
+              them — section 06's device, because the claim is the same shape:
+              separate things that are one loop. */}
+          <div data-reveal data-reveal-group="course-hero">
+            <CourseFlow steps={COURSE.mechanic.steps} caption={COURSE.mechanic.flowCaption} />
+          </div>
         </div>
       </HeroSurface>
 
@@ -155,17 +178,35 @@ export default function CoursePage() {
                   key={step.title}
                   data-reveal
                   data-reveal-group="mechanic-steps"
-                  className="rounded-2xl border border-hairline bg-paper p-7"
+                  className="relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
                 >
+                  {/* The tone as a rule down the edge and a wash out of the
+                      far corner. Four identical white cards told a reader
+                      nothing about which stage they were looking at; these
+                      are the same four tones the rest of the site already
+                      uses for the same four stages. */}
                   <span
-                    className={`inline-grid size-11 place-items-center rounded-full border border-dashed font-display text-sm font-extrabold ${tone.ring} ${tone.text}`}
-                  >
-                    {step.n}
+                    aria-hidden="true"
+                    className={`absolute inset-y-0 left-0 w-1 ${tone.rule}`}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-gradient-to-br ${tone.wash} to-transparent`}
+                  />
+
+                  <span className="relative flex items-center gap-3">
+                    <span
+                      className={`grid size-10 shrink-0 place-items-center rounded-xl font-display text-sm font-extrabold ${tone.tile}`}
+                    >
+                      {step.n}
+                    </span>
+                    <span className={`micro-label ${tone.text}`}>{step.kicker}</span>
                   </span>
-                  <h3 className="mt-5 font-display text-xl leading-snug font-extrabold text-ink">
+
+                  <h3 className="relative mt-5 font-display text-xl leading-snug font-extrabold text-ink">
                     {step.title}
                   </h3>
-                  <p className="mt-3 leading-relaxed text-muted">{step.body}</p>
+                  <p className="relative mt-3 leading-relaxed text-muted">{step.body}</p>
                 </li>
               );
             })}
@@ -178,13 +219,18 @@ export default function CoursePage() {
           <div
             data-reveal
             data-reveal-group="mechanic-steps"
-            className="mt-10 rounded-2xl border border-hairline bg-paper p-7"
+            className="panel-brand-outline mt-10 bg-paper p-7"
           >
             <p className="micro-label text-muted">{COURSE.mechanic.example.label}</p>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-10 gap-y-4">
               <div>
-                <p className="font-display text-3xl font-extrabold text-ink tabular-nums">
+                {/* Blue for what it costs, gold for what it is listed at —
+                    the same two tones those two stages wear in the panel
+                    above and in the hero. */}
+                <p
+                  className={`font-display text-3xl font-extrabold tabular-nums ${toneOf('blue').text}`}
+                >
                   {COURSE.mechanic.example.cost}
                 </p>
                 <p className="mt-1 text-sm text-muted">{COURSE.mechanic.example.costLabel}</p>
@@ -193,7 +239,9 @@ export default function CoursePage() {
               <Icon name="arrowRight" className="size-5 shrink-0 text-muted/60" />
 
               <div>
-                <p className="font-display text-3xl font-extrabold text-ink tabular-nums">
+                <p
+                  className={`font-display text-3xl font-extrabold tabular-nums ${toneOf('gold').text}`}
+                >
                   {COURSE.mechanic.example.list}
                 </p>
                 <p className="mt-1 text-sm text-muted">{COURSE.mechanic.example.listLabel}</p>
@@ -233,12 +281,12 @@ export default function CoursePage() {
           </div>
 
           <ul className="mt-12 grid gap-6 md:grid-cols-3">
-            {COURSE.market.points.map((point) => (
+            {COURSE.market.points.map((point, index) => (
               <li
                 key={point.label}
                 data-reveal
                 data-reveal-group="market"
-                className="border-t-2 border-hairline pt-5"
+                className={`border-t-2 pt-5 ${toneOf(PROOF_TONES[index]).edge}`}
               >
                 <p className="font-display text-lg leading-snug font-extrabold text-ink">
                   {point.label}

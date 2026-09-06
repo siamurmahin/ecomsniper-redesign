@@ -46,22 +46,29 @@ export const overlay = {
 
       steps: [
         {
+          kicker: 'Nichts ausgegeben',
           title: 'Finden und einstellen',
           body: 'Finde einen Artikel bei einem Händler und stelle ihn teurer in deinen eBay-Shop. Nichts ist gekauft, nichts ist geschuldet.',
         },
         {
+          kicker: 'Du wirst bezahlt',
           title: 'Ein Kunde kauft ihn',
           body: 'Der Verkauf passiert auf eBay, vor einem Publikum, das schon da ist. Du wirst bezahlt, bevor du etwas ausgegeben hast.',
         },
         {
+          kicker: 'Der Händler versendet',
           title: 'Du bestellst an seine Adresse',
           body: 'Du kaufst denselben Artikel beim Händler und gibst Namen und Lieferadresse deines Kunden an statt deiner eigenen. Der Händler versendet direkt.',
         },
         {
+          kicker: 'Was übrig bleibt',
           title: 'Die Differenz bleibt dir',
           body: 'Was der Kunde gezahlt hat, minus Einkauf und eBay-Gebühren, gehört dir. Kein Lager, keine Kartons, keine Ware, die im Zimmer steht.',
         },
       ],
+
+      flowCaption:
+        'Du kaufst nie auf Vorrat und bezahlst keinen Artikel, bevor dich jemand dafür bezahlt hat. Genau deshalb kann das bei null anfangen.',
 
       example: {
         label: 'Ihr Beispiel, wie sie es schreiben',

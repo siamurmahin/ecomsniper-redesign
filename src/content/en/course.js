@@ -96,28 +96,41 @@ export const COURSE = {
       {
         n: '01',
         tone: 'blue',
+        icon: 'magnifier',
+        kicker: 'Nothing spent',
         title: 'Find it, and list it',
         body: 'Find an item on a retailer’s site and list it on your eBay store at a higher price. Nothing is bought and nothing is owed.',
       },
       {
         n: '02',
         tone: 'gold',
+        icon: 'salesGrowth',
+        kicker: 'You are paid',
         title: 'A customer buys it',
         body: 'The sale happens on eBay, in front of an audience that is already there. You are paid before you have spent anything.',
       },
       {
         n: '03',
         tone: 'red',
+        icon: 'scooter',
+        kicker: 'They ship it',
         title: 'You order it to their address',
         body: 'You buy the same item from the retailer and enter your customer’s name and shipping address instead of your own. The retailer ships it directly.',
       },
       {
         n: '04',
         tone: 'green',
+        icon: 'checkCircle',
+        kicker: 'What is left',
         title: 'You keep the difference',
         body: 'What the customer paid, minus what the item cost and the fees eBay charges, is yours. No warehouse, no boxes, no stock sitting in a room.',
       },
     ],
+
+    /* The line under the hero panel. It says what the four nodes above it
+       add up to, which is the one thing a picture of a loop cannot say. */
+    flowCaption:
+      'You never buy stock, and you never pay for an item before somebody has paid you for it. That is the whole reason this can start from nothing.',
 
     /* Their example, kept as an example and labelled as one. Their own blog
        post on margins argues that the gap is thinner than this once fees are
