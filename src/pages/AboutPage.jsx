@@ -135,6 +135,7 @@ export default function AboutPage() {
      gets all three lines at once instead of a caret that never rests. */
   const isStatic = useReducedMotion();
   const costRef = useRevealOnScroll();
+  const offerRef = useRevealOnScroll();
   const originRef = useRevealOnScroll();
   const givingRef = useRevealOnScroll();
   const boundariesRef = useRevealOnScroll();
@@ -371,7 +372,17 @@ export default function AboutPage() {
       </section>
 
       {/* 2. What they get for it — moved up from seventh on their page. */}
-      <section aria-labelledby="offer-headline" className="section-band surface-deep">
+      {/* The ref is not decoration. Every [data-reveal] on this site is held
+          at opacity 0 by CSS while JavaScript runs, and the only thing that
+          brings it back is a useRevealOnScroll scope on an ancestor. This
+          section had the attributes and no scope, so its three cards and its
+          heading were hidden on arrival and stayed hidden — reported as "the
+          offer section is blank on the first visit". */}
+      <section
+        ref={offerRef}
+        aria-labelledby="offer-headline"
+        className="section-band surface-deep"
+      >
         <div className="site-shell">
           <div className="max-w-3xl">
             <p className="section-eyebrow" data-reveal data-reveal-group="offer">
