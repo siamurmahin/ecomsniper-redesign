@@ -40,27 +40,6 @@ session.
   Update the Decided row when this settles either way, rather than leaving two
   parts of this file disagreeing.
 
-- **Reorganise the header nav: no hash links, features behind a dropdown.**
-  Asked 7 Sep. Today's nav maps the _homepage_, not the site: four of its seven
-  entries are hash links into homepage sections — `/#proof`, `/#how-it-works`,
-  `/#training`, `/#founders` — which is what it had to be when the homepage was
-  the only page. There are now fourteen pages, and the four feature pages are
-  reachable from nothing but a pill in section 07 of the homepage.
-
-  What it should become, to settle before building: a **Features** dropdown
-  carrying Product Hunter, AI Lister, Competitor Research and Price Monitor;
-  the remaining routes flat beside it; every hash link either promoted to the
-  page it should have pointed at or dropped. About becomes a real link the day
-  that page lands.
-
-  **This trips the speed gate and the number is not yet measured.** `SiteHeader`
-  is in the eager `SiteChrome` chunk — it renders on every route — so a
-  dropdown's open state, its outside-click and Escape handling and its focus
-  management are eager JS, not lazy. Measure it against the 586 ceiling before
-  building, and say what a CSS-only or `<details>`-based version would cost
-  instead. A dropdown also has to work for keyboard, touch and a no-JS visitor,
-  all three of which this site has been caught out by already.
-
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
   container rather than replacing it. Built the way GTM is — declared in
@@ -195,10 +174,10 @@ to make possible.
 
 ### To build — one page and five posts
 
-| #   | Page                     | Route                     | Notes                                                                       |
-| --- | ------------------------ | ------------------------- | --------------------------------------------------------------------------- |
-| 1   | Dropship Mastery course  | `/course/dropshipMastery` | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
-| 2   | Blog posts, five of them | `/blog/<slug>`            | Template and index are built; four of the nine in their sitemap are written |
+| #   | Page                     | Route                     | Notes                                                                                                                                                                                        |
+| --- | ------------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Dropship Mastery course  | `/course/dropshipMastery` | Sitemap also lists a lowercase `/course/dropshipmastery`. **Two routes, ~2.6KB of route table, against 1KB of ceiling left — the eager budget needs a decision before this page, not after** |
+| 2   | Blog posts, five of them | `/blog/<slug>`            | Template and index are built; four of the nine in their sitemap are written                                                                                                                  |
 
 **All four feature pages are built**, and section 07 of the homepage no longer
 links off this site: both remaining pills became relative hrefs the day their
@@ -342,6 +321,8 @@ come from the index, and their sitemap is advertising URLs that may 404.
 
 | Date       | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Commit    |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 7 Sep 2026 | **The nav maps the site instead of the homepage.** Four of its seven entries were hash links into homepage sections; now a **Features** dropdown carries the four tools and the rest are real routes — Pricing, Blog, About, FAQ, Contact. The dropdown reuses the mobile panel's Escape, outside-`pointerdown` and close-on-route-change rather than adding its own, so it costs one piece of state and the markup. Links became `Link` rather than `<a>`, which stops a nav click reloading the whole app between two prerendered pages. **+1,548 bytes eager**, measured both sides                                       | `128439e` |
+| 7 Sep 2026 | **An unlayered `!important` is the weakest important there is.** The no-JS rule revealing the dropdown lost twice to Tailwind preflight's `[hidden]{display:none!important}` — plain, then with a two-attribute selector to outrank it. For normal declarations unlayered beats layered; for important declarations that order **reverses**. Joining `@layer base` put ordinary specificity back in charge                                                                                                                                                                                                                   | `128439e` |
 | 7 Sep 2026 | **About, off the shelf after three days parked.** The hero is the review wall — hero-03's layered column built from real Trustpilot reviews rather than its revenue dashboards, on the page that promises not to show earnings screenshots. The money filter came with it and is enforced, not remembered. The offer moves from seventh to third: what it costs you, what you get, how we behave. The giving gallery is five real photographs, not six with an Unsplash one among them. `AboutHeroLab.jsx` deleted. Eager 580 → 583KB; CSS went **down** 133 → 130KB, because the lab took its own utilities with it         | `7137a9c` |
 | 7 Sep 2026 | **No link in the site furniture points at `ecomsniper.io` any more.** The footer's About link was the last one, and it was a soft-404 on their own site                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `7137a9c` |
 | 7 Sep 2026 | **Price Monitor, and the four feature pages are done.** `/price-monitor` in both languages, `/priceMonitorV6` 301ing onto it. The one page with no second version: no readable slug on their site and no sitemap entry, so there was nothing to choose between and the slug is ours. Two sections rather than numbered steps, because the product is that you do nothing — a numbered list would have been the previous page's shape borrowed. The two case bodies are our draft: theirs repeat the headline with one word swapped. Eager JS +2,446 bytes, page 14KB in its own chunk                                        | `e0b987e` |

@@ -234,3 +234,79 @@ design ask — there is no server here, `ssr: false` — so the pages will carry
 layout, fields, states and copy in both languages, and say plainly that they
 are not connected, the way the contact form already refuses to fake a delivery.
 A form that looks like it logs you in and does not is worse than no page.
+
+## The nav, and a cascade rule worth knowing
+
+The header was a table of contents for the homepage: four of its seven entries
+were hash links into homepage sections, which is exactly what it should have
+been when the homepage was the only page. Fifteen pages later it was pointing
+at the wrong document, and the four feature pages — a week of work — were
+reachable from nothing but a pill in section 07.
+
+Now it is a **Features** dropdown over the four tools, then Pricing, Blog,
+About, FAQ, Contact. Proof, How it works and Training are gone from it: they
+are homepage sections and the homepage is the logo, one click from anywhere.
+Careers and Affiliate stay in the footer, where a visitor looks for a company's
+own business rather than its product.
+
+### It cost 1,548 bytes because it reused what was already there
+
+`SiteHeader` renders on every route and lives in the eager `SiteChrome` chunk,
+so a dropdown's machinery is paid for by every visitor including the ones who
+never open it. That was flagged before building rather than after.
+
+What made it cheap is that the component already had the machinery: Escape, an
+outside `pointerdown` and close-on-route-change were written for the mobile
+panel. The dropdown joined the same three effects instead of bringing its own,
+so what it actually cost was one piece of state and the markup. Measured on
+both sides: 597,012 → 598,560 bytes.
+
+Body scroll locks for the panel and deliberately not for the dropdown. A
+dropdown is a few links in a bar, the page behind it stays usable, and locking
+the page for it is the modal treatment applied to something that is not a
+modal.
+
+The links also stopped being `<a>` and became `Link`. They were anchors because
+four of them were hash links; with every entry a real route, an anchor reloads
+the entire application to move between two prerendered pages the router already
+holds.
+
+### An unlayered `!important` is the weakest important there is
+
+The dropdown's panel is `hidden` when closed rather than unmounted, so the four
+hrefs sit in the prerendered HTML for a crawler. That is not the same as being
+reachable, and with scripts off the button does nothing — which would have put
+four pages behind a control that cannot work, on a site that fixed exactly this
+class of bug yesterday.
+
+The fix belongs in `noScriptStyles`, which already exists for it. The rule took
+three attempts:
+
+1. `[data-nav-group-panel]{display:flex!important}` — computed to `none`.
+2. `[data-nav-group-panel][hidden]{display:flex!important}`, two attributes to
+   outrank preflight's one — computed to `none`.
+3. The same rule wrapped in `@layer base` — `flex`, and all four links
+   reachable.
+
+Tailwind v4 preflight declares `[hidden]{display:none!important}` inside
+`@layer base`. **For normal declarations an unlayered rule beats a layered one.
+For important declarations that order reverses**, so an unlayered `!important`
+loses to every layered `!important` no matter how specific it is. Joining the
+same layer puts ordinary specificity back in charge, and the two-attribute
+selector then wins on its own merits.
+
+The other rules in that file stay unlayered on purpose — they compete with
+nothing important, and unlayered is the stronger place for them.
+
+Two attempts were spent writing more specific selectors, which is the natural
+move and the wrong one: specificity cannot cross a layer boundary for an
+important declaration. The browser said so in one `getComputedStyle` each time,
+which is the only reason this took minutes rather than an afternoon.
+
+### The ceiling is nearly spent
+
+585KB against 586. The Dropship Mastery course page is two more routes, roughly
+2.6KB of route table, so the eager budget needs a decision **before** that page
+rather than after it — noted on `TODO.md` beside the page itself. The repayment
+is still `errorBoundaries` at 107KB and `vendor-react` at 187KB, neither of
+which has been looked at once.
