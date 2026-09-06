@@ -257,6 +257,38 @@ not exist.
 Three `<link>` tags in `root.jsx`. Costs less than the 404 it replaces.
 **Fixed 6 Sep.**
 
+### 16. `npm run build` fails about two times in three, locally — `high`
+
+The prerender dies on the **second route in the list**, whichever route that
+is, with an empty message:
+
+```
+Prerender (html): / -> buildclientindex.html
+Error: Prerender: Request failed for /pricing/:
+```
+
+Measured 6 Sep. Three builds at HEAD: fail, pass, fail. Three more with the
+blog added: fail, pass, fail. It is not the blog, and it is not `/pricing` —
+swapping `/faq` into second position moved the failure onto `/faq`. It is
+**positional**, which rules out route content and points at a race in
+`@react-router/dev`'s prerender as it starts.
+
+Ruled out by measurement, not by reasoning: the blog work (fails identically
+without it), the JSON-LD on `/pricing` (fails with the schema removed), and a
+file lock from a running preview server (fails with nothing serving).
+
+**The leading suspect is the Node version.** `.nvmrc` pins **22.22.0**; this
+machine is on **24.20.0**. CI and Netlify honour the pin, which would explain
+why deploys have not been failing while local builds have.
+
+**Fix:** run the pinned Node locally — `nvm use` — and confirm the flake
+disappears. If it survives on 22.22.0 this is a real bug in the toolchain and
+belongs upstream, because a build that fails two times in three will eventually
+fail a deploy. Nobody has tested that yet, so this stays open at `high`.
+
+Workaround until then: rebuild. A green build is a correct build — the failure
+is total, not partial, so there is no risk of shipping a half-prerendered site.
+
 ---
 
 ## Closed

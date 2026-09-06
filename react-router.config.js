@@ -28,6 +28,13 @@
  * page in both languages.
  */
 import { ROLE_SLUGS } from './src/content/en/careers.js';
+import { POST_SLUGS } from './src/content/en/blog.js';
+
+/** Every blog post, in both languages. */
+const postRoutes = [
+  ...POST_SLUGS.map((slug) => `/blog/${slug}`),
+  ...POST_SLUGS.map((slug) => `/de/blog/${slug}`),
+];
 
 /** Every job advert, in both languages. */
 const jobRoutes = [
@@ -42,6 +49,7 @@ export default {
     '/pricing',
     '/faq',
     '/free-play-book',
+    '/blog',
     '/careers',
     '/affiliate',
     '/affiliate/terms',
@@ -56,6 +64,7 @@ export default {
     '/de/pricing',
     '/de/faq',
     '/de/free-play-book',
+    '/de/blog',
     '/de/careers',
     '/de/affiliate',
     '/de/affiliate/terms',
@@ -67,5 +76,6 @@ export default {
     '/de/cookie-policy',
     '/de/404',
     ...jobRoutes,
+    ...postRoutes,
   ],
 };

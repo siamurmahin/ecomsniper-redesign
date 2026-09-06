@@ -92,6 +92,86 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://ecomsniper.io/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/blog/ebay-dropshipping-profit-margins-in-2026</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/ebay-dropshipping-profit-margins-in-2026" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/ebay-dropshipping-profit-margins-in-2026" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/ebay-dropshipping-profit-margins-in-2026" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/blog/ebay-dropshipping-profit-margins-in-2026</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/ebay-dropshipping-profit-margins-in-2026" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/ebay-dropshipping-profit-margins-in-2026" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/ebay-dropshipping-profit-margins-in-2026" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/blog/ebay-cassini-algorithm-in-2026</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/ebay-cassini-algorithm-in-2026" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/ebay-cassini-algorithm-in-2026" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/ebay-cassini-algorithm-in-2026" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/blog/ebay-cassini-algorithm-in-2026</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/ebay-cassini-algorithm-in-2026" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/ebay-cassini-algorithm-in-2026" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/ebay-cassini-algorithm-in-2026" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/blog/ebay-vero-violations-the-complete-2026-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/ebay-vero-violations-the-complete-2026-guide" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/ebay-vero-violations-the-complete-2026-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/ebay-vero-violations-the-complete-2026-guide" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/blog/ebay-vero-violations-the-complete-2026-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/ebay-vero-violations-the-complete-2026-guide" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/ebay-vero-violations-the-complete-2026-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/ebay-vero-violations-the-complete-2026-guide" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/blog/building-the-engine-for-the-next-era-of-ecomsniper</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/building-the-engine-for-the-next-era-of-ecomsniper" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/building-the-engine-for-the-next-era-of-ecomsniper" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/building-the-engine-for-the-next-era-of-ecomsniper" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ecomsniper.io/de/blog/building-the-engine-for-the-next-era-of-ecomsniper</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/blog/building-the-engine-for-the-next-era-of-ecomsniper" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/blog/building-the-engine-for-the-next-era-of-ecomsniper" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ecomsniper.io/blog/building-the-engine-for-the-next-era-of-ecomsniper" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://ecomsniper.io/careers/video-editor</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://ecomsniper.io/careers/video-editor" />
     <xhtml:link rel="alternate" hreflang="de" href="https://ecomsniper.io/de/careers/video-editor" />

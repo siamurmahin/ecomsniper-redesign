@@ -11,9 +11,17 @@
  */
 
 /** Every language offered, in the order the menu lists them. */
+/*
+ * `locale` is the BCP 47 tag for `Intl`, and it is here rather than in the one
+ * file that currently needs it so a third language arrives with its date
+ * format attached instead of finding a two-entry lookup somewhere else.
+ *
+ * `en-GB` and not `en-US`: this site writes "programme" and "optimised", and a
+ * date of 8/9/2026 means different months on either side of the Atlantic.
+ */
 export const LANGUAGES = [
-  { code: 'en', short: 'EN', label: 'English', prefix: '' },
-  { code: 'de', short: 'DE', label: 'Deutsch', prefix: '/de' },
+  { code: 'en', short: 'EN', label: 'English', prefix: '', locale: 'en-GB' },
+  { code: 'de', short: 'DE', label: 'Deutsch', prefix: '/de', locale: 'de-DE' },
 ];
 
 export const DEFAULT_LANGUAGE = 'en';
