@@ -87,15 +87,21 @@ session.
 
 Nothing on the About page is in flight — see Parked below.
 
-- **The About photographs.** Their giving gallery is five real images plus a
-  founder portrait. **We hold optimised copies of all seven** in
-  `src/assets/giving/` (`b02e651`) — an earlier note here claiming "we have
-  none of them" was stale. What is still missing is a portrait big enough to
-  use: theirs is 260 × 260 and goes soft above about 300px.
-- **Their charity gallery contains a stock photo.** "Children smiling" is an
-  Unsplash image sitting among real charity work, three screens under a promise
-  not to create false impressions. Kept out of the hero wall by name. Raise
-  with the client.
+- **A founder portrait big enough to use.** Theirs is 260 × 260 and goes soft
+  above about 300px, so the About page renders it at 56px beside the quote
+  rather than as the portrait the section wants. The layout takes a larger file
+  in the same slot the day one arrives.
+- **The stock photograph is out of the build, and the client should still hear
+  about it.** "Children smiling" was an Unsplash image sitting among five real
+  charity photographs, three screens under a promise not to create false
+  impressions. Removed 7 Sep — deck, asset map and file — so the gallery is
+  five real photographs. Tell them anyway, in case they have a sixth real one:
+  it is on their live site now, and this is the page that argues they are
+  honest.
+- **`giving-education.webp` is oversized.** 1100 × 688 for a slot that renders
+  at 397 × 298, where the other four are 720 × 540. 94KB, lazy and below the
+  fold, so it is a tidy-up rather than a defect — fold it into the image pass
+  rather than re-encoding one file on its own.
 
 Nothing in flight. The environment work is finished and verified; the items
 below are what it left behind.
@@ -108,30 +114,12 @@ below are what it left behind.
 
 ## Parked
 
-- **The About page, and its hero.** Paused 4 Sep on request to move on to other
-  pages. Nothing about it is lost, and it should not be restarted from scratch:
-
-  - `src/pages/AboutHeroLab.jsx` holds **four passes of hero design**, ending
-    on the direction that was closest — a dense two-column hero after
-    shadcn hero-03, with a staggered wall of real Trustpilot reviews bleeding
-    off both edges. It is **deliberately not routed**: an unrouted module is
-    never bundled, so it costs nothing while it waits. One commented line in
-    `src/routes.js` brings it back.
-  - What the passes established, so it is not re-litigated: the earlier
-    designs failed because they were sparse left-aligned text in one column,
-    and because each carried five competing devices instead of committing to
-    one. The references that fixed that are in `SESSION-NOTES-04-SEP.md` §9.
-  - **Reviews, not photographs, in the hero.** Decided 4 Sep. It removes
-    ~243KB from the first screen, keeps LCP as text, and the reviews
-    corroborate the page's actual claim — that the team answers its own
-    support — which a charity photograph cannot.
-  - The **money-claim filter** in that file is not cosmetic. This page promises
-    not to show earnings screenshots; the filter enforces it against the deck
-    so a review added later cannot quietly break the promise.
-
-  Still undecided when it resumes: whether the hero is that one, and whether
-  the section order moves the offer up from 7th, which was agreed in principle
-  and never built.
+_Nothing is parked._ The About page was, from 4 to 7 September, and it came back
+built rather than restarted — which is what the entry was for. The four hero
+passes, the references that fixed them and the reviews-not-photographs decision
+all survived the pause in `AboutHeroLab.jsx` and `SESSION-NOTES-04-SEP.md` §9,
+and the lab was deleted the day the page shipped. Worth copying the next time
+something has to be put down mid-design.
 
 ---
 
@@ -174,42 +162,43 @@ payments and auth are out of this phase.
 
 ### Built
 
-| Page                | Route                                                               |
-| ------------------- | ------------------------------------------------------------------- |
-| Home                | `/`                                                                 |
-| Pricing             | `/pricing`                                                          |
-| FAQ                 | `/faq`                                                              |
-| Free playbook       | `/free-play-book`                                                   |
-| Privacy policy      | `/privacy-policy`                                                   |
-| Cookie policy       | `/cookie-policy` — ours, no equivalent on their site                |
-| Careers             | `/careers` — static list; role description awaited from client      |
-| Affiliate           | `/affiliate` — their full terms, 11 clauses, both languages         |
-| Terms               | `/terms-and-conditions` — their 15 sections, verbatim               |
-| Contact             | `/contact` — their copy; the form never fakes a delivery            |
-| Product Hunter      | `/product-hunter` — `/productHunterV6` 301s onto it                 |
-| AI Lister           | `/ai-powered-lister` — `/aiListerV6` 301s onto it                   |
-| Blog                | `/blog`, and four posts at `/blog/<slug>`                           |
-| Competitor Research | `/competitor-research` — `/competitorResearchV6` 301s onto it       |
-| Price Monitor       | `/price-monitor` — `/priceMonitorV6` 301s onto it; the slug is ours |
+| Page                | Route                                                                |
+| ------------------- | -------------------------------------------------------------------- |
+| Home                | `/`                                                                  |
+| Pricing             | `/pricing`                                                           |
+| FAQ                 | `/faq`                                                               |
+| Free playbook       | `/free-play-book`                                                    |
+| Privacy policy      | `/privacy-policy`                                                    |
+| Cookie policy       | `/cookie-policy` — ours, no equivalent on their site                 |
+| Careers             | `/careers` — static list; role description awaited from client       |
+| Affiliate           | `/affiliate` — their full terms, 11 clauses, both languages          |
+| Terms               | `/terms-and-conditions` — their 15 sections, verbatim                |
+| Contact             | `/contact` — their copy; the form never fakes a delivery             |
+| Product Hunter      | `/product-hunter` — `/productHunterV6` 301s onto it                  |
+| AI Lister           | `/ai-powered-lister` — `/aiListerV6` 301s onto it                    |
+| Blog                | `/blog`, and four posts at `/blog/<slug>`                            |
+| Competitor Research | `/competitor-research` — `/competitorResearchV6` 301s onto it        |
+| Price Monitor       | `/price-monitor` — `/priceMonitorV6` 301s onto it; the slug is ours  |
+| About               | `/about` — the review-wall hero, and the offer moved up from seventh |
 
-All of the above exist in both languages — **twenty-one URLs per language, 42
+All of the above exist in both languages — **twenty-two URLs per language, 44
 in all**, which is exactly what `sitemap.xml` lists and what
-`react-router.config.js` prerenders (44 documents: the 42 plus a 404 per
+`react-router.config.js` prerenders (46 documents: the 44 plus a 404 per
 language, which is kept out of the sitemap). Those three numbers agreeing is
 the check; when they last disagreed the sitemap was four pages behind without
-anyone noticing. Twenty-one rather than the fourteen pages above because the
+anyone noticing. Twenty-two rather than the fifteen pages above because the
 advert, the affiliate terms and the four posts each own a URL.
 
-**About is not on this list.** Its design was withdrawn in `c2c95b8` and there
-is no `/about` route today. It sits in To build below.
+**About was withdrawn in `c2c95b8` and is back**, built 7 Sep from the material
+that was kept rather than from scratch — which is what the Parked entry existed
+to make possible.
 
-### To build — two pages and five posts
+### To build — one page and five posts
 
 | #   | Page                     | Route                     | Notes                                                                       |
 | --- | ------------------------ | ------------------------- | --------------------------------------------------------------------------- |
 | 1   | Dropship Mastery course  | `/course/dropshipMastery` | Sitemap also lists a lowercase `/course/dropshipmastery`                    |
 | 2   | Blog posts, five of them | `/blog/<slug>`            | Template and index are built; four of the nine in their sitemap are written |
-| 3   | About                    | `/about`                  | Design withdrawn 4 Sep — copy, research and images kept, page rebuilt later |
 
 **All four feature pages are built**, and section 07 of the homepage no longer
 links off this site: both remaining pills became relative hrefs the day their
@@ -353,6 +342,8 @@ come from the index, and their sitemap is advertising URLs that may 404.
 
 | Date       | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Commit    |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 7 Sep 2026 | **About, off the shelf after three days parked.** The hero is the review wall — hero-03's layered column built from real Trustpilot reviews rather than its revenue dashboards, on the page that promises not to show earnings screenshots. The money filter came with it and is enforced, not remembered. The offer moves from seventh to third: what it costs you, what you get, how we behave. The giving gallery is five real photographs, not six with an Unsplash one among them. `AboutHeroLab.jsx` deleted. Eager 580 → 583KB; CSS went **down** 133 → 130KB, because the lab took its own utilities with it         | `7137a9c` |
+| 7 Sep 2026 | **No link in the site furniture points at `ecomsniper.io` any more.** The footer's About link was the last one, and it was a soft-404 on their own site                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `7137a9c` |
 | 7 Sep 2026 | **Price Monitor, and the four feature pages are done.** `/price-monitor` in both languages, `/priceMonitorV6` 301ing onto it. The one page with no second version: no readable slug on their site and no sitemap entry, so there was nothing to choose between and the slug is ours. Two sections rather than numbered steps, because the product is that you do nothing — a numbered list would have been the previous page's shape borrowed. The two case bodies are our draft: theirs repeat the headline with one word swapped. Eager JS +2,446 bytes, page 14KB in its own chunk                                        | `e0b987e` |
 | 7 Sep 2026 | **The footer's Blog link stopped pointing at their site.** `/blog` shipped 6 Sep and the footer was not moved with it, so a link in the site furniture was still a soft-404 on `ecomsniper.io`. About is the only external one left, and only until that page exists                                                                                                                                                                                                                                                                                                                                                         | `e0b987e` |
 | 6 Sep 2026 | **Competitor Research, the third feature page.** `/competitor-research` in both languages, `/competitorResearchV6` 301ing onto it. Their copy exists twice and this is the first page where V6 was the _worse_ of the two: it has the better headline and loses the four concrete steps, so the hero is V6's and the steps are the readable slug's, verbatim. Five drawn panels built on `HuntPanels` — same chrome, same scan, no second set of CSS. Eager JS +2,531 bytes, all route table; the page itself is 17KB in its own chunk. Ceiling 578 → 586, once, for the six routes the three remaining pages need           | `1d7725e` |

@@ -120,3 +120,117 @@ The pattern is worth stating on its own: **a fix confirmed by one passing run
 is a coincidence with a commit message.** Twice now the confirming run was the
 first one after the change, and twice the change was not what made it pass. The
 gate does pass — three runs, every assertion, on the fourth invocation.
+
+## About, off the shelf
+
+Parked on 4 September mid-design, with four hero passes in an unrouted file and
+two questions left open: whether the hero was the closest of those passes, and
+whether the offer moved up from seventh. Both were answered today, and the page
+was built from the parked material rather than restarted — which is the whole
+reason the Parked entry was written the way it was.
+
+### The hero
+
+`hero-03`'s device is a right column that does not end: cards running off the
+top and bottom edges so the eye reads "there is more of this" without a word
+saying so. What does not transfer is its content — that column is filled with
+revenue dashboards, and this page promises four screens down that it will not
+show screenshots of big earnings.
+
+So the wall is real Trustpilot reviews. Decided 4 Sep and still right: it keeps
+~243KB off the first screen, keeps LCP as text, and the reviews corroborate
+what this page actually claims — that the team answers its own support and is
+straight with people. A charity photograph cannot corroborate that; it can only
+decorate it. The photographs have their own section further down, where they
+are the subject.
+
+**The money filter moved across with the wall**, and it is the part of this page
+worth keeping. Any review quoting a sum of money is dropped from the hero, so a
+review added to the deck next month cannot quietly break a promise made further
+down the same page. Today it removes exactly one — the reviewer who reports
+turning $99 into $500 — and it is deliberately blunt, because a filter that
+tried to tell a fair mention of money from an unfair one would be a judgement
+call re-made every time the deck changed.
+
+### The order is not theirs, and that was the user's call to delegate
+
+Their page: cost, origin, giving, boundaries, responsibility, **offer**, team,
+invitation. The one section saying what a reader receives for their money is
+seventh, after four screens of ethics.
+
+Here it is third. The page now reads: this is what it costs you, this is what
+you get, this is how we behave. Everything after it keeps their sequence,
+because origin → giving → boundaries → responsibility earn each other properly
+in that order and there was no reason to touch them.
+
+### The sixth photograph is gone
+
+Their gallery is six images. Five are the client's own charity work; the sixth
+is an Unsplash stock photograph captioned "Moments that matter", sitting among
+them three screens below a promise not to create false impressions, on the one
+page whose entire argument is that this company is honest.
+
+It is out of the deck, out of the asset map and off the disk. Five real
+photographs is not a gallery with a hole in it — it is the honest version of
+the same gallery. The client is still told, in case they have a sixth real
+photograph to send.
+
+### The lab was deleted, not kept
+
+`AboutHeroLab.jsx` held four passes of design and a commented line in
+`routes.js` that would restore it. Both are gone. What it established is in the
+page header and in `SESSION-NOTES-04-SEP.md` §9, and a lab kept "just in case"
+is a second version of a page waiting to drift out of step with the first.
+
+It paid for itself on the way out: **CSS went down**, 133KB to 130KB, because
+the utilities only the lab used went with it. That is the first time this
+budget has moved in the right direction without anyone trying.
+
+### A third screenshot artefact, and the check that settles it
+
+The full-page capture showed the site header floating in the middle of the hero
+and every gallery tile blank. Both were the picture, not the page: the header
+is `position: fixed` and the capture ran at `scrollY: 4700`, and the five
+images were all `complete: true` at their natural sizes with the tiles rendered
+at 397 × 298.
+
+That is three today. The check is the same one every time and takes a single
+evaluate: read the geometry and the load state out of the DOM instead of
+looking at the picture. It is now quicker to do that than to talk myself out of
+believing a screenshot.
+
+### Numbers
+
+| | |
+| --- | --- |
+| Page chunk | 26KB lazy, 8.3KB gzipped |
+| Eager JS | 580 → 583KB, two routes, inside the 586 ceiling |
+| CSS | 133 → **130KB** |
+| Sitemap / documents | 44 URLs, 46 prerendered documents |
+
+`giving-education.webp` is 1100 × 688 for a slot that renders at 397 × 298,
+where the other four are 720 × 540. 94KB, lazy, below the fold — filed as a
+tidy-up for the image pass rather than re-encoded on its own.
+
+## Two new asks, recorded before either is built
+
+The header nav reorganisation — no hash links, a Features dropdown — and the
+login and registration designs. Both went onto `TODO.md` under Now with what
+has to be settled first, which is the rule this file keeps.
+
+Two things worth writing down rather than discovering later:
+
+**The nav dropdown is eager JS.** `SiteHeader` lives in the `SiteChrome` chunk
+and renders on every route, so a dropdown's open state, its outside-click and
+Escape handling and its focus management are paid for by every visitor on every
+page, including the ones who never open it. Measure it against the 586 ceiling
+before building, and price a `<details>` or CSS-only version against it. This
+is exactly the case the speed gate exists for.
+
+**The auth pages contradict a Decided row.** "Everything except login,
+registration and checkout" has been the scope line since the start. Rather than
+quietly building past it, the row now points at the new entry. Taken as a
+design ask — there is no server here, `ssr: false` — so the pages will carry
+layout, fields, states and copy in both languages, and say plainly that they
+are not connected, the way the contact form already refuses to fake a delivery.
+A form that looks like it logs you in and does not is worse than no page.
