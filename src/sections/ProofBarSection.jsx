@@ -6,7 +6,7 @@ import RatingStars from '../components/ui/RatingStars';
 import CountryTicker from '../components/ui/CountryTicker';
 import SpotlightCard from '../components/reactbits/SpotlightCard';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
-import { prefersReducedMotion } from '../lib/motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { toneOf } from '../lib/signalTones';
 
 /**
@@ -58,7 +58,9 @@ export default function ProofBarSection({ showAnchorLink = true }) {
   const { ASSURANCE, PROOF_BAR, A11Y } = useContent();
   const sectionRef = useRevealOnScroll({ start: 'top 92%' });
   // Read once at mount: a number ticking upward is motion like any other.
-  const staticNumbers = prefersReducedMotion();
+  // Decides whether a number is a CountUp or plain text, so it comes from the
+  // hook rather than the media query — see `hooks/useReducedMotion`.
+  const staticNumbers = useReducedMotion();
   // Counted rather than written down, so the label cannot drift from the flags.
   const countryCount = ASSURANCE.countries.list.length;
 

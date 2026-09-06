@@ -4,7 +4,8 @@ import Icon from '../components/ui/Icon';
 import VideoLightbox from '../components/ui/VideoLightbox';
 import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
-import { gsap, prefersReducedMotion } from '../lib/motion';
+import { gsap } from '../lib/motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { thumbUrl } from '../lib/proofMedia';
 
 /** Seconds an interview holds the stage before the next one takes it. */
@@ -37,7 +38,7 @@ export default function InterviewsSection() {
   const [leadIndex, setLeadIndex] = useState(0);
   const [isHeld, setIsHeld] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const [isStatic] = useState(() => prefersReducedMotion());
+  const isStatic = useReducedMotion();
   const stageRef = useRef(null);
   const listRef = useRef(null);
   const rowRefs = useRef(new Map());

@@ -5,7 +5,8 @@ import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { useLocation } from 'react-router';
 import { languageFromPath, pathForLanguage } from '../lib/language';
-import { gsap, prefersReducedMotion, MOTION } from '../lib/motion';
+import { gsap, MOTION } from '../lib/motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { SplitText } from '../lib/textMotion';
 import { toneOf } from '../lib/signalTones';
 
@@ -51,7 +52,9 @@ export default function AudienceSection() {
   const [isHeld, setIsHeld] = useState(false);
   const [hasTakenOver, setHasTakenOver] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const [isStatic] = useState(() => prefersReducedMotion());
+  // Decides whether the dwell timer is rendered, so it comes from the hook
+  // rather than the media query — see `hooks/useReducedMotion`.
+  const isStatic = useReducedMotion();
 
   const people = AUDIENCE.people;
   const count = people.length;

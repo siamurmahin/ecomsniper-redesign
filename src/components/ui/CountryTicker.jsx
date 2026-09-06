@@ -1,5 +1,5 @@
 import { useContent } from '../../hooks/useContent';
-import { prefersReducedMotion } from '../../lib/motion';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 /* Flag artwork, resolved from each country's ISO code. Real artwork, not flag
    emoji: regional indicator pairs render as two bare letters on Windows. */
@@ -19,9 +19,10 @@ const flagUrl = (code) => FLAGS[`../../assets/flags/flag-${code.toLowerCase()}.w
 export default function CountryTicker({ onInk = false, className = '' }) {
   const { ASSURANCE } = useContent();
   const countries = ASSURANCE.countries.list;
-  // Read once at mount: a ticker is motion like any other, and a reader who has
-  // asked for less of it gets the plain wrapped row instead.
-  const isStatic = prefersReducedMotion();
+  // A ticker is motion like any other, and a reader who has asked for less of
+  // it gets the plain wrapped row instead. From the hook because it decides
+  // which row is rendered — see `hooks/useReducedMotion`.
+  const isStatic = useReducedMotion();
 
   const textTone = onInk ? 'text-muted-dark' : 'text-muted';
 

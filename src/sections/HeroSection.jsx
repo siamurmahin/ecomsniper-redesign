@@ -7,7 +7,7 @@ import TextType from '../components/reactbits/TextType';
 import { useContent } from '../hooks/useContent';
 import { announceHeroReady } from '../lib/heroReady';
 // The hero's entrance is CSS; its easing comes from the stylesheet.
-import { prefersReducedMotion } from '../lib/motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { toneOf } from '../lib/signalTones';
 
 /** The two objections, and the colour each answer carries. */
@@ -111,9 +111,13 @@ export default function HeroSection() {
     return { ...splitIntoWords(fixed), text: fixed.map((part) => part.text).join('') };
   }, [HERO.headlineParts]);
 
-  // Read on the first render — anything added later would mount after the
-  // entrance resolved its targets and stay where it was left.
-  const [isStatic] = useState(() => prefersReducedMotion());
+  /* Decides what is rendered — the typed phrase or the plain word, the
+     unbreakable eyebrow or the wrapping one — so it comes from the hook rather
+     than from reading the media query here. The prerender has no `window`, so
+     a render that reads it directly always disagrees with the HTML for a
+     reader who has the preference set, and React answers a mismatch by
+     throwing the whole prerendered document away. See `hooks/useReducedMotion`. */
+  const isStatic = useReducedMotion();
 
   // The eyebrow scrolls rather than wraps, but only where the line really
   // does not fit. Measured, not a breakpoint: the copy can change length.

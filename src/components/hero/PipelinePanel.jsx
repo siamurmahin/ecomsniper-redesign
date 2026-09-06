@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import CtaButton from '../ui/CtaButton';
 import Icon from '../ui/Icon';
 import { useContent } from '../../hooks/useContent';
-import { prefersReducedMotion } from '../../lib/motion';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { toneOf } from '../../lib/signalTones';
 
 /** How long one step holds, swap included. Long enough that the two numbers
@@ -36,9 +36,10 @@ export default function PipelinePanel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  // Read on the first render: a flag set later would arrive after the entrance
-  // timeline has already resolved its targets.
-  const [isStatic] = useState(() => prefersReducedMotion());
+  // Decides which panel is rendered, so it comes from the hook rather than
+  // from the media query — a direct read cannot agree with the prerender.
+  // See `hooks/useReducedMotion`.
+  const isStatic = useReducedMotion();
 
   /*
    * The steps that are not on screen yet are painted for the first moment of

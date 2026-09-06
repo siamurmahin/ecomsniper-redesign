@@ -5,7 +5,7 @@ import Icon from '../components/ui/Icon';
 import { useContent } from '../hooks/useContent';
 import { useParallax } from '../hooks/useParallax';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
-import { prefersReducedMotion } from '../lib/motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { toneOf } from '../lib/signalTones';
 
 /**
@@ -68,7 +68,7 @@ function PillarCard({ item, index }) {
 
   useEffect(() => () => cancelAnimationFrame(frameRef.current), []);
 
-  const isStatic = prefersReducedMotion();
+  const isStatic = useReducedMotion();
 
   return (
     <li
