@@ -254,3 +254,54 @@ page. It was the screenshot. `CLAUDE.md` says to drop `js-motion` from `<html>`
 
 Third time this week that a reading, not the thing being read, produced the
 defect. The rule in `CLAUDE.md` was right there and was followed halfway.
+
+## Picked up after a power cut, mid-component
+
+The machine lost power with `CoverFallback.jsx` written and unstaged and
+`BlogPage.jsx` half-edited around it. Nothing was lost — the working tree held
+both, eslint passed on both, and the build ran all sixty-odd routes. What had
+not survived was the bookkeeping: `1342b36` was committed without its Done row,
+so `TODO.md` recorded the decision to build search and tabs and not the fact
+that they existed.
+
+### The budget fired, and the interesting part is by how much
+
+`npm run budget` said `OVER eager JS 576KB / 575KB`. The obvious reading is
+that the coverless-cover work costs a kilobyte on the first screen, and the
+obvious fix — inline the reticle's SVG so the blog stops sharing a module with
+the homepage — contradicts the comment inside `ReticleMark` itself, which says
+in as many words that two copies of a logo are two places for it to drift.
+
+So it was measured instead of reasoned about. Stash, build, count the bytes the
+document actually preloads; unstash, build, count again.
+
+```
+HEAD  589,218 bytes  575.41KB
+WIP   589,322 bytes  575.51KB
+```
+
+**104 bytes.** The chunk list is identical on both sides — same twenty files,
+same sizes — and `ReticleMark-BQlJyW9_.js` does exist as a new shared chunk but
+is nowhere in the preload list. The 104 bytes are the route manifest naming a
+chunk the first screen never fetches. The ceiling did not fire on weight; it
+fired on rounding, because 575 had 0.6KB of room left and `kb()` rounds.
+
+`check-budget.mjs` already answers this case: "a ceiling for pages, not for
+weight — if it fires again on something that is not the manifest, that is a
+real regression". It was the manifest. Raised to 578, with the measurement in
+the comment so the next person does not have to take it on trust.
+
+Worth keeping: a budget with no headroom stops measuring the thing it was
+written to measure. At 0.6KB of room the next component was going to fail it
+whatever the component was, and the failure would have said "1KB over" while
+meaning "104 bytes and a rounding boundary".
+
+### The fallback itself
+
+Verified on the production build at `:4173`, not on the dev server, with
+`js-motion` dropped and the GSAP inline styles stripped — the rule in
+`CLAUDE.md` that was followed halfway earlier in the day. The founder's letter
+card is now the same height as the two beside it, brand ground under the
+reticle with `NEWS & UPDATES` beneath the mark. No stock photograph, which
+would have been the only image on the site illustrating nothing, on the one
+post that is a person speaking plainly.
