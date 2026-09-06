@@ -89,7 +89,7 @@ Other traps this codebase has already fallen into:
   timeout. Their site is slow to hydrate, and a half-loaded SPA is
   indistinguishable from a dead one: no text, generic title, wedged renderer.
   Two findings were filed wrong this way.
-- **`lhci` fails at cleanup on Windows, after the audit has passed.** `Runtime error encountered: EPERM, Permission denied: ...Templighthouse.NNNNNNN` is chrome-launcher failing to delete its own profile directory, thrown after "Generating results". The audit is fine and the run is wasted anyway, because lhci reads the exit code. Point the temp directory somewhere else for the run — `TMP=<dir> TEMP=<dir> npx lhci autorun` — rather than reading it as a failed assertion.
+- **`lhci` fails at cleanup while a `chrome-devtools-mcp` browser is open.** `Runtime error encountered: EPERM, Permission denied: ...lighthouse.NNNNNNN` is chrome-launcher failing to delete its own profile directory, thrown after "Generating results" — the audit passed and the run is thrown away anyway, because lhci reads the exit code. **Close the devtools browser and run it again**; that is the whole fix. Moving `TMP`/`TEMP` elsewhere appears to work and does not: it was tried, passed once with the browser closed, and failed at the new path the moment a browser was open again. Two variables changed at once and the wrong one got the credit.
 - **`git archive` on Windows applies `core.autocrlf`.** It is not a faithful
   export of what CI checks out. Use `git ls-files --eol` to see the truth.
 - Verify a claim against the thing itself before reporting it. Two wrong

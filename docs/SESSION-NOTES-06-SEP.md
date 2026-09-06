@@ -412,3 +412,21 @@ The DOM had both sections at 1822px and 802px with their text in them.
 Fourth reading this week that produced a defect the page did not have. The
 check that settles it takes one line — read the section heights out of the DOM
 rather than looking at the picture.
+
+### The lhci note written this morning was wrong, and wrong in an instructive way
+
+`npx lhci autorun` failed twice with `EPERM` deleting chrome-launcher's temp
+profile. Running it with `TMP` and `TEMP` pointed at our own directory passed,
+and that went into `CLAUDE.md` as the fix.
+
+It failed again this evening — at the new path, with the redirect in place. Two
+things had changed between the failing runs and the passing one: the temp
+directory, and whether a `chrome-devtools-mcp` browser was open. The temp
+directory got the credit because it was the one deliberately changed.
+
+Tested properly: default `TMP`, devtools browser closed, three runs and every
+assertion pass. The lock is the open browser. The note now says so, and says
+that the redirect was tried and does not work, so nobody re-derives it.
+
+The general shape is the one this file keeps recording: a fix applied while
+another variable moved is not a fix, it is a correlation with a commit message.
