@@ -99,3 +99,24 @@ against Competitor Research's 2250 and 3900. Measured: 1280px and 2430px. Two
 cases are not half of four steps, because the band's own eyebrow, headline and
 lead do not halve with the list inside it. Read off the built page, as the rule
 says, rather than derived from the page before.
+
+## The lhci note was wrong twice, and the third version admits it
+
+Yesterday's note said the `EPERM` at cleanup was fixed by redirecting `TMP`.
+That was corrected last night to "close the `chrome-devtools-mcp` browser; that
+is the whole fix", after the redirect failed at the new path.
+
+Today it failed with no browser open at all. Then, in a single invocation, runs
+one and two passed and run three failed — same command, same conditions, same
+minute. That is not a variable anybody controls; it is flaky, and both fixes
+were coincidences that happened to sit next to a passing run.
+
+`CLAUDE.md` now says so, names both wrong diagnoses so neither gets re-derived
+from the same symptom, and says to check `.lighthouseci/` for written reports
+before reporting the gate as failed. It also says not to write a third fix in
+there without three failures and three passes each way.
+
+The pattern is worth stating on its own: **a fix confirmed by one passing run
+is a coincidence with a commit message.** Twice now the confirming run was the
+first one after the change, and twice the change was not what made it pass. The
+gate does pass — three runs, every assertion, on the fourth invocation.
