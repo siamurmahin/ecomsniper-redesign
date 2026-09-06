@@ -19,6 +19,48 @@ session.
 
 ## Now
 
+- **Design the login and registration pages.** Asked 7 Sep, and it **changes a
+  Decided row** — "everything except login, registration and checkout" has been
+  the scope line since the start, and it is in Decided below rather than up
+  here. Taken as asked: the ask is the **design**, so what gets built is the
+  two pages, their layout, their fields, their states and their copy in both
+  languages. Nothing is wired to an authentication backend and no session,
+  token or password ever leaves the page, because there is no server on this
+  site — `ssr: false`, static hosting.
+
+  What that means in practice, to agree before building: the forms validate
+  and show their own error and success states, and submitting posts nowhere
+  until an endpoint exists. **A form that looks like it logs you in and does
+  not is worse than no page**, so each carries a visible line saying it is not
+  connected yet, the way the contact form already refuses to fake a delivery.
+  If the intent is instead a real login against their existing system, that is
+  a different job with a security review in it, and it needs the client's
+  current auth arrangement first.
+
+  Update the Decided row when this settles either way, rather than leaving two
+  parts of this file disagreeing.
+
+- **Reorganise the header nav: no hash links, features behind a dropdown.**
+  Asked 7 Sep. Today's nav maps the _homepage_, not the site: four of its seven
+  entries are hash links into homepage sections — `/#proof`, `/#how-it-works`,
+  `/#training`, `/#founders` — which is what it had to be when the homepage was
+  the only page. There are now fourteen pages, and the four feature pages are
+  reachable from nothing but a pill in section 07 of the homepage.
+
+  What it should become, to settle before building: a **Features** dropdown
+  carrying Product Hunter, AI Lister, Competitor Research and Price Monitor;
+  the remaining routes flat beside it; every hash link either promoted to the
+  page it should have pointed at or dropped. About becomes a real link the day
+  that page lands.
+
+  **This trips the speed gate and the number is not yet measured.** `SiteHeader`
+  is in the eager `SiteChrome` chunk — it renders on every route — so a
+  dropdown's open state, its outside-click and Escape handling and its focus
+  management are eager JS, not lazy. Measure it against the 586 ceiling before
+  building, and say what a CSS-only or `<details>`-based version would cost
+  instead. A dropdown also has to work for keyboard, touch and a no-JS visitor,
+  all three of which this site has been caught out by already.
+
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
   container rather than replacing it. Built the way GTM is — declared in
@@ -296,7 +338,7 @@ come from the index, and their sitemap is advertising URLs that may 404.
   is complete. Until then nothing may cost speed without a decision taken in
   advance — see the speed gate in `CLAUDE.md`.
 
-- **Stack stays React**, extended into the full production site: everything except login, registration and checkout.
+- **Stack stays React**, extended into the full production site: everything except login, registration and checkout. **Superseded in part, 7 Sep** — the login and registration _designs_ were asked for; see Now. Checkout is still out, and nothing here is wired to an authentication backend.
 - **SEO is fixed by prerendering, not meta tags.** Done.
 - **CMS is Storyblok**, build-time fetch, webhook rebuild.
 - **Consent is accept / reject / customise.** Categories: essential (locked), analytics, marketing. Consent Mode v2 denied by default.
