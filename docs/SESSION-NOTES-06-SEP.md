@@ -318,3 +318,97 @@ run away regardless.
 Running it with `TMP` and `TEMP` pointed at a directory of our own passed three
 runs and every assertion. Written into `CLAUDE.md` beside the other measuring
 traps, because the failure names Lighthouse and means the filesystem.
+
+## Competitor Research, and the first page where V6 was the worse draft
+
+Product Hunter and the AI Lister both settled the same way: their site
+publishes each feature page twice, the `V6` spelling turned out to be the
+fuller rewrite, and the readable slug was kept as the URL with `V6` redirecting
+onto it. Going into this page the assumption was that it would settle the same
+way a third time.
+
+It does not. `V6` here is 640 characters against 864, and the difference is
+real rather than editorial: the readable slug explains four concrete steps —
+identify competitors, scan for top sellers, undercut the lowest price, launch
+your listings — and `V6` compresses all four into two atmospheric sections that
+describe the idea rather than the procedure. What `V6` does have is the better
+headline. So the page takes the hero from one and the steps from the other, and
+`docs/source-copy/competitor-research-v6.md` had already written down that this
+would be needed, which is the reason the capture files exist.
+
+Three of their lines did not survive, all of them standing rules rather than
+opinions about this page: the flat "30 day money back guarantee" is qualified
+to the monthly plan, the hero gets a call to action that neither of their
+versions has above the fold, and "prices shown as blocks on purpose. The real
+numbers come from the live listings you are looking at" is dropped — that is a
+design note apologising for a mock, printed as product copy.
+
+### Building the panels on `HuntPanels` rather than beside it
+
+Five panels were needed and none of them existed. The temptation was a second
+`SnipePanels.css` and a second idea of what a scanning state looks like, which
+would have been a kilobyte of stylesheet to say almost exactly what the sheet
+already says.
+
+Instead the window chrome, the sweep timings, the row stagger and the
+`.hunt-*` rules are imported from the Product Hunter panels, and
+`ScanningState` was exported to go with them. Two feature pages showing the
+same software should look like the same software; that is the argument, and the
+byte count agrees with it — the whole page is 17KB in its own lazy chunk and
+the stylesheet grew by 1KB.
+
+Only two of the five animate. The ladder resolves into an order and the store
+scan sweeps, because in both a scan genuinely runs. The dossier, the arithmetic
+and the published listings are static, on `ExtractPanel`'s rule: animating a
+panel where nothing is being computed is inventing work.
+
+### The floor line
+
+The hero is the price ladder — four sellers on one item, ordered by price, with
+yours arriving underneath — because "the cheapest listing wins the sale, so
+yours becomes the cheapest listing" is the argument for the whole page rather
+than one of its steps.
+
+Under it sits what the item costs from Amazon. That line is the only thing on
+the page which says undercutting has a bottom, and without it the ladder reads
+as a race to zero. It is also the one thing added to their copy rather than
+taken from it, which is why it is a number and not a sentence.
+
+The page's positioning — spot named competitors, save them, post under them —
+is theirs and ships as they wrote it. It is filed under Blocked for the client
+to look at rather than quietly reworded, because a rebuild that edits what a
+business says about its own product has stopped being a rebuild.
+
+### Two numbers measured rather than assumed
+
+**The ceiling.** The speed gate was declared before the page was built rather
+than after: two routes, roughly a kilobyte each of route manifest, against a
+budget with 2KB of headroom. Measured afterwards it was 589,322 bytes to
+591,853 — **+2,531**, of which 2,057 is the manifest and 542 the lazy-import
+plumbing in the eager `index` chunk. No application code reached the first
+screen; the page's own 17KB is not in that number at all.
+
+Raised 578 → 586 in one move rather than three. Price Monitor, Dropship Mastery
+and About are six routes between them, and raising the ceiling a page at a time
+produces three commits that each look like a regression and none of which is
+one. The repayment is unchanged and unstarted: `errorBoundaries` at 107KB and
+`vendor-react` at 187KB.
+
+**The placeholder heights.** `defer-render` needs a `--defer-h` per breakpoint,
+and a wrong one moves the ground under a reader mid-scroll. The first pass
+guessed 2000px and 3000px by eye. Measured, the band is 2246px in two columns
+and 3867px stacked — the stacked figure read by forcing the grid to one column
+at 360px rather than by halving the desktop number, which four steps and five
+panels would have got wrong in the direction that hurts. Now 2250 and 3900.
+
+### A blank screenshot that was not a blank page
+
+The full-page capture came back with two screens of nothing between the last
+step and the footer, which looked like the FAQ and guarantee sections had
+failed to render. They had not: `content-visibility: auto` skips painting what
+is off screen, and a full-page screenshot is exactly the case that exposes it.
+The DOM had both sections at 1822px and 802px with their text in them.
+
+Fourth reading this week that produced a defect the page did not have. The
+check that settles it takes one line — read the section heights out of the DOM
+rather than looking at the picture.
