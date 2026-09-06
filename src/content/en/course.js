@@ -53,14 +53,38 @@
  * theirs.
  */
 export const COURSE = {
-  eyebrow: 'The course',
+  eyebrow: 'Dropship Mastery · the course',
 
-  headlineParts: [{ text: 'Dropship ' }, { text: 'Mastery', mark: true }],
-  headline: 'Dropship Mastery',
+  /* The headline carries the promise; the product's name moved up into the
+     eyebrow, where it still gets said and still gets indexed. What a reader
+     wants at the top of a sales page is what changes for them, and "Dropship
+     Mastery" told them only what the thing is called.
+
+     The promise is deliberately the *mechanism*, not an outcome: no income,
+     no timeframe, nothing that needs a disclaimer under it. "Without buying
+     stock first" is the actual thing that makes this model different from
+     every other e-commerce course, and it is checkable. */
+  headlineParts: [
+    { text: 'Learn eBay dropshipping ' },
+    { text: 'without buying stock first.', mark: true },
+  ],
+  headline: 'Learn eBay dropshipping without buying stock first.',
 
   /* Their subheading, with the income promise taken out of it. What is left is
      what the course actually is, which is also the part a reader can check. */
-  lead: 'The step-by-step eBay dropshipping training, taught with the Sniper package — no inventory, no website, no stock you have paid for and cannot sell.',
+  lead: 'Dropship Mastery is the step-by-step training, taught alongside the software that does the repetitive part. Start from zero, with no inventory, no website and nothing paid for up front except the course itself.',
+
+  /* The price, said on the page rather than found after a click.
+     A reader who reaches /pricing without knowing the number arrives to a
+     surprise, and surprise at the price is where a funnel loses people who
+     were otherwise sold. Saying it here also makes the guarantee mean
+     something: a risk reversal against an unknown number reassures nobody. */
+  price: {
+    value: '$97',
+    suffix: 'for your first month',
+    thereafter: 'then $199 a month. Cancel whenever you like.',
+    reversal: '30 days money back on the monthly plan — the whole month, not a trial period.',
+  },
 
   ctas: {
     /* Their above-the-fold button is Join Discord. It stays, as the second
@@ -78,6 +102,39 @@ export const COURSE = {
     { value: '400+', label: 'members in 8 countries' },
     { value: '30 days', label: 'money back on the monthly plan' },
   ],
+
+  /* Who should not buy this, said out loud.
+     Every honest qualifier costs a few sign-ups and buys back the ones who
+     would have refunded — and on this site it is also a promise being kept:
+     About says, in the client's words, "we would rather have 100 users who
+     get real value than 1,000 who feel like they wasted their money." A page
+     that sells to everybody contradicts that two clicks away. */
+  fit: {
+    eyebrow: 'Before you enrol',
+    headlineParts: [{ text: 'This is not ' }, { text: 'for everyone.', mark: true }],
+    headline: 'This is not for everyone.',
+    lead: 'It is worth knowing which side of this you are on before you pay for anything.',
+
+    for: {
+      label: 'It fits if',
+      items: [
+        'You have a few hours a week and would rather spend them building something than watching it.',
+        'You want a second income that does not need a warehouse, a brand or an advertising budget.',
+        'You are willing to follow a process for longer than a fortnight before judging it.',
+        'You can cover an eBay store subscription and the cost of the items you sell, which you pay only after a customer has paid you.',
+      ],
+    },
+
+    against: {
+      label: 'It does not fit if',
+      items: [
+        'You are looking for something that runs without you. This is a business, and it needs the hours.',
+        'You need this month’s rent from it. Nobody can promise you that, and anybody who does is selling you something else.',
+        'You want to be told exactly how much you will make. We will not tell you, because we do not know.',
+        'You would rather not deal with customers. eBay sales come with buyers, questions and the occasional return.',
+      ],
+    },
+  },
 
   mechanic: {
     eyebrow: 'How it works',
@@ -245,6 +302,68 @@ export const COURSE = {
         email: 'mailto:sammy@ecomsniper.io',
       },
     ],
+  },
+
+  objections: {
+    eyebrow: 'The questions people actually ask',
+    headlineParts: [{ text: 'What you are ' }, { text: 'probably thinking.', mark: true }],
+    headline: 'What you are probably thinking.',
+    lead: 'The five that come up most, answered as directly as we can. The general questions about the software and the plans are on the FAQ page.',
+
+    items: [
+      {
+        tone: 'blue',
+        question: 'Is eBay dropshipping still worth doing in 2026?',
+        answer:
+          'It is harder than it was in 2019 and it still works. What changed is that the margins are thinner and the sourcing has to be better, which is exactly what the course spends its time on. Our own blog post on margins works through the six fees that come out of a sale — read that before you enrol rather than after.',
+        cta: {
+          label: 'Read the margins post',
+          href: '/blog/ebay-dropshipping-profit-margins-in-2026',
+        },
+      },
+      {
+        tone: 'red',
+        question: 'Will eBay suspend my account for this?',
+        answer:
+          'Dropshipping from a retailer is against eBay’s policy in some markets and permitted in others, and listing an item you cannot fulfil is what actually gets accounts restricted. The course covers what the policy says, what a VeRO takedown is and how to avoid one, and the software pauses a listing when the source runs out of stock — which is the failure that causes most defects.',
+        cta: {
+          label: 'Read the VeRO guide',
+          href: '/blog/ebay-vero-violations-the-complete-2026-guide',
+        },
+      },
+      {
+        tone: 'gold',
+        question: 'How much do I need to start, beyond the course?',
+        answer:
+          'An eBay store subscription, and the money to buy each item after a customer has paid you for it — that money comes out of a payment you have already received. There is no stock to buy up front. The FAQ page lists the typical monthly costs.',
+        cta: { label: 'See the typical costs', href: '/faq' },
+      },
+      {
+        tone: 'green',
+        question: 'I have never sold anything online. Is that a problem?',
+        answer:
+          'No. The course assumes you have never listed an item, and starts with opening the account. If you have sold before you will move through the first section quickly.',
+      },
+      {
+        tone: 'blue',
+        question: 'What if I enrol and it is not what I expected?',
+        answer:
+          'Ask for your money back within 30 days on the monthly plan and you get it. Not a trial, not a pro-rata refund — the month. If it is not for you we would rather you said so than stayed.',
+      },
+    ],
+
+    footer: {
+      text: 'Everything else — the plans, the software, what the community is for —',
+      cta: { label: 'is on the FAQ page', href: '/faq' },
+    },
+  },
+
+  /* The bar that follows a reader down a page this long. Nothing urgent in it:
+     the price, the reversal, and the button. */
+  sticky: {
+    label: 'Dropship Mastery',
+    price: '$97 first month',
+    cta: { label: 'Enrol now', href: '/pricing' },
   },
 
   close: {

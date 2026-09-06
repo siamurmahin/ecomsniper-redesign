@@ -16,12 +16,22 @@
  */
 export const overlay = {
   COURSE: {
-    eyebrow: 'Der Kurs',
+    eyebrow: 'Dropship Mastery · der Kurs',
 
-    headlineParts: [{ text: 'Dropship ' }, { text: 'Mastery', mark: true }],
-    headline: 'Dropship Mastery',
+    headlineParts: [
+      { text: 'Lerne eBay-Dropshipping — ' },
+      { text: 'ohne vorher Ware zu kaufen.', mark: true },
+    ],
+    headline: 'Lerne eBay-Dropshipping — ohne vorher Ware zu kaufen.',
 
-    lead: 'Das eBay-Dropshipping-Training Schritt für Schritt, unterrichtet mit dem Sniper-Paket — kein Lager, keine Website, keine Ware, die du bezahlt hast und nicht loswirst.',
+    lead: 'Dropship Mastery ist das Training Schritt für Schritt — zusammen mit der Software, die den wiederkehrenden Teil übernimmt. Start bei null: kein Lager, keine Website, nichts im Voraus bezahlt außer dem Kurs selbst.',
+
+    /* Beträge stehen nur im englischen Deck. Übersetzt sind die Beschriftungen. */
+    price: {
+      suffix: 'für deinen ersten Monat',
+      thereafter: 'danach 199 $ im Monat. Jederzeit kündbar.',
+      reversal: '30 Tage Geld zurück im Monatsplan — der ganze Monat, keine Testphase.',
+    },
 
     ctas: {
       primary: { label: 'Jetzt einschreiben' },
@@ -33,6 +43,33 @@ export const overlay = {
       { label: 'Mitglieder in 8 Ländern' },
       { value: '30 Tage', label: 'Geld zurück im Monatsplan' },
     ],
+
+    fit: {
+      eyebrow: 'Bevor du dich einschreibst',
+      headlineParts: [{ text: 'Das ist nicht ' }, { text: 'für jeden.', mark: true }],
+      headline: 'Das ist nicht für jeden.',
+      lead: 'Es lohnt sich zu wissen, auf welcher Seite du stehst, bevor du für irgendetwas bezahlst.',
+
+      for: {
+        label: 'Es passt, wenn',
+        items: [
+          'du ein paar Stunden pro Woche hast und sie lieber in etwas Eigenes steckst als in Zuschauen.',
+          'du ein zweites Einkommen willst, das ohne Lager, Marke und Werbebudget auskommt.',
+          'du bereit bist, einem Ablauf länger als zwei Wochen zu folgen, bevor du urteilst.',
+          'du eine eBay-Shop-Gebühr tragen kannst und den Einkauf der Artikel — den du erst zahlst, nachdem ein Kunde dich bezahlt hat.',
+        ],
+      },
+
+      against: {
+        label: 'Es passt nicht, wenn',
+        items: [
+          'du etwas suchst, das ohne dich läuft. Das ist ein Geschäft, und es braucht die Stunden.',
+          'du die Miete dieses Monats daraus brauchst. Das kann dir niemand versprechen — und wer es tut, verkauft dir etwas anderes.',
+          'du hören willst, wie viel du genau verdienen wirst. Wir sagen es dir nicht, weil wir es nicht wissen.',
+          'du lieber nicht mit Kunden zu tun hättest. Zu Verkäufen auf eBay gehören Käufer, Fragen und gelegentlich Retouren.',
+        ],
+      },
+    },
 
     mechanic: {
       eyebrow: 'So funktioniert es',
@@ -149,6 +186,54 @@ export const overlay = {
           body: 'Ich bin dein Ansprechpartner für die Welt des Dropshipping. Ich brenne für Online-Business und habe die Erfahrung dahinter — und ich begleite dich dabei, etwas aufzubauen, das funktioniert. Nicht nur eine Sammlung Videos.',
         },
       ],
+    },
+
+    objections: {
+      eyebrow: 'Die Fragen, die wirklich kommen',
+      headlineParts: [{ text: 'Was du dir ' }, { text: 'gerade denkst.', mark: true }],
+      headline: 'Was du dir gerade denkst.',
+      lead: 'Die fünf häufigsten, so direkt beantwortet, wie es geht. Die allgemeinen Fragen zu Software und Plänen stehen auf der FAQ-Seite.',
+
+      items: [
+        {
+          question: 'Lohnt sich eBay-Dropshipping 2026 überhaupt noch?',
+          answer:
+            'Es ist schwerer als 2019 — und es funktioniert weiterhin. Geändert haben sich die Margen und der Anspruch an die Beschaffung, und genau damit verbringt der Kurs seine Zeit. Unser Blogbeitrag zu Margen rechnet die sechs Gebühren durch, die von einem Verkauf abgehen. Lies ihn vor der Einschreibung, nicht danach.',
+          cta: { label: 'Zum Beitrag über Margen' },
+        },
+        {
+          question: 'Sperrt eBay mein Konto dafür?',
+          answer:
+            'Dropshipping von einem Händler verstößt in manchen Märkten gegen die eBay-Richtlinie und ist in anderen erlaubt — und was Konten tatsächlich einschränkt, ist ein Angebot, das du nicht liefern kannst. Der Kurs behandelt die Richtlinie und VeRO-Meldungen, und die Software pausiert ein Angebot, wenn die Quelle ausverkauft ist. Genau dieser Fall verursacht die meisten Mängel.',
+          cta: { label: 'Zum VeRO-Leitfaden' },
+        },
+        {
+          question: 'Was brauche ich zum Start außer dem Kurs?',
+          answer:
+            'Eine eBay-Shop-Gebühr und das Geld für jeden Artikel, nachdem ein Kunde dich dafür bezahlt hat — es kommt also aus einer Zahlung, die du schon erhalten hast. Es gibt keine Ware, die vorher gekauft werden muss. Die typischen monatlichen Kosten stehen auf der FAQ-Seite.',
+          cta: { label: 'Typische Kosten ansehen' },
+        },
+        {
+          question: 'Ich habe noch nie online verkauft. Ist das ein Problem?',
+          answer:
+            'Nein. Der Kurs setzt voraus, dass du noch nie etwas eingestellt hast, und beginnt beim Anlegen des Kontos. Wer schon verkauft hat, ist durch den ersten Teil schnell durch.',
+        },
+        {
+          question: 'Und wenn es nicht das ist, was ich erwartet habe?',
+          answer:
+            'Sag innerhalb von 30 Tagen im Monatsplan Bescheid, und du bekommst dein Geld zurück. Keine Testphase, keine anteilige Erstattung — der Monat. Wenn es nichts für dich ist, sollst du das lieber sagen, als zu bleiben.',
+        },
+      ],
+
+      footer: {
+        text: 'Alles andere — die Pläne, die Software, wofür die Community da ist —',
+        cta: { label: 'steht auf der FAQ-Seite' },
+      },
+    },
+
+    sticky: {
+      price: '97 $ erster Monat',
+      cta: { label: 'Jetzt einschreiben' },
     },
 
     close: {

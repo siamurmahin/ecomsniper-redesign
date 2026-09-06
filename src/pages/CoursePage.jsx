@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { COURSE as EN_COURSE } from '../content/en/course';
 import { overlay as germanCourse } from '../content/de/course';
 import { usePageContent } from '../hooks/usePageContent';
@@ -7,10 +8,10 @@ import { toneOf } from '../lib/signalTones';
 import CtaButton from '../components/ui/CtaButton';
 import HeroSurface from '../components/hero/HeroSurface';
 import CourseFlow from '../components/course/CourseFlow';
+import StickyEnrol from '../components/course/StickyEnrol';
 import MarkedHeadline from '../components/ui/MarkedHeadline';
 import Icon from '../components/ui/Icon';
 import TestimonialsSection from '../sections/TestimonialsSection';
-import FaqSection from '../sections/FaqSection';
 import AssuranceSection from '../sections/AssuranceSection';
 
 /**
@@ -81,6 +82,13 @@ function BandHead({ id, section, align = '' }) {
 export default function CoursePage() {
   const COURSE = usePageContent(EN_COURSE, OVERLAYS);
   const { SITE } = useContent();
+  /* The two call-to-action rows. The bar appears once the first has gone off
+     screen and hides again when the second arrives — so it is only ever there
+     when there is no other door on screen. */
+  const heroCtaRef = useRef(null);
+  const closeCtaRef = useRef(null);
+  const fitRef = useRevealOnScroll();
+  const objectionsRef = useRevealOnScroll();
   const mechanicRef = useRevealOnScroll();
   const marketRef = useRevealOnScroll();
   const includedRef = useRevealOnScroll();
@@ -113,6 +121,7 @@ export default function CoursePage() {
             </p>
 
             <div
+              ref={heroCtaRef}
               className="mt-9 flex flex-wrap items-center gap-4"
               data-reveal
               data-reveal-group="course-hero"
@@ -125,6 +134,24 @@ export default function CoursePage() {
                 {COURSE.ctas.secondary.label}
               </CtaButton>
             </div>
+
+            {/* The price, beside the button rather than behind it.
+                A reader who reaches /pricing without knowing the number
+                arrives to a surprise, and that is where a funnel loses people
+                who were otherwise sold. The guarantee sits with it, because a
+                risk reversal against an unknown price reassures nobody. */}
+            <p
+              className="mt-5 text-sm leading-relaxed text-muted"
+              data-reveal
+              data-reveal-group="course-hero"
+            >
+              <span className="font-semibold text-ink">
+                {COURSE.price.value} {COURSE.price.suffix}
+              </span>{' '}
+              — {COURSE.price.thereafter}
+              <br />
+              {COURSE.price.reversal}
+            </p>
 
             {/* What stands in for the income claims their page opens with:
                 three figures a reader can go and check, each standing on its
@@ -158,7 +185,54 @@ export default function CoursePage() {
         </div>
       </HeroSurface>
 
-      {/* 1. The mechanic. A reader who does not believe the model works will
+      {/* 1. Who it is not for, before anything is sold.
+             Self-selection lifts the conversion that matters and cuts the
+             refunds that follow the one that does not — and it is the same
+             promise About makes: "we would rather have 100 users who get real
+             value than 1,000 who feel like they wasted their money." */}
+      <section
+        ref={fitRef}
+        id="is-it-for-me"
+        aria-labelledby="fit-headline"
+        className="section-band"
+      >
+        <div className="site-shell">
+          <BandHead id="fit" section={COURSE.fit} />
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-2">
+            {[
+              { side: COURSE.fit.for, tone: 'green', icon: 'checkCircle' },
+              { side: COURSE.fit.against, tone: 'red', icon: 'close' },
+            ].map(({ side, tone, icon }) => {
+              const t = toneOf(tone);
+
+              return (
+                <div
+                  key={side.label}
+                  data-reveal
+                  data-reveal-group="fit"
+                  className="relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
+                >
+                  <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${t.rule}`} />
+
+                  <p className={`micro-label ${t.text}`}>{side.label}</p>
+
+                  <ul className="mt-5 grid gap-4">
+                    {side.items.map((item) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <Icon name={icon} className={`mt-0.5 size-4 shrink-0 ${t.text}`} />
+                        <span className="leading-relaxed text-muted">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. The mechanic. A reader who does not believe the model works will
              not read anything below this. */}
       <section
         ref={mechanicRef}
@@ -416,7 +490,70 @@ export default function CoursePage() {
       {/* 5. The proof, which is the site's own and not this page's invention. */}
       <TestimonialsSection />
 
-      {/* 6. The last door, before the questions and the guarantee. */}
+      {/* 6. The objections, before the last door rather than after it.
+             This replaces the site-wide FaqSection, which answers site-wide
+             questions — the plans, the software, what the community is for.
+             None of those are what stands between somebody reading this page
+             and the button. These five are, and the general ones keep their
+             home on /faq, which this links to twice. Two FAQs on one page
+             would also be two things claiming to be the FAQ, and only one of
+             them carries the schema. */}
+      <section
+        ref={objectionsRef}
+        id="questions"
+        aria-labelledby="objections-headline"
+        className="section-band bg-paper-sunk"
+      >
+        <div className="site-shell">
+          <BandHead id="objections" section={COURSE.objections} />
+
+          <ul className="mt-12 grid gap-5">
+            {COURSE.objections.items.map((item) => {
+              const t = toneOf(item.tone);
+
+              return (
+                <li
+                  key={item.question}
+                  data-reveal
+                  data-reveal-group="objections"
+                  className="relative overflow-hidden rounded-2xl border border-hairline bg-paper p-7 pl-8"
+                >
+                  <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${t.rule}`} />
+
+                  <h3 className="font-display text-lg leading-snug font-extrabold text-ink">
+                    {item.question}
+                  </h3>
+                  <p className="mt-3 max-w-3xl leading-relaxed text-muted">{item.answer}</p>
+
+                  {item.cta ? (
+                    <a
+                      href={item.cta.href}
+                      className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-2 ${t.text}`}
+                    >
+                      {item.cta.label}
+                      <Icon name="arrowRight" className="size-3.5" />
+                    </a>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="mt-8 text-sm text-muted" data-reveal data-reveal-group="objections">
+            {COURSE.objections.footer.text}{' '}
+            <a
+              href={COURSE.objections.footer.cta.href}
+              className="font-semibold text-ink underline underline-offset-2"
+            >
+              {COURSE.objections.footer.cta.label}
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+
+      {/* 7. The last door, with the guarantee beside it rather than a screen
+             below it. */}
       <section ref={closeRef} aria-labelledby="close-headline" className="section-band">
         <div className="site-shell">
           <BandHead id="close" section={COURSE.close} />
@@ -430,6 +567,7 @@ export default function CoursePage() {
           </p>
 
           <div
+            ref={closeCtaRef}
             className="mt-9 flex flex-wrap items-center gap-4"
             data-reveal
             data-reveal-group="close"
@@ -441,12 +579,32 @@ export default function CoursePage() {
               {COURSE.close.ctas.secondary.label}
             </CtaButton>
           </div>
+
+          {/* The price and the reversal again, at the point of the decision.
+              Somebody who has read nine thousand pixels should not have to
+              scroll back to the hero to remember what it costs. */}
+          <p
+            className="mt-5 text-sm leading-relaxed text-muted"
+            data-reveal
+            data-reveal-group="close"
+          >
+            <span className="font-semibold text-ink">
+              {COURSE.price.value} {COURSE.price.suffix}
+            </span>{' '}
+            — {COURSE.price.thereafter}
+            <br />
+            {COURSE.price.reversal}
+          </p>
         </div>
       </section>
 
-      <FaqSection />
-
       <AssuranceSection />
+
+      <StickyEnrol
+        copy={{ ...COURSE.sticky, cta: { ...COURSE.sticky.cta, href: COURSE.ctas.primary.href } }}
+        heroCtaRef={heroCtaRef}
+        closeCtaRef={closeCtaRef}
+      />
     </>
   );
 }
