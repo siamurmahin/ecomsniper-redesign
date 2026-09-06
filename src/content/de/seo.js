@@ -41,6 +41,12 @@ export const overlay = {
       description:
         'Finde eBay-Verkäufer, die über Amazon-Preis anbieten, lies alle ihre Titel aus und durchsuche Amazon mit einem Klick. Drei Schritte, danach einstellen mit dem AI Lister.',
     },
+    priceMonitor: {
+      title: 'Price Monitor — deine Angebote halten sich selbst aktuell',
+      description:
+        'Der Händler ändert den Preis oder ist ausverkauft, und dein eBay-Angebot zieht nach, ohne dass du nachsiehst. Preis- und Bestandsüberwachung in Echtzeit, im Hintergrund.',
+    },
+
     competitorResearch: {
       title: 'Competitor Research — sieh, wer verkauft, und geh darunter',
       description:

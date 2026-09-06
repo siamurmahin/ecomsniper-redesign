@@ -62,6 +62,11 @@ export const SEO = {
     description:
       'Spot Amazon-to-eBay dropshippers, scan their store for what sold more than once, and post the same item at a lower price. Four steps, then list in one click.',
   },
+  priceMonitor: {
+    title: 'Price Monitor — your listings keep themselves right',
+    description:
+      'The retailer moves a price or runs out of stock, and your eBay listing follows without you checking. Real-time price and stock monitoring, running in the background.',
+  },
   contact: {
     title: 'Contact EcomSniper — a real person answers',
     description:

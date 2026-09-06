@@ -68,6 +68,16 @@
   status = 301
 
 [[redirects]]
+  from = "/priceMonitorV6"
+  to = "/price-monitor"
+  status = 301
+
+[[redirects]]
+  from = "/de/priceMonitorV6"
+  to = "/de/price-monitor"
+  status = 301
+
+[[redirects]]
   from = "/competitorResearchV6"
   to = "/competitor-research"
   status = 301

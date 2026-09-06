@@ -29,6 +29,7 @@ export default [
   route('product-hunter', 'routes/product-hunter.jsx'),
   route('ai-powered-lister', 'routes/ai-powered-lister.jsx'),
   route('competitor-research', 'routes/competitor-research.jsx'),
+  route('price-monitor', 'routes/price-monitor.jsx'),
   route('contact', 'routes/contact.jsx'),
   route('terms-and-conditions', 'routes/terms.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
@@ -49,6 +50,7 @@ export default [
   route('de/competitor-research', 'routes/competitor-research.jsx', {
     id: 'de-competitor-research',
   }),
+  route('de/price-monitor', 'routes/price-monitor.jsx', { id: 'de-price-monitor' }),
   route('de/contact', 'routes/contact.jsx', { id: 'de-contact' }),
   route('de/terms-and-conditions', 'routes/terms.jsx', { id: 'de-terms' }),
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),

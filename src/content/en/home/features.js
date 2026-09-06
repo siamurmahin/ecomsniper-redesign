@@ -45,7 +45,7 @@ export const FEATURES = {
       body: 'Price or stock changes at the retailer, and your listing updates in the background.',
       metric: '24/7 price & stock monitoring',
       tone: 'green',
-      links: [{ label: 'Price Monitoring', href: 'https://ecomsniper.io/priceMonitorV6' }],
+      links: [{ label: 'Price Monitoring', href: '/price-monitor' }],
     },
     {
       n: '4',

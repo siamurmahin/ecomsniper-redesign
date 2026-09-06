@@ -526,6 +526,32 @@
     animation: hunt-flag 1s ease-out var(--hunt-delay, 0s) 1 normal both;
   }
 
+  /* The one thing on the Price Monitor page that repeats.
+
+     Everywhere else on this site a repeating animation was removed for saying
+     "still loading" — see the note above `hunt-hit`, and the infinite sweep
+     that was taken out of the hunt table. This one is the exception the rule
+     is measured against: the page's whole claim is that something is still
+     running while nobody watches, and a status light that stops has said the
+     opposite of the sentence beside it.
+
+     Opacity only, on a 6px dot, so it composites and never lays out. Left to
+     the global reduced-motion rule, which collapses the duration and leaves
+     the dot at full strength — which reads as on, not as broken. */
+  .watch-pulse {
+    animation: watch-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes watch-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
   /* The sweep. One pass across the panel, then gone. */
   .is-running .hunt-beam {
     animation:

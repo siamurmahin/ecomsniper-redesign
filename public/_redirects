@@ -16,9 +16,11 @@
 /productHunterV6     /product-hunter     301!
 /aiListerV6          /ai-powered-lister  301!
 /competitorResearchV6  /competitor-research  301!
+/priceMonitorV6        /price-monitor        301!
 /de/productHunterV6  /de/product-hunter  301!
 /de/aiListerV6       /de/ai-powered-lister  301!
 /de/competitorResearchV6  /de/competitor-research  301!
+/de/priceMonitorV6        /de/price-monitor        301!
 
 # Their real affiliate URL. On their site /affiliate is a blank unmatched
 # route and the contract lives at /affiliate/join; ours splits the offer
