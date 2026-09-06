@@ -1631,6 +1631,19 @@
     color: var(--color-paper);
   }
 
+  /* …but not inside a popover that brings its own paper surface with it.
+     The language menu sits inside that same transparent bar, so the rule
+     above turned its two items white on a white panel — invisible at the
+     top of the page and fine once scrolled, which is exactly how it was
+     reported. The mobile panel is a sibling of the bar rather than a child,
+     so it was never affected. */
+  body:has(.surface-deep) header [role='menu'] :is(a, button, span) {
+    color: var(--color-ink);
+  }
+  body:has(.surface-deep) header [role='menu'] .text-muted {
+    color: var(--color-muted);
+  }
+
   /* Horizontal testimonial rows. `marquee-drift` above already walks a track
      left; this is its mirror, so alternating rows can run against each other.
      A separate keyframe rather than `animation-direction: reverse` because

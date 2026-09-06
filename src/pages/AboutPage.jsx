@@ -5,7 +5,6 @@ import { useContent } from '../hooks/useContent';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { toneOf } from '../lib/signalTones';
 import { GIVING_IMAGES, SAMMY_PORTRAIT } from '../assets/giving';
-import ReviewWall from '../components/about/ReviewWall';
 import CtaButton from '../components/ui/CtaButton';
 import HeroSurface from '../components/hero/HeroSurface';
 import MarkedHeadline from '../components/ui/MarkedHeadline';
@@ -110,7 +109,7 @@ function ProseBand({ id, section, tone = '', children, lead }) {
 
 export default function AboutPage() {
   const ABOUT = usePageContent(EN_ABOUT, OVERLAYS);
-  const { PROOF, SITE } = useContent();
+  const { SITE } = useContent();
   const givingRef = useRevealOnScroll();
   const boundariesRef = useRevealOnScroll();
   const teamRef = useRevealOnScroll();
@@ -118,89 +117,88 @@ export default function AboutPage() {
 
   return (
     <>
+      {/* Centred, and without the review wall it carried until 7 Sep.
+          The wall was the page's opening argument when the hero was a
+          two-column composition on a pale ground; on the dark surface the
+          words hold the screen on their own, and eight review cards beside
+          them were competing with the one sentence this page exists to say.
+          The reviews still appear — in `TestimonialsSection`, where they are
+          the subject rather than the wallpaper. */}
       <HeroSurface className="surface-deep">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p className="section-eyebrow" data-reveal data-reveal-group="about-hero">
-              {ABOUT.eyebrow}
-            </p>
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="section-eyebrow" data-reveal data-reveal-group="about-hero">
+            {ABOUT.eyebrow}
+          </p>
 
-            <h1
-              className="mt-5 max-w-[16ch] text-[length:var(--text-hero)] leading-[0.98]"
-              data-reveal
-              data-reveal-group="about-hero"
-            >
-              <MarkedHeadline parts={ABOUT.headlineParts} />
-            </h1>
+          <h1
+            className="mx-auto mt-5 max-w-[20ch] text-[length:var(--text-hero)] leading-[0.98]"
+            data-reveal
+            data-reveal-group="about-hero"
+          >
+            <MarkedHeadline parts={ABOUT.headlineParts} />
+          </h1>
 
-            {/* Their three short lines, set as three lines. Run together into
-                a paragraph they are a sentence about tiredness; kept apart
-                they are the reader's own week. */}
-            <ul className="mt-7 grid gap-1" data-reveal data-reveal-group="about-hero">
-              {ABOUT.hours.map((line) => (
-                <li key={line} className="font-display text-xl font-extrabold text-ink">
-                  {line}
-                </li>
-              ))}
-            </ul>
+          {/* Their three short lines, set as three lines. Run together into a
+              paragraph they are a sentence about tiredness; kept apart they
+              are the reader's own week. */}
+          <ul className="mt-8 grid gap-1" data-reveal data-reveal-group="about-hero">
+            {ABOUT.hours.map((line) => (
+              <li key={line} className="font-display text-xl font-extrabold text-ink">
+                {line}
+              </li>
+            ))}
+          </ul>
 
-            <p
-              className="mt-7 max-w-[52ch] text-[length:var(--text-lead)] leading-relaxed text-muted"
-              data-reveal
-              data-reveal-group="about-hero"
-            >
-              <MarkedHeadline parts={ABOUT.statementParts} />
-            </p>
+          <p
+            className="mx-auto mt-8 max-w-[52ch] text-[length:var(--text-lead)] leading-relaxed text-muted"
+            data-reveal
+            data-reveal-group="about-hero"
+          >
+            <MarkedHeadline parts={ABOUT.statementParts} />
+          </p>
 
-            {/* The door their page does not have until its last screen. */}
-            <div
-              className="mt-9 flex flex-wrap items-center gap-4"
-              data-reveal
-              data-reveal-group="about-hero"
-            >
-              <CtaButton href={ABOUT.ctas.primary.href}>{ABOUT.ctas.primary.label}</CtaButton>
-              <CtaButton href={ABOUT.ctas.secondary.href} variant="secondary">
-                {ABOUT.ctas.secondary.label}
-              </CtaButton>
+          {/* The door their page does not have until its last screen. */}
+          <div
+            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+            data-reveal
+            data-reveal-group="about-hero"
+          >
+            <CtaButton href={ABOUT.ctas.primary.href}>{ABOUT.ctas.primary.label}</CtaButton>
+            <CtaButton href={ABOUT.ctas.secondary.href} variant="secondary">
+              {ABOUT.ctas.secondary.label}
+            </CtaButton>
+          </div>
+
+          {/* Two figures that can be checked, rather than a row of invented
+              avatars — on this page of all pages. The Trustpilot score is a
+              link for the same reason: a number nobody can go and verify is
+              worth less than no number. */}
+          <dl
+            className="mx-auto mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 border-t border-hairline pt-7"
+            data-reveal
+            data-reveal-group="about-hero"
+          >
+            <div className="flex items-baseline gap-2">
+              <dt className="font-display text-lg font-extrabold text-ink">4.7</dt>
+              <dd className="text-sm text-muted">
+                on{' '}
+                <a
+                  href={SITE.trustpilotUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ink underline underline-offset-2"
+                >
+                  Trustpilot
+                </a>
+                , from 42 reviews
+              </dd>
             </div>
 
-            {/* Three figures that can be checked, rather than hero-03's row of
-                invented avatars — on this page of all pages. The Trustpilot
-                score is a link for the same reason: a number nobody can go and
-                verify is worth less than no number. */}
-            <dl
-              className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6"
-              data-reveal
-              data-reveal-group="about-hero"
-            >
-              <div className="flex items-baseline gap-2">
-                <dt className="font-display text-lg font-extrabold text-ink">4.7</dt>
-                <dd className="text-sm text-muted">
-                  on{' '}
-                  <a
-                    href={SITE.trustpilotUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ink underline underline-offset-2"
-                  >
-                    Trustpilot
-                  </a>
-                  , from 42 reviews
-                </dd>
-              </div>
-
-              <div className="flex items-baseline gap-2">
-                <dt className="font-display text-lg font-extrabold text-ink">
-                  {ABOUT.figure.value}
-                </dt>
-                <dd className="text-sm text-muted">{ABOUT.figure.label}</dd>
-              </div>
-            </dl>
-          </div>
-
-          <div data-reveal data-reveal-group="about-hero">
-            <ReviewWall reviews={PROOF.reviews} />
-          </div>
+            <div className="flex items-baseline gap-2">
+              <dt className="font-display text-lg font-extrabold text-ink">{ABOUT.figure.value}</dt>
+              <dd className="text-sm text-muted">{ABOUT.figure.label}</dd>
+            </div>
+          </dl>
         </div>
       </HeroSurface>
 
