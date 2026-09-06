@@ -19,23 +19,6 @@ session.
 
 ## Now
 
-- **The affiliate form's panel has square corners.** Asked for 6 Sep — nothing
-  else on this site has a sharp corner. `.panel-brand-outline` sets a gradient
-  border and no radius, so it renders square unless the caller remembers to add
-  one. `ContactPage` does (`rounded-2xl`); `AffiliatePage` does not. The radius
-  goes on the class rather than the caller, so it cannot be forgotten again.
-
-- **Half the stylesheet is a duplicate.** Found 6 Sep while fixing the above.
-  `index.css` is 1838 lines and lines 161-433 reappear verbatim at 584-856 —
-  272 consecutive identical lines, two `@layer base` blocks and two
-  `@layer components` blocks. 220 of 852 substantial lines appear more than
-  once. It is not only weight: the **later copy wins**, so editing the first
-  one silently does nothing, which nearly happened to the radius fix above.
-  CSS is at 129KB of a 130KB budget with 1KB spare, so this is also where the
-  headroom is. Wants its own pass — the blocks have to be diffed to the end
-  before anything is deleted, not assumed identical because their first 272
-  lines are. `ISSUES.md` 15.
-
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
   container rather than replacing it. Built the way GTM is — declared in
@@ -299,6 +282,8 @@ come from the index, and their sitemap is advertising URLs that may 404.
 
 | Date       | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Commit    |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 6 Sep 2026 | **287 duplicated lines out of `index.css`.** Lines 161-439 reappeared at 591-869 — two `@layer base` blocks, two `@utility btn`, two openings of `@layer components`. The later copy won, so editing the first silently did nothing. Only the prefix was duplicated; both regions had unique tails and both were kept. Zero shipped bytes saved — the bundler already deduped — so the win is the removed trap, not weight. Computed styles identical on 14 pages                       | `efc67c6` |
+| 6 Sep 2026 | **The affiliate application panel had square corners.** `.panel-brand-outline` set a gradient border and no radius, so it rendered square unless the caller added one — contact did, affiliate did not. Radius moved onto the class so it cannot be forgotten                                                                                                                                                                                                                           | `2ba87f7` |
 | 6 Sep 2026 | **The site was a permanent spinner without JavaScript.** `#preloader` is fixed at `z-index: 9999` and removed only by script — the app, or a 6s backstop that is also a script — so with scripts off every page was a spinner over the finished prerendered page. A `<noscript>` block hides it and un-stacks the hero panel, whose five steps were otherwise four-fifths unreachable. `aria-hidden`/`inert` moved behind an effect so seen and announced agree. 571KB eager, 4KB spare | `6c36468` |
 | 6 Sep 2026 | **The hero panel keeps its layout under reduced motion.** The still version rendered all five steps stacked — four times the panel height, off the bottom of the first screen, and reported as a broken layout. Now the same 396px panel with autoplay off; the rail was already real buttons, so every step stays reachable by click and by keyboard. Eager JS 571KB → 570KB                                                                                                           | `5240bac` |
 | 6 Sep 2026 | **`?motion=on`, so this site's motion can be reviewed on a machine that has animation turned off.** Sets `motion-force` on `<html>` and remembers it; the stylesheet's reduced-motion block, `prefersReducedMotion()` and `useReducedMotion()` all read the class first. Takes a deliberate query parameter, so no visitor's stated preference is ever overridden. 1KB eager                                                                                                            | `4577256` |
