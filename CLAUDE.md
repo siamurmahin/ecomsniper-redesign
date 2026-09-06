@@ -33,7 +33,7 @@ of it.
 What trips the gate:
 
 - A new dependency, or anything that grows the first-screen bundle —
-  `npm run budget` currently has ~8KB of headroom on eager JS
+  `npm run budget` currently has ~2KB of headroom on eager JS
 - A third-party script, embed, font or icon set
 - An unoptimised image or video, or one without dimensions
 - Anything running on scroll, resize, or every frame
