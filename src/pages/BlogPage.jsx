@@ -9,6 +9,7 @@ import { formatPostDate } from '../lib/postDate';
 import MarkedHeadline from '../components/ui/MarkedHeadline';
 import HeroSurface from '../components/hero/HeroSurface';
 import Icon from '../components/ui/Icon';
+import CoverFallback from '../components/blog/CoverFallback';
 
 /* Module scope so the hook memo has a stable dependency. */
 const OVERLAYS = { de: germanBlog.BLOG };
@@ -85,12 +86,15 @@ function PostCard({ post, blog, language, lead = false }) {
             a word of the post, and the card then has to be as tall again to
             balance it. Beside it, the same image is the reason the card is that
             height at all. */}
-        {cover && (
-          <span
-            className={`relative block shrink-0 overflow-hidden bg-paper-sunk ${
-              lead ? 'aspect-[16/9] lg:aspect-auto lg:w-[52%]' : 'aspect-[16/9]'
-            }`}
-          >
+        {/* Every card gets a cover. A post without art gets the drawn one
+            rather than a hole where the other cards have an image — see
+            `components/blog/CoverFallback`. */}
+        <span
+          className={`relative block shrink-0 overflow-hidden bg-paper-sunk ${
+            lead ? 'aspect-[16/9] lg:aspect-auto lg:w-[52%]' : 'aspect-[16/9]'
+          }`}
+        >
+          {cover ? (
             <img
               src={cover}
               alt=""
@@ -103,8 +107,10 @@ function PostCard({ post, blog, language, lead = false }) {
               decoding="async"
               className="absolute inset-0 size-full object-cover transition-transform duration-[900ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
             />
-          </span>
-        )}
+          ) : (
+            <CoverFallback label={post.category} />
+          )}
+        </span>
 
         <span
           aria-hidden="true"

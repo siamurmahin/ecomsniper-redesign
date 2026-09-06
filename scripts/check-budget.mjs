@@ -75,8 +75,21 @@ const BUDGETS = {
      look rather than raising it. The runtime itself is the place to win the
      15KB back: errorBoundaries is 107KB eager and vendor-react 187KB, and
      neither has been examined. That is tuning work, deliberately deferred
-     until the site is complete. */
-  eagerJs: 575,
+     until the site is complete.
+
+     578, raised from 575 on 6 Sep, and the paragraph above is the reason it
+     is allowed: what fired it was the manifest again. The blog's coverless
+     cards draw `ReticleMark`, which the homepage already used, so Rollup
+     split the mark into a shared chunk — one the first screen never fetches,
+     but which the manifest has to name. Measured on both sides of the
+     change: 589,218 bytes to 589,322. **104 bytes**, and the whole of it is
+     the route table.
+
+     575 had 0.6KB of room left, so this ceiling was going to round against
+     the next component whatever it was. The three is headroom, not a budget
+     for new weight: nothing on the first screen grew here, and if the next
+     failure is application code the answer is still "make it lazy". */
+  eagerJs: 578,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake.
