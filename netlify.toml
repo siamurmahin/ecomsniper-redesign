@@ -20,6 +20,28 @@
   # `.nvmrc`, which is what CI reads.
   NODE_VERSION = "22.22.0"
 
+# What the pages call themselves.
+#
+# Every canonical, every hreflang alternate and the OG image URL are built from
+# this. Without it they all said https://ecomsniper.io whatever the site was
+# served from, so the preview deploy told search engines the real copy of each
+# page was on the client's live site — a request not to index the thing being
+# previewed.
+#
+# Production says the real domain. Previews and branch deploys say their own
+# address, which Netlify hands the build as DEPLOY_PRIME_URL. The default in
+# `config/site.js` is the real domain, so a build with none of this set — a
+# local one, or CI — is unchanged.
+
+[context.production.environment]
+  VITE_SITE_ORIGIN = "https://ecomsniper.io"
+
+[context.deploy-preview]
+  command = "VITE_SITE_ORIGIN=$DEPLOY_PRIME_URL npm run build"
+
+[context.branch-deploy]
+  command = "VITE_SITE_ORIGIN=$DEPLOY_PRIME_URL npm run build"
+
 # The playbook keeps the URL the live site already publishes,
 # /free-play-book. /free-playbook was this rebuild's own spelling for a while,
 # so it redirects here rather than 404ing. Declared before the SPA fallback

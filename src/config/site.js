@@ -7,8 +7,27 @@
  * drifts in two of them, and the one that matters is never the one you check.
  */
 
-/** Where the site lives. Used for canonicals, hreflang and absolute links. */
-export const DOMAIN = 'https://ecomsniper.io';
+/**
+ * Where the site lives. Used for canonicals, hreflang and absolute links.
+ *
+ * Read from the environment so a deploy preview canonicalises to itself.
+ * Every page used to declare `https://ecomsniper.io` as its canonical
+ * whatever it was served from, which on the Netlify preview told Google that
+ * the real copy of each page was somewhere else — a request not to index the
+ * site being previewed. Correct the day this replaces their site at that
+ * address, wrong every day before it.
+ *
+ * `netlify.toml` sets `VITE_SITE_ORIGIN` from Netlify's own `DEPLOY_PRIME_URL`
+ * for previews and branch deploys, and to the real domain for production. The
+ * fallback is the real domain, so a build with nothing set — a local one, or
+ * CI — behaves exactly as it did before this change.
+ *
+ * No trailing slash, ever: everything here appends a path that starts with one.
+ */
+export const DOMAIN = (import.meta.env.VITE_SITE_ORIGIN || 'https://ecomsniper.io').replace(
+  /\/+$/,
+  '',
+);
 
 /**
  * Which hostnames count as production.

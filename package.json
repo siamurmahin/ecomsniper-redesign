@@ -6,7 +6,7 @@
   "description": "EcomSniper marketing site — conversion-optimised rebuild (Vite + React + GSAP).",
   "scripts": {
     "dev": "react-router dev",
-    "build": "react-router build",
+    "build": "react-router build && node scripts/prune-orphan-css.mjs",
     "typegen": "react-router typegen",
     "preview": "vite preview --outDir build/client",
     "lint": "eslint .",
@@ -14,7 +14,8 @@
     "fetch:fonts": "node scripts/fetch-fonts.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "budget": "node scripts/check-budget.mjs"
+    "budget": "node scripts/check-budget.mjs",
+    "check:launch": "node scripts/check-launch.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",
