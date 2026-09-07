@@ -425,7 +425,10 @@ function Finale({ finale, onReplay }) {
           <button
             type="button"
             onClick={onReplay}
-            className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-muted-dark underline-offset-4 transition-colors duration-300 hover:text-paper hover:underline"
+            /* -my-1.5 py-1.5: the tap target clears 24px without moving the
+               label — it was 19px tall, which is under the WCAG 2.2 minimum
+               and small for a thumb on a phone. */
+            className="-my-1.5 inline-flex items-center gap-1.5 py-1.5 text-[0.8rem] font-semibold text-muted-dark underline-offset-4 transition-colors duration-300 hover:text-paper hover:underline"
           >
             <Icon name="play" className="size-3" />
             {finale.replay}

@@ -21,6 +21,23 @@ import { acceptAll, decide, readDecision, rejectAll, subscribe } from './store';
  * decides. That also keeps the banner out of the prerendered HTML, which is
  * what stops a crawler indexing "Accept all" as page content.
  */
+/**
+ * Three buttons on one line, on a phone as well.
+ *
+ * `.btn` is `px-7`. Three of these are ~414px of content in the ~350px a
+ * 390px-wide phone leaves inside the banner, so the row wrapped two-and-one —
+ * which reads as "two choices, and an afterthought" on the one control where
+ * the three options are supposed to look equally available. Rejecting has to
+ * be exactly as easy as accepting, and a button on its own line is not.
+ *
+ * Equal thirds and tighter padding below `sm`; from `sm` up the row is the
+ * auto-width flex it always was. The important modifier is how the header
+ * already overrides the same padding, and it is honoured here — measured, not
+ * assumed.
+ */
+const COMPACT_BUTTON =
+  'w-full !px-2 text-[0.78rem] whitespace-nowrap sm:w-auto sm:!px-7 sm:text-sm';
+
 export default function ConsentBanner() {
   const { CONSENT } = useContent();
   const { pathname } = useLocation();
@@ -121,16 +138,21 @@ export default function ConsentBanner() {
               })}
             </ul>
 
-            <div className="mt-5 flex flex-wrap gap-3">
-              <button type="button" className="btn-primary" onClick={onSave}>
+            {/* Three across on a phone as well — see `COMPACT_BUTTON`. */}
+            <div className="mt-5 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-3">
+              <button type="button" className={`btn-primary ${COMPACT_BUTTON}`} onClick={onSave}>
                 {CONSENT.panel.save}
               </button>
-              <button type="button" className="btn-secondary" onClick={onAcceptAll}>
+              <button
+                type="button"
+                className={`btn-secondary ${COMPACT_BUTTON}`}
+                onClick={onAcceptAll}
+              >
                 {CONSENT.panel.acceptAll}
               </button>
               <button
                 type="button"
-                className="btn-ghost-on-ink text-ink"
+                className={`btn-ghost-on-ink text-ink ${COMPACT_BUTTON}`}
                 onClick={() => setCustomising(false)}
               >
                 {CONSENT.panel.back}
@@ -149,13 +171,17 @@ export default function ConsentBanner() {
             {/* Reject is the same variant as accept on purpose: a quieter
                 reject button is a dark pattern, and under the TTDSG it is
                 also not valid consent. */}
-            <div className="flex shrink-0 flex-wrap gap-3">
-              <button type="button" className="btn-secondary" onClick={onRejectAll}>
+            <div className="grid grid-cols-3 gap-2 sm:flex sm:shrink-0 sm:flex-wrap sm:gap-3">
+              <button
+                type="button"
+                className={`btn-secondary ${COMPACT_BUTTON}`}
+                onClick={onRejectAll}
+              >
                 {CONSENT.banner.rejectAll}
               </button>
               <button
                 type="button"
-                className="btn-ghost-on-ink text-ink"
+                className={`btn-ghost-on-ink text-ink ${COMPACT_BUTTON}`}
                 /* Opens with everything off. Pre-ticking a box is consent the
                    visitor did not give, which is the one thing every
                    regulator agrees on. */
@@ -163,7 +189,11 @@ export default function ConsentBanner() {
               >
                 {CONSENT.banner.customise}
               </button>
-              <button type="button" className="btn-primary" onClick={onAcceptAll}>
+              <button
+                type="button"
+                className={`btn-primary ${COMPACT_BUTTON}`}
+                onClick={onAcceptAll}
+              >
                 {CONSENT.banner.acceptAll}
               </button>
             </div>
