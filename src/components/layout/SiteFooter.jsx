@@ -194,11 +194,23 @@ export default function SiteFooter() {
             <address className="mt-7 not-italic">
               <h2 className="micro-label text-paper/70">{contact.title}</h2>
 
+              {/* The phone and the email are underlined; the address is not.
+
+                  Both were already real links — `tel:+18009949831` and a
+                  `mailto:` — and both were styled exactly like the address line
+                  under them, which is not a link at all. Three identical grey
+                  rows, one of which does nothing when pressed, reads as three
+                  pieces of text, and it was reported as "the number is not
+                  linked". It was; it just did not say so.
+
+                  A hairline underline is the cheapest way for a link to
+                  announce itself, and it is what the rest of this site uses on
+                  inline links. */}
               <ul className="mt-4 flex flex-col gap-2.5 text-sm">
                 <li>
                   <a
                     href={contact.phone.href}
-                    className="inline-flex items-center gap-2.5 text-muted-dark transition-colors duration-200 hover:text-paper"
+                    className="inline-flex items-center gap-2.5 text-muted-dark underline decoration-ink-line underline-offset-4 transition-colors duration-200 hover:text-paper hover:decoration-paper"
                   >
                     <Icon name="phone" className="size-3.5 shrink-0" aria-hidden="true" />
                     {contact.phone.label}
@@ -207,7 +219,7 @@ export default function SiteFooter() {
                 <li>
                   <a
                     href={contact.email.href}
-                    className="inline-flex items-center gap-2.5 text-muted-dark transition-colors duration-200 hover:text-paper"
+                    className="inline-flex items-center gap-2.5 text-muted-dark underline decoration-ink-line underline-offset-4 transition-colors duration-200 hover:text-paper hover:decoration-paper"
                   >
                     <Icon name="mail" className="size-3.5 shrink-0" aria-hidden="true" />
                     {contact.email.label}
