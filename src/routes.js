@@ -31,6 +31,8 @@ export default [
   route('competitor-research', 'routes/competitor-research.jsx'),
   route('price-monitor', 'routes/price-monitor.jsx'),
   route('about', 'routes/about.jsx'),
+  route('login', 'routes/login.jsx'),
+  route('register', 'routes/register.jsx'),
 
   route('course/dropship-mastery', 'routes/course.jsx'),
   route('contact', 'routes/contact.jsx'),
@@ -55,6 +57,8 @@ export default [
   }),
   route('de/price-monitor', 'routes/price-monitor.jsx', { id: 'de-price-monitor' }),
   route('de/about', 'routes/about.jsx', { id: 'de-about' }),
+  route('de/login', 'routes/login.jsx', { id: 'de-login' }),
+  route('de/register', 'routes/register.jsx', { id: 'de-register' }),
   route('de/course/dropship-mastery', 'routes/course.jsx', { id: 'de-course' }),
   route('de/contact', 'routes/contact.jsx', { id: 'de-contact' }),
   route('de/terms-and-conditions', 'routes/terms.jsx', { id: 'de-terms' }),

@@ -97,6 +97,18 @@ export const SEO = {
     description:
       'Every cookie this site can set, what it does and how long it lasts. Essential cookies only until you choose otherwise, and you can change that choice at any time.',
   },
+  /* Both auth pages are noindex — see `routes/login.jsx`. These still exist
+     because the title is what a browser tab and a bookmark read. */
+  login: {
+    title: 'Log in — EcomSniper',
+    description: 'Sign in to your EcomSniper dashboard, your listings and the training.',
+  },
+  register: {
+    title: 'Create your account — EcomSniper',
+    description:
+      'Start with the software and the course for $97 the first month, with 30 days money back on the monthly plan.',
+  },
+
   notFound: {
     title: 'Page not found — EcomSniper',
     description: 'That page does not exist. Head back to the homepage or take the free playbook.',

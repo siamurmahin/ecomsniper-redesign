@@ -123,8 +123,26 @@ const BUDGETS = {
      So the next time this fires it will not be a page. It will be a
      regression, or it will be the repayment finally being attempted: 586 was
      spent to 588 by the last page, and errorBoundaries at 107KB and
-     vendor-react at 187KB are still sitting there untouched. */
-  eagerJs: 590,
+     vendor-react at 187KB are still sitting there untouched.
+
+     **That prediction was wrong within a day, and it is worth saying why
+     rather than quietly editing it.** It was true of the plan as it stood on
+     7 Sep — every page in that plan was built. Login and registration were
+     asked for on the evening of the 7th and designed on the 8th, and they are
+     pages: four routes, two of them German. The lesson is not that the
+     arithmetic was off, it is that "the last raise this needs" is a statement
+     about a scope that somebody can add to, and this file should not make
+     that kind of promise again.
+
+     596, raised from 590 on 8 Sep for /login and /register in both languages.
+     Four routes at the ~1.3KB each every measurement since 4 Sep has found,
+     which is ~5.6KB against 1KB of headroom. The decision was taken with the
+     number in front of it and before the pages were built, which is what the
+     speed gate in CLAUDE.md asks for.
+
+     The repayment is still errorBoundaries and vendor-react, and it is still
+     untouched. */
+  eagerJs: 596,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake.

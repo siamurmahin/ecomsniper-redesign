@@ -34,6 +34,8 @@ import TelegramIcon from '../../assets/icons/social-telegram.svg?react';
 import PhoneIcon from '../../assets/icons/phone.svg?react';
 import MailIcon from '../../assets/icons/mail.svg?react';
 import MapPinIcon from '../../assets/icons/map-pin.svg?react';
+import EyeIcon from '../../assets/icons/eye.svg?react';
+import EyeOffIcon from '../../assets/icons/eye-off.svg?react';
 
 /**
  * The site's icon set, from the brand's own SVGs. Each is authored with
@@ -77,6 +79,8 @@ const ICONS = {
   phone: PhoneIcon,
   mail: MailIcon,
   mapPin: MapPinIcon,
+  eye: EyeIcon,
+  eyeOff: EyeOffIcon,
 };
 
 /**

@@ -90,6 +90,16 @@ export const overlay = {
       description:
         'Jedes Cookie, das diese Seite setzen kann, wofür es da ist und wie lange es gilt. Nur notwendige Cookies, bis du etwas anderes wählst — und jederzeit änderbar.',
     },
+    login: {
+      title: 'Anmelden — EcomSniper',
+      description: 'Melde dich an — für dein Dashboard, deine Listings und das Training.',
+    },
+    register: {
+      title: 'Konto erstellen — EcomSniper',
+      description:
+        'Starte mit Software und Kurs für 97 $ im ersten Monat, mit 30 Tagen Geld-zurück-Garantie im Monatstarif.',
+    },
+
     notFound: {
       title: 'Seite nicht gefunden — EcomSniper',
       description:
