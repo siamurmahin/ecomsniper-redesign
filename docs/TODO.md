@@ -19,26 +19,100 @@ session.
 
 ## Now
 
-- **Design the login and registration pages.** Asked 7 Sep, and it **changes a
-  Decided row** — "everything except login, registration and checkout" has been
-  the scope line since the start, and it is in Decided below rather than up
-  here. Taken as asked: the ask is the **design**, so what gets built is the
-  two pages, their layout, their fields, their states and their copy in both
-  languages. Nothing is wired to an authentication backend and no session,
-  token or password ever leaves the page, because there is no server on this
-  site — `ssr: false`, static hosting.
+- **"Who is behind this" moves onto About.** Asked 8 Sep. `FoundersSection` —
+  the homepage's section 10, the two founder bios beside the playbook card —
+  renders on About too, **after origin**: how this started, then who did it and
+  the book one of them wrote, then what they give back. Placement chosen by the
+  user from three. The section is imported, not copied: one component, two
+  pages, so a change to either founder's copy moves both.
 
-  What that means in practice, to agree before building: the forms validate
-  and show their own error and success states, and submitting posts nowhere
-  until an endpoint exists. **A form that looks like it logs you in and does
-  not is worse than no page**, so each carries a visible line saying it is not
-  connected yet, the way the contact form already refuses to fake a delivery.
-  If the intent is instead a real login against their existing system, that is
-  a different job with a security review in it, and it needs the client's
-  current auth arrangement first.
+- **Two of the homepage's three proof sections move onto About**, after team
+  and before the invitation. `InterviewsSection` (04b, members on video) and
+  `TestimonialsSection` (04d, the written reviews). **`ReceiptsSection` is
+  deliberately not among them** — its three cards are `$5,059.44 in 31 days`,
+  `4,224 active listings` and `2 accounts at all-time highs`, and About says in
+  the client's own words _"We will not show you screenshots of big earnings.
+  Those create false hope."_ Putting the receipts on that page breaks its own
+  promise four screens above the section that makes it. Asked 8 Sep, decided by
+  the user after the collision was raised. The client is told it is a choice
+  they can reverse.
 
-  Update the Decided row when this settles either way, rather than leaving two
-  parts of this file disagreeing.
+- **The money filter comes back with the reviews.** The About hero enforced it
+  until the hero became `PipelinePanel`: any review quoting a sum of money is
+  dropped **on this page only**. Measured on the built page it removes two of
+  eighteen: the reviewer who turns 99 USD into 500 USD, and the one reporting
+  200,000 USD of revenue — the second is the big-earnings claim this page
+  promises not to show, arriving as a review rather than a screenshot. It
+  exists so a review added to the deck next month cannot quietly break the
+  same promise. Blunt on purpose: a
+  filter judging a fair mention of money from an unfair one is a decision
+  re-made every time the deck changes.
+
+- **The course page's sticky enrol bar is removed.** Asked 8 Sep. `StickyEnrol`
+  — the floating pill carrying "Dropship Mastery / $97 first month / Enrol now"
+  between the hero's buttons and the closing section's — goes entirely:
+  component, its copy block in both languages, and the two refs on the page's
+  own call-to-action rows that fed its `IntersectionObserver`. The page keeps
+  the door at the top and the door at the foot.
+
+- **The login and registration designs are built.** Asked 7 Sep, designed and
+  built 8 Sep, and it **changes a Decided row** — "everything except login,
+  registration and checkout" has been the scope line since the start. Login and
+  registration are now in; checkout is still out, and the registration page
+  says so where step two would begin.
+
+  Their pages were captured out of the live DOM first —
+  `docs/source-copy/auth.md` — because a plain fetch of an SPA that slow to
+  hydrate returns the shell with nothing in it. What that capture found:
+  `/login` is a bare Material card, and **`/register` is not a registration
+  page at all, it is step one of a two-step checkout** with an order summary
+  beside it.
+
+  Four decisions, all taken before building:
+
+  - **The register page covers step one only.** The subscription summary is
+    beside it in their own figures; where payment begins the page says
+    checkout is not built here.
+  - **Their headline is not carried.** It is _"99% of People Who Use
+    EcomSniper for 3 Months Make 1-3k/month"_ — the one claim `CLAUDE.md`
+    bans by name. See Blocked.
+  - **The password minimum is eight, not their six.** See Blocked.
+  - **Every "Start your eBay business" CTA still points at their live
+    signup.** Ours takes no payment and creates no account; pointing the
+    site's primary door at it would break the funnel on every page to show a
+    design. The switch happens when there is an endpoint.
+
+  Neither form posts, stores or logs anything: `ssr: false`, there is nowhere
+  for it to go, and both carry a visible line saying so before anybody types.
+  Both pages are `noindex` in both languages — a sign-in form has nothing to
+  rank, their own sitemap omits them, and a design that is not connected is the
+  last thing that should appear in results as a way to log in.
+
+  **Eager JS ceiling raised 590 → 596**, decided with the number in front of it
+  rather than after: four routes at the ~1.3KB each every measurement since
+  4 Sep has found. Measured after: 594KB, 2KB spare.
+
+- **Dropship Mastery, five changes after looking at the page.** Asked 8 Sep,
+  all five built.
+
+  The hero panel was chosen from three built side by side at
+  `/lab/course-hero`: **the syllabus won**, and the lab and both losing panels
+  are deleted with the choice. What the old loop panel got wrong was not taste
+  — `CourseFlow` was `bg-ink` and its own header said it was drawn for a pale
+  hero, but `7e07b92` made that hero `surface-deep`, and its four nodes were
+  the four steps the section directly below it expands.
+
+  The other four: the step cards lost the tinted circle bleeding out of their
+  top right; their example is a three-column ledger with the fees caveat
+  attached to the gap rather than to the box; the offer's two columns are equal
+  height with the button at the foot; the instructors have faces at 64px; and
+  the objections took the homepage's `FaqAccordion` while keeping this page's
+  own questions — the site-wide FAQ stays on /faq, which is the only page
+  carrying the schema.
+
+  The panel's copy is in both decks under `heroPanel`. Nothing in it is
+  invented: the four module names are the client's own line, and there are no
+  lesson counts, durations or hours of content, because none of that is known.
 
 - **Microsoft Clarity, alongside GTM.** Decided 4 Sep, on the paste of their
   live privacy copy. Clarity is not gone: it comes back beside the GTM
@@ -283,6 +357,8 @@ come from the index, and their sitemap is advertising URLs that may 404.
 | Blog post bodies                                  | **The four post bodies are our draft, not the client's.** Their slugs, titles, categories and dates are real, read off the live index; the prose is written by us on the same instruction as the job advert. Their real posts run to ~25,000 characters each and should be imported rather than retyped. The founder's letter carries only its captured opening and says so. **Replace before launch**                                                                                                                                                                                                                                                                                                                                                                   |
 | Job advert copy                                   | **The Video Editor description on `/careers/video-editor` is our draft, not the client's.** Written 6 Sep on the instruction to build now and replace later. Every fact around it — title, department, location, type, pay — is real; the summary, the about, the responsibilities and both requirement lists are not. `content/en/careers.js` says so in its header. **Replace or sign off before launch** — an unread draft is exactly how "This is a one liner description" reached their production site                                                                                                                                                                                                                                                             |
 | CV upload on job applications                     | The application form asks for a portfolio link rather than a file. A `mailto:` cannot carry an attachment, and no endpoint exists to receive one — the hand-off tells the applicant to attach a CV to the email instead. Add the field when `VITE_JOBS_ENDPOINT` exists and can take multipart                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| The registration page's headline                  | Their `/register` opens on **"99% of People Who Use EcomSniper for 3 Months Make 1-3k/month"** — the one claim this repository has banned by name since the start, and it sits on the page where somebody is about to pay. It is not carried. What replaces it is what it costs today and how to leave, both already published here. **Theirs to reinstate — but it is the same claim About rules out, on the worst page to make it**                                                                                                                                                                                                                                                                                                                                    |
+| "Must be 6 characters"                            | The password helper on their registration page. Six is below every current guideline, and a form that asks for six is telling people six is enough. The rebuild asks for eight with no forced composition rules. **Their server still accepts what it accepts — that is a change only they can make, and it is worth making**                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Four claims on the course page                    | The most claim-heavy page they have, and three of the four collide with a promise the **About page** makes in the client's own words. **"Six-Figure eBay Dropshipping Business"** in an H2 and **"Already Helped People Create A Second Income Stream"** in the H1 subheading, against _"we will not show you screenshots of big earnings. Those create false hope."_ **"I have done over $1,000,000 on eBay"** in Marc's bio — the same promise, and unverifiable. **"Limited Time Bonus"** over three $97 items struck to $0, against _"we will not rush you with countdown timers or limited spots."_ The bonuses and their values ship; the urgency does not. **All four are theirs to reinstate or drop — but not silently, and not while About says the opposite** |
 | eBay does not have "2 billion transactions daily" | Stated as fact on their course page. eBay's own reported figures are nowhere near it — the annual GMV implies a tiny fraction — and it reads as a garbled version of its live listing count. It is an assertion about a third party, so it is not carried: the section argues the same point from figures that are true. **Ask what they meant**; if it was live listings, that number is worth having and is checkable                                                                                                                                                                                                                                                                                                                                                  |
 | Price Monitor's two cases are our draft           | Their page lists two things that change and both entries repeat the headline with a single word swapped — _"Never have an issue keeping track of your inventory for price changes"_ under **Prices change**, and the same again with _"stockouts"_. That is placeholder that was never rewritten, so the bodies are ours, written to say what each case does. Every claim in them is one their own page or the homepage already makes. **Replace or sign off before launch**, as with the job advert and the blog bodies                                                                                                                                                                                                                                                 |

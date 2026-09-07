@@ -20,48 +20,6 @@ who can fix it. When one is fixed it moves to **Closed** with the commit.
 
 ## Open
 
-### 1. ~~CI never gets past its first step~~ — withdrawn, was a bad measurement
-
-**This issue was wrong and is kept for the record.** It claimed CI was blocked
-by CRLF committed to the repository. Neither half was true.
-
-The repository content is LF and always was: `git ls-files --eol` reports 191
-text files at `i/lf` and none at `i/crlf`. CI checks out on Linux, gets LF,
-and prettier passes.
-
-What produced the false reading was the test itself. `git archive` on Windows
-applies `core.autocrlf`, so the "clean export" I measured had CRLF that no CI
-runner would ever see — 48 CRLF pairs in the archive against 0 in the blob. An
-earlier `grep -c` compounded it by counting every line rather than the CRLF
-ones.
-
-There was a real problem underneath, a smaller one: `core.autocrlf=true` writes
-CRLF into a **Windows working tree**, so `npm run format:check` failed locally
-on 28 files while passing in CI on the same commit. A check that passes in one
-place and fails in another teaches people to ignore it. Fixed by `eol=lf` in
-`.gitattributes` — one line, no source file touched.
-
-### 2. ~~Their Terms and Conditions page is empty~~ — withdrawn, wrong
-
-**Wrong, and kept for the same reason as issues 1 and 3.** It claimed
-`https://ecomsniper.io/terms-and-conditions` renders a heading, the line
-**"Last Updated: Invalid Date"** and nothing else, and concluded there was
-**no terms of service on a site taking $199 a month**. That was the strongest
-finding in this file about the client, and it was not true.
-
-Their page carries fifteen numbered sections — 9,730 characters, headed
-"Last Updated: Tue Mar 18 2025". Re-read on 4 Sep after
-`readyState === 'complete'` and a full scroll, then checked clause by clause:
-37 clauses. The full text is in `source-copy/terms-and-conditions.md`.
-
-The original reading was taken before the page had hydrated. Fifth in that
-family this week, and the second time it produced a finding against the client
-rather than only a wrong note. **A screenshot of a half-loaded SPA is evidence
-of nothing.** The "Invalid Date" line was real at the time of reading and is
-not on the page now.
-
-Rebuilt as `/terms-and-conditions` in both languages.
-
 ### 2b. Three defects inside their terms — `medium`, owner: client
 
 Found while reproducing the document. All three are carried into the rebuild
@@ -79,36 +37,6 @@ someone has already accepted.
    and all. An unfilled template placeholder sitting inside the liability cap.
 3. **Refunds are directed to `sammy@ecomsniper.io`**, a personal address,
    while the published contact address is `management@ecomsniper.io`.
-
-### 3. ~~Two of their four feature pages never finish loading~~ — withdrawn, wrong again
-
-**Also wrong, and kept for the same reason as issue 1.** It claimed
-`/ai-powered-lister` and `/competitor-research` never render. Both load
-perfectly well when given time:
-
-| Page                   | Result                                             |
-| ---------------------- | -------------------------------------------------- |
-| `/ai-powered-lister`   | `complete`, 1700 chars, title "Ai Powered Lister"  |
-| `/competitor-research` | `complete`, 864 chars, title "Competitor Research" |
-| `/aiListerV6`          | `complete`, 1822 chars                             |
-| `/productHunterV6`     | `complete`, 1230 chars                             |
-
-Their site is slow to hydrate, and every reading was taken while
-`readyState` was still `interactive`. A partially loaded SPA looks exactly
-like a broken one from outside: zero text, generic title, wedged renderer. The
-conclusion followed the symptom instead of waiting for the page.
-
-It also corrupted a second finding. `/productHunterV6` was recorded at 316
-characters against 992 for the readable slug, and that gap was written up as
-evidence that the V6 redesign had dropped its copy into images. Read after
-completion it is **1063 characters with all three steps explained** — the same
-substance, reworded. There was no gap. The slug comparison in
-`source-copy/product-hunter.md` has been corrected.
-
-**The guard, now in `CLAUDE.md`:** assert `readyState === 'complete'` before
-reading anything out of a page, and never conclude "broken" from a single
-timeout. This is the third measurement mistake of the day with the same shape
-— reading a thing before it had settled, then trusting the reading.
 
 ### 4. Eight footer links are soft-404s — `high`
 
@@ -154,18 +82,19 @@ Ruled out by measurement: fonts (metric-matched, 0px delta), images (CLS
 0.002), the marquee reflow (fixed), full-document layout (520ms → 169ms),
 `ScrollTrigger.refresh()` (1ms), `lenis.resize()` (0ms).
 
-**Fix:** unknown. Needs another profiling pass. Owner: us.
+**Fix:** unknown. Needs another profiling pass in an untuned browser —
+`chrome-devtools-mcp` throttles `requestAnimationFrame` to a couple of frames a
+second, so nothing about frame timing can be read through it. Owner: us.
 
-### 8. 115KB of dead CSS ships on every deploy — `low`
+**Measured again 8 Sep, after the day's work**, three Lighthouse runs on the
+production build: performance **97**, accessibility **100**, best practices
+**96**, SEO **100**; LCP **1.0s**, CLS **0.002**, **TBT 0ms**.
 
-`@react-router/dev` moves a stylesheet from the server build into
-`build/client`, where nothing links it. Confirmed orphaned: no HTML or JS in
-the client build references it.
-
-No config value prevents it — the plugin moves the asset when `ssrEmitAssets`
-is false and copies it when true. Costs deploy size, not visitor bandwidth.
-
-**Fix:** a post-build prune, if it ever matters. Owner: us.
+Total blocking time of zero does not prove the frame is gone — it counts only
+what blocks after first paint, and this frame was measured in the first second,
+which may be before it. It does mean the frame is not costing a visitor
+interactivity, which is what `medium` was about. Worth one profiling pass
+before launch, not worth holding launch for.
 
 ### 9. "Prerendered" is less literal than it sounds — `low`
 
@@ -210,10 +139,160 @@ It resolves itself the moment the ids arrive — the table fills in from the
 declarations already written. It becomes a real defect only if the site ships
 to production with the copy naming vendors and the ids still empty.
 
-**Fix:** the ids, which are already on the Blocked list. Check this before
-launch rather than after. Owner: client for the ids, us for the check.
+**Fix:** the ids, which are already on the Blocked list. Owner: client.
+
+**The check is now automatic.** `npm run check:launch` fails while the privacy
+copy names a vendor whose id is unset, and it is the last gate before a merge
+to `main` — a merge is a deploy. It currently reports exactly this issue, twice
+(Clarity and Tag Manager), which is the correct answer and will stay the
+correct answer until the ids arrive. Confirmed 8 Sep: the ids are still not
+available, and the client has been asked again.
 
 ---
+
+### 16. `npm run build` fails about two times in three, locally — `medium`
+
+The prerender dies on the **second route in the list**, whichever route that
+is, with an empty message:
+
+```
+Prerender (html): / -> buildclientindex.html
+Error: Prerender: Request failed for /pricing/:
+```
+
+Measured 6 Sep. Three builds at HEAD: fail, pass, fail. Three more with the
+blog added: fail, pass, fail. It is not the blog, and it is not `/pricing` —
+swapping `/faq` into second position moved the failure onto `/faq`. It is
+**positional**, which rules out route content and points at a race in
+`@react-router/dev`'s prerender as it starts.
+
+Ruled out by measurement, not by reasoning: the blog work (fails identically
+without it), the JSON-LD on `/pricing` (fails with the schema removed), and a
+file lock from a running preview server (fails with nothing serving).
+
+**The leading suspect is the Node version.** `.nvmrc` pins **22.22.0**; this
+machine is on **24.20.0**. CI and Netlify honour the pin, which would explain
+why deploys have not been failing while local builds have.
+
+**Fix:** run the pinned Node locally and confirm the flake disappears. If it
+survives on 22.22.0 this is a real bug in the toolchain and belongs upstream.
+
+**Checked 8 Sep, and it is narrower than `high` suggested.** Both places that
+matter honour the pin: `.github/workflows/quality.yml` reads
+`node-version-file: .nvmrc`, and `netlify.toml` sets
+`NODE_VERSION = "22.22.0"`. The failures are on this machine's unpinned
+**24.20.0**, and no deploy has failed. So it is a local development annoyance
+rather than something that can break a launch — **downgraded to `medium`**.
+
+Still untested on 22.22.0, because this machine has no version manager
+installed (no nvm, fnm, volta or nvs) and installing one, or a second Node, is
+a change to the machine rather than to this repository. Worth doing before
+anybody concludes the toolchain is at fault.
+
+Counted again on 8 Sep across the day's builds: 9 failures, 6 passes, every
+failure identical — second route in the list, empty message. Retrying works and
+a green build is a correct build, because the failure is total rather than
+partial.
+
+Workaround until then: rebuild. A green build is a correct build — the failure
+is total, not partial, so there is no risk of shipping a half-prerendered site.
+
+---
+
+### 21. Untranslated German pages share a title and description with the English — `low`
+
+Seven pairs: both blog listing pages, all four posts, `/affiliate/terms` and
+`/careers/video-editor`. The German deck has no overlay for them, so they fall
+through to English — which is the fallback working as designed, and it does
+mean two indexed URLs with identical metadata. `hreflang` tells search engines
+they are alternates, so this is a translation backlog item rather than a bug.
+Recorded so it is not re-found as one.
+
+## Closed
+
+### 13. ~~Nothing linked the favicon~~ — fixed 6 Sep
+
+`public/` has carried `favicon.svg`, `apple-touch-icon.png` and
+`site.webmanifest` since the move off `index.html`, and nothing has referenced
+any of them since. The document is rendered from `root.jsx` now and the tags
+did not come with it, so every tab on the site showed the blank default page
+icon and every page load spent a request on `/favicon.ico` to be told it does
+not exist.
+
+Three `<link>` tags in `root.jsx`. Costs less than the 404 it replaces.
+**Fixed 6 Sep.**
+
+### 1. ~~CI never gets past its first step~~ — withdrawn, was a bad measurement
+
+**This issue was wrong and is kept for the record.** It claimed CI was blocked
+by CRLF committed to the repository. Neither half was true.
+
+The repository content is LF and always was: `git ls-files --eol` reports 191
+text files at `i/lf` and none at `i/crlf`. CI checks out on Linux, gets LF,
+and prettier passes.
+
+What produced the false reading was the test itself. `git archive` on Windows
+applies `core.autocrlf`, so the "clean export" I measured had CRLF that no CI
+runner would ever see — 48 CRLF pairs in the archive against 0 in the blob. An
+earlier `grep -c` compounded it by counting every line rather than the CRLF
+ones.
+
+There was a real problem underneath, a smaller one: `core.autocrlf=true` writes
+CRLF into a **Windows working tree**, so `npm run format:check` failed locally
+on 28 files while passing in CI on the same commit. A check that passes in one
+place and fails in another teaches people to ignore it. Fixed by `eol=lf` in
+`.gitattributes` — one line, no source file touched.
+
+### 2. ~~Their Terms and Conditions page is empty~~ — withdrawn, wrong
+
+**Wrong, and kept for the same reason as issues 1 and 3.** It claimed
+`https://ecomsniper.io/terms-and-conditions` renders a heading, the line
+**"Last Updated: Invalid Date"** and nothing else, and concluded there was
+**no terms of service on a site taking $199 a month**. That was the strongest
+finding in this file about the client, and it was not true.
+
+Their page carries fifteen numbered sections — 9,730 characters, headed
+"Last Updated: Tue Mar 18 2025". Re-read on 4 Sep after
+`readyState === 'complete'` and a full scroll, then checked clause by clause:
+37 clauses. The full text is in `source-copy/terms-and-conditions.md`.
+
+The original reading was taken before the page had hydrated. Fifth in that
+family this week, and the second time it produced a finding against the client
+rather than only a wrong note. **A screenshot of a half-loaded SPA is evidence
+of nothing.** The "Invalid Date" line was real at the time of reading and is
+not on the page now.
+
+Rebuilt as `/terms-and-conditions` in both languages.
+
+### 3. ~~Two of their four feature pages never finish loading~~ — withdrawn, wrong again
+
+**Also wrong, and kept for the same reason as issue 1.** It claimed
+`/ai-powered-lister` and `/competitor-research` never render. Both load
+perfectly well when given time:
+
+| Page                   | Result                                             |
+| ---------------------- | -------------------------------------------------- |
+| `/ai-powered-lister`   | `complete`, 1700 chars, title "Ai Powered Lister"  |
+| `/competitor-research` | `complete`, 864 chars, title "Competitor Research" |
+| `/aiListerV6`          | `complete`, 1822 chars                             |
+| `/productHunterV6`     | `complete`, 1230 chars                             |
+
+Their site is slow to hydrate, and every reading was taken while
+`readyState` was still `interactive`. A partially loaded SPA looks exactly
+like a broken one from outside: zero text, generic title, wedged renderer. The
+conclusion followed the symptom instead of waiting for the page.
+
+It also corrupted a second finding. `/productHunterV6` was recorded at 316
+characters against 992 for the readable slug, and that gap was written up as
+evidence that the V6 redesign had dropped its copy into images. Read after
+completion it is **1063 characters with all three steps explained** — the same
+substance, reworded. There was no gap. The slug comparison in
+`source-copy/product-hunter.md` has been corrected.
+
+**The guard, now in `CLAUDE.md`:** assert `readyState === 'complete'` before
+reading anything out of a page, and never conclude "broken" from a single
+timeout. This is the third measurement mistake of the day with the same shape
+— reading a thing before it had settled, then trusting the reading.
 
 ### 12. ~~A reader with reduced motion got the prerender thrown away~~ — fixed 6 Sep
 
@@ -245,53 +324,86 @@ Verified across all 28 prerendered pages, Chrome run twice, once with
 `--force-prefers-reduced-motion` and once without: no page errors, no failed
 requests, `js-motion` intact on every page in both modes.
 
-### 13. Nothing linked the favicon — `medium`
+### 17. The cookie banner's three buttons wrapped on a phone — fixed 8 Sep
 
-`public/` has carried `favicon.svg`, `apple-touch-icon.png` and
-`site.webmanifest` since the move off `index.html`, and nothing has referenced
-any of them since. The document is rendered from `root.jsx` now and the tags
-did not come with it, so every tab on the site showed the blank default page
-icon and every page load spent a request on `/favicon.ico` to be told it does
-not exist.
+Reported by the user, reproduced at 390px: `Reject all` and `Customise` on one
+line, `Accept all` alone on the next. `.btn` is `px-7`, so three of them are
+~414px of content in the ~350px a phone leaves inside the banner.
 
-Three `<link>` tags in `root.jsx`. Costs less than the 404 it replaces.
-**Fixed 6 Sep.**
+It is not only untidy. The row is the one control on the site where the three
+options have to look equally available — a quieter reject is a dark pattern and
+under the TTDSG is not valid consent — and a button on its own line does not
+look equal to two sitting together.
 
-### 16. `npm run build` fails about two times in three, locally — `high`
+Now `grid-cols-3` with tighter padding below `sm`, the auto-width flex row from
+`sm` up. Measured after: one row at 320, 360, 390 and 414px, equal widths, no
+label clipped, no page overflow.
 
-The prerender dies on the **second route in the list**, whichever route that
-is, with an empty message:
+### 18. Two tap targets under the WCAG 2.2 minimum — fixed 8 Sep
 
-```
-Prerender (html): / -> buildclientindex.html
-Error: Prerender: Request failed for /pricing/:
-```
+Found by sweeping every route at 390px and measuring every link, button and
+input against the 24 × 24px minimum:
 
-Measured 6 Sep. Three builds at HEAD: fail, pass, fail. Three more with the
-blog added: fail, pass, fail. It is not the blog, and it is not `/pricing` —
-swapping `/faq` into second position moved the failure onto `/faq`. It is
-**positional**, which rules out route content and points at a race in
-`@react-router/dev`'s prerender as it starts.
+- **`Watch it again`** in `PipelinePanel`'s finale: 114 × **19**. Padding only,
+  `-my-1.5 py-1.5`, so the label does not move. Now 114 × 31.
+- **The consent checkbox** on `/register`: 16 × 16, ours, shipped the same day.
+  Now 20 × 20. The `<label>` wraps the box and the sentence, so the whole line
+  toggles it — that is the equivalent larger target the rule allows, and the
+  box being aimable on its own is the part that was missing.
 
-Ruled out by measurement, not by reasoning: the blog work (fails identically
-without it), the JSON-LD on `/pricing` (fails with the schema removed), and a
-file lock from a running preview server (fails with nothing serving).
+The other small hits the sweep returned are correct and were left alone: the
+`Skip to content` link is 1 × 1 until it takes focus, and the 1 × 1 input on
+`/contact` is the honeypot, which must not be reachable.
 
-**The leading suspect is the Node version.** `.nvmrc` pins **22.22.0**; this
-machine is on **24.20.0**. CI and Netlify honour the pin, which would explain
-why deploys have not been failing while local builds have.
+### 19. An empty registration form reported three problems out of four — fixed 8 Sep
 
-**Fix:** run the pinned Node locally — `nvm use` — and confirm the flake
-disappears. If it survives on 22.22.0 this is a real bug in the toolchain and
-belongs upstream, because a build that fails two times in three will eventually
-fail a deploy. Nobody has tested that yet, so this stays open at `high`.
+`confirmEmail` was validated as `next.confirmEmail !== next.email`. Two blanks
+are equal, so submitting an empty form marked email, password and the consent
+box and said nothing about the confirmation — the reader fixed what they were
+shown and submitted one short. Now an empty confirmation fails on its own.
+Verified in the browser: four fields carry `aria-invalid` on an empty submit.
 
-Workaround until then: rebuild. A green build is a correct build — the failure
-is total, not partial, so there is no risk of shipping a half-prerendered site.
+### 20. ~~Every canonical pointed at `ecomsniper.io`~~ — fixed 8 Sep
 
----
+`config/site.js` sets `DOMAIN = 'https://ecomsniper.io'`, and `lib/meta.js`
+builds every `rel="canonical"`, every `hreflang` alternate and the OG image URL
+from it. On all 53 prerendered documents the canonical is on **their** domain.
 
-## Closed
+That is correct the day this replaces their site at that address, and wrong
+while it is served from `ecomsniper.netlify.app`: it tells Google the real copy
+of every page is somewhere else, which is a request not to index this one.
+
+**Fixed** the way it was proposed, once the decision was taken.
+`config/site.js` reads `VITE_SITE_ORIGIN` and falls back to the real domain,
+so a local build and CI are unchanged. `netlify.toml` sets it to
+`$DEPLOY_PRIME_URL` for deploy previews and branch deploys and to
+`https://ecomsniper.io` for production.
+
+`content/en/site.js` carried a second copy of the same string, and it is the
+one `lib/meta.js` actually builds canonicals from — changing the config alone
+would have moved nothing. It now imports `DOMAIN`.
+
+Verified end to end: `VITE_SITE_ORIGIN=https://preview.example.com npm run build`
+put `rel="canonical" href="https://preview.example.com/about"` in the
+prerendered HTML, and a plain build puts the production domain back.
+
+### 8. ~~136KB of dead CSS shipped on every deploy~~ — fixed 8 Sep
+
+`@react-router/dev` moves a stylesheet from the server build into
+`build/client`, where nothing links it. Confirmed orphaned: no HTML or JS in
+the client build references it.
+
+No config value prevents it — the plugin moves the asset when `ssrEmitAssets`
+is false and copies it when true. Costs deploy size, not visitor bandwidth.
+
+**Fixed.** `scripts/prune-orphan-css.mjs` runs as the second half of
+`npm run build`, so Netlify gets the same result as a local build. It reads
+every HTML and JS file in the client build and deletes a stylesheet **only**
+when its filename appears in none of them — if the plugin ever starts linking
+that file, nothing is removed. Measured on the build that shipped this:
+`server-build-DJ8R30sa.css`, **136.1KB**, gone; `root-*.css` at the same size
+correctly kept, which is what proves the reference check works rather than the
+size heuristic somebody would have reached for instead.
 
 | Issue                                                                                                                                                                                                  | Fixed by           |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |

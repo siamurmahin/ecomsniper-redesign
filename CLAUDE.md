@@ -95,6 +95,15 @@ Other traps this codebase has already fallen into:
   indistinguishable from a dead one: no text, generic title, wedged renderer.
   Two findings were filed wrong this way.
 - **`lhci` fails at cleanup on this machine, intermittently, after the audit has passed.** `Runtime error encountered: EPERM, Permission denied: ...lighthouse.NNNNNNN` is chrome-launcher failing to delete its own profile directory — thrown after "Generating results", so the audit itself completed and lhci throws the run away anyway because it reads the exit code. **No reliable fix is known.** Two were claimed here and both were wrong: redirecting `TMP`/`TEMP` (failed later at the new path) and closing the `chrome-devtools-mcp` browser (failed later with no browser open). It has passed and failed under both conditions, so treat it as flaky rather than as a variable you control — retry it, and if it keeps failing check `.lighthouseci/` for whether reports were actually written before reporting the gate as failed. Do not write a third fix into this file without failing and passing three times each way.
+- **`vite preview` serves `index.html` for every path, and Netlify does not.**
+  `curl localhost:4173/about` on it returns the homepage document. The browser
+  then hydrates the About route into the homepage's HTML, React reports
+  `#418` on every page and regenerates the tree, and it looks exactly like the
+  hydration bug that issue 12 fixed. It is the preview server. `netlify.toml`
+  has no SPA rewrite — its catch-all is a 404 — so to read anything about
+  hydration, serve `build/client` with something that resolves
+  `<path>/index.html` and 404s otherwise. Checked that way: no console errors
+  on any page.
 - **`git archive` on Windows applies `core.autocrlf`.** It is not a faithful
   export of what CI checks out. Use `git ls-files --eol` to see the truth.
 - Verify a claim against the thing itself before reporting it. Two wrong
@@ -154,7 +163,15 @@ desktop height. A wrong estimate moves the ground under a reader mid-scroll.
 ## Gates
 
 `npm run format:check`, `npm run lint`, `npm run build`, `npm run budget`,
-`npx lhci autorun`. All must pass. The budget's "eager JS" is what the
+`npx lhci autorun`. All must pass.
+
+**`npm run check:launch` is the last one, and only before a merge to `main`** —
+a merge is a deploy. It reads the built site rather than the source: vendors
+named in the privacy copy with no id set, any `<a>` pointing back at
+`ecomsniper.io`, the canonical origin this build actually carries, `noindex` on
+the two auth pages, and any stylesheet in the deploy that nothing links. It is
+expected to fail today, twice, on the missing GTM and Clarity ids — see
+`ISSUES.md` 11. The budget's "eager JS" is what the
 document asks for before anything runs; when it fails the answer is usually
 "make it lazy", not "raise the ceiling" — and if you do raise it, say why in
 the commit.
