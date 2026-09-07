@@ -24,9 +24,9 @@ const COLUMN_SETTINGS = [
   { direction: 'animate-rail-up', duration: '70s' },
 ];
 
-function dealColumns(PROOF) {
+function dealColumns(reviews) {
   const columns = [[], [], []];
-  PROOF.reviews.forEach((review, index) => columns[index % 3].push(review));
+  reviews.forEach((review, index) => columns[index % 3].push(review));
   return columns;
 }
 
@@ -74,8 +74,8 @@ function ReviewCard({ review }) {
  * Native overflow-x with snapping, so momentum and rubber-banding come free.
  * No data-lenis-prevent: that would trap the page's own scroll under a thumb.
  */
-function ReviewRail() {
-  const { PROOF, A11Y } = useContent();
+function ReviewRail({ reviews }) {
+  const { A11Y } = useContent();
   const railRef = useRef(null);
   const [edges, setEdges] = useState({ start: true, end: false });
 
@@ -120,7 +120,7 @@ function ReviewRail() {
         ref={railRef}
         className="edge-fade-x flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {PROOF.reviews.map((review) => (
+        {reviews.map((review) => (
           <div key={review.name + review.title} className="w-[82vw] max-w-sm shrink-0 snap-center">
             <ReviewCard review={review} />
           </div>
@@ -151,9 +151,13 @@ function ReviewRail() {
   );
 }
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ reviews }) {
   const { PROOF, SITE } = useContent();
-  const COLUMNS = useMemo(() => dealColumns(PROOF), [PROOF]);
+  /* The deck's own list unless a page hands over a shorter one. About does:
+     it drops any review quoting a sum of money, because that page promises
+     not to show earnings. See `AboutPage`. */
+  const shown = reviews ?? PROOF.reviews;
+  const COLUMNS = useMemo(() => dealColumns(shown), [shown]);
   const sectionRef = useRevealOnScroll();
   /* Half of this section is the second copy of its own evidence, and none of
      it can be seen from the top of the page. */
@@ -206,7 +210,7 @@ export default function TestimonialsSection() {
           at that width, and it is the one a thumb already knows. */}
       {isNarrow && (
         <div className="mt-12">
-          <ReviewRail />
+          <ReviewRail reviews={shown} />
         </div>
       )}
 

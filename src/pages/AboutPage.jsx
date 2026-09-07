@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ABOUT as EN_ABOUT } from '../content/en/about';
 import { overlay as germanAbout } from '../content/de/about';
 import { usePageContent } from '../hooks/usePageContent';
@@ -13,6 +14,9 @@ import TextType from '../components/reactbits/TextType';
 import MarkedHeadline from '../components/ui/MarkedHeadline';
 import Icon from '../components/ui/Icon';
 import AssuranceSection from '../sections/AssuranceSection';
+import FoundersSection from '../sections/FoundersSection';
+import InterviewsSection from '../sections/InterviewsSection';
+import TestimonialsSection from '../sections/TestimonialsSection';
 
 /**
  * About.
@@ -56,6 +60,29 @@ import AssuranceSection from '../sections/AssuranceSection';
 
 /* Module scope so the hook memo has a stable dependency. */
 const OVERLAYS = { de: germanAbout.ABOUT };
+
+/**
+ * Which reviews may appear on this page.
+ *
+ * The boundaries section says, in the client's own words, that they will not
+ * show screenshots of big earnings because "those create false hope". A wall
+ * of income claims two screens above breaks that promise before the reader
+ * reaches it, so the rule is enforced rather than remembered: any review
+ * quoting a sum of money is filtered out here, and stays out when somebody
+ * adds reviews to the deck later without reading this file.
+ *
+ * Today it removes two of eighteen, and both earn it: the reviewer who turns
+ * 99 USD into 500 USD, and the one reporting 200,000 USD of revenue — which is
+ * the big-earnings claim this page promises not to show, arriving in a review
+ * rather than a screenshot. It is blunt on purpose: a filter telling a fair
+ * mention of money from an unfair one is a judgement re-made every time the
+ * deck changes. This one fails safe, and the cost of it being over-eager is a
+ * slightly shorter wall. Counted on the built page, not guessed.
+ *
+ * It was the About hero's rule until 7 Sep, when the hero became
+ * `PipelinePanel`; it comes back with the reviews rather than being rewritten.
+ */
+const QUOTES_MONEY = /\$|\bUSD\b|\bdollars?\b|\bprofits?\b/i;
 
 /* One colour logic for the whole page, the same one the course page uses:
    blue, gold, green in the order things are read. Red is deliberately absent
@@ -129,7 +156,14 @@ function ProseBand({ id, section, tone = '', children, lead }) {
 
 export default function AboutPage() {
   const ABOUT = usePageContent(EN_ABOUT, OVERLAYS);
-  const { SITE } = useContent();
+  const { SITE, PROOF } = useContent();
+
+  /* The written reviews this page is allowed to show. Memoised so the wall
+     deals its three columns once rather than on every render. */
+  const characterReviews = useMemo(
+    () => PROOF.reviews.filter((review) => !QUOTES_MONEY.test(review.body)),
+    [PROOF],
+  );
   /* False on the server and on the hydrating render, so the markup matches;
      true afterwards for a visitor who has asked the OS to reduce motion, who
      gets all three lines at once instead of a caret that never rests. */
@@ -522,6 +556,20 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* The homepage's section 10, rendered here rather than rewritten.
+
+          It follows the origin on purpose: that section says how this started
+          — by hand, then tools, then a company — and this one says who did it
+          and what they wrote. Their own page never introduces either founder,
+          and in this category trust rests on the operator.
+
+          One component, two pages: change a founder's copy in
+          `content/en/home/founders` and it moves in both places. It keeps its
+          own paper ground rather than taking a surface class — the book is an
+          ink card built to stand on a light band, and on `surface-deep` it
+          would sink into it. */}
+      <FoundersSection />
+
       {/* 4. The giving, and the photographs. */}
       <section
         ref={givingRef}
@@ -785,6 +833,21 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* The evidence, last of all and closest to the one ask.
+
+          Two of the homepage's three proof sections. The third — `Receipts` —
+          is deliberately absent: its cards are a sales dashboard reading
+          $5,059.44 in 31 days and two accounts at all-time highs, and the
+          boundaries section four screens up says, in the client's own words,
+          that this company will not show screenshots of big earnings. A page
+          that makes that promise and then shows them has not been rebuilt.
+
+          The reviews are filtered for the same reason — see `QUOTES_MONEY`.
+          Both sections read the global deck, so neither needs this page's
+          content and neither can drift from the homepage's. */}
+      <InterviewsSection />
+      <TestimonialsSection reviews={characterReviews} />
 
       {/* 8. The invitation, which is the one place this page asks for anything. */}
       <section
