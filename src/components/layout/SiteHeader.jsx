@@ -218,15 +218,15 @@ export default function SiteHeader() {
               <LanguageSwitcher />
             </div>
 
-            <a
-              href={SITE.loginUrl}
+            <Link
+              to={pathForLanguage(SITE.loginUrl, language)}
               // whitespace-nowrap and shrink-0: from about 1090px down, the
               // row got tight enough to break "Log in" across two lines, which
               // took the header's height with it.
               className="hidden shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-ink sm:block xl:px-3.5"
             >
               {SITE.loginLabel}
-            </a>
+            </Link>
 
             <CtaButton
               href={SITE.signupUrl}
@@ -317,12 +317,12 @@ export default function SiteHeader() {
                 </Link>
               ),
             )}
-            <a
-              href={SITE.loginUrl}
+            <Link
+              to={pathForLanguage(SITE.loginUrl, language)}
               className="rounded-2xl px-4 py-3.5 text-base font-medium text-muted transition-colors hover:bg-ink/5"
             >
               {SITE.loginLabel}
-            </a>
+            </Link>
 
             {/* Ruled off: a language is a setting, not another destination. */}
             <div className="mt-1 border-t border-hairline pt-1">

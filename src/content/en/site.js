@@ -5,16 +5,30 @@
  * German overlays it key by key from `../de`.
  */
 
+import { DOMAIN } from '../../config/site';
+
 /* Named before SITE so the door below can be built from it. */
-const SIGNUP_URL = 'https://ecomsniper.io/register';
+/* Ours, since 8 Sep. It was `https://ecomsniper.io/register` — every CTA on
+   the site handed the visitor to their live signup, which was right while
+   there was no page here to send them to and wrong the moment there was.
+   `CtaButton` reads the leading slash and renders a router `Link` in the
+   reader's own language, so this one line moves every door on the site.
+
+   **The page it lands on takes no payment and creates no account.** That is
+   the trade, and it was made deliberately: see `TODO.md`. */
+const SIGNUP_URL = '/register';
 
 export const SITE = {
   name: 'EcomSniper',
-  domain: 'https://ecomsniper.io',
+  /* From `config/site.js`, which reads it from the environment. It was a
+     second copy of the same string, and the copy in the deck is the one
+     `lib/meta.js` builds every canonical and hreflang from — so a change to
+     the config alone would have moved nothing. */
+  domain: DOMAIN,
   /* All three were wrong and dead. app.ecomsniper.io has no DNS at all, and
      discord.gg/ecomsniper is not a server — it answers 200 for any code. */
   signupUrl: SIGNUP_URL,
-  loginUrl: 'https://ecomsniper.io/login',
+  loginUrl: '/login',
   discordUrl: 'https://discord.gg/DGkSJ5QZww',
   telegramUrl: 'https://t.me/ecomsniper',
   trustpilotUrl: 'https://uk.trustpilot.com/review/ecomsniper.io',
