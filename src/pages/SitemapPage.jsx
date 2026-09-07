@@ -92,101 +92,117 @@ export default function SitemapPage() {
     return null;
   };
 
-  const ref = useRevealOnScroll();
+  const headRef = useRevealOnScroll();
+  const listRef = useRevealOnScroll();
 
   return (
-    <section
-      ref={ref}
-      /* Its own padding rather than `section-band`: a band is shorter than the
-         floating header, so its first line lands underneath it. Contact,
-         Playbook and the auth pages all set their own for the same reason. */
-      className="brand-ground relative isolate overflow-hidden pt-36 pb-20 sm:pt-44 lg:pt-52 lg:pb-24"
-    >
-      <HeroDots />
+    <>
+      {/* The first screen: the dot field, and what this page is.
 
-      <div className="site-shell">
-        <p className="section-eyebrow" data-reveal data-reveal-group="sitemap-head">
-          {SITEMAP.eyebrow}
-        </p>
+          Its own padding rather than `section-band`, which is shorter than the
+          floating header and would put the eyebrow underneath it — the same
+          reason Contact, Playbook and the auth pages set their own.
 
-        <h1
-          className="mt-5 max-w-[16ch] text-[length:var(--text-hero)] leading-[0.98]"
-          data-reveal
-          data-reveal-group="sitemap-head"
-        >
-          {SITEMAP.headline}
-        </h1>
+          The band ends here on purpose. `HeroDots` used to run the length of
+          the page, which put a texture behind 23 rows of small type that are
+          meant to be read rather than looked at, and left the directory with
+          no edge of its own. */}
+      <section
+        ref={headRef}
+        className="brand-ground relative isolate overflow-hidden pt-36 pb-16 sm:pt-44 lg:pt-52 lg:pb-20"
+      >
+        <HeroDots />
 
-        <p
-          className="mt-6 max-w-2xl text-[length:var(--text-lead)] leading-relaxed text-muted"
-          data-reveal
-          data-reveal-group="sitemap-head"
-        >
-          {SITEMAP.lead}
-        </p>
+        <div className="site-shell">
+          <p className="section-eyebrow" data-reveal data-reveal-group="sitemap-head">
+            {SITEMAP.eyebrow}
+          </p>
 
-        {/* The count, and the file a machine wants. Both are one line and they
+          <h1
+            className="mt-5 max-w-[16ch] text-[length:var(--text-hero)] leading-[0.98]"
+            data-reveal
+            data-reveal-group="sitemap-head"
+          >
+            {SITEMAP.headline}
+          </h1>
+
+          <p
+            className="mt-6 max-w-2xl text-[length:var(--text-lead)] leading-relaxed text-muted"
+            data-reveal
+            data-reveal-group="sitemap-head"
+          >
+            {SITEMAP.lead}
+          </p>
+
+          {/* The count, and the file a machine wants. Both are one line and they
             belong together: this is the page saying what it is. */}
-        <p
-          className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-6 text-sm text-muted"
-          data-reveal
-          data-reveal-group="sitemap-head"
-        >
-          <span className="font-display text-base font-extrabold text-ink">
-            {SITEMAP.countLabel.replace('{n}', pageCount)}
-          </span>
-          <span className="flex items-center gap-2">
-            {SITEMAP.crawler.text}{' '}
-            <a
-              href={SITEMAP.crawler.cta.href}
-              className="font-semibold text-ink underline underline-offset-4"
-            >
-              {SITEMAP.crawler.cta.label}
-            </a>
-          </span>
-        </p>
+          <p
+            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-6 text-sm text-muted"
+            data-reveal
+            data-reveal-group="sitemap-head"
+          >
+            <span className="font-display text-base font-extrabold text-ink">
+              {SITEMAP.countLabel.replace('{n}', pageCount)}
+            </span>
+            <span className="flex items-center gap-2">
+              {SITEMAP.crawler.text}{' '}
+              <a
+                href={SITEMAP.crawler.cta.href}
+                className="font-semibold text-ink underline underline-offset-4"
+              >
+                {SITEMAP.crawler.cta.label}
+              </a>
+            </span>
+          </p>
+        </div>
+      </section>
 
-        <div className="mt-16 grid gap-x-16 gap-y-14 lg:grid-cols-2">
-          {SITEMAP.groups.map((group, index) => {
-            /* The tone and the icon are structural, so they come from the
+      {/* The directory, on paper. Plain rather than one of the two washed
+          surfaces: this band is 23 rows of link and note, and the job of the
+          ground under it is to stay out of the way. */}
+      <section ref={listRef} className="section-band bg-paper">
+        <div className="site-shell">
+          <div className="grid gap-x-16 gap-y-14 lg:grid-cols-2">
+            {SITEMAP.groups.map((group, index) => {
+              /* The tone and the icon are structural, so they come from the
                English deck: the German overlay carries words, and merging an
                array by position keeps everything it does not mention. */
-            const source = EN_SITEMAP.groups[index];
-            const tone = toneOf(source.tone);
-            const children = childrenFor(source.children);
+              const source = EN_SITEMAP.groups[index];
+              const tone = toneOf(source.tone);
+              const children = childrenFor(source.children);
 
-            return (
-              <section
-                key={group.title}
-                data-reveal
-                data-reveal-group="sitemap-groups"
-                aria-labelledby={`sitemap-group-${index}`}
-              >
-                {/* The tone lives in the tile and in the rule under the
+              return (
+                <section
+                  key={group.title}
+                  data-reveal
+                  data-reveal-group="sitemap-groups"
+                  aria-labelledby={`sitemap-group-${index}`}
+                >
+                  {/* The tone lives in the tile and in the rule under the
                     heading, never in the type: four coloured headings on one
                     quiet page would be four things shouting. */}
-                <h2
-                  id={`sitemap-group-${index}`}
-                  className="flex items-center gap-3 pb-4 font-display text-lg font-extrabold tracking-tight text-ink"
-                >
-                  <span
-                    aria-hidden="true"
-                    className={`grid size-8 shrink-0 place-items-center rounded-lg ${tone.tile}`}
+                  <h2
+                    id={`sitemap-group-${index}`}
+                    className="flex items-center gap-3 pb-4 font-display text-lg font-extrabold tracking-tight text-ink"
                   >
-                    <Icon name={source.icon} className="size-4" />
-                  </span>
-                  {group.title}
-                </h2>
+                    <span
+                      aria-hidden="true"
+                      className={`grid size-8 shrink-0 place-items-center rounded-lg ${tone.tile}`}
+                    >
+                      <Icon name={source.icon} className="size-4" />
+                    </span>
+                    {group.title}
+                  </h2>
 
-                <span aria-hidden="true" className={`block h-0.5 w-full ${tone.rule}`} />
+                  <span aria-hidden="true" className={`block h-0.5 w-full ${tone.rule}`} />
 
-                <ul className="mt-2 divide-y divide-hairline">
-                  {group.links.map((link, linkIndex) => {
-                    const href = source.links[linkIndex].href;
+                  <ul className="mt-2 divide-y divide-hairline">
+                    {group.links.map((link, linkIndex) => {
+                      const href = source.links[linkIndex].href;
 
-                    return (
-                      <li key={href}>
-                        {/* Two columns, both ranged left, the note starting
+                      return (
+                        <li key={href}>
+                          {/* Two columns, both ranged left, the note starting
                             at the same x down the whole group. It was the
                             label left and the note right-aligned against the
                             far edge, which on a two-line note left a ragged
@@ -194,62 +210,63 @@ export default function SitemapPage() {
                             fragments rather than as an index. A directory is
                             scanned down a column, so the columns have to hold
                             still. */}
-                        <Link
-                          to={localise(href)}
-                          className="group grid gap-x-6 gap-y-1 py-3.5 sm:grid-cols-[minmax(0,11rem)_1fr] sm:items-baseline"
-                        >
-                          <span className="font-display text-base font-extrabold text-ink underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-300 group-hover:decoration-ink">
-                            {link.label}
-                          </span>
-                          <span className="text-sm leading-relaxed text-muted">{link.note}</span>
-                        </Link>
+                          <Link
+                            to={localise(href)}
+                            className="group grid gap-x-6 gap-y-1 py-3.5 sm:grid-cols-[minmax(0,11rem)_1fr] sm:items-baseline"
+                          >
+                            <span className="font-display text-base font-extrabold text-ink underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-300 group-hover:decoration-ink">
+                              {link.label}
+                            </span>
+                            <span className="text-sm leading-relaxed text-muted">{link.note}</span>
+                          </Link>
 
-                        {/* The posts and the roles, under the page they belong
+                          {/* The posts and the roles, under the page they belong
                             to rather than as a fifth group. */}
-                        {children && href === CHILD_ANCHOR[source.children] ? (
-                          <div className="pb-5 sm:pl-[calc(11rem+1.5rem)]">
-                            <p className={`micro-label ${tone.text}`}>{children.label}</p>
-                            <ul className="mt-3 grid gap-2">
-                              {children.items.map((item) => (
-                                <li key={item.href} className="flex gap-2.5">
-                                  <span
-                                    aria-hidden="true"
-                                    className={`mt-2 size-1.5 shrink-0 rounded-full ${tone.dot}`}
-                                  />
-                                  <Link
-                                    to={localise(item.href)}
-                                    className="text-sm leading-relaxed text-muted underline decoration-hairline underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
-                                  >
-                                    {item.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : null}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            );
-          })}
-        </div>
+                          {children && href === CHILD_ANCHOR[source.children] ? (
+                            <div className="pb-5 sm:pl-[calc(11rem+1.5rem)]">
+                              <p className={`micro-label ${tone.text}`}>{children.label}</p>
+                              <ul className="mt-3 grid gap-2">
+                                {children.items.map((item) => (
+                                  <li key={item.href} className="flex gap-2.5">
+                                    <span
+                                      aria-hidden="true"
+                                      className={`mt-2 size-1.5 shrink-0 rounded-full ${tone.dot}`}
+                                    />
+                                    <Link
+                                      to={localise(item.href)}
+                                      className="text-sm leading-relaxed text-muted underline decoration-hairline underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
+                                    >
+                                      {item.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              );
+            })}
+          </div>
 
-        <p
-          className="mt-16 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-hairline pt-8 text-sm text-muted"
-          data-reveal
-          data-reveal-group="sitemap-groups"
-        >
-          {SITEMAP.language.text}{' '}
-          <Link
-            to={SITEMAP.language.cta.href}
-            className="font-semibold text-ink underline underline-offset-4"
+          <p
+            className="mt-16 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-hairline pt-8 text-sm text-muted"
+            data-reveal
+            data-reveal-group="sitemap-groups"
           >
-            {SITEMAP.language.cta.label}
-          </Link>
-        </p>
-      </div>
-    </section>
+            {SITEMAP.language.text}{' '}
+            <Link
+              to={SITEMAP.language.cta.href}
+              className="font-semibold text-ink underline underline-offset-4"
+            >
+              {SITEMAP.language.cta.label}
+            </Link>
+          </p>
+        </div>
+      </section>
+    </>
   );
 }
