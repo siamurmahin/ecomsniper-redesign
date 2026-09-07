@@ -74,7 +74,17 @@ export default function CourseSyllabusPanel({ panel }) {
 
       <figcaption className="mt-8 border-t border-hairline pt-6">
         <span className="flex items-center gap-3">
-          <span className="flex -space-x-2">
+          {/* shrink-0 on the stack, not only on the images inside it.
+
+              Without it the wrapper is a flex item that may shrink, and at
+              375px the sentence beside it is long enough to make it: the
+              wrapper collapsed under its own content and the two photographs
+              overflowed it, landing on top of the first line of text — the
+              images ran to x113 while the sentence started at x98. The images
+              were already `shrink-0`, which is why this looked like it should
+              have been safe. A stack of overlapping avatars is one atom, and
+              the atom is what has to refuse to shrink. */}
+          <span className="flex shrink-0 -space-x-2">
             {TEACHERS.map((teacher) => (
               <img
                 key={teacher.name}
