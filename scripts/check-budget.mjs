@@ -141,8 +141,21 @@ const BUDGETS = {
      speed gate in CLAUDE.md asks for.
 
      The repayment is still errorBoundaries and vendor-react, and it is still
-     untouched. */
-  eagerJs: 596,
+     untouched.
+
+     600, raised from 596 on 8 Sep for /sitemap in both languages — the
+     human-readable directory, asked for after the generated sitemap.xml. Two
+     routes, ~1.3KB each, against 2KB of headroom: measured 594 before and 597
+     after, so it went over by 1KB exactly as predicted when the page was
+     costed. The cost was put in front of the decision before the page was
+     built, which is the whole point of this file.
+
+     4KB rather than 597 so the next page does not immediately trip it again,
+     and because the last two raises were each one page late. If the next thing
+     to fire this is not a page, it is a regression — and the repayment is
+     still sitting there: errorBoundaries 107KB, vendor-react 187KB, neither
+     looked at once. */
+  eagerJs: 600,
 
   /* Tailwind's output grows with the classes used, so this needs room to
      breathe or it fires on the next component rather than on a mistake.

@@ -59,6 +59,7 @@ export const overlay = {
           { label: 'Datenschutz' },
           { label: 'Cookie-Richtlinie' },
           { label: 'Bewertungen' },
+          { label: 'Alle Seiten' },
         ],
       },
     ],

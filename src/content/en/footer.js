@@ -57,6 +57,9 @@ export const FOOTER = {
         { label: 'Privacy policy', href: '/privacy-policy' },
         { label: 'Cookie policy', href: '/cookie-policy' },
         { label: 'Reviews', href: SITE.trustpilotUrl },
+        /* A page landing is not finished until every link waiting for it has
+           moved. This one had nowhere to be until now. */
+        { label: 'All pages', href: '/sitemap' },
       ],
     },
   ],

@@ -97,6 +97,12 @@ export const SEO = {
     description:
       'Every cookie this site can set, what it does and how long it lasts. Essential cookies only until you choose otherwise, and you can change that choice at any time.',
   },
+  sitemap: {
+    title: 'Every page on this site — EcomSniper',
+    description:
+      'The whole site in one place: the software, the training, the company and the legal pages, in English and German.',
+  },
+
   /* Both auth pages are noindex — see `routes/login.jsx`. These still exist
      because the title is what a browser tab and a bookmark read. */
   login: {

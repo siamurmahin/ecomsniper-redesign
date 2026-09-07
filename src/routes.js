@@ -39,6 +39,7 @@ export default [
   route('terms-and-conditions', 'routes/terms.jsx'),
   route('privacy-policy', 'routes/privacy.jsx'),
   route('cookie-policy', 'routes/cookies.jsx'),
+  route('sitemap', 'routes/sitemap.jsx'),
 
   route('de', 'routes/home.jsx', { id: 'de-home' }),
   route('de/pricing', 'routes/pricing.jsx', { id: 'de-pricing' }),
@@ -64,6 +65,7 @@ export default [
   route('de/terms-and-conditions', 'routes/terms.jsx', { id: 'de-terms' }),
   route('de/privacy-policy', 'routes/privacy.jsx', { id: 'de-privacy' }),
   route('de/cookie-policy', 'routes/cookies.jsx', { id: 'de-cookies' }),
+  route('de/sitemap', 'routes/sitemap.jsx', { id: 'de-sitemap' }),
 
   route('*', 'routes/not-found.jsx'),
 ];

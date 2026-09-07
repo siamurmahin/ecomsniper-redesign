@@ -90,6 +90,12 @@ export const overlay = {
       description:
         'Jedes Cookie, das diese Seite setzen kann, wofür es da ist und wie lange es gilt. Nur notwendige Cookies, bis du etwas anderes wählst — und jederzeit änderbar.',
     },
+    sitemap: {
+      title: 'Jede Seite dieser Website — EcomSniper',
+      description:
+        'Die ganze Website auf einen Blick: Software, Training, Unternehmen und die rechtlichen Seiten, auf Deutsch und Englisch.',
+    },
+
     login: {
       title: 'Anmelden — EcomSniper',
       description: 'Melde dich an — für dein Dashboard, deine Listings und das Training.',
