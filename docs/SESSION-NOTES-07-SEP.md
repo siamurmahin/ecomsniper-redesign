@@ -635,3 +635,95 @@ A specific complaint is worth more than any number of options. "Too pale and
 flat" pointed at two token values and took under an hour to answer; three fully
 built directions answered nothing, because they all inherited the thing that
 was actually wrong.
+
+## About, rebuilt section by section — and the two bugs it uncovered
+
+The surface pass fixed the ground; the sections on top of it were still the
+plain ones written that morning. They were rebuilt on request, one complaint at
+a time, and the complaints were consistently right.
+
+**The hero** takes the homepage's shape — the argument on the left, the
+software working on the right. The right side is `PipelinePanel`, the same demo
+the homepage runs, which answers the question a reader actually arrives at an
+About page with: not "who are you" but "what is it you do". It reads
+`HERO_PANEL` from the global deck, so the two pages cannot drift.
+
+The drifting review wall that had been there since the morning is gone. Eight
+review cards were competing with the one sentence the page exists to say, and
+they were answering a question nobody asks here — the reviews are in
+`TestimonialsSection` further down, where they are the subject.
+
+**The three lines** — the late shifts, the overtime, the tired mornings — are
+typed one after another with the homepage's `TextType`. Stacked, they were a
+list read at a glance; typed, they take about as long to read as they took to
+live, which is the sentence underneath them.
+
+**The cost section** finally uses `cost.hours` and `cost.unknown`, which have
+sat in the deck since 4 September with a note saying to delete them if no hero
+used them. Nothing ever did, and they are the best thing in the section: the
+same $200 is a few hours to one reader and a week of early mornings to another.
+The first attempt set the figure at 5rem and it shouted over a section about
+not knowing what a number means to somebody; it is at reading size now, between
+the two halves of the comparison it belongs to.
+
+**One card anatomy** across the offer, the giving and the origin: a rule down
+the edge in the item's tone, a tile with its icon, a lead, a body. Nine cards on
+the page, nine different icons, one colour logic — blue, gold, green in reading
+order, with red kept for the boundaries section where something has gone wrong.
+The giving cards' glow went: decoration doing the job hierarchy should do, and a
+neon halo around a sentence about visiting orphanages was the wrong note.
+
+### The offer section had been invisible since it was written
+
+Reported as "blank on the first visit, fine after a reload". It was neither.
+
+Its heading and its three cards carry `data-reveal`, which CSS holds at
+`opacity: 0` for as long as JavaScript is running. The only thing that brings
+them back is a `useRevealOnScroll` scope on an ancestor, and that section had
+the attributes and **no `ref`**. The content was in the DOM, laid out, taking
+its full height, and permanently transparent.
+
+The reload was a red herring, and an instructive one: the global reduced-motion
+rule forces `opacity: 1 !important` on every `[data-reveal]`, so whether the bug
+appeared depended on the browser's motion setting rather than on reloading. On
+this machine, which has motion off system-wide, the section always looked fine.
+
+Every other section on About and all seven on the course page have their ref.
+Worth a check rather than a memory: **a `data-reveal` with no scope above it is
+content that never appears**, and nothing about the markup says so.
+
+### The dropdown fled the pointer
+
+The Features panel hangs 8px below its button, and the element listening for the
+hover is only as tall as the button. Moving down towards the menu left the
+group, fired `mouseleave`, and closed it before the pointer arrived — the
+classic hover-gap, and the classic fix: the panel grows a transparent strip
+upward across the gap, and because it is a descendant of the group, hovering
+that strip still counts as hovering the group.
+
+### Three faults that all came from the dark heroes
+
+Each was reported separately and all three have one cause — the header stands
+on the hero and every one of its assumptions was written for a pale one.
+
+1. The ink wordmark is two artworks in one file; "Sniper" is black lettering,
+   so on near-black the header read as a target and half a word.
+2. Both popovers in the header bar — the language menu and the Features
+   dropdown — are children of the bar, so the paper-type override turned their
+   contents white on their own white panels.
+3. The eyebrow's dash is a `::before` at `bg-ink/25`: black on black on every
+   deep band, noticed on the invitation but true of five sections.
+
+The lesson is the shape of the fault rather than any one of them: **a rule keyed
+on the header's state reaches everything that lives inside the header**, and the
+header sits on every page. A fourth dark-hero page would find the next one.
+
+### And a trap of my own making
+
+The origin cards' gradient was an inline style, and the reading ritual in
+`CLAUDE.md` strips the `style` attribute off every `[data-reveal]` to get past
+GSAP — so it removed the background and the cards looked broken in every
+screenshot I took of them. They were not.
+
+Now a class, and `CLAUDE.md` says why: anything visual on a revealed element
+belongs in a class, not an inline style.
