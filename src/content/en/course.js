@@ -80,6 +80,47 @@ export const COURSE = {
      surprise, and surprise at the price is where a funnel loses people who
      were otherwise sold. Saying it here also makes the guarantee mean
      something: a risk reversal against an unknown number reassures nobody. */
+  /* The hero's right-hand panel: what the course actually covers.
+     Chosen 8 Sep from three built side by side — the syllabus, the offer, and
+     the old four-node loop repainted. The loop lost because its four nodes
+     were the four steps the section directly below it already expands, so the
+     first screen was spending its picture on the page's second section.
+
+     The four names are the client's own line — "the setup, the sourcing, the
+     listing, the fulfilment". The sentence under each is ours, written to say
+     what that part is without inventing anything: no lesson counts, no
+     durations, no "12 hours of content". None of that is known, and this is
+     the page whose held-out claims are already listed for the client. */
+  heroPanel: {
+    eyebrow: 'The course',
+    name: 'Dropship Mastery',
+    lead: 'Taught from zero — no experience assumed.',
+    modules: [
+      {
+        n: '01',
+        name: 'The setup',
+        body: 'The eBay account, the store and the tools, from a cold start.',
+      },
+      {
+        n: '02',
+        name: 'The sourcing',
+        body: 'Finding items that sell, and the retailers that already stock them.',
+      },
+      {
+        n: '03',
+        name: 'The listing',
+        body: 'Writing and posting listings, and the bulk tools that do it for you.',
+      },
+      {
+        n: '04',
+        name: 'The fulfilment',
+        body: 'The order, the delivery, and the buyer on the other end of it.',
+      },
+    ],
+    taughtBy: 'Taught by Marc and Sammy, who answer their own email.',
+    updated: 'Updated when the platform changes, not left to rot.',
+  },
+
   price: {
     value: '$97',
     suffix: 'for your first month',
@@ -199,6 +240,10 @@ export const COURSE = {
       costLabel: 'costs at the retailer',
       list: '$150',
       listLabel: 'listed on your store',
+      /* Their own two numbers, subtracted. Shown because the note underneath
+         is about this figure being smaller than it looks, and an honest
+         caveat lands better next to the thing it is qualifying. */
+      gapLabel: 'the gap, before eBay’s fees',
       note: 'An illustration, not a typical result. What is left after eBay’s fees is smaller than the gap — the blog post on profit margins works through the six fees that come out of it.',
       noteCta: {
         label: 'Read the margins post',
@@ -361,12 +406,6 @@ export const COURSE = {
 
   /* The bar that follows a reader down a page this long. Nothing urgent in it:
      the price, the reversal, and the button. */
-  sticky: {
-    label: 'Dropship Mastery',
-    price: '$97 first month',
-    cta: { label: 'Enrol now', href: '/pricing' },
-  },
-
   close: {
     eyebrow: 'Ready when you are',
     headlineParts: [

@@ -28,6 +28,29 @@ export const overlay = {
     lead: 'Dropship Mastery ist das Training Schritt für Schritt — zusammen mit der Software, die den wiederkehrenden Teil übernimmt. Start bei null: kein Lager, keine Website, nichts im Voraus bezahlt außer dem Kurs selbst.',
 
     /* Beträge stehen nur im englischen Deck. Übersetzt sind die Beschriftungen. */
+    heroPanel: {
+      eyebrow: 'Der Kurs',
+      name: 'Dropship Mastery',
+      lead: 'Von null an unterrichtet — Vorkenntnisse sind nicht nötig.',
+      modules: [
+        { name: 'Das Setup', body: 'Das eBay-Konto, der Shop und die Tools, von ganz vorne.' },
+        {
+          name: 'Die Beschaffung',
+          body: 'Artikel finden, die sich verkaufen — und die Händler, die sie schon führen.',
+        },
+        {
+          name: 'Das Einstellen',
+          body: 'Listings schreiben und einstellen, und die Bulk-Tools, die das für dich tun.',
+        },
+        {
+          name: 'Die Abwicklung',
+          body: 'Die Bestellung, der Versand und der Käufer am anderen Ende.',
+        },
+      ],
+      taughtBy: 'Unterrichtet von Marc und Sammy, die ihre eigenen E-Mails beantworten.',
+      updated: 'Wird aktualisiert, wenn sich die Plattform ändert — nicht liegen gelassen.',
+    },
+
     price: {
       suffix: 'für deinen ersten Monat',
       thereafter: 'danach 199 $ im Monat. Jederzeit kündbar.',
@@ -112,6 +135,7 @@ export const overlay = {
         label: 'Ihr Beispiel, wie sie es schreiben',
         costLabel: 'kostet beim Händler',
         listLabel: 'im eigenen Shop eingestellt',
+        gapLabel: 'die Spanne, vor eBay-Gebühren',
         note: 'Eine Darstellung, kein typisches Ergebnis. Nach den Gebühren von eBay bleibt weniger als die Differenz — der Blogbeitrag zu Margen rechnet die sechs Gebühren durch.',
         noteCta: { label: 'Zum Beitrag über Margen' },
       },
@@ -230,11 +254,6 @@ export const overlay = {
         text: 'Alles andere — die Pläne, die Software, wofür die Community da ist —',
         cta: { label: 'steht auf der FAQ-Seite' },
       },
-    },
-
-    sticky: {
-      price: '97 $ erster Monat',
-      cta: { label: 'Jetzt einschreiben' },
     },
 
     close: {
