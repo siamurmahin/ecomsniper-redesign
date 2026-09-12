@@ -69,6 +69,20 @@ export const SUPPORT_HOSTNAME = /^(ecomsniper\.netlify\.app)$/i;
 /** Whether the support chat may load here. False during SSR. */
 export function isSupportHost() {
   if (typeof location === 'undefined') return false;
+
+  /*
+   * The dev server is allowed it so the widget can be looked at while it is
+   * being worked on — there is otherwise no hostname a developer can reach it
+   * from, and a launcher nobody can open is a launcher nobody can check.
+   *
+   * `import.meta.env.DEV` is false in every built bundle, so this cannot
+   * travel: `npm run build` served locally, a deploy preview and a branch
+   * deploy all still fail the match, which is the part that matters. Nothing
+   * loads until the launcher is clicked either way, so reaching the client's
+   * support queue from here takes a deliberate press.
+   */
+  if (import.meta.env.DEV) return true;
+
   return isProductionHost() || SUPPORT_HOSTNAME.test(location.hostname);
 }
 

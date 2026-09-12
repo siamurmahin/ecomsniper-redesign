@@ -118,3 +118,28 @@ error.
 
 `format:check`, `lint` (0 errors, 41 pre-existing warnings), `build` and
 `budget` (597KB / 600KB eager JS) all pass. `lhci` did not complete — above.
+
+## The launcher was invisible, because it was switched off twice over
+
+Asked where the chatbot was. Two gates, both doing what they were built to do:
+`VITE_WEBSYCHAT_ID` was unset, so `HAS_CHAT` was false and the component
+returned `null`; and `isSupportHost()` excluded localhost, so it would not
+have appeared on the dev server even with the key.
+
+The second is now lifted for `import.meta.env.DEV` only — there was otherwise
+no hostname a developer could look at the widget from. Checked in the built
+bundle rather than assumed: the branch is compiled out entirely, leaving
+
+```js
+function Kt(){return typeof location>"u"?!1:Ne()||Ke.test(location.hostname)}
+```
+
+so a production build, a deploy preview and a branch deploy are unchanged.
+The key went into a local `.env`, which is gitignored; it is not a secret
+either way, since the embed carries it in its own script URL.
+
+Opened on the dev server and used: our launcher appeared, the click handed the
+corner to the embed's own, the panel opened, a typed message rendered, no
+`fonts.googleapis.com` request was made and `#websychat-fonts` was our style
+element. Then "Failed to fetch" — issue 22, and the only thing left between
+this and a working bot.
