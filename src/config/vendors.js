@@ -67,18 +67,34 @@ export const VENDORS = [
     ],
   },
   {
-    name: 'tawk',
-    label: 'Tawk.to live chat',
-    /* Essential, but not loaded until it is opened — see `third-party/tawk`.
-       A support widget a visitor has deliberately clicked is not tracking,
-       and gating it behind a category would mean someone who rejected
-       analytics could not ask for help. */
+    name: 'websychat',
+    label: 'WebsyChat support chatbot',
+    /* Essential, but not loaded until it is opened — see
+       `third-party/websychat`. A support widget a visitor has deliberately
+       clicked is not tracking, and gating it behind a category would mean
+       someone who rejected analytics could not ask for help.
+
+       It replaced Tawk.to on 13 Sep: two fixed launchers cannot both sit in
+       the same corner, and this is the one the client staffs. */
     category: ESSENTIAL,
-    id: env('VITE_TAWK_ID'),
-    privacyUrl: 'https://www.tawk.to/privacy-policy/',
+    id: env('VITE_WEBSYCHAT_ID'),
+    privacyUrl: 'https://websychat.com/privacy',
+    /* `localStorage`, not cookies — the same identifier doing the same job,
+       and ePrivacy does not care which drawer a site keeps it in. Listed here
+       so the generated policy describes it; the retention is "until cleared"
+       because nothing expires it but the visitor. The key carries the site id,
+       so the names below are the shape rather than the literal string. */
     cookies: [
-      { name: 'TawkConnectionTime', purpose: 'essential', retention: 'session' },
-      { name: '__tawkuuid', purpose: 'essential', retention: '6 months' },
+      {
+        name: 'websychat:<site> (local storage)',
+        purpose: 'essential',
+        retention: 'until cleared',
+      },
+      {
+        name: 'websychat:<site>:history (local storage)',
+        purpose: 'essential',
+        retention: 'until cleared',
+      },
     ],
   },
 ];

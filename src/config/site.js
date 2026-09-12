@@ -48,6 +48,30 @@ export function isProductionHost() {
   return PRODUCTION_HOSTNAME.test(location.hostname);
 }
 
+/**
+ * Where the support chat is allowed to open a real conversation.
+ *
+ * Wider than production by exactly one hostname, and deliberately its own rule
+ * rather than a widened `PRODUCTION_HOSTNAME`: that constant gates GTM and
+ * Clarity too, and putting the review site inside it would start recording
+ * sessions and firing advertising tags on a domain nobody consented to. A
+ * staffed support widget is not that — it answers someone who asked, and the
+ * client reviews the site at the Netlify address before it moves to the real
+ * one, so a chat button that does nothing there is a chat button nobody can
+ * check.
+ *
+ * Localhost is still out, and so is every deploy preview: their hostnames
+ * carry a `branch--` or `deploy-preview-N--` prefix, which this does not match.
+ * A build running against a branch must not put a visitor in the real queue.
+ */
+export const SUPPORT_HOSTNAME = /^(ecomsniper\.netlify\.app)$/i;
+
+/** Whether the support chat may load here. False during SSR. */
+export function isSupportHost() {
+  if (typeof location === 'undefined') return false;
+  return isProductionHost() || SUPPORT_HOSTNAME.test(location.hostname);
+}
+
 /** How to reach a human. The footer and the legal pages both read these. */
 export const CONTACT = {
   phone: '+1 (800) 994-9831',

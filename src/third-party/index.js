@@ -20,8 +20,8 @@ import { loadGtm } from './gtm';
 /**
  * Which loader belongs to which vendor.
  *
- * Tawk is deliberately absent: it is essential, and it loads on click from
- * the launcher rather than from a consent decision. See `tawk.js`.
+ * WebsyChat is deliberately absent: it is essential, and it loads on click
+ * from the launcher rather than from a consent decision. See `websychat.js`.
  */
 const LOADERS = { gtm: loadGtm, clarity: loadClarity };
 
@@ -53,4 +53,4 @@ export async function applyConsent(granted) {
   await Promise.all(loads);
 }
 
-export { loadTawk, openTawk } from './tawk';
+export { loadWebsyChat, openWebsyChat } from './websychat';

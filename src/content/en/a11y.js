@@ -18,6 +18,7 @@ export const A11Y = {
   closeMenu: 'Close menu',
   language: 'Language',
   backToTop: 'Back to top',
+  openChat: 'Open the chat',
   home: 'EcomSniper home',
   navPrimary: 'Primary',
   navMobile: 'Mobile',

@@ -19,6 +19,37 @@ session.
 
 ## Now
 
+- **WebsyChat replaces Tawk.to, on click, site-wide.** Asked 13 Sep. The
+  chatbot the client set up — site key `ws_7ac17c2d6e04a0fd2811617a`, its own
+  API at `api.websychat.com`. Tawk goes entirely: loader, vendor entry,
+  cookies, env var. Two fixed bottom-right launchers cannot both ship, and
+  Tawk had no caller in the UI, so nothing visible is lost.
+
+  Handed over as a `useEffect` that appends the embed to `document.body` on
+  every page. Not built that way, and the reasons were measured before the
+  decision rather than discovered after it:
+
+  | Eager, as handed over | Measured                                                                                                                                                                                      |
+  | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `embed.js`            | 13.3KB brotli, **61.9KB parsed**, on every page view                                                                                                                                          |
+  | New origins           | `apps.websychat.com`, then `api.websychat.com` for the boot config                                                                                                                            |
+  | Google Fonts          | the embed injects a `fonts.googleapis.com` stylesheet — Fraunces + Manrope — so two more origins and a render-blocking sheet, on a site that self-hosts its typefaces precisely to avoid that |
+  | Runtime               | `setInterval` every 8s plus an `EventSource` held open                                                                                                                                        |
+  | Storage               | `localStorage` visitor id, session id and the last eight transcripts, written before anyone is asked                                                                                          |
+  | First screen          | a `position: fixed` launcher at `z-index: 2147483000`, on every page                                                                                                                          |
+
+  Built on the shape `tawk.js` already had, chosen with those numbers in front
+  of the user: **our own launcher in `SiteChrome`, and not one third-party byte
+  until it is clicked.** The embed's font injection is suppressed by
+  pre-inserting the `#websychat-fonts` id it guards on, so the widget renders
+  in the typefaces this site already serves.
+
+  Filed **essential, on demand**, for the reason Tawk was: a support widget
+  someone has deliberately opened is not tracking, and gating it behind a
+  category would mean a visitor who rejected analytics could not ask for help.
+  Its storage is declared in `config/vendors.js`, so it reaches the generated
+  cookie policy like everything else.
+
 - **"Who is behind this" moves onto About.** Asked 8 Sep. `FoundersSection` —
   the homepage's section 10, the two founder bios beside the playbook card —
   renders on About too, **after origin**: how this started, then who did it and
@@ -188,18 +219,18 @@ something has to be put down mid-design.
 
 In the order the work wants to happen, not the order it was asked.
 
-| #   | Task                                                                                                                                                                     | Waiting on                                                                               |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                         |
-| 2   | **New pages** — four, plus five more blog posts, listed in the Pages section below                                                                                       | Slug decisions and copy, per that section                                                |
-| 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                   | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                         |
-| 4   | **Playbook form endpoint** — the playbook form still fakes success; contact does not, it hands off to a mail client instead                                              | Deferred by decision until the move to the client's server                               |
-| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                            |
-| 6   | **Tawk.to** — built and inert, loads on click behind consent when it returns                                                                                             | `VITE_TAWK_ID`, and a decision that it is coming back                                    |
-| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                       | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters |
-| 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                         |                                                                                          | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
-| 10  | **Decide how Careers and Blog are edited** — static now by decision. Storyblok, markdown in the repo, or something else, once the whole site is up                       | The client, after the site is complete                                                   |
-| 11  | Login / registration / checkout                                                                                                                                          | Out of this phase entirely — payments and auth are not in scope                          |
+| #   | Task                                                                                                                                                                     | Waiting on                                                                                                                              |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Storyblok CMS** — content fetched at build time, webhook triggers a Netlify rebuild, schemas mirroring `src/content/` file for file, so the CMS adds no runtime weight | **Pricing confirmation.** Do not start before it                                                                                        |
+| 2   | **New pages** — four, plus five more blog posts, listed in the Pages section below                                                                                       | Slug decisions and copy, per that section                                                                                               |
+| 3   | **Wire GTM and Clarity for real** — both loaders, the consent gate and the generated cookie policy are built and inert                                                   | `VITE_GTM_ID`, `VITE_CLARITY_ID`                                                                                                        |
+| 4   | **Playbook form endpoint** — the playbook form still fakes success; contact does not, it hands off to a mail client instead                                              | Deferred by decision until the move to the client's server                                                                              |
+| 5   | **Dashboard screenshots** — still mocks in `FeatureTourSection`                                                                                                          | Real captures from the client                                                                                                           |
+| 6   | **WebsyChat** — launcher, loader and cookie declaration are built; no site key is set, so the launcher renders nothing at all                                            | `VITE_WEBSYCHAT_ID`, and a production hostname — `isProductionHost()` matches `ecomsniper.io` only, so a Netlify deploy loads no widget |
+| 7   | **Orphan CSS in the build** — `@react-router/dev` moves a 115KB server-build stylesheet into `build/client` where nothing links it                                       | Nothing. Costs deploy size, not visitor bandwidth. A post-build prune if it ever matters                                                |
+| 8   | **Vite 7 → 8.** `@react-router/dev@8.3.1` supports it (`vite: ^7                                                                                                         |                                                                                                                                         | ^8`), and the reason it was backed out in `064d77e`is gone — that was`@vitejs/plugin-react@6`pulling a`@babel/core` release candidate, and that plugin is no longer a dependency at all | Nothing technical. Held deliberately: a bundler major can move chunking and CSS splitting, which is what most of 3 Sep went on. Wants a quiet moment and a before/after measurement, not a half-built site |
+| 10  | **Decide how Careers and Blog are edited** — static now by decision. Storyblok, markdown in the repo, or something else, once the whole site is up                       | The client, after the site is complete                                                                                                  |
+| 11  | Login / registration / checkout                                                                                                                                          | Out of this phase entirely — payments and auth are not in scope                                                                         |
 
 ---
 
@@ -391,7 +422,7 @@ come from the index, and their sitemap is advertising URLs that may 404.
 - **CMS is Storyblok**, build-time fetch, webhook rebuild.
 - **Consent is accept / reject / customise.** Categories: essential (locked), analytics, marketing. Consent Mode v2 denied by default.
 - **GTM only.** One container carries GA4, Meta and TikTok. Clarity is not in the code.
-- **Tawk.to loads on click**, never on page load, and behind consent.
+- **WebsyChat loads on click**, never on page load, from a launcher this repo owns. It replaced Tawk.to on 13 Sep and Tawk is gone from the repo entirely.
 - **Config is centralised**: `src/config/` for ids and toggles, `src/third-party/` for every external script, nothing external imported from anywhere else.
 - **Base before new pages** — the developer's own instruction.
 

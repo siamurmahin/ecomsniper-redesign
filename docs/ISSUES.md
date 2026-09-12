@@ -208,6 +208,41 @@ mean two indexed URLs with identical metadata. `hreflang` tells search engines
 they are alternates, so this is a translation backlog item rather than a bug.
 Recorded so it is not re-found as one.
 
+### 22. The chat API sends no CORS headers, so the widget cannot talk to it — `high`, owner: vendor
+
+Measured 13 Sep, the day WebsyChat was wired in. The embed loads, draws its
+launcher and opens its panel — and then shows **"Failed to fetch"** where the
+greeting belongs, because its first call dies in the browser:
+
+```
+GET https://api.websychat.com/api/v1/embed/ws_7ac17c2d6e04a0fd2811617a
+net::ERR_FAILED
+```
+
+The response is a 200 carrying the right body — `"name":"Ecom Sniper"`,
+`"embedStatus":"live"`, the widget's colours and its lead form — and **no
+`Access-Control-Allow-Origin` header on it at all.** Checked from three
+origins, `https://ecomsniper.io`, `https://ecomsniper.netlify.app` and
+`http://localhost:4180`: identical headers every time, none of them CORS. The
+`OPTIONS` preflight on the same URL is a 404.
+
+So this is not an allowlist missing our domain — the API does not answer
+cross-origin at all, and that endpoint is only ever called cross-origin, from
+whatever site embeds it. Every `fetch` in `embed.js` goes there: the boot
+config, the transcript restore, the 8-second poll, sending a message, the lead
+form, the escalation to a human. None of them can succeed today, on any site.
+
+Nothing in this repo can fix it. The integration is correct and already points
+at the documented API; the header has to be added at `api.websychat.com`.
+**What the vendor needs to do:** return `Access-Control-Allow-Origin` for the
+origins registered against the site key — the config already records ours as
+`"siteUrl":"http://ecomsniper.netlify.app"` — and answer the `OPTIONS`
+preflight rather than 404ing it.
+
+Until then the launcher is best left unconfigured: with no `VITE_WEBSYCHAT_ID`
+set it renders nothing at all, which is better than a button that opens a
+panel saying "Failed to fetch". See `TODO.md` Blocked 6.
+
 ## Closed
 
 ### 13. ~~Nothing linked the favicon~~ — fixed 6 Sep

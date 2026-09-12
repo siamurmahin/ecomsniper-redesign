@@ -11,6 +11,7 @@ export const overlay = {
     closeMenu: 'Menü schließen',
     language: 'Sprache',
     backToTop: 'Nach oben',
+    openChat: 'Chat öffnen',
     home: 'EcomSniper Startseite',
     navPrimary: 'Hauptmenü',
     navMobile: 'Mobiles Menü',
